@@ -1,0 +1,45 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
+import { Building2, Inbox, BadgeDollarSign, ArrowLeftRight, Users, LogOut } from 'lucide-react';
+import { Brand } from '@/components/layout/brand';
+import { NavItemLink } from '@/components/layout/nav-item';
+import { useAuth } from '@/providers/auth-provider';
+
+const ITEMS = [
+  { href: '/owner', label: 'Markazlar', icon: Building2 },
+  { href: '/owner/applications', label: 'Arizalar', icon: Inbox },
+  { href: '/owner/transactions', label: 'Tranzaksiyalar', icon: ArrowLeftRight },
+  { href: '/owner/users', label: 'Foydalanuvchilar', icon: Users },
+  { href: '/owner/plans', label: 'Tariflar', icon: BadgeDollarSign },
+];
+
+/** Owner-panel sidebar: brand, platform nav, logout. */
+export function OwnerSidebar() {
+  const pathname = usePathname();
+  const { user, logout } = useAuth();
+
+  return (
+    <aside className="flex h-full w-[236px] flex-shrink-0 flex-col overflow-y-auto rounded-[28px] bg-background p-[22px_16px] shadow-nm">
+      <div className="mb-6 px-1"><Brand /></div>
+      <div className="mb-3.5 px-2.5 text-[10px] font-bold tracking-[1px] text-[#9aa6b8]">PLATFORMA — OWNER</div>
+      <nav className="flex flex-col">
+        {ITEMS.map((i) => (
+          <NavItemLink key={i.href} href={i.href} label={i.label} icon={i.icon}
+            active={pathname === i.href || (i.href !== '/owner' && pathname.startsWith(i.href))} />
+        ))}
+      </nav>
+      <div className="flex-1" />
+      <div className="flex items-center gap-[11px] rounded-[18px] bg-background p-3 shadow-nm-inset-sm">
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-[13px] font-bold text-foreground">{user?.fullName ?? 'Owner'}</div>
+          <div className="text-[11px] font-semibold text-muted">ICAN — Egasi</div>
+        </div>
+        <button type="button" onClick={logout} aria-label="Chiqish" title="Chiqish"
+          className="flex size-8 flex-shrink-0 items-center justify-center rounded-[10px] bg-background text-muted shadow-nm-sm hover:text-danger">
+          <LogOut className="size-4" strokeWidth={2} />
+        </button>
+      </div>
+    </aside>
+  );
+}

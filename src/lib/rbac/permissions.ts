@@ -1,0 +1,23 @@
+/**
+ * Permission codes — the single source of truth on the client, mirroring the
+ * backend `permissions.constants.ts`. Gate UI with these codes (never role
+ * names). `*.delete` always means soft delete.
+ */
+export const PERMISSIONS = {
+  STUDENT: ['student.read', 'student.create', 'student.update', 'student.delete'],
+  GROUP: ['group.read', 'group.create', 'group.update', 'group.delete'],
+  TEACHER: ['teacher.read', 'teacher.create', 'teacher.update', 'teacher.delete'],
+  SUBJECT: ['subject.read', 'subject.create', 'subject.update', 'subject.delete'],
+  ATTENDANCE: ['attendance.read', 'attendance.mark', 'attendance.edit'],
+  ASSIGNMENT: ['assignment.read', 'assignment.create', 'assignment.update', 'assignment.grade'],
+  PAYMENT: ['payment.read', 'payment.create', 'payment.delete'],
+  TRANSACTION: ['transaction.read', 'transaction.create'],
+  LESSON: ['lesson.read', 'lesson.update'],
+  REPORT: ['report.finance', 'report.attendance', 'report.teacher'],
+  ROLE: ['role.read', 'role.create', 'role.update', 'role.assign'],
+} as const;
+
+type Group = keyof typeof PERMISSIONS;
+export type PermissionCode = (typeof PERMISSIONS)[Group][number];
+
+export const ALL_PERMISSIONS: PermissionCode[] = Object.values(PERMISSIONS).flat() as PermissionCode[];

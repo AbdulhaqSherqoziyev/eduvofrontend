@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-manrope: 'Manrope';
+  --bg: #e8ecf3;
+  --surface: #eef2f8;
+  --primary: #2e6be6;
+  --accent: #5b8def;
+  --selected: #dce6fa;
+  --text: #1e2a3a;
+  --text-soft: #7a8699;
+  --success: #1e9e63;
+  --warning: #c8851f;
+  --danger: #d8463b;
+  --radius-card: 20px;
+  --radius-ctl: 14px;
+
+  --nm-raised: -6px -6px 12px rgba(255, 255, 255, 0.9), 6px 6px 12px rgba(163, 177, 198, 0.5);
+  --nm-raised-sm: -3px -3px 7px rgba(255, 255, 255, 0.9), 3px 3px 7px rgba(163, 177, 198, 0.45);
+  --nm-inset: inset -4px -4px 8px rgba(255, 255, 255, 0.85), inset 4px 4px 8px rgba(163, 177, 198, 0.5);
+  --nm-inset-sm: inset -2px -2px 5px rgba(255, 255, 255, 0.85), inset 2px 2px 5px rgba(163, 177, 198, 0.55);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-manrope), system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::placeholder {
+    color: #9aa6b8;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cfd7e3;
+    border-radius: 8px;
+    border: 3px solid var(--bg);
+  }
+}
+
+@layer utilities {
+  .bg-grad-primary {
+    background-image: linear-gradient(135deg, #3d78ee, #2e6be6);
+  }
+  .bg-grad-bar {
+    background-image: linear-gradient(90deg, #5b8def, #2e6be6);
+  }
+  .nm-pressable {
+    transition: box-shadow 0.16s ease, transform 0.16s ease;
+  }
+  .nm-pressable:active {
+    box-shadow: var(--nm-inset);
+    transform: translateY(1px);
+  }
+}

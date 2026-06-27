@@ -1,0 +1,32 @@
+import { cn } from '@/lib/utils/cn';
+
+export type PillTone = 'success' | 'danger' | 'warning' | 'muted' | 'primary';
+
+const tones: Record<PillTone, string> = {
+  success: 'text-success bg-[rgba(43,182,115,0.14)]',
+  danger: 'text-danger bg-[rgba(228,87,76,0.14)]',
+  warning: 'text-warning bg-[rgba(232,161,58,0.17)]',
+  muted: 'text-[#5b6b82] bg-[rgba(122,134,153,0.16)]',
+  primary: 'text-primary bg-[rgba(46,107,230,0.12)]',
+};
+
+interface StatusPillProps {
+  label: string;
+  tone: PillTone;
+  className?: string;
+}
+
+/** Small rounded status badge, colored by tone. */
+export function StatusPill({ label, tone, className }: StatusPillProps) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center rounded-full px-[13px] py-[5px] text-[12px] font-bold',
+        tones[tone],
+        className,
+      )}
+    >
+      {label}
+    </span>
+  );
+}

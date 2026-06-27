@@ -1,0 +1,18 @@
+import { MetricCards } from './_components/metric-cards';
+import { IncomeChart } from './_components/income-chart';
+import { DebtorsCard } from './_components/debtors-card';
+import { TeacherPerformanceCard } from './_components/teacher-performance-card';
+import { ActivityFeed } from './_components/activity-feed';
+
+/** Dashboard home — metrics, income chart, debtors, teacher performance, activity. */
+export default function DashboardPage() {
+  return (
+    <div className="grid grid-cols-12 gap-[22px] items-start">
+      <MetricCards />
+      <IncomeChart />
+      <DebtorsCard />
+      <TeacherPerformanceCard />
+      <ActivityFeed />
+    </div>
+  );
+}
