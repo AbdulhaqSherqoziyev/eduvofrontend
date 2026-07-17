@@ -9,7 +9,7 @@ import { Pagination } from '@/components/shared/pagination';
 import { useGroups } from '@/lib/hooks/use-groups';
 import { ManageGroupRow } from './manage-group-row';
 
-const HEAD = 'grid grid-cols-[2fr_1.4fr_1.3fr_1fr_1.1fr_124px] items-center gap-4 px-4 pb-3.5 pt-2';
+const HEAD = 'grid min-w-[700px] grid-cols-[40px_2fr_1.4fr_1.3fr_1fr_1.1fr_124px] items-center gap-4 px-4 pb-3.5 pt-2';
 
 /** Groups management table — real data via useGroups(), paginated. */
 export function ManageGroupsTable() {
@@ -18,8 +18,9 @@ export function ManageGroupsTable() {
   const query = useGroups({ page, limit: pageSize });
 
   return (
-    <NmCard className="px-4 py-3.5">
+    <NmCard className="px-4 py-3.5 overflow-x-auto">
       <div className={`${HEAD} text-[10.5px] font-bold uppercase tracking-[0.8px] text-[#9aa6b8]`}>
+        <div>#</div>
         <div>GURUH</div>
         <div>O&apos;QITUVCHI</div>
         <div>JADVAL</div>
@@ -36,8 +37,8 @@ export function ManageGroupsTable() {
         {(data) => (
           <>
             <div>
-              {data.items.map((group) => (
-                <ManageGroupRow key={group.id} group={group} />
+              {data.items.map((group, i) => (
+                <ManageGroupRow key={group.id} group={group} n={(page - 1) * pageSize + i + 1} />
               ))}
             </div>
             <Pagination

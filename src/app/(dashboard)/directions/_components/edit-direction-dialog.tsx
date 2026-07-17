@@ -1,30 +1,31 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Pencil } from 'lucide-react';
-import { NmDialog } from '@/components/ui/nm-dialog';
-import { NmButton } from '@/components/ui/nm-button';
-import { NmIconButton } from '@/components/ui/nm-icon-button';
-import { NmInput } from '@/components/ui/nm-input';
-import { FieldLabel } from '@/components/ui/label';
-import { useUpdateSubject } from '@/lib/hooks/use-subjects';
-import type { Subject } from '@/lib/types/subject';
-import { directionSchema, type DirectionFormValues } from './direction-schema';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Pencil } from "lucide-react";
+import { NmDialog } from "@/components/ui/nm-dialog";
+import { NmButton } from "@/components/ui/nm-button";
+import { NmIconButton } from "@/components/ui/nm-icon-button";
+import { NmInput } from "@/components/ui/nm-input";
+import { NmTextarea } from "@/components/ui/nm-textarea";
+import { FieldLabel } from "@/components/ui/label";
+import { useUpdateSubject } from "@/lib/hooks/use-subjects";
+import type { Subject } from "@/lib/types/subject";
+import { directionSchema, type DirectionFormValues } from "./direction-schema";
 
 function Err({ msg }: { msg?: string }) {
   if (!msg) return null;
   return <p className="mt-1.5 text-[12px] font-semibold text-danger">{msg}</p>;
 }
 
-/** Edit an existing direction (subject.update). */
+/** Edit an existing direction (name + note). */
 export function EditDirectionDialog({ subject }: { subject: Subject }) {
   const [open, setOpen] = useState(false);
   const update = useUpdateSubject(subject.id);
   const { register, handleSubmit, formState } = useForm<DirectionFormValues>({
     resolver: zodResolver(directionSchema),
-    defaultValues: { name: subject.name, level: subject.level, durationMonths: subject.durationMonths, price: subject.price },
+    defaultValues: { name: subject.name, note: subject.note },
   });
   const { errors } = formState;
 
@@ -47,32 +48,20 @@ export function EditDirectionDialog({ subject }: { subject: Subject }) {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <div>
           <FieldLabel>NOMI</FieldLabel>
-          <NmInput {...register('name')} />
+          <NmInput {...register("name")} />
           <Err msg={errors.name?.message} />
         </div>
-        <div className="grid grid-cols-3 gap-3">
-          <div>
-            <FieldLabel>DARAJA</FieldLabel>
-            <NmInput {...register('level')} />
-            <Err msg={errors.level?.message} />
-          </div>
-          <div>
-            <FieldLabel>MUDDAT (OY)</FieldLabel>
-            <NmInput type="number" inputMode="numeric" {...register('durationMonths')} />
-            <Err msg={errors.durationMonths?.message} />
-          </div>
-          <div>
-            <FieldLabel>NARX</FieldLabel>
-            <NmInput type="number" inputMode="numeric" {...register('price')} />
-            <Err msg={errors.price?.message} />
-          </div>
+        <div>
+          <FieldLabel>IZOH</FieldLabel>
+          <NmTextarea rows={2} {...register("note")} />
+          <Err msg={errors.note?.message} />
         </div>
         <div className="mt-2 flex gap-3">
           <NmButton type="button" variant="soft" className="flex-1" onClick={() => setOpen(false)}>
             Bekor qilish
           </NmButton>
           <NmButton type="submit" className="flex-[1.4]" disabled={update.isPending}>
-            {update.isPending ? '...' : 'Saqlash'}
+            {update.isPending ? "..." : "Saqlash"}
           </NmButton>
         </div>
       </form>

@@ -1,7 +1,8 @@
-/** Subject = "Yo'nalish" (direction/course track). */
+/** Subject = "Yo'nalish" (direction/course track). Just name + note now. */
 export interface Subject {
   id: string;
   name: string;
+  note: string;
   level: string;
   durationMonths: number;
   price: number;
@@ -11,7 +12,5 @@ export interface Subject {
 
 export interface CreateSubjectInput {
   name: string;
-  level: string;
-  durationMonths: number;
-  price: number;
+  note?: string;
 }

@@ -13,7 +13,7 @@ export function TransactionSummary() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
         <Skeleton className="h-[92px]" />
         <Skeleton className="h-[92px]" />
         <Skeleton className="h-[92px]" />
@@ -26,7 +26,7 @@ export function TransactionSummary() {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-5">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
       <SummaryCard
         label="KIRIM (IYUN)"
         value={formatSom(data.income)}

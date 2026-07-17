@@ -17,7 +17,7 @@ export function CreateGroupDialog() {
   const create = useCreateGroup();
   const form = useForm<GroupFormValues>({
     resolver: zodResolver(groupSchema),
-    defaultValues: { name: '', subjectId: '', teacherId: '', schedule: 'Du · Cho · Ju', startTime: '18:00', level: 'BEGINNER', price: '' },
+    defaultValues: { name: '', subjectId: '', teacherId: '', roomId: '', schedule: 'Du · Cho · Ju', startTime: '18:00', endTime: '', level: 'BEGINNER', price: '' },
   });
 
   const onSubmit = async (values: GroupFormValues) => {
@@ -25,8 +25,10 @@ export function CreateGroupDialog() {
       name: values.name,
       subjectId: values.subjectId || undefined,
       teacherId: values.teacherId || undefined,
+      roomId: values.roomId || undefined,
       schedule: values.schedule,
       startTime: values.startTime,
+      endTime: values.endTime || undefined,
       price: Number(values.price),
       level: values.level as GroupLevel,
     });

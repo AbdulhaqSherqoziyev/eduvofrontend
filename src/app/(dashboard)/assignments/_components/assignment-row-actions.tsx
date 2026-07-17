@@ -4,6 +4,7 @@ import { Trash2 } from 'lucide-react';
 import { Can } from '@/components/shared/can';
 import { NmIconButton } from '@/components/ui/nm-icon-button';
 import { useDeleteAssignment } from '@/lib/hooks/use-assignments';
+import { SubmissionsDialog } from './submissions-dialog';
 
 /** Per-row delete action for an assignment (assignment.update). */
 export function AssignmentRowActions({ id, title }: { id: string; title: string }) {
@@ -12,10 +13,15 @@ export function AssignmentRowActions({ id, title }: { id: string; title: string 
     if (window.confirm(`"${title}" — o'chirilsinmi?`)) remove.mutate(id);
   };
   return (
-    <Can permission="assignment.update">
-      <NmIconButton tone="danger" aria-label="O'chirish" onClick={onDelete} disabled={remove.isPending}>
-        <Trash2 className="size-[15px]" strokeWidth={2} />
-      </NmIconButton>
-    </Can>
+    <div className="flex items-center gap-2">
+      <Can permission="assignment.read">
+        <SubmissionsDialog assignmentId={id} title={title} />
+      </Can>
+      <Can permission="assignment.update">
+        <NmIconButton tone="danger" aria-label="O'chirish" onClick={onDelete} disabled={remove.isPending}>
+          <Trash2 className="size-[15px]" strokeWidth={2} />
+        </NmIconButton>
+      </Can>
+    </div>
   );
 }

@@ -28,7 +28,7 @@ export function StaffFormFields({ form, withPassword, passwordLabel, roleIds, on
         <NmInput placeholder="Masalan: Dilshod Karimov" {...register('fullName')} />
         {err(errors.fullName?.message)}
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <FieldLabel>TELEFON</FieldLabel>
           <NmInput placeholder="+998 90 ..." {...register('phone')} />

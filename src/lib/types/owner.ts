@@ -6,7 +6,9 @@ export interface OwnerSubscription {
   id: string;
   status: SubStatus;
   balance: number;
+  planId: string | null;
   planName: string | null;
+  modules: string[];
   effectiveMonthlyFee: number;
   effectiveSetupFee: number;
   discountPercent: number;
@@ -19,6 +21,7 @@ export interface OwnerSubscription {
 
 export interface OwnerTenant {
   id: string;
+  seq: number;
   name: string;
   slug: string;
   domain?: string | null;
@@ -33,7 +36,6 @@ export interface CreateCenterInput {
   centerName: string;
   directorName: string;
   phone: string;
-  slug: string;
   planId?: string;
 }
 
@@ -62,7 +64,10 @@ export interface OwnerPlan {
   monthlyFee: number;
   setupFee: number;
   trialDays: number;
+  minStudents: number | null;
   maxStudents: number | null;
+  maxBranches: number | null;
+  modules: string[];
   isActive: boolean;
   sortOrder: number;
 }

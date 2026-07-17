@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useDebtors } from '@/lib/hooks/use-dashboard';
 import { QueryBoundary } from '@/components/shared/query-boundary';
 import { EmptyState } from '@/components/shared/empty-state';
@@ -14,7 +15,7 @@ export function DebtorsCard() {
   const query = useDebtors();
 
   return (
-    <NmCard className="col-span-4 p-[22px]">
+    <NmCard className="col-span-1 sm:col-span-2 md:col-span-4 p-[22px]">
       <QueryBoundary
         query={query}
         loading={<RowsSkeleton rows={5} />}
@@ -42,7 +43,9 @@ export function DebtorsCard() {
                 </div>
               ))}
             </div>
-            <div className="mt-[18px] text-center text-[13px] font-bold text-primary">Barchasini ko,rish →</div>
+            <Link href="/students?status=DEBTOR" className="mt-[18px] block text-center text-[13px] font-bold text-primary hover:underline">
+              Barchasini ko&apos;rish →
+            </Link>
           </>
         )}
       </QueryBoundary>

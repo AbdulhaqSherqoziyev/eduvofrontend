@@ -6,18 +6,38 @@ import { NmSelect } from '@/components/ui/nm-select';
 import { FieldLabel } from '@/components/ui/label';
 import { useSubjectOptions } from '@/lib/hooks/use-subjects';
 import { useTeacherOptions } from '@/lib/hooks/use-teachers';
+import { useRoomOptions } from '@/lib/hooks/use-rooms';
 import { GROUP_LEVEL_META, type GroupLevel } from '@/lib/types/group';
 import type { GroupFormValues } from './group-schema';
 
-const SCHEDULES = ['Du · Cho · Ju', 'Se · Pa · Sha', 'Har kuni'];
+const WEEK_DAYS = ['Du', 'Se', 'Cho', 'Pa', 'Ju', 'Sha', 'Ya'];
 const LEVELS = Object.keys(GROUP_LEVEL_META) as GroupLevel[];
+
+function parseScheduleDays(schedule: string): string[] {
+  if (schedule === 'Har kuni') return [...WEEK_DAYS];
+  return schedule.split('·').map((d) => d.trim()).filter((d) => WEEK_DAYS.includes(d));
+}
+
+function formatScheduleDays(days: string[]): string {
+  const ordered = WEEK_DAYS.filter((d) => days.includes(d));
+  return ordered.length === 7 ? 'Har kuni' : ordered.join(' · ');
+}
 
 /** Form fields for creating a group. */
 export function CreateGroupFields({ form }: { form: UseFormReturn<GroupFormValues> }) {
   const subjects = useSubjectOptions();
   const teachers = useTeacherOptions();
-  const { register, formState } = form;
+  const rooms = useRoomOptions();
+  const { register, formState, watch, setValue } = form;
   const err = formState.errors;
+  const selectedDays = parseScheduleDays(watch('schedule') ?? '');
+
+  const toggleDay = (day: string) => {
+    const next = selectedDays.includes(day)
+      ? selectedDays.filter((d) => d !== day)
+      : [...selectedDays, day];
+    setValue('schedule', formatScheduleDays(next), { shouldValidate: true });
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -26,7 +46,7 @@ export function CreateGroupFields({ form }: { form: UseFormReturn<GroupFormValue
         <NmInput placeholder="Masalan: Ingliz tili A1" {...register('name')} />
         {err.name ? <p className="mt-1.5 text-[12px] font-semibold text-danger">{err.name.message}</p> : null}
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <FieldLabel>FAN</FieldLabel>
           <NmSelect defaultValue="" {...register('subjectId')}>
@@ -46,18 +66,49 @@ export function CreateGroupFields({ form }: { form: UseFormReturn<GroupFormValue
           </NmSelect>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      <div>
+        <FieldLabel>DARS KUNLARI</FieldLabel>
+        <div className="flex flex-wrap gap-2">
+          {WEEK_DAYS.map((day) => {
+            const active = selectedDays.includes(day);
+            return (
+              <button
+                key={day}
+                type="button"
+                aria-pressed={active}
+                onClick={() => toggleDay(day)}
+                className={`h-9 min-w-[42px] rounded-ctl px-2.5 text-[13px] font-semibold transition-colors nm-pressable ${
+                  active
+                    ? 'bg-grad-primary text-white shadow-nm-primary'
+                    : 'bg-background text-muted shadow-nm-sm hover:text-primary'
+                }`}
+              >
+                {day}
+              </button>
+            );
+          })}
+        </div>
+        {err.schedule ? <p className="mt-1.5 text-[12px] font-semibold text-danger">{err.schedule.message}</p> : null}
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <FieldLabel>JADVAL</FieldLabel>
-          <NmSelect {...register('schedule')}>
-            {SCHEDULES.map((s) => (
-              <option key={s} value={s}>{s}</option>
+          <FieldLabel>XONA</FieldLabel>
+          <NmSelect defaultValue="" {...register('roomId')}>
+            <option value="">Xonasiz</option>
+            {rooms.map((r) => (
+              <option key={r.value} value={r.value}>{r.label}</option>
             ))}
           </NmSelect>
         </div>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         <div>
-          <FieldLabel>VAQT</FieldLabel>
-          <NmInput defaultValue="18:00" {...register('startTime')} />
+          <FieldLabel>BOSHLANISHI</FieldLabel>
+          <NmInput type="time" defaultValue="18:00" {...register('startTime')} />
+        </div>
+        <div>
+          <FieldLabel>TUGASHI</FieldLabel>
+          <NmInput type="time" {...register('endTime')} />
         </div>
         <div>
           <FieldLabel>DARAJA</FieldLabel>

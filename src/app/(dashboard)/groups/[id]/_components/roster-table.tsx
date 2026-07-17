@@ -1,9 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { QueryBoundary } from '@/components/shared/query-boundary';
 import { EmptyState } from '@/components/shared/empty-state';
 import { RowsSkeleton } from '@/components/shared/skeleton';
 import { Avatar } from '@/components/ui/avatar';
+import { RowIndex } from '@/components/shared/row-index';
 import { StatusPill } from '@/components/shared/status-pill';
 import { useGroupRoster } from '@/lib/hooks/use-groups';
 import { STUDENT_STATUS_META } from '@/lib/types/student';
@@ -11,7 +13,7 @@ import { formatSom } from '@/lib/utils/format';
 import { cn } from '@/lib/utils/cn';
 import { RosterDots } from './roster-dots';
 
-const COLS = 'grid grid-cols-[38px_2.2fr_1.5fr_1fr_1.1fr] items-center gap-4';
+const COLS = 'grid min-w-[700px] grid-cols-[40px_2.2fr_1.5fr_1fr_1.1fr] items-center gap-4';
 
 /** Roster of a group with recent attendance, status and balance. */
 export function RosterTable({ groupId }: { groupId: string }) {
@@ -40,11 +42,11 @@ export function RosterTable({ groupId }: { groupId: string }) {
               const meta = STUDENT_STATUS_META[r.status];
               return (
                 <div key={r.id} className={cn(COLS, 'rounded-[16px] px-4 py-[13px] hover:shadow-nm-inset-sm')}>
-                  <div className="text-[13px] font-bold text-[#9aa6b8]">{i + 1}</div>
-                  <div className="flex min-w-0 items-center gap-[13px]">
+                  <RowIndex n={i + 1} />
+                  <Link href={`/students/${r.studentId}`} className="flex min-w-0 items-center gap-[13px]">
                     <Avatar name={r.fullName} size={40} />
-                    <span className="truncate text-[14px] font-bold text-foreground">{r.fullName}</span>
-                  </div>
+                    <span className="truncate text-[14px] font-bold text-foreground hover:text-primary">{r.fullName}</span>
+                  </Link>
                   <RosterDots dots={r.recentAttendance} />
                   <div>
                     <StatusPill label={meta.label} tone={meta.tone} />

@@ -2,6 +2,7 @@ export type TransactionType = 'INCOME' | 'EXPENSE';
 
 export interface Transaction {
   id: string;
+  seq: number;
   date: string;
   type: TransactionType;
   category: string;
@@ -9,6 +10,10 @@ export interface Transaction {
   note: string;
   amount: number;
   method: string;
+  voided: boolean;
+  reversalOf: string | null;
+  /** Which login performed the entry — "Full Name (phone)", '' on legacy rows. */
+  createdBy: string;
 }
 
 export interface TransactionSummary {

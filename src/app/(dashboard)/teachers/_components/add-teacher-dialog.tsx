@@ -16,15 +16,14 @@ export function AddTeacherDialog() {
   const create = useCreateTeacher();
   const form = useForm<TeacherFormValues>({
     resolver: zodResolver(teacherSchema),
-    defaultValues: { fullName: '', phone: '', salary: '', subjectId: '' },
+    defaultValues: { fullName: '', phone: '', directions: '' },
   });
 
   const onSubmit = async (values: TeacherFormValues) => {
     await create.mutateAsync({
       fullName: values.fullName,
       phone: values.phone,
-      salary: Number(values.salary),
-      subjectId: values.subjectId || undefined,
+      directions: values.directions || undefined,
     });
     form.reset();
     setOpen(false);

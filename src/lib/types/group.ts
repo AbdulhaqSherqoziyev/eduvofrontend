@@ -11,12 +11,16 @@ export interface Group {
   subjectName: string;
   teacherId?: string;
   teacherName: string;
+  roomId?: string | null;
+  roomName: string;
   schedule: string;
   startTime: string;
+  endTime: string;
   price: number;
   studentCount: number;
   attendanceRate: number;
   level: GroupLevel;
+  createdAt: string;
 }
 
 export interface RosterEntry {
@@ -32,8 +36,10 @@ export interface CreateGroupInput {
   name: string;
   subjectId?: string;
   teacherId?: string;
+  roomId?: string;
   schedule: string;
   startTime: string;
+  endTime?: string;
   price: number;
   level: GroupLevel;
 }

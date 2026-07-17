@@ -36,7 +36,9 @@ export function PlansList() {
                 <div className="mt-3 flex flex-col gap-1 text-[12.5px] font-semibold text-[#5b6b82]">
                   <div>O&apos;rnatish: {formatSom(p.setupFee)}</div>
                   <div>Sinov: {p.trialDays} kun</div>
-                  {p.maxStudents ? <div>Maks o&apos;quvchi: {p.maxStudents}</div> : null}
+                  <div>O&apos;quvchi: {p.minStudents ?? 0}{p.maxStudents ? `–${p.maxStudents}` : '+'}</div>
+                  {p.maxBranches != null ? <div>Filiallar: {p.maxBranches} tagacha</div> : null}
+                  <div>Modullar: {p.modules?.length ?? 0} ta</div>
                   <div className={p.isActive ? 'text-success' : 'text-[#9aa6b8]'}>{p.isActive ? 'Faol' : "O'chirilgan"}</div>
                 </div>
               </NmCard>

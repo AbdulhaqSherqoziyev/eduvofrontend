@@ -17,9 +17,11 @@ export function DayColumn({ label, sessions }: DayColumnProps) {
         {label}
       </div>
       <div className="flex flex-col gap-2.5">
-        {sessions.map((session) => (
-          <SessionBar key={session.id} session={session} />
-        ))}
+        {sessions.length === 0 ? (
+          <p className="py-3 text-center text-[12px] font-semibold text-[#c2cad6]">Dars yo‘q</p>
+        ) : (
+          sessions.map((session) => <SessionBar key={session.id} session={session} />)
+        )}
       </div>
     </NmCard>
   );

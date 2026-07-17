@@ -1,7 +1,7 @@
 import type { PillTone } from '@/components/shared/status-pill';
 
 export type InvoiceStatus = 'PAID' | 'PARTIAL' | 'UNPAID' | 'OVERDUE';
-export type PaymentMethod = 'CASH' | 'CLICK' | 'PAYME';
+export type PaymentMethod = 'CASH' | 'CARD' | 'DISCOUNT' | 'CLICK' | 'PAYME';
 
 export interface Invoice {
   id: string;
@@ -25,6 +25,20 @@ export interface AcceptPaymentInput {
   method: PaymentMethod;
 }
 
+export interface AcceptStudentPaymentInput {
+  studentId: string;
+  amount: number;
+  method: PaymentMethod;
+  note?: string;
+}
+
+export interface StudentPaymentResult {
+  studentId: string;
+  allocated: number;
+  credited: number;
+  balance: number;
+}
+
 export interface InvoiceListParams {
   search?: string;
   status?: InvoiceStatus;
@@ -41,6 +55,6 @@ export const INVOICE_STATUS_META: Record<InvoiceStatus, { label: string; tone: P
 
 export const PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
   { value: 'CASH', label: 'Naqd' },
-  { value: 'CLICK', label: 'Click' },
-  { value: 'PAYME', label: 'Payme' },
+  { value: 'CARD', label: 'Karta' },
+  { value: 'DISCOUNT', label: 'Chegirma' },
 ];

@@ -13,9 +13,7 @@ import { usePlans } from '@/lib/hooks/use-owner-plans';
 import { useCreateCenter } from '@/lib/hooks/use-owner-tenants';
 import type { ProvisionResult } from '@/lib/types/owner';
 
-type V = { centerName: string; directorName: string; phone: string; slug: string; planId: string };
-
-const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
+type V = { centerName: string; directorName: string; phone: string; planId: string };
 
 /** OWNER provisions a new center; shows the generated login on success. */
 export function CreateCenterDialog() {
@@ -23,13 +21,13 @@ export function CreateCenterDialog() {
   const [result, setResult] = useState<ProvisionResult | null>(null);
   const { data: plans } = usePlans();
   const create = useCreateCenter();
-  const form = useForm<V>({ defaultValues: { centerName: '', directorName: '', phone: '+998 ', slug: '', planId: '' } });
+  const form = useForm<V>({ defaultValues: { centerName: '', directorName: '', phone: '+998 ', planId: '' } });
 
   const close = () => { setOpen(false); setResult(null); form.reset(); };
   const onSubmit = form.handleSubmit(async (v) => {
     setResult(await create.mutateAsync({
       centerName: v.centerName, directorName: v.directorName, phone: cleanPhone(v.phone),
-      slug: v.slug ? slugify(v.slug) : slugify(v.centerName), planId: v.planId || undefined,
+      planId: v.planId || undefined,
     }));
   });
 
@@ -51,19 +49,16 @@ export function CreateCenterDialog() {
       ) : (
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
           <div><FieldLabel>MARKAZ NOMI</FieldLabel><NmInput {...form.register('centerName', { required: true })} /></div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div><FieldLabel>DIREKTOR</FieldLabel><NmInput {...form.register('directorName', { required: true })} /></div>
             <div><FieldLabel>TELEFON</FieldLabel><NmInput {...form.register('phone')} /></div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div><FieldLabel>SLUG (ixtiyoriy)</FieldLabel><NmInput placeholder="markaz-nomi" {...form.register('slug')} /></div>
-            <div>
-              <FieldLabel>TARIF</FieldLabel>
-              <NmSelect {...form.register('planId')}>
-                <option value="">Birinchi faol tarif</option>
-                {(plans ?? []).map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-              </NmSelect>
-            </div>
+          <div>
+            <FieldLabel>TARIF</FieldLabel>
+            <NmSelect {...form.register('planId')}>
+              <option value="">Birinchi faol tarif</option>
+              {(plans ?? []).map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </NmSelect>
           </div>
           <div className="mt-2 flex gap-3">
             <NmButton type="button" variant="soft" className="flex-1" onClick={close}>Bekor</NmButton>

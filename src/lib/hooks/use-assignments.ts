@@ -27,6 +27,22 @@ export function useDeleteAssignment() {
   return useMutation({ mutationFn: assignmentsApi.softDelete, onSuccess: invalidate });
 }
 
+export function useSubmissions(id: string, enabled: boolean) {
+  return useQuery({ queryKey: [KEY, id, 'submissions'], queryFn: () => assignmentsApi.submissions(id), enabled });
+}
+
+export function useGradeSubmission(assignmentId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ submissionId, score }: { submissionId: string; score: number }) =>
+      assignmentsApi.grade(submissionId, { score }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [KEY, assignmentId, 'submissions'] });
+      qc.invalidateQueries({ queryKey: [KEY] });
+    },
+  });
+}
+
 export function useUploadAssignmentFile() {
   return useMutation({ mutationFn: assignmentsApi.uploadFile });
 }

@@ -2,6 +2,7 @@
 
 import { Eye } from 'lucide-react';
 import { Avatar } from '@/components/ui/avatar';
+import { RowIndex } from '@/components/shared/row-index';
 import { NmIconButton } from '@/components/ui/nm-icon-button';
 import { cn } from '@/lib/utils/cn';
 import { ownerApi } from '@/lib/api/owner';
@@ -9,14 +10,15 @@ import { startImpersonation } from '@/lib/auth/impersonation';
 import type { OwnerUser } from '@/lib/types/owner-users';
 import { UserDialog } from './user-dialog';
 
-export const USER_COLS = 'grid grid-cols-[2fr_1.4fr_1.5fr_100px] items-center gap-4';
+export const USER_COLS = 'grid min-w-[700px] grid-cols-[40px_2fr_1.4fr_1.5fr_100px] items-center gap-4';
 
 /** One cross-tenant user row — identity, center/role, role chips, login-as + edit. */
-export function UserRow({ user }: { user: OwnerUser }) {
+export function UserRow({ user, n }: { user: OwnerUser; n: number }) {
   const onImpersonate = async () => startImpersonation(await ownerApi.impersonateUser(user.id));
 
   return (
     <div className={cn(USER_COLS, 'rounded-[16px] px-4 py-[13px] transition-shadow hover:shadow-nm-inset-sm')}>
+      <RowIndex n={n} />
       <div className="flex min-w-0 items-center gap-[13px]">
         <Avatar name={user.fullName} size={42} />
         <div className="min-w-0">

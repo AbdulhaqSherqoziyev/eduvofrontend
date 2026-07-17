@@ -13,7 +13,7 @@ export function PaymentSummaryStrip() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-3 gap-[22px]">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-[22px]">
         {[0, 1, 2].map((i) => (
           <Skeleton key={i} className="h-[92px]" />
         ))}
@@ -26,7 +26,7 @@ export function PaymentSummaryStrip() {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-[22px]">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-[22px]">
       <SummaryCard label="YIG'ILGAN" value={formatSom(data.collected)} icon={<Check className="size-[22px]" />} tone="success" />
       <SummaryCard label="QOLDIQ" value={formatSom(data.outstanding)} icon={<Clock className="size-[22px]" />} tone="muted" />
       <SummaryCard label="MUDDATI O'TGAN" value={formatSom(data.overdue)} icon={<AlertTriangle className="size-[22px]" />} tone="danger" />

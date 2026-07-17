@@ -9,13 +9,15 @@ interface NavItemLinkProps {
   label: string;
   icon: LucideIcon;
   active: boolean;
+  onClick?: () => void;
 }
 
 /** One sidebar nav link; active state is the pressed-in (inset) look. */
-export function NavItemLink({ href, label, icon: Icon, active }: NavItemLinkProps) {
+export function NavItemLink({ href, label, icon: Icon, active, onClick }: NavItemLinkProps) {
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={cn(
         'mb-[5px] flex w-full items-center gap-[13px] rounded-[15px] px-[14px] py-3 text-left text-[14.5px]',
         'transition-all duration-200',

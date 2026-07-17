@@ -13,7 +13,7 @@ export function TeacherPerformanceCard() {
   const query = useTeacherPerformance();
 
   return (
-    <NmCard className="col-span-7 p-[22px]">
+    <NmCard className="col-span-1 sm:col-span-2 md:col-span-7 p-[22px]">
       <div className="mb-[18px] text-[17px] font-extrabold tracking-[-0.3px] text-foreground">
         O,qituvchilar samaradorligi
       </div>

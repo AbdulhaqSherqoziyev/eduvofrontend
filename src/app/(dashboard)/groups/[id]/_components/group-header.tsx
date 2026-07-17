@@ -9,6 +9,7 @@ import { CircularProgress } from '@/components/ui/circular-progress';
 import { useGroup } from '@/lib/hooks/use-groups';
 import { GROUP_LEVEL_META } from '@/lib/types/group';
 import { formatSom, formatPercent } from '@/lib/utils/format';
+import { formatDate } from '@/lib/utils/date';
 
 /** Group summary card — name, level, teacher, schedule, price, attendance ring. */
 export function GroupHeader({ id }: { id: string }) {
@@ -27,6 +28,10 @@ export function GroupHeader({ id }: { id: string }) {
         </div>
         <div className="text-[13px] font-semibold text-muted">
           {group.subjectName} &middot; {group.studentCount} o&apos;quvchi
+          {group.roomName ? <> &middot; {group.roomName}</> : null}
+        </div>
+        <div className="text-[12px] font-semibold text-[#9aa6b8]">
+          Ochilgan: {formatDate(group.createdAt)}
         </div>
       </div>
 
@@ -41,7 +46,7 @@ export function GroupHeader({ id }: { id: string }) {
       <div className="ml-auto flex items-center gap-[22px]">
         <div className="flex items-center gap-2 rounded-ctl bg-background px-[14px] py-2.5 text-[12.5px] font-semibold text-[#5b6b82] shadow-nm-inset-sm">
           <Clock className="h-4 w-4" />
-          {group.schedule} &middot; {group.startTime}
+          {group.schedule} &middot; {group.startTime}{group.endTime ? `–${group.endTime}` : ''}
         </div>
         <div className="text-[18px] font-extrabold text-foreground">
           {formatSom(group.price)}

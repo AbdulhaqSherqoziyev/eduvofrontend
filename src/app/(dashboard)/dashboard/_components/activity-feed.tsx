@@ -21,7 +21,7 @@ export function ActivityFeed() {
   const query = useRecentActivity();
 
   return (
-    <NmCard className="col-span-5 p-[22px]">
+    <NmCard className="col-span-1 sm:col-span-2 md:col-span-5 p-[22px]">
       <div className="mb-[18px] text-[17px] font-extrabold tracking-[-0.3px] text-foreground">So,nggi faoliyat</div>
       <QueryBoundary
         query={query}

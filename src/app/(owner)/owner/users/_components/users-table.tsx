@@ -17,9 +17,9 @@ export function UsersTable({ tenantId, search }: { tenantId: string; search: str
   const query = useOwnerUsers({ tenantId: tenantId || undefined, search: search || undefined, page, limit: pageSize });
 
   return (
-    <NmCard className="px-4 py-3.5">
+    <NmCard className="px-4 py-3.5 overflow-x-auto">
       <div className={`${USER_COLS} px-4 pb-3.5 pt-2 text-[10.5px] font-bold uppercase tracking-[0.8px] text-[#9aa6b8]`}>
-        <div>FOYDALANUVCHI</div><div>MARKAZ / LAVOZIM</div><div>ROLLAR</div><div className="text-right">AMAL</div>
+        <div>#</div><div>FOYDALANUVCHI</div><div>MARKAZ / LAVOZIM</div><div>ROLLAR</div><div className="text-right">AMAL</div>
       </div>
       <QueryBoundary
         query={query}
@@ -29,7 +29,7 @@ export function UsersTable({ tenantId, search }: { tenantId: string; search: str
       >
         {(data) => (
           <div>
-            {data.items.map((u) => <UserRow key={u.id} user={u} />)}
+            {data.items.map((u, i) => <UserRow key={u.id} user={u} n={(page - 1) * pageSize + i + 1} />)}
             <Pagination page={page} pageSize={pageSize} total={data.total} onPageChange={setPage}
               onPageSizeChange={(s) => { setPageSize(s); setPage(1); }} />
           </div>

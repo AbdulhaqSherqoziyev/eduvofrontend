@@ -32,6 +32,7 @@ export interface CreateAssignmentInput {
 
 export interface AssignmentListParams {
   groupId?: string;
+  status?: AssignmentStatus;
   page?: number;
   limit?: number;
 }

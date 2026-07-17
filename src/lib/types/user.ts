@@ -7,6 +7,7 @@ export interface StaffRole {
 
 export interface Staff {
   id: string;
+  seq: number;
   fullName: string;
   phone: string;
   isSuperAdmin: boolean;

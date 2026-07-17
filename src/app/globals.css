@@ -23,6 +23,34 @@
   --nm-inset-sm: inset -2px -2px 5px rgba(255, 255, 255, 0.85), inset 2px 2px 5px rgba(163, 177, 198, 0.55);
 }
 
+.dark {
+  --bg: #23272f;
+  --surface: #262b34;
+  --primary: #4f83f0;
+  --accent: #6d9bf5;
+  --selected: #2b3a57;
+  --text: #e6ebf4;
+  --text-soft: #93a0b4;
+  --success: #34c07f;
+  --warning: #e0a33c;
+  --danger: #ef6a5f;
+
+  --nm-raised: -6px -6px 12px rgba(255, 255, 255, 0.045), 6px 6px 14px rgba(0, 0, 0, 0.55);
+  --nm-raised-sm: -3px -3px 7px rgba(255, 255, 255, 0.04), 3px 3px 8px rgba(0, 0, 0, 0.5);
+  --nm-inset: inset -4px -4px 8px rgba(255, 255, 255, 0.04), inset 4px 4px 10px rgba(0, 0, 0, 0.55);
+  --nm-inset-sm: inset -2px -2px 5px rgba(255, 255, 255, 0.035), inset 2px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.dark ::placeholder {
+  color: #6d7a8f;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #3a4353;
+}
+/* Soften hardcoded light-mode grays in dark mode. */
+.dark .text-\[\#9aa6b8\] { color: #7d8aa0; }
+.dark .text-\[\#5b6b82\] { color: #a4b0c4; }
+
 @layer base {
   * {
     box-sizing: border-box;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StudentsToolbar } from './students-toolbar';
 import { StudentTable } from './student-table';
 import { DeletedStudentTable } from './deleted-student-table';
@@ -10,6 +10,11 @@ export function StudentsBoard() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('');
   const [trashed, setTrashed] = useState(false);
+
+  useEffect(() => {
+    const status = new URLSearchParams(window.location.search).get('status');
+    if (status) setFilter(status);
+  }, []);
 
   return (
     <div className="flex flex-col gap-5">

@@ -2,6 +2,7 @@
 
 import { Eye, RotateCcw } from 'lucide-react';
 import { Avatar } from '@/components/ui/avatar';
+import { RowIndex } from '@/components/shared/row-index';
 import { StatusPill } from '@/components/shared/status-pill';
 import { NmIconButton } from '@/components/ui/nm-icon-button';
 import { cn } from '@/lib/utils/cn';
@@ -12,10 +13,10 @@ import { useRestoreCenter } from '@/lib/hooks/use-owner-tenants';
 import { SUB_STATUS_META, type OwnerTenant } from '@/lib/types/owner';
 import { ManageCenterDialog } from './manage-center-dialog';
 
-export const CENTER_COLS = 'grid grid-cols-[2.1fr_1.2fr_1.1fr_1.1fr_1fr_128px] items-center gap-4';
+export const CENTER_COLS = 'grid min-w-[700px] grid-cols-[40px_2.1fr_1.2fr_1.1fr_1.1fr_1fr_128px] items-center gap-4';
 
 /** One center row — name, counts, fee, balance, status, login-as + manage. */
-export function CenterRow({ tenant }: { tenant: OwnerTenant }) {
+export function CenterRow({ tenant, n }: { tenant: OwnerTenant; n: number }) {
   const sub = tenant.subscription;
   const meta = sub ? SUB_STATUS_META[sub.status] : null;
   const balance = sub?.balance ?? 0;
@@ -26,11 +27,12 @@ export function CenterRow({ tenant }: { tenant: OwnerTenant }) {
   return (
     <div className={cn(CENTER_COLS, 'rounded-[16px] px-4 py-[13px] transition-shadow hover:shadow-nm-inset-sm',
       tenant.archived && 'opacity-55')}>
+      <RowIndex n={n} />
       <div className="flex min-w-0 items-center gap-[13px]">
         <Avatar name={tenant.name} size={42} />
         <div className="min-w-0">
           <div className="truncate text-[14px] font-bold text-foreground">{tenant.name}</div>
-          <div className="text-[12px] font-semibold text-[#9aa6b8]">{tenant.slug}{tenant.archived ? ' · arxiv' : ''}</div>
+          <div className="text-[12px] font-semibold text-[#9aa6b8]">#{tenant.seq} · {tenant.slug}{tenant.archived ? ' · arxiv' : ''}</div>
         </div>
       </div>
       <div className="text-[12.5px] font-semibold text-[#5b6b82]">

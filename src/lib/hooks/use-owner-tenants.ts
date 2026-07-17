@@ -44,7 +44,7 @@ export function useRestoreCenter() {
 export function useTopup(tenantId: string) {
   const invalidate = useInvalidate();
   return useMutation({
-    mutationFn: (v: { amount: number; note?: string }) => ownerApi.topup(tenantId, v.amount, v.note),
+    mutationFn: (v: { amount: number; note?: string; method?: string }) => ownerApi.topup(tenantId, v.amount, v.note, v.method),
     onSuccess: invalidate,
   });
 }

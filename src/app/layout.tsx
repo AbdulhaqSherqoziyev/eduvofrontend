@@ -4,8 +4,12 @@ import { QueryProvider } from '@/providers/query-provider';
 import { AuthProvider } from '@/providers/auth-provider';
 
 export const metadata: Metadata = {
-  title: 'Ustoz — EDU-ERP',
-  description: "Ta'lim markazlari uchun boshqaruv tizimi",
+  title: 'Eduvo — ERP',
+  description: "Ta'lim markazlari uchun ERP tizimi",
+  manifest: '/manifest.json',
+  themeColor: '#2E6BE6',
+  appleWebApp: { capable: true, title: 'Eduvo', statusBarStyle: 'default' },
+  icons: { icon: '/favicon.svg', apple: '/icon-512.png' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -20,6 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{if(localStorage.getItem('eduvo_theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}",
+          }}
+        />
         <QueryProvider>
           <AuthProvider>{children}</AuthProvider>
         </QueryProvider>

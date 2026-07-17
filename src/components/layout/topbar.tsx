@@ -1,38 +1,48 @@
 'use client';
 
-import { Bell, Search } from 'lucide-react';
+import { Search, Menu } from 'lucide-react';
 import { Avatar } from '@/components/ui/avatar';
 import { Brand } from './brand';
 import { SectionSwitch } from './section-switch';
+import { BalanceBadge } from './balance-badge';
+import { NotificationsBell } from './notifications-bell';
+import { ThemeToggle } from './theme-toggle';
+import { useMobileNav } from './mobile-nav';
 import { useAuth } from '@/providers/auth-provider';
 
-/** Sticky top bar: brand, section switch, search, notifications, avatar. */
+/** Sticky top bar: hamburger (mobile), brand, section switch, search, balance, avatar. */
 export function Topbar() {
   const { user } = useAuth();
+  const { setOpen } = useMobileNav();
   return (
-    <header className="flex flex-shrink-0 items-center gap-[18px] rounded-[24px] bg-background px-5 py-[13px] shadow-nm">
+    <header className="flex flex-shrink-0 items-center gap-3 rounded-[24px] bg-background px-3.5 py-[11px] shadow-nm md:gap-[18px] md:px-5 md:py-[13px]">
+      <button
+        type="button"
+        aria-label="Menyu"
+        onClick={() => setOpen(true)}
+        className="flex size-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-background text-foreground shadow-nm-sm nm-pressable md:hidden"
+      >
+        <Menu className="size-5" strokeWidth={2} />
+      </button>
       <div className="flex-shrink-0">
         <Brand compact />
       </div>
-      <div className="h-9 w-[1.5px] flex-shrink-0 bg-[rgba(163,177,198,0.28)]" />
-      <SectionSwitch />
+      <div className="hidden h-9 w-[1.5px] flex-shrink-0 bg-[rgba(163,177,198,0.28)] md:block" />
+      <div className="hidden md:block">
+        <SectionSwitch />
+      </div>
       <div className="flex-1" />
-      <div className="flex h-11 w-[230px] flex-shrink-0 items-center rounded-[13px] bg-background px-[15px] text-[#9aa6b8] shadow-nm-inset">
+      <div className="hidden h-11 w-[230px] flex-shrink-0 items-center rounded-[13px] bg-background px-[15px] text-[#9aa6b8] shadow-nm-inset lg:flex">
         <Search className="size-[18px] flex-shrink-0" strokeWidth={2} />
         <input
           placeholder="Qidirish..."
           className="ml-[11px] w-full border-0 bg-transparent text-[14px] font-medium text-foreground outline-none"
         />
       </div>
-      <button
-        type="button"
-        aria-label="Bildirishnomalar"
-        className="relative flex size-11 flex-shrink-0 items-center justify-center rounded-[13px] bg-background text-[#5b6b82] shadow-nm-sm nm-pressable"
-      >
-        <Bell className="size-5" strokeWidth={2} />
-        <span className="absolute right-[11px] top-2.5 size-2 rounded-full border-2 border-background bg-danger" />
-      </button>
-      <Avatar name={user?.fullName ?? 'U'} size={44} className="rounded-[13px]" />
+      <BalanceBadge />
+      <ThemeToggle />
+      <NotificationsBell />
+      <Avatar name={user?.fullName ?? 'U'} size={44} className="flex-shrink-0 rounded-[13px]" />
     </header>
   );
 }

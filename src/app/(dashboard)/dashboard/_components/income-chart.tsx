@@ -12,7 +12,7 @@ export function IncomeChart() {
   const query = useIncomeChart();
 
   return (
-    <NmCard className="col-span-8 p-[22px]">
+    <NmCard className="col-span-1 sm:col-span-2 md:col-span-8 p-[22px]">
       <div className="mb-[18px] flex items-start justify-between">
         <div>
           <div className="text-[17px] font-extrabold tracking-[-0.3px] text-foreground">Daromad dinamikasi</div>

@@ -8,14 +8,15 @@ import { Can } from '@/components/shared/can';
 import { NmIconButton } from '@/components/ui/nm-icon-button';
 import { formatSom } from '@/lib/utils/format';
 import { cn } from '@/lib/utils/cn';
+import { RowIndex } from '@/components/shared/row-index';
 import { GROUP_LEVEL_META, type Group } from '@/lib/types/group';
 import { useDeleteGroup } from '@/lib/hooks/use-groups';
 import { EditGroupDialog } from './edit-group-dialog';
 
-const COLS = 'grid grid-cols-[2fr_1.4fr_1.3fr_1fr_1.1fr_124px] items-center gap-4';
+const COLS = 'grid min-w-[700px] grid-cols-[40px_2fr_1.4fr_1.3fr_1fr_1.1fr_124px] items-center gap-4';
 
 /** One group table row: name, teacher, schedule, students, price, actions. */
-export function ManageGroupRow({ group }: { group: Group }) {
+export function ManageGroupRow({ group, n }: { group: Group; n: number }) {
   const remove = useDeleteGroup();
   const meta = GROUP_LEVEL_META[group.level];
 
@@ -27,6 +28,7 @@ export function ManageGroupRow({ group }: { group: Group }) {
 
   return (
     <div className={cn(COLS, 'rounded-[16px] px-4 py-[13px] transition-shadow hover:shadow-nm-inset-sm')}>
+      <RowIndex n={n} />
       <div className="min-w-0">
         <div className="truncate text-[14px] font-bold text-foreground">{group.name}</div>
         <div className="mt-1">

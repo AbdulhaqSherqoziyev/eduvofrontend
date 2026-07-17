@@ -18,15 +18,14 @@ export function EditTeacherDialog({ teacher }: { teacher: Teacher }) {
   const update = useUpdateTeacher(teacher.id);
   const form = useForm<TeacherFormValues>({
     resolver: zodResolver(teacherSchema),
-    defaultValues: { fullName: teacher.fullName, phone: teacher.phone, salary: String(teacher.salary), subjectId: '' },
+    defaultValues: { fullName: teacher.fullName, phone: teacher.phone, directions: '' },
   });
 
   const onSubmit = async (values: TeacherFormValues) => {
     await update.mutateAsync({
       fullName: values.fullName,
       phone: values.phone,
-      salary: Number(values.salary),
-      subjectId: values.subjectId || undefined,
+      directions: values.directions || undefined,
     });
     setOpen(false);
   };

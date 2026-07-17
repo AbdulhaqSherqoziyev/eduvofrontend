@@ -18,7 +18,7 @@ export function MetricCards() {
     return (
       <>
         {[0, 1, 2, 3].map((i) => (
-          <Skeleton key={i} className="col-span-3 h-[150px]" />
+          <Skeleton key={i} className="col-span-1 md:col-span-3 h-[150px]" />
         ))}
       </>
     );
@@ -26,7 +26,7 @@ export function MetricCards() {
 
   if (query.isError || query.data === undefined) {
     return (
-      <div className="col-span-12">
+      <div className="col-span-1 sm:col-span-2 md:col-span-12">
         <ErrorCard onRetry={() => query.refetch()} />
       </div>
     );
@@ -36,7 +36,7 @@ export function MetricCards() {
 
   return (
     <>
-      <div className="col-span-3">
+      <div className="col-span-1 md:col-span-3">
         <StatCard
           label="OYLIK DAROMAD"
           icon={<CreditCard size={20} />}
@@ -45,7 +45,7 @@ export function MetricCards() {
           footer={<StatusPill tone="success" label={'↑ ' + m.revenueDeltaPct + '% o,tgan oyga'} />}
         />
       </div>
-      <div className="col-span-3">
+      <div className="col-span-1 md:col-span-3">
         <StatCard
           label="KUTILAYOTGAN TO,LOV"
           icon={<Clock size={20} />}
@@ -53,7 +53,7 @@ export function MetricCards() {
           footer={<StatusPill tone="muted" label={m.expectedInvoices + ' ta hisob kutilmoqda'} />}
         />
       </div>
-      <div className="col-span-3">
+      <div className="col-span-1 md:col-span-3">
         <StatCard
           label="FAOL O,QUVCHILAR"
           icon={<Users size={20} />}
@@ -62,7 +62,7 @@ export function MetricCards() {
           footer={<StatusPill tone="success" label={'↑ ' + m.studentsAddedThisMonth + ' bu oy qo,shildi'} />}
         />
       </div>
-      <NmCard className="col-span-3 p-[22px] flex items-center gap-[18px]">
+      <NmCard className="col-span-1 md:col-span-3 p-[22px] flex items-center gap-[18px]">
         <CircularProgress value={m.attendanceRate} size={78} />
         <div>
           <div className="text-[11px] font-bold uppercase tracking-[0.7px] text-muted">O,RTACHA DAVOMAT</div>

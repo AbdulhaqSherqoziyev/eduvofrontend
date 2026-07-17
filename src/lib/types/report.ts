@@ -4,12 +4,19 @@ export interface FinanceReportRow {
   expense: number;
 }
 
+export interface FinanceCategoryRow {
+  category: string;
+  amount: number;
+}
+
 export interface FinanceReport {
   collected: number;
   expected: number;
   expense: number;
   net: number;
+  months: number;
   rows: FinanceReportRow[];
+  byCategory: FinanceCategoryRow[];
 }
 
 export interface AttendanceReportRow {
@@ -37,6 +44,7 @@ export interface TeacherReport {
 }
 
 export interface ReportParams {
+  months?: number;
   from?: string;
   to?: string;
 }

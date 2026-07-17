@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { transactionsApi } from '../api/transactions';
 import type { TransactionListParams } from '../types/transaction';
 
@@ -10,4 +10,17 @@ export function useTransactions(params: TransactionListParams) {
 
 export function useTransactionSummary() {
   return useQuery({ queryKey: [KEY, 'summary'], queryFn: transactionsApi.summary });
+}
+
+export function useVoidTransaction() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => transactionsApi.void(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [KEY] });
+      qc.invalidateQueries({ queryKey: ['invoices'] });
+      qc.invalidateQueries({ queryKey: ['payment-summary'] });
+      qc.invalidateQueries({ queryKey: ['students'] });
+    },
+  });
 }

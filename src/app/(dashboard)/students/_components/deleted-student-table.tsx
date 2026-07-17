@@ -10,6 +10,7 @@ import { QueryBoundary } from '@/components/shared/query-boundary';
 import { EmptyState } from '@/components/shared/empty-state';
 import { RowsSkeleton } from '@/components/shared/skeleton';
 import { Pagination } from '@/components/shared/pagination';
+import { RowIndex } from '@/components/shared/row-index';
 import { useDeletedStudents, useRestoreStudent } from '@/lib/hooks/use-students';
 
 /** Trash view — soft-deleted students with a restore action, paginated. */
@@ -30,8 +31,9 @@ export function DeletedStudentTable({ search }: { search: string }) {
       >
         {(data) => (
           <>
-            {data.items.map((s) => (
+            {data.items.map((s, i) => (
               <div key={s.id} className="flex items-center gap-3 rounded-[16px] px-4 py-3 hover:shadow-nm-inset-sm">
+                <RowIndex n={(page - 1) * pageSize + i + 1} />
                 <Avatar name={s.fullName} size={40} tone="muted" />
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-[14px] font-bold text-foreground">{s.fullName}</div>

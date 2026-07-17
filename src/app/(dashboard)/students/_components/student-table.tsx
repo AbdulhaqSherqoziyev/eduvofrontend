@@ -10,7 +10,7 @@ import { useStudents } from '@/lib/hooks/use-students';
 import type { StudentStatus } from '@/lib/types/student';
 import { StudentRow } from './student-row';
 
-const HEAD = 'grid grid-cols-[2.4fr_1.5fr_1.3fr_1.1fr_92px] items-center gap-4 px-4 pb-3.5 pt-2';
+const HEAD = 'grid min-w-[700px] grid-cols-[40px_2.4fr_1.5fr_1.3fr_1.1fr_92px] items-center gap-4 px-4 pb-3.5 pt-2';
 
 interface StudentTableProps {
   search: string;
@@ -30,8 +30,9 @@ export function StudentTable({ search, status }: StudentTableProps) {
   });
 
   return (
-    <NmCard className="px-4 py-3.5">
+    <NmCard className="px-4 py-3.5 overflow-x-auto">
       <div className={`${HEAD} text-[10.5px] font-bold uppercase tracking-[0.8px] text-[#9aa6b8]`}>
+        <div>#</div>
         <div>O&apos;QUVCHI</div>
         <div>GURUH</div>
         <div>BALANS</div>
@@ -47,8 +48,8 @@ export function StudentTable({ search, status }: StudentTableProps) {
         {(data) => (
           <>
             <div>
-              {data.items.map((student) => (
-                <StudentRow key={student.id} student={student} />
+              {data.items.map((student, i) => (
+                <StudentRow key={student.id} student={student} n={(page - 1) * pageSize + i + 1} />
               ))}
             </div>
             <Pagination

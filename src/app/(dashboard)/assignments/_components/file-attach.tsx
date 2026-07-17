@@ -19,8 +19,12 @@ export function FileAttach({ value, onChange }: Props) {
   const onPick = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const picked = Array.from(e.target.files ?? []);
     e.target.value = '';
+    const MAX = 10 * 1024 * 1024;
+    const ALLOWED = /^(image\/|application\/pdf)/;
     const added: { id: string; name: string }[] = [];
     for (const file of picked) {
+      if (!ALLOWED.test(file.type)) { window.alert(`${file.name}: faqat rasm yoki PDF biriktirish mumkin`); continue; }
+      if (file.size > MAX) { window.alert(`${file.name}: hajmi 10 MB dan oshmasligi kerak`); continue; }
       const res = await upload.mutateAsync(file);
       added.push({ id: res.id, name: res.name });
     }
@@ -37,7 +41,7 @@ export function FileAttach({ value, onChange }: Props) {
 
   return (
     <div className="flex flex-col gap-2.5">
-      <input ref={inputRef} type="file" multiple hidden onChange={onPick} />
+      <input ref={inputRef} type="file" multiple hidden accept="image/*,application/pdf" onChange={onPick} />
       <NmButton
         type="button"
         variant="soft"

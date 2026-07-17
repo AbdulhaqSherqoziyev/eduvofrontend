@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutGrid, SlidersHorizontal } from 'lucide-react';
-import { SECTION_HOME, sectionForPath, type NavSection } from '@/lib/nav/items';
+import { SECTION_HOME, sectionForPath, visibleSections, type NavSection } from '@/lib/nav/items';
+import { useTenantFlags } from '@/lib/hooks/use-tenant-settings';
 import { cn } from '@/lib/utils/cn';
 
 const ITEMS: { key: NavSection; label: string; icon: typeof LayoutGrid }[] = [
@@ -14,9 +15,13 @@ const ITEMS: { key: NavSection; label: string; icon: typeof LayoutGrid }[] = [
 /** Top-bar Asosiy / Boshqaruv switch — jumps to each section's home route. */
 export function SectionSwitch() {
   const active = sectionForPath(usePathname());
+  const { teacherOnlyMode } = useTenantFlags();
+  const allowed = visibleSections(teacherOnlyMode);
+  const shown = ITEMS.filter((i) => allowed.includes(i.key));
+  if (shown.length <= 1) return null;
   return (
     <div className="flex flex-shrink-0 gap-2.5">
-      {ITEMS.map(({ key, label, icon: Icon }) => (
+      {shown.map(({ key, label, icon: Icon }) => (
         <Link
           key={key}
           href={SECTION_HOME[key]}

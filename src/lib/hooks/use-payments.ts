@@ -23,3 +23,15 @@ export function useAcceptPayment() {
     },
   });
 }
+
+export function useAcceptStudentPayment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: paymentsApi.acceptStudent,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [KEY] });
+      qc.invalidateQueries({ queryKey: [SUMMARY_KEY] });
+      qc.invalidateQueries({ queryKey: ['students'] });
+    },
+  });
+}

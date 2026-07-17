@@ -35,7 +35,7 @@ export function NmSegmented({ items, value, onValueChange, className, size = 'md
           aria-selected={item.value === value}
           onClick={() => onValueChange(item.value)}
           className={cn(
-            'relative z-[2] flex-1 border-0 bg-transparent font-sans text-[13px] font-bold transition-colors',
+            'relative z-[2] flex-1 whitespace-nowrap border-0 bg-transparent px-4 font-sans text-[13px] font-bold transition-colors',
             item.value === value ? 'text-primary' : 'text-[#5b6b82]',
           )}
         >

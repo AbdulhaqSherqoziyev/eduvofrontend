@@ -1,20 +1,22 @@
-import { cn } from '@/lib/utils/cn';
-
-/** Ustoz logo lockup — soft square mark + wordmark. */
+/** Eduvo logo lockup — brand mark (blue square + white diamond) + wordmark. */
 export function Brand({ compact }: { compact?: boolean }) {
+  const s = compact ? 44 : 48;
   return (
     <div className="flex items-center gap-3">
-      <div
-        className={cn(
-          'flex flex-shrink-0 items-center justify-center rounded-[14px] bg-background shadow-nm-sm',
-          compact ? 'size-11' : 'size-12',
-        )}
+      <svg
+        width={s}
+        height={s}
+        viewBox="0 0 64 64"
+        className="flex-shrink-0"
+        style={{ display: 'block' }}
+        aria-label="Eduvo"
       >
-        <div className="size-4 rotate-45 rounded-[5px] bg-grad-primary shadow-[0_3px_6px_rgba(46,107,230,0.45)]" />
-      </div>
+        <rect width="64" height="64" rx="16" fill="#3D7BF0" />
+        <rect x="20" y="20" width="24" height="24" rx="7" transform="rotate(45 32 32)" fill="#fff" />
+      </svg>
       <div>
-        <div className="text-[18px] font-extrabold leading-none tracking-[-0.4px] text-foreground">Ustoz</div>
-        <div className="mt-[3px] text-[10.5px] font-semibold text-muted">Ta&apos;lim markazi</div>
+        <div className="text-[18px] font-extrabold leading-none tracking-[-0.4px] text-foreground">Eduvo</div>
+        <div className="mt-[3px] text-[10.5px] font-semibold text-muted">ERP</div>
       </div>
     </div>
   );

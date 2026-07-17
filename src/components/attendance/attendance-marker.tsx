@@ -31,9 +31,10 @@ export function AttendanceMarker({ groupId }: { groupId?: string }) {
 
   return (
     <div className="flex flex-col gap-3">
-      {sheet.data.marks.map((m) => (
+      {sheet.data.marks.map((m, i) => (
         <AttendanceStudentRow
           key={m.studentId}
+          n={i + 1}
           fullName={m.fullName}
           mark={marks[m.studentId]}
           onStatus={(s) => setStatus(m.studentId, s)}

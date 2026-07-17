@@ -42,7 +42,7 @@ export function UserFormFields(p: Props) {
         <NmInput placeholder="Masalan: Dilshod Karimov" value={p.values.fullName}
           onChange={(e) => p.onChange({ fullName: e.target.value })} />
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <FieldLabel>TELEFON</FieldLabel>
           <NmInput placeholder="+998 90 ..." value={p.values.phone}

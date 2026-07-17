@@ -8,6 +8,7 @@ export interface OverrideInput {
   customSetupFee?: number;
   discountPercent?: number;
   planId?: string;
+  modules?: string[];
 }
 
 /** Platform OWNER endpoints (all under /platform/*, guarded by platform auth). */
@@ -23,8 +24,8 @@ export const ownerApi = {
     api.post<Session>(`/platform/impersonate/tenant/${id}`).then((r) => r.data),
   impersonateUser: (userId: string) =>
     api.post<Session>(`/platform/impersonate/user/${userId}`).then((r) => r.data),
-  topup: (tenantId: string, amount: number, note?: string) =>
-    api.post(`/platform/tenants/${tenantId}/transactions/topup`, { amount, note }).then((r) => r.data),
+  topup: (tenantId: string, amount: number, note?: string, method?: string) =>
+    api.post(`/platform/tenants/${tenantId}/transactions/topup`, { amount, note, method }).then((r) => r.data),
   setStatus: (tenantId: string, status: string) =>
     api.patch(`/platform/subscriptions/${tenantId}/status`, { status }).then((r) => r.data),
   override: (tenantId: string, input: OverrideInput) =>

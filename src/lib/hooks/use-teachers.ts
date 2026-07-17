@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { teachersApi } from '../api/teachers';
-import type { CreateTeacherInput } from '../types/teacher';
+import type { CreateTeacherInput, SetTeacherAccountInput } from '../types/teacher';
 import type { ListParams } from '../api/http';
 
 const KEY = 'teachers';
@@ -35,4 +35,23 @@ export function useUpdateTeacher(id: string) {
 export function useDeleteTeacher() {
   const invalidate = useInvalidate();
   return useMutation({ mutationFn: teachersApi.softDelete, onSuccess: invalidate });
+}
+
+export function useTeacherAccount(id: string, enabled: boolean) {
+  return useQuery({
+    queryKey: [KEY, id, 'account'],
+    queryFn: () => teachersApi.getAccount(id),
+    enabled: enabled && !!id,
+  });
+}
+
+export function useSetTeacherAccount(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: SetTeacherAccountInput) => teachersApi.setAccount(id, input),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [KEY, id, 'account'] });
+      qc.invalidateQueries({ queryKey: [KEY] });
+    },
+  });
 }
