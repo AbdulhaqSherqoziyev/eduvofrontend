@@ -7,6 +7,7 @@ const TITLES: Record<string, [string, string]> = {
   '/assignments': ['Vazifalar', 'Uy vazifalari va topshiriqlar'],
   '/schedule': ['Dars jadvali', 'Haftalik dars jadvali'],
   '/transactions': ['Tranzaksiyalar tarixi', 'Barcha kirim va chiqimlar'],
+  '/leads': ['Lidlar', "Qiziqish bildirganlar va ularning bosqichlari"],
   '/students': ["O'quvchilar", "Barcha o'quvchilar ro'yxati"],
   '/teachers': ["O'qituvchilar", "O'qituvchilarni qo'shish va boshqarish"],
   '/directions': ["Yo'nalishlar", "O'quv yo'nalishlari va kurslar"],
