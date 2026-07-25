@@ -7,6 +7,7 @@ import { NmButton } from "@/components/ui/nm-button";
 import { NmInput } from "@/components/ui/nm-input";
 import { formatSom } from "@/lib/utils/format";
 import { PortalAssignment, type AssignmentRow } from "./portal-assignment";
+import { GamificationCard, RatingChip, RatingBreakdown, isNewStudent, type Gamification } from "./portal-gamification";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
@@ -24,6 +25,7 @@ interface Overview {
   notifications: { id: string; type: string; title: string; body: string; date: string; read: boolean }[];
   unreadCount: number;
   rating: number;
+  gamification?: Gamification;
 }
 
 const ST: Record<string, string> = { PRESENT: "Keldi", LATE: "Kech", ABSENT: "Kelmadi", EXCUSED: "Sababli" };
@@ -37,6 +39,7 @@ export function PortalOverview({ token, onLogout }: { token: string; onLogout: (
   const [reload, setReload] = useState(0);
   const [pw, setPw] = useState({ cur: "", nw: "" });
   const [pwMsg, setPwMsg] = useState("");
+  const [ratingOpen, setRatingOpen] = useState(false);
 
   useEffect(() => {
     const q = sel ? `?studentId=${encodeURIComponent(sel)}` : "";
@@ -74,18 +77,25 @@ export function PortalOverview({ token, onLogout }: { token: string; onLogout: (
 
   return (
     <div className="flex flex-col gap-5">
-      <NmCard className="flex items-center justify-between p-5">
-        <div>
-          <div className="text-[18px] font-extrabold text-foreground">{data.student.fullName}</div>
-          <div className="text-[12.5px] font-semibold text-muted">{data.role === "parent" ? "Ota-ona kabineti" : "O'quvchi kabineti"}</div>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5 rounded-ctl bg-background px-3 py-2 shadow-nm-inset-sm">
-            <Star className="size-4 text-warning" />
-            <span className="text-[15px] font-extrabold text-foreground">{data.rating}%</span>
+      <NmCard className="p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-[18px] font-extrabold text-foreground">{data.student.fullName}</div>
+            <div className="text-[12.5px] font-semibold text-muted">{data.role === "parent" ? "Ota-ona kabineti" : "O'quvchi kabineti"}</div>
           </div>
-          <NmButton variant="soft" size="sm" onClick={onLogout}><LogOut className="size-4" /></NmButton>
+          <div className="flex items-center gap-4">
+            {data.gamification ? (
+              <RatingChip rating={data.rating} g={data.gamification} open={ratingOpen} onToggle={() => setRatingOpen((v) => !v)} />
+            ) : (
+              <div className="flex items-center gap-1.5 rounded-ctl bg-background px-3 py-2 shadow-nm-inset-sm">
+                <Star className="size-4 text-warning" />
+                <span className="text-[15px] font-extrabold text-foreground">{data.rating}%</span>
+              </div>
+            )}
+            <NmButton variant="soft" size="sm" onClick={onLogout}><LogOut className="size-4" /></NmButton>
+          </div>
         </div>
+        {data.gamification && ratingOpen ? <RatingBreakdown g={data.gamification} /> : null}
       </NmCard>
 
       {data.role === "parent" && data.children && data.children.length > 1 ? (
@@ -128,6 +138,8 @@ export function PortalOverview({ token, onLogout }: { token: string; onLogout: (
           </div>
         </NmCard>
       ) : null}
+
+      {data.gamification ? <GamificationCard g={data.gamification} rating={data.rating} role={data.role} /> : null}
 
       <NmCard className="p-5">
         <div className="mb-3 flex items-center justify-between">
@@ -191,7 +203,9 @@ export function PortalOverview({ token, onLogout }: { token: string; onLogout: (
       ) : null}
 
       <NmCard className="p-5">
-        <div className="mb-2 text-[13px] font-extrabold text-foreground">Davomat — {data.attendance.rate}%</div>
+        <div className="mb-2 text-[13px] font-extrabold text-foreground">
+          {data.gamification && isNewStudent(data.gamification) ? "Davomat" : `Davomat — ${data.attendance.rate}%`}
+        </div>
         <div className="flex flex-col gap-1.5">
           {data.attendance.list.slice(0, 10).map((a, i) => (
             <div key={i} className="flex justify-between text-[12.5px]">

@@ -96,3 +96,17 @@
     transform: translateY(1px);
   }
 }
+
+/* Portal mikro-bayram (gemifikatsiya §5.2) */
+@keyframes nm-pop {
+  0% { transform: scale(.5); opacity: 0; }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes nm-ray {
+  0%   { transform: rotate(var(--a)) translateY(-6px) scale(1); opacity: .9; }
+  100% { transform: rotate(var(--a)) translateY(-20px) scale(.3); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nm-celebrate, .nm-celebrate * { animation: none !important; }
+}

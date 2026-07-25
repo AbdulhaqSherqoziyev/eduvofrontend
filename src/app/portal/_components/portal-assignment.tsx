@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Paperclip } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Paperclip, Check } from "lucide-react";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
@@ -25,6 +25,10 @@ export function PortalAssignment({ a, role, token, onDone }: { a: AssignmentRow;
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
+  const [celebrating, setCelebrating] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
   const graded = a.score != null;
 
@@ -37,7 +41,8 @@ export function PortalAssignment({ a, role, token, onDone }: { a: AssignmentRow;
         body: JSON.stringify({ content, link }),
       });
       if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(Array.isArray(d.message) ? d.message.join(", ") : d.message || "Xato"); }
-      setMsg("ok"); setOpen(false); onDone();
+      setMsg("ok"); setOpen(false); setCelebrating(true);
+      timerRef.current = setTimeout(() => { setCelebrating(false); onDone(); }, 1100);
     } catch (e) { setMsg(e instanceof Error ? e.message : "Xato"); } finally { setBusy(false); }
   };
 
@@ -45,8 +50,8 @@ export function PortalAssignment({ a, role, token, onDone }: { a: AssignmentRow;
     <div className="rounded-[12px] bg-background px-3 py-2.5 shadow-nm-inset-sm">
       <div className="flex justify-between gap-2 text-[12.5px]">
         <span className="font-bold text-foreground">{a.dueDate} · {a.title}</span>
-        <span className={graded ? "font-bold text-primary" : a.submitted ? "font-bold text-success" : "font-bold text-danger"}>
-          {graded ? `${a.score} ball` : a.submitted ? "Topshirilgan" : "Topshirilmagan"}
+        <span className={graded ? "font-bold text-primary" : a.submitted ? "font-bold text-success" : "font-bold text-warning"}>
+          {graded ? `${a.score} ball` : a.submitted ? "Topshirilgan" : "Kutilmoqda"}
         </span>
       </div>
       {a.description ? <p className="mt-1 text-[12px] leading-relaxed text-muted">{a.description}</p> : null}
@@ -64,7 +69,19 @@ export function PortalAssignment({ a, role, token, onDone }: { a: AssignmentRow;
 
       {role === "student" && !graded ? (
         <div className="mt-2">
-          {open ? (
+          {celebrating ? (
+            <div className="nm-celebrate flex items-center gap-2 py-2">
+              <div className="relative flex size-8 items-center justify-center rounded-full bg-background shadow-nm-sm animate-[nm-pop_.4s_ease-out]">
+                <Check className="size-4 text-success" />
+                {[0, 60, 120, 180, 240, 300].map((deg, i) => (
+                  <span key={deg}
+                    className={`absolute left-1/2 top-1/2 -ml-[3px] -mt-[3px] size-1.5 rounded-full ${["bg-success", "bg-primary", "bg-warning"][i % 3]}`}
+                    style={{ "--a": `${deg}deg`, animation: "nm-ray .7s ease-out forwards", animationDelay: `${(i % 3) * 50}ms` } as React.CSSProperties} />
+                ))}
+              </div>
+              <span className="text-[12.5px] font-bold text-success animate-[nm-pop_.4s_ease-out]">Barakalla, topshirildi!</span>
+            </div>
+          ) : open ? (
             <div className="flex flex-col gap-2">
               <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="Javobingiz..." rows={3}
                 className="w-full resize-y rounded-[10px] bg-background px-3 py-2 text-[12.5px] text-foreground shadow-nm-inset-sm outline-none" />
