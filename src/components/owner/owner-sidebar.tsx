@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { Building2, BadgeDollarSign, ArrowLeftRight, Users, FileText, LogOut } from 'lucide-react';
+import { Building2, BadgeDollarSign, Boxes, ArrowLeftRight, Users, FileText, LogOut } from 'lucide-react';
 import { Brand } from '@/components/layout/brand';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { NavItemLink } from '@/components/layout/nav-item';
@@ -14,6 +14,7 @@ const ITEMS = [
   { href: '/owner/transactions', label: 'Tranzaksiyalar', icon: ArrowLeftRight },
   { href: '/owner/users', label: 'Foydalanuvchilar', icon: Users },
   { href: '/owner/plans', label: 'Tariflar', icon: BadgeDollarSign },
+  { href: '/owner/modules', label: 'Modullar', icon: Boxes },
   { href: '/owner/offerta', label: 'Oferta', icon: FileText },
 ];
 

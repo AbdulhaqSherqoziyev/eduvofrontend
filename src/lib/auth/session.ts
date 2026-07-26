@@ -1,3 +1,4 @@
+import { clearModuleGate } from './module-gate';
 import type { Session, SessionUser } from './types';
 
 const TOKEN_KEY = 'edu_erp_token';
@@ -35,12 +36,17 @@ export function setSession(session: Session): void {
   if (!isBrowser()) return;
   window.localStorage.setItem(TOKEN_KEY, session.accessToken);
   window.localStorage.setItem(USER_KEY, JSON.stringify(session.user));
+  // A new session can be another user or (entering a branch) another tenant —
+  // the cached module list belongs to neither. Dropping it makes the nav
+  // optimistic until the first GET /modules lands.
+  clearModuleGate();
 }
 
 export function clearSession(): void {
   if (!isBrowser()) return;
   window.localStorage.removeItem(TOKEN_KEY);
   window.localStorage.removeItem(USER_KEY);
+  clearModuleGate();
   // Tear down any stashed impersonation origin so a later login can't inherit it.
   IMP_ORIGIN_KEYS.forEach((k) => window.localStorage.removeItem(k));
 }

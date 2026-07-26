@@ -13,19 +13,22 @@ const tones: Record<PillTone, string> = {
 interface StatusPillProps {
   label: string;
   tone: PillTone;
+  /** Optional leading glyph, so the state never rests on colour alone. */
+  icon?: React.ReactNode;
   className?: string;
 }
 
 /** Small rounded status badge, colored by tone. */
-export function StatusPill({ label, tone, className }: StatusPillProps) {
+export function StatusPill({ label, tone, icon, className }: StatusPillProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-[13px] py-[5px] text-[12px] font-bold',
+        'inline-flex items-center gap-1.5 rounded-full px-[13px] py-[5px] text-[12px] font-bold',
         tones[tone],
         className,
       )}
     >
+      {icon}
       {label}
     </span>
   );

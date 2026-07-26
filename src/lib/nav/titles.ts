@@ -16,6 +16,7 @@ const TITLES: Record<string, [string, string]> = {
   '/roles': ['Rollar va ruxsatlar', 'Foydalanuvchi huquqlarini boshqarish'],
   '/staff': ['Xodimlar', "Xodimlarni qo'shish, rol biriktirish va boshqarish"],
   '/profile': ['Mening profilim', "Ism, telefon va parolni o'zgartirish"],
+  '/modules': ['Tarif va modullar', "Yoqilgan bo'limlar va oylik to'lov"],
 };
 
 export function titleForPath(pathname: string): [string, string] {

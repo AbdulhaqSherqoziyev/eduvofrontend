@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { LayoutGrid, SlidersHorizontal } from 'lucide-react';
 import { SECTION_HOME, sectionForPath, visibleSections, type NavSection } from '@/lib/nav/items';
 import { useTenantFlags } from '@/lib/hooks/use-tenant-settings';
+import { useModuleGateVersion } from '@/lib/hooks/use-module-gate';
 import { cn } from '@/lib/utils/cn';
 
 const ITEMS: { key: NavSection; label: string; icon: typeof LayoutGrid }[] = [
@@ -16,6 +17,7 @@ const ITEMS: { key: NavSection; label: string; icon: typeof LayoutGrid }[] = [
 export function SectionSwitch() {
   const active = sectionForPath(usePathname());
   const { teacherOnlyMode } = useTenantFlags();
+  useModuleGateVersion(); // visibleSections() counts module-gated items
   const allowed = visibleSections(teacherOnlyMode);
   const shown = ITEMS.filter((i) => allowed.includes(i.key));
   if (shown.length <= 1) return null;

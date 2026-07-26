@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { sectionForPath, visibleNavItems, type NavSection } from '@/lib/nav/items';
 import { useTenantFlags } from '@/lib/hooks/use-tenant-settings';
+import { useModuleGateVersion } from '@/lib/hooks/use-module-gate';
 import { NavItemLink } from './nav-item';
 import { UserCard } from './user-card';
 import { SectionSwitch } from './section-switch';
@@ -19,6 +20,9 @@ export function Sidebar() {
   const pathname = usePathname();
   const section = sectionForPath(pathname);
   const { teacherOnlyMode } = useTenantFlags();
+  // visibleNavItems() reads the module gate synchronously; subscribing here is
+  // what re-renders the nav when the first GET /modules lands.
+  useModuleGateVersion();
   const items = visibleNavItems(section, teacherOnlyMode);
   const { open, setOpen } = useMobileNav();
 
