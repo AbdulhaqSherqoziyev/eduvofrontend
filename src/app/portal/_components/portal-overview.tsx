@@ -5,11 +5,36 @@ import { LogOut, Star, Bell, Check } from "lucide-react";
 import { NmCard } from "@/components/ui/nm-card";
 import { NmButton } from "@/components/ui/nm-button";
 import { NmInput } from "@/components/ui/nm-input";
+import { NmDialog } from "@/components/ui/nm-dialog";
 import { formatSom } from "@/lib/utils/format";
 import { PortalAssignment, type AssignmentRow } from "./portal-assignment";
 import { GamificationCard, RatingChip, RatingBreakdown, isNewStudent, type Gamification } from "./portal-gamification";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+
+/**
+ * `needsLogin` is true ONLY for a real 401. Everything else — no signal, a 500,
+ * a timeout — keeps the session and offers a retry, because logging the person
+ * out costs them a login they were given and cannot reset themselves.
+ */
+class PortalError extends Error {
+  needsLogin: boolean;
+  constructor(message: string, needsLogin: boolean) {
+    super(message);
+    this.needsLogin = needsLogin;
+  }
+}
+
+/** Shape of the screen while it loads — a word ("Yuklanmoqda...") reads slower. */
+function PortalSkeleton() {
+  return (
+    <div className="flex flex-col gap-5" aria-busy="true">
+      {[92, 150, 120].map((h, i) => (
+        <div key={i} className="animate-pulse rounded-card bg-background shadow-nm-inset-sm" style={{ height: h }} />
+      ))}
+    </div>
+  );
+}
 
 interface Invoice { period: string; amount: number; paidAmount: number; dueDate: string; status: string }
 interface PaymentRow { date: string; amount: number; method: string; note: string; period: string }
@@ -34,7 +59,8 @@ const PM: Record<string, string> = { CASH: "Naqd", CLICK: "Click", PAYME: "Payme
 
 export function PortalOverview({ token, onLogout }: { token: string; onLogout: () => void }) {
   const [data, setData] = useState<Overview | null>(null);
-  const [err, setErr] = useState("");
+  const [err, setErr] = useState<PortalError | null>(null);
+  const [confirmOut, setConfirmOut] = useState(false);
   const [sel, setSel] = useState<string | undefined>(undefined);
   const [reload, setReload] = useState(0);
   const [pw, setPw] = useState({ cur: "", nw: "" });
@@ -44,9 +70,23 @@ export function PortalOverview({ token, onLogout }: { token: string; onLogout: (
   useEffect(() => {
     const q = sel ? `?studentId=${encodeURIComponent(sel)}` : "";
     fetch(`${API}/portal/overview${q}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(async (r) => { if (!r.ok) throw new Error("Sessiya tugadi"); return r.json(); })
-      .then(setData)
-      .catch((e) => setErr(e.message));
+      // A dropped connection is NOT an expired session. Translating every
+      // failure into "Sessiya tugadi" and offering only "Chiqish" meant one
+      // tunnel with no signal cost the family its login — which the centre
+      // issued and nobody remembers.
+      .then(async (r) => {
+        if (r.status === 401) throw new PortalError("Xavfsizlik uchun qaytadan kiring.", true);
+        if (!r.ok) throw new PortalError("Ma'lumotni yuklab bo'lmadi.", false);
+        return r.json();
+      })
+      .then((d) => { setData(d); setErr(null); })
+      .catch((e) =>
+        setErr(
+          e instanceof PortalError
+            ? e
+            : new PortalError("Internet yo'q. Aloqani tekshiring.", false),
+        ),
+      );
   }, [token, sel, reload]);
 
   const changePw = async (e: React.FormEvent) => {
@@ -69,8 +109,20 @@ export function PortalOverview({ token, onLogout }: { token: string; onLogout: (
     setReload((x) => x + 1);
   };
 
-  if (err) return <NmCard className="p-6 text-center"><p className="text-danger">{err}</p><NmButton className="mt-3" onClick={onLogout}>Chiqish</NmButton></NmCard>;
-  if (!data) return <p className="py-10 text-center text-muted">Yuklanmoqda...</p>;
+  if (err && !data)
+    return (
+      <NmCard className="p-6 text-center">
+        <p className="text-[13.5px] font-semibold text-foreground">{err.message}</p>
+        <div className="mt-4 flex flex-col gap-2">
+          {err.needsLogin ? (
+            <NmButton onClick={onLogout}>Kirish</NmButton>
+          ) : (
+            <NmButton onClick={() => { setErr(null); setReload((x) => x + 1); }}>Qayta urinish</NmButton>
+          )}
+        </div>
+      </NmCard>
+    );
+  if (!data) return <PortalSkeleton />;
 
   const fin = data.finance ?? { balance: 0, invoices: [], payments: [] };
   const debt = fin.balance < 0;
@@ -92,7 +144,7 @@ export function PortalOverview({ token, onLogout }: { token: string; onLogout: (
                 <span className="text-[15px] font-extrabold text-foreground">{data.rating}%</span>
               </div>
             )}
-            <NmButton variant="soft" size="sm" onClick={onLogout}><LogOut className="size-4" /></NmButton>
+            <NmButton variant="soft" size="sm" aria-label="Chiqish" onClick={() => setConfirmOut(true)}><LogOut className="size-4" /></NmButton>
           </div>
         </div>
         {data.gamification && ratingOpen ? <RatingBreakdown g={data.gamification} /> : null}
@@ -144,8 +196,14 @@ export function PortalOverview({ token, onLogout }: { token: string; onLogout: (
       <NmCard className="p-5">
         <div className="mb-3 flex items-center justify-between">
           <div className="text-[13px] font-extrabold text-foreground">Hisob-kitob</div>
-          <div className={`rounded-ctl bg-background px-3 py-1.5 text-[14px] font-extrabold shadow-nm-inset-sm ${fin.balance === 0 ? "text-muted" : debt ? "text-danger" : "text-success"}`}>
-            {fin.balance === 0 ? "0 so'm" : debt ? `Qarz: ${formatSom(-fin.balance)} so'm` : `Haqdor: ${formatSom(fin.balance)} so'm`}
+          {/* Never "Qarz", never red. A child opens this screen several times a
+              day; a red family debt is a humiliation, not information. */}
+          <div className={`rounded-ctl bg-background px-3 py-1.5 text-[14px] font-extrabold shadow-nm-inset-sm ${debt ? "text-foreground" : "text-muted"}`}>
+            {fin.balance === 0
+              ? "0 so'm"
+              : debt
+                ? `To'lanmagan: ${formatSom(-fin.balance)} so'm`
+                : `Ortiqcha to'langan: ${formatSom(fin.balance)} so'm`}
           </div>
         </div>
         {fin.invoices.length ? (
@@ -155,7 +213,7 @@ export function PortalOverview({ token, onLogout }: { token: string; onLogout: (
               <div key={i} className="flex flex-wrap justify-between gap-2 rounded-[12px] bg-background px-3 py-2 text-[12.5px] shadow-nm-inset-sm">
                 <span className="font-bold text-foreground">{iv.period}</span>
                 <span className="text-muted">{formatSom(iv.paidAmount)} / {formatSom(iv.amount)} so&apos;m · {iv.dueDate}</span>
-                <span className={iv.status === "PAID" ? "font-bold text-success" : iv.status === "OVERDUE" ? "font-bold text-danger" : "font-bold text-warning"}>{INV_ST[iv.status] ?? iv.status}</span>
+                <span className={iv.status === "PAID" ? "font-bold text-success" : "font-bold text-warning"}>{INV_ST[iv.status] ?? iv.status}</span>
               </div>
             ))}
           </div>
@@ -238,6 +296,22 @@ export function PortalOverview({ token, onLogout }: { token: string; onLogout: (
           </div>
         </form>
       </NmCard>
+
+      {/* Logging out is expensive here: the login came from the centre and the
+          family cannot reset it themselves. Never a stray tap. */}
+      <NmDialog open={confirmOut} onOpenChange={setConfirmOut} title="Chiqasizmi?">
+        <p className="text-[13.5px] font-semibold leading-[1.55] text-foreground">
+          Qayta kirish uchun login va parol kerak bo&apos;ladi.
+        </p>
+        <div className="mt-4 flex gap-3 max-[380px]:flex-col-reverse">
+          <NmButton variant="soft" className="flex-[1.4]" autoFocus onClick={() => setConfirmOut(false)}>
+            Bekor qilish
+          </NmButton>
+          <NmButton variant="danger" className="flex-1" onClick={onLogout}>
+            Chiqish
+          </NmButton>
+        </div>
+      </NmDialog>
     </div>
   );
 }

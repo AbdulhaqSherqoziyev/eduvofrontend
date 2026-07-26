@@ -12,19 +12,50 @@ interface Grp { id: string; name: string; teacherName?: string; subjectName?: st
 /** Teacher Mini App: pick one of your groups → mark today's attendance. */
 export function TeacherAttendance({ token, fullName, onLogout }: { token: string; fullName: string; onLogout: () => void }) {
   const [groups, setGroups] = useState<Grp[] | null>(null);
-  const [err, setErr] = useState("");
+  const [err, setErr] = useState<{ message: string; needsLogin: boolean } | null>(null);
+  const [reload, setReload] = useState(0);
   const [sel, setSel] = useState<Grp | null>(null);
   const [all, setAll] = useState(false);
 
   useEffect(() => {
+    // Only a 401 means the session is over. A teacher standing in a corridor
+    // with no signal must not be logged out of the app they mark attendance in.
     fetch(`${API}/groups?limit=100`, { headers: { Authorization: `Bearer ${token}` } })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("Sessiya tugadi — qayta kiring"))))
-      .then((d) => setGroups(d.items ?? d))
-      .catch((e) => setErr(e.message));
-  }, [token]);
+      .then((r) => {
+        if (r.status === 401) return Promise.reject({ message: "Xavfsizlik uchun qaytadan kiring.", needsLogin: true });
+        if (!r.ok) return Promise.reject({ message: "Guruhlarni yuklab bo'lmadi.", needsLogin: false });
+        return r.json();
+      })
+      .then((d) => { setGroups(d.items ?? d); setErr(null); })
+      .catch((e) =>
+        setErr(
+          e && typeof e === "object" && "needsLogin" in e
+            ? (e as { message: string; needsLogin: boolean })
+            : { message: "Internet yo'q. Aloqani tekshiring.", needsLogin: false },
+        ),
+      );
+  }, [token, reload]);
 
-  if (err) return <NmCard className="p-6 text-center"><p className="text-danger">{err}</p><NmButton className="mt-3" onClick={onLogout}>Chiqish</NmButton></NmCard>;
-  if (!groups) return <p className="py-10 text-center text-muted">Yuklanmoqda...</p>;
+  if (err && !groups)
+    return (
+      <NmCard className="p-6 text-center">
+        <p className="text-[13.5px] font-semibold text-foreground">{err.message}</p>
+        <NmButton
+          className="mt-4"
+          onClick={err.needsLogin ? onLogout : () => { setErr(null); setReload((x) => x + 1); }}
+        >
+          {err.needsLogin ? "Kirish" : "Qayta urinish"}
+        </NmButton>
+      </NmCard>
+    );
+  if (!groups)
+    return (
+      <div className="flex flex-col gap-5" aria-busy="true">
+        {[92, 120, 120].map((h, i) => (
+          <div key={i} className="animate-pulse rounded-card bg-background shadow-nm-inset-sm" style={{ height: h }} />
+        ))}
+      </div>
+    );
   if (sel) return <TeacherRoster token={token} groupId={sel.id} groupName={sel.name} onBack={() => setSel(null)} />;
 
   const mine = groups.filter((g) => g.teacherName && g.teacherName === fullName);
