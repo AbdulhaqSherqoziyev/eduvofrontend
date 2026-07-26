@@ -4,7 +4,13 @@ import type { Session, SessionUser } from './types';
 const TOKEN_KEY = 'edu_erp_token';
 const USER_KEY = 'edu_erp_user';
 // Kept in sync with lib/auth/impersonation.ts (avoids a circular import).
-const IMP_ORIGIN_KEYS = ['edu_erp_imp_origin_token', 'edu_erp_imp_origin_user'];
+// The stack replaced the two single-slot keys; both are cleared so a tab that
+// was open across the change cannot inherit a stale origin.
+const IMP_ORIGIN_KEYS = [
+  'edu_erp_imp_stack',
+  'edu_erp_imp_origin_token',
+  'edu_erp_imp_origin_user',
+];
 
 const isBrowser = () => typeof window !== 'undefined';
 
