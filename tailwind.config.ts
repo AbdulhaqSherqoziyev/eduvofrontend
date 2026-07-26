@@ -2,6 +2,9 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],
+  // The theme toggle puts `.dark` on <html>; without this the `dark:` variant
+  // would compile to a prefers-color-scheme query and miss the class entirely.
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {

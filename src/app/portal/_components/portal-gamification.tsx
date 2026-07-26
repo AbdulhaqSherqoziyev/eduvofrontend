@@ -135,7 +135,7 @@ function NewProgress({ count, label }: { count: number; label?: string }) {
   );
 }
 
-function StreakWell({ streak }: { streak: Gamification["streak"] }) {
+export function StreakWell({ streak }: { streak: Gamification["streak"] }) {
   const frozen = streak.frozen && streak.current > 0;
   const active = streak.current > 0;
   return (
@@ -238,7 +238,9 @@ function BadgesSection({ g }: { g: Gamification }) {
   );
 }
 
-export function GamificationCard({ g, rating, role }: { g: Gamification; rating: number; role: string }) {
+/** `hideStreak`: the home screen shows the streak as its own row above this card
+ *  (spec §6.1 order), so the card must not repeat it. */
+export function GamificationCard({ g, rating, role, hideStreak }: { g: Gamification; rating: number; role: string; hideStreak?: boolean }) {
   const parent = role === "parent";
   const isNew = isNewStudent(g);
 
@@ -262,7 +264,7 @@ export function GamificationCard({ g, rating, role }: { g: Gamification; rating:
           )
         ) : (
           <>
-            {parent ? <ParentFacts g={g} /> : <StreakWell streak={g.streak} />}
+            {parent ? <ParentFacts g={g} /> : hideStreak ? null : <StreakWell streak={g.streak} />}
             <LevelBlock rating={rating} />
             {parent ? (
               g.delta30 != null && g.delta30 >= 1 ? (

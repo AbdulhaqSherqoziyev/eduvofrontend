@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Paperclip, Check } from "lucide-react";
+import { dayLabel } from "../_lib/api";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
@@ -19,10 +20,12 @@ export interface AssignmentRow {
   files: { name: string; url: string; size: number | null }[];
 }
 
-export function PortalAssignment({ a, role, token, onDone }: { a: AssignmentRow; role: string; token: string; onDone: () => void }) {
+export function PortalAssignment({ a, role, token, onDone, autoOpen }: { a: AssignmentRow; role: string; token: string; onDone: () => void; autoOpen?: boolean }) {
   const [content, setContent] = useState(a.submissionContent || "");
   const [link, setLink] = useState(a.submissionLink || "");
-  const [open, setOpen] = useState(false);
+  // `autoOpen`: arrived here from the home screen's [Topshirish] — the form is
+  // already open so the tap that changed tabs is not spent twice.
+  const [open, setOpen] = useState(!!autoOpen);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const [celebrating, setCelebrating] = useState(false);
@@ -49,7 +52,7 @@ export function PortalAssignment({ a, role, token, onDone }: { a: AssignmentRow;
   return (
     <div className="rounded-[12px] bg-background px-3 py-2.5 shadow-nm-inset-sm">
       <div className="flex justify-between gap-2 text-[12.5px]">
-        <span className="font-bold text-foreground">{a.dueDate} · {a.title}</span>
+        <span className="font-bold text-foreground">{dayLabel(a.dueDate)} · {a.title}</span>
         <span className={graded ? "font-bold text-primary" : a.submitted ? "font-bold text-success" : "font-bold text-warning"}>
           {graded ? `${a.score} ball` : a.submitted ? "Topshirilgan" : "Kutilmoqda"}
         </span>

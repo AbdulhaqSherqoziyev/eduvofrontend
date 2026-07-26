@@ -1,0 +1,19 @@
+{
+  "id": "/t",
+  "name": "Eduvo Ustoz",
+  "short_name": "Eduvo Ustoz",
+  "description": "O'qituvchi uchun bugungi darslar va davomat",
+  "start_url": "/t",
+  "scope": "/t",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#E8ECF3",
+  "theme_color": "#2E6BE6",
+  "lang": "uz",
+  "dir": "ltr",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

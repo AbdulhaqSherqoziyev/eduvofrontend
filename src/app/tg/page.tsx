@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { MiniLogin } from "../portal/_components/mini-login";
 import { PortalOverview } from "../portal/_components/portal-overview";
 import { TeacherAttendance } from "../portal/_components/teacher-attendance";
+import { HomeSkeleton } from "@/components/ui/nm-skeleton";
+import { clearSession } from "../portal/_lib/api";
 
 const PKEY = "eduvo_portal_token";
 const TKEY = "eduvo_tg_teacher";
@@ -26,6 +28,7 @@ export default function TgMiniApp() {
   const [teacher, setTeacher] = useState<{ token: string; fullName: string } | null>(null);
   const [ready, setReady] = useState(false);
   const [initData, setInitData] = useState<string | undefined>(undefined);
+  const [notice, setNotice] = useState("");
 
   useEffect(() => {
     try { const t = window.localStorage.getItem(TKEY); if (t) setTeacher(JSON.parse(t)); } catch { /* ignore */ }
@@ -58,18 +61,33 @@ export default function TgMiniApp() {
     }
   }, []);
 
-  if (!ready) return <p className="py-16 text-center text-[13px] font-semibold text-muted">Yuklanmoqda...</p>;
-  const onTeacher = (token: string, fullName: string) => { const v = { token, fullName }; window.localStorage.setItem(TKEY, JSON.stringify(v)); setTeacher(v); };
-  const onPortal = (t: string) => { window.localStorage.setItem(PKEY, t); setPortal(t); };
-  const outTeacher = () => { window.localStorage.removeItem(TKEY); setTeacher(null); };
-  const outPortal = () => { window.localStorage.removeItem(PKEY); setPortal(null); };
+  if (!ready)
+    return (
+      <main className="min-h-screen bg-background p-4">
+        <div className="mx-auto max-w-3xl">
+          <HomeSkeleton />
+        </div>
+      </main>
+    );
+
+  const onTeacher = (token: string, fullName: string) => { const v = { token, fullName }; window.localStorage.setItem(TKEY, JSON.stringify(v)); setNotice(""); setTeacher(v); };
+  const onPortal = (t: string) => { window.localStorage.setItem(PKEY, t); setNotice(""); setPortal(t); };
+  const signOut = (reason?: "auth") => {
+    clearSession();
+    setNotice(reason === "auth" ? "Xavfsizlik uchun qaytadan kiring." : "");
+    setTeacher(null);
+    setPortal(null);
+  };
+
+  const adoptToken = (t: string) => { window.localStorage.setItem(PKEY, t); setPortal(t); };
+
+  if (teacher) return <TeacherAttendance token={teacher.token} fullName={teacher.fullName} onLogout={signOut} />;
+  if (portal) return <PortalOverview token={portal} onLogout={signOut} onToken={adoptToken} />;
 
   return (
     <main className="min-h-screen bg-background p-4">
       <div className="mx-auto max-w-3xl">
-        {teacher ? <TeacherAttendance token={teacher.token} fullName={teacher.fullName} onLogout={outTeacher} />
-          : portal ? <PortalOverview token={portal} onLogout={outPortal} />
-          : <MiniLogin onTeacher={onTeacher} onPortal={onPortal} initData={initData} />}
+        <MiniLogin onTeacher={onTeacher} onPortal={onPortal} initData={initData} notice={notice} />
       </div>
     </main>
   );

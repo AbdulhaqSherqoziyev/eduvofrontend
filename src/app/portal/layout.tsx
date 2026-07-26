@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SwRegister } from './_components/sw-register';
 
 /**
  * The portal installs as its OWN app.
@@ -11,13 +12,22 @@ import type { Metadata } from 'next';
  * Students and parents share one installable app on purpose: a phone is often
  * shared inside a family, and a browser cannot place two icons for one
  * start_url anyway. The login decides which of the two the person sees.
+ *
+ * iOS ignores `name` in the manifest and reads only apple-mobile-web-app-title,
+ * so `appleWebApp.title` is not optional here.
  */
 export const metadata: Metadata = {
   title: 'Eduvo — kabinet',
   manifest: '/manifest-portal.json',
   appleWebApp: { capable: true, title: 'Eduvo', statusBarStyle: 'default' },
+  icons: { icon: '/favicon.svg', apple: '/icon-512.png' },
 };
 
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      <SwRegister />
+      {children}
+    </>
+  );
 }

@@ -1,317 +1,229 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { LogOut, Star, Bell, Check } from "lucide-react";
-import { NmCard } from "@/components/ui/nm-card";
-import { NmButton } from "@/components/ui/nm-button";
-import { NmInput } from "@/components/ui/nm-input";
-import { NmDialog } from "@/components/ui/nm-dialog";
-import { formatSom } from "@/lib/utils/format";
-import { PortalAssignment, type AssignmentRow } from "./portal-assignment";
-import { GamificationCard, RatingChip, RatingBreakdown, isNewStudent, type Gamification } from "./portal-gamification";
+import { useCallback, useEffect, useState } from 'react';
+import { BookOpen, CalendarCheck, Home, User, Wallet } from 'lucide-react';
+import { NmDialog } from '@/components/ui/nm-dialog';
+import { NmButton } from '@/components/ui/nm-button';
+import { HomeSkeleton } from '@/components/ui/nm-skeleton';
+import { CHILD_KEY, apiFetch, clearCaches, readCache, writeCache, type FailKind } from '../_lib/api';
+import type { Overview } from '../_lib/types';
+import { OfflineBar, PortalErrorCard } from './offline-bar';
+import { PortalTabBar, type TabDef } from './portal-tabbar';
+import { AssignmentsTab, AttendanceTab, StudentHome } from './portal-student';
+import { ParentHome } from './portal-parent';
+import { ProfileTab } from './portal-profile';
+import { PaymentDetail } from './portal-payment';
+import { firstName } from '../_lib/api';
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+type Tab = 'home' | 'tasks' | 'money' | 'attendance' | 'profile';
+
+const STUDENT_TABS: TabDef<Tab>[] = [
+  { key: 'home', label: 'Bosh sahifa', icon: Home },
+  { key: 'tasks', label: 'Vazifalar', icon: BookOpen },
+  { key: 'attendance', label: 'Davomat', icon: CalendarCheck },
+  { key: 'profile', label: 'Profil', icon: User },
+];
+
+const PARENT_TABS: TabDef<Tab>[] = [
+  { key: 'home', label: 'Bosh sahifa', icon: Home },
+  { key: 'money', label: "To'lov", icon: Wallet },
+  { key: 'attendance', label: 'Davomat', icon: CalendarCheck },
+  { key: 'profile', label: 'Profil', icon: User },
+];
+
+const readChild = (): string | null => {
+  try {
+    return window.localStorage.getItem(CHILD_KEY);
+  } catch {
+    return null;
+  }
+};
 
 /**
- * `needsLogin` is true ONLY for a real 401. Everything else — no signal, a 500,
- * a timeout — keeps the session and offers a retry, because logging the person
- * out costs them a login they were given and cannot reset themselves.
+ * The installed app for a student or a parent.
+ *
+ * Two rules shape everything below:
+ *  - a lost connection never costs a session. Only a real 401 on the data call
+ *    signs anyone out; a timeout or a 500 keeps the token and offers a retry.
+ *  - the last good answer is kept in localStorage, not Cache Storage, so it is
+ *    wiped together with the token. One phone is often shared in a family.
  */
-class PortalError extends Error {
-  needsLogin: boolean;
-  constructor(message: string, needsLogin: boolean) {
-    super(message);
-    this.needsLogin = needsLogin;
-  }
-}
-
-/** Shape of the screen while it loads — a word ("Yuklanmoqda...") reads slower. */
-function PortalSkeleton() {
-  return (
-    <div className="flex flex-col gap-5" aria-busy="true">
-      {[92, 150, 120].map((h, i) => (
-        <div key={i} className="animate-pulse rounded-card bg-background shadow-nm-inset-sm" style={{ height: h }} />
-      ))}
-    </div>
-  );
-}
-
-interface Invoice { period: string; amount: number; paidAmount: number; dueDate: string; status: string }
-interface PaymentRow { date: string; amount: number; method: string; note: string; period: string }
-interface Overview {
-  role: string;
-  student: { fullName: string; phone: string; gender: string | null; birthYear: number | null };
-  groups: { id: string; name: string; teacherName: string; schedule: string; time: string; room: string }[];
-  lessons: { date: string; time: string; group: string; room: string }[];
-  attendance: { rate: number; list: { date: string; group: string; status: string; lateMinutes: number }[] };
-  assignments: AssignmentRow[];
-  finance: { balance: number; invoices: Invoice[]; payments: PaymentRow[] };
-  children: { studentId: string; fullName: string }[];
-  notifications: { id: string; type: string; title: string; body: string; date: string; read: boolean }[];
-  unreadCount: number;
-  rating: number;
-  gamification?: Gamification;
-}
-
-const ST: Record<string, string> = { PRESENT: "Keldi", LATE: "Kech", ABSENT: "Kelmadi", EXCUSED: "Sababli" };
-const INV_ST: Record<string, string> = { PAID: "To'langan", PARTIAL: "Qisman", UNPAID: "To'lanmagan", OVERDUE: "Muddati o'tgan" };
-const PM: Record<string, string> = { CASH: "Naqd", CLICK: "Click", PAYME: "Payme" };
-
-export function PortalOverview({ token, onLogout }: { token: string; onLogout: () => void }) {
+export function PortalOverview({
+  token,
+  onLogout,
+  onToken,
+}: {
+  token: string;
+  onLogout: (reason?: 'auth') => void;
+  onToken?: (t: string) => void;
+}) {
   const [data, setData] = useState<Overview | null>(null);
-  const [err, setErr] = useState<PortalError | null>(null);
-  const [confirmOut, setConfirmOut] = useState(false);
-  const [sel, setSel] = useState<string | undefined>(undefined);
+  const [cachedAt, setCachedAt] = useState<string | null>(null);
+  const [fromCache, setFromCache] = useState(false);
+  const [fail, setFail] = useState<Exclude<FailKind, 'auth'> | null>(null);
+  const [tab, setTab] = useState<Tab>('home');
+  const [child, setChild] = useState<string | null>(() => (typeof window === 'undefined' ? null : readChild()));
   const [reload, setReload] = useState(0);
-  const [pw, setPw] = useState({ cur: "", nw: "" });
-  const [pwMsg, setPwMsg] = useState("");
-  const [ratingOpen, setRatingOpen] = useState(false);
+  const [confirmOut, setConfirmOut] = useState(false);
+  const [openAssignment, setOpenAssignment] = useState<string | null>(null);
 
   useEffect(() => {
-    const q = sel ? `?studentId=${encodeURIComponent(sel)}` : "";
-    fetch(`${API}/portal/overview${q}`, { headers: { Authorization: `Bearer ${token}` } })
-      // A dropped connection is NOT an expired session. Translating every
-      // failure into "Sessiya tugadi" and offering only "Chiqish" meant one
-      // tunnel with no signal cost the family its login — which the centre
-      // issued and nobody remembers.
-      .then(async (r) => {
-        if (r.status === 401) throw new PortalError("Xavfsizlik uchun qaytadan kiring.", true);
-        if (!r.ok) throw new PortalError("Ma'lumotni yuklab bo'lmadi.", false);
-        return r.json();
-      })
-      .then((d) => { setData(d); setErr(null); })
-      .catch((e) =>
-        setErr(
-          e instanceof PortalError
-            ? e
-            : new PortalError("Internet yo'q. Aloqani tekshiring.", false),
-        ),
-      );
-  }, [token, sel, reload]);
+    let alive = true;
+    const key = `portal:${child ?? 'self'}`;
 
-  const changePw = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setPwMsg("");
-    try {
-      const r = await fetch(`${API}/portal/password`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ currentPassword: pw.cur, newPassword: pw.nw }),
-      });
-      if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(Array.isArray(d.message) ? d.message.join(", ") : d.message || "Xato"); }
-      setPw({ cur: "", nw: "" }); setPwMsg("ok");
-    } catch (err) { setPwMsg(err instanceof Error ? err.message : "Xato"); }
-  };
+    // Cache first: the screen appears immediately and refreshes underneath.
+    // A skeleton is only for people who have nothing stored yet.
+    const cached = readCache<Overview>(key);
+    if (cached) {
+      setData(cached.data);
+      setCachedAt(cached.at);
+      setFromCache(true);
+    }
+    setFail(null);
 
-  const markRead = async () => {
-    const q = sel ? `?studentId=${encodeURIComponent(sel)}` : "";
-    try { await fetch(`${API}/portal/notifications/read${q}`, { method: "PATCH", headers: { Authorization: `Bearer ${token}` } }); } catch { /* best-effort */ }
-    setReload((x) => x + 1);
-  };
-
-  if (err && !data)
-    return (
-      <NmCard className="p-6 text-center">
-        <p className="text-[13.5px] font-semibold text-foreground">{err.message}</p>
-        <div className="mt-4 flex flex-col gap-2">
-          {err.needsLogin ? (
-            <NmButton onClick={onLogout}>Kirish</NmButton>
-          ) : (
-            <NmButton onClick={() => { setErr(null); setReload((x) => x + 1); }}>Qayta urinish</NmButton>
-          )}
-        </div>
-      </NmCard>
+    apiFetch<Overview>(`/portal/overview${child ? `?studentId=${encodeURIComponent(child)}` : ''}`, { token }).then(
+      (res) => {
+        if (!alive) return;
+        if (res.ok) {
+          setData(res.data);
+          setFromCache(false);
+          setFail(null);
+          writeCache(key, res.data);
+          return;
+        }
+        if (res.kind === 'auth') {
+          clearCaches();
+          onLogout('auth');
+          return;
+        }
+        setFail(res.kind);
+      },
     );
-  if (!data) return <PortalSkeleton />;
 
-  const fin = data.finance ?? { balance: 0, invoices: [], payments: [] };
-  const debt = fin.balance < 0;
+    return () => {
+      alive = false;
+    };
+  }, [token, child, reload, onLogout]);
 
-  return (
-    <div className="flex flex-col gap-5">
-      <NmCard className="p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <div className="text-[18px] font-extrabold text-foreground">{data.student.fullName}</div>
-            <div className="text-[12.5px] font-semibold text-muted">{data.role === "parent" ? "Ota-ona kabineti" : "O'quvchi kabineti"}</div>
-          </div>
-          <div className="flex items-center gap-4">
-            {data.gamification ? (
-              <RatingChip rating={data.rating} g={data.gamification} open={ratingOpen} onToggle={() => setRatingOpen((v) => !v)} />
-            ) : (
-              <div className="flex items-center gap-1.5 rounded-ctl bg-background px-3 py-2 shadow-nm-inset-sm">
-                <Star className="size-4 text-warning" />
-                <span className="text-[15px] font-extrabold text-foreground">{data.rating}%</span>
-              </div>
-            )}
-            <NmButton variant="soft" size="sm" aria-label="Chiqish" onClick={() => setConfirmOut(true)}><LogOut className="size-4" /></NmButton>
-          </div>
-        </div>
-        {data.gamification && ratingOpen ? <RatingBreakdown g={data.gamification} /> : null}
-      </NmCard>
+  // Connection back → refresh quietly. No toast, no "you are online again!".
+  useEffect(() => {
+    const on = () => setReload((x) => x + 1);
+    window.addEventListener('online', on);
+    return () => window.removeEventListener('online', on);
+  }, []);
 
-      {data.role === "parent" && data.children && data.children.length > 1 ? (
-        <div className="flex flex-wrap gap-2">
-          {data.children.map((c) => {
-            const active = (sel ?? data.children[0]?.studentId) === c.studentId;
-            return (
-              <button key={c.studentId} onClick={() => setSel(c.studentId)}
-                className={`rounded-ctl px-4 py-2 text-[13px] font-bold transition-all ${active ? "text-primary shadow-nm-inset" : "text-muted shadow-nm-sm hover:text-primary"}`}>
-                {c.fullName}
-              </button>
-            );
-          })}
-        </div>
+  // Remember which child is on screen. It used to reset to the first one on
+  // every open, so a parent of two re-picked the same name every single time.
+  useEffect(() => {
+    const kids = data?.children ?? [];
+    if (!kids.length) return;
+    if (child && kids.some((k) => k.studentId === child)) return;
+    const first = kids[0].studentId;
+    try {
+      window.localStorage.setItem(CHILD_KEY, first);
+    } catch {
+      /* ignore */
+    }
+    setChild(first);
+  }, [data, child]);
+
+  const pickChild = useCallback((id: string) => {
+    try {
+      window.localStorage.setItem(CHILD_KEY, id);
+    } catch {
+      /* ignore */
+    }
+    setChild(id);
+    setTab('home');
+  }, []);
+
+  const retry = useCallback(() => {
+    setFail(null);
+    setReload((x) => x + 1);
+  }, []);
+
+  const markRead = useCallback(async () => {
+    await apiFetch(`/portal/notifications/read${child ? `?studentId=${encodeURIComponent(child)}` : ''}`, {
+      token,
+      method: 'PATCH',
+    });
+    setReload((x) => x + 1);
+  }, [token, child]);
+
+  const shell = (body: React.ReactNode, withTabs: boolean) => (
+    <>
+      <main className="min-h-screen bg-background p-4 pb-[76px] sm:p-8 sm:pb-[76px]">
+        <div className="mx-auto flex max-w-3xl flex-col gap-3 sm:gap-5">{body}</div>
+      </main>
+      {withTabs && data ? (
+        <PortalTabBar tabs={data.role === 'parent' ? PARENT_TABS : STUDENT_TABS} active={tab} onChange={setTab} />
       ) : null}
+    </>
+  );
 
-      {data.notifications?.length ? (
-        <NmCard className="p-5">
-          <div className="mb-2 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-[13px] font-extrabold text-foreground">
-              <Bell className="size-4 text-primary" />Bildirishnomalar
-              {data.unreadCount ? <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-white">{data.unreadCount}</span> : null}
-            </div>
-            {data.unreadCount ? (
-              <button onClick={markRead} className="inline-flex items-center gap-1 rounded-ctl bg-background px-3 py-1.5 text-[11.5px] font-bold text-primary shadow-nm-sm hover:shadow-nm-inset-sm">
-                <Check className="size-3.5" />O&apos;qildi
-              </button>
-            ) : null}
-          </div>
-          <div className="flex flex-col gap-1.5">
-            {data.notifications.slice(0, 12).map((n) => (
-              <div key={n.id} className={`rounded-[12px] px-3 py-2 text-[12.5px] shadow-nm-inset-sm ${n.read ? "bg-background" : "bg-background ring-1 ring-primary/30"}`}>
-                <div className="flex justify-between gap-2">
-                  <span className="font-bold text-foreground">{n.title}</span>
-                  <span className="text-[11px] text-muted">{n.date}</span>
-                </div>
-                {n.body ? <p className="mt-0.5 text-muted">{n.body}</p> : null}
-              </div>
-            ))}
-          </div>
-        </NmCard>
-      ) : null}
+  if (!data && fail) return shell(<PortalErrorCard kind={fail} onRetry={retry} />, false);
+  if (!data) return shell(<HomeSkeleton />, false);
 
-      {data.gamification ? <GamificationCard g={data.gamification} rating={data.rating} role={data.role} /> : null}
+  const parent = data.role === 'parent';
+  const name = firstName(data.student.fullName);
 
-      <NmCard className="p-5">
-        <div className="mb-3 flex items-center justify-between">
-          <div className="text-[13px] font-extrabold text-foreground">Hisob-kitob</div>
-          {/* Never "Qarz", never red. A child opens this screen several times a
-              day; a red family debt is a humiliation, not information. */}
-          <div className={`rounded-ctl bg-background px-3 py-1.5 text-[14px] font-extrabold shadow-nm-inset-sm ${debt ? "text-foreground" : "text-muted"}`}>
-            {fin.balance === 0
-              ? "0 so'm"
-              : debt
-                ? `To'lanmagan: ${formatSom(-fin.balance)} so'm`
-                : `Ortiqcha to'langan: ${formatSom(fin.balance)} so'm`}
-          </div>
-        </div>
-        {fin.invoices.length ? (
-          <div className="mb-3 flex flex-col gap-1.5">
-            <div className="text-[11px] font-bold uppercase tracking-wide text-muted">To&apos;lov hisoblari</div>
-            {fin.invoices.map((iv, i) => (
-              <div key={i} className="flex flex-wrap justify-between gap-2 rounded-[12px] bg-background px-3 py-2 text-[12.5px] shadow-nm-inset-sm">
-                <span className="font-bold text-foreground">{iv.period}</span>
-                <span className="text-muted">{formatSom(iv.paidAmount)} / {formatSom(iv.amount)} so&apos;m · {iv.dueDate}</span>
-                <span className={iv.status === "PAID" ? "font-bold text-success" : "font-bold text-warning"}>{INV_ST[iv.status] ?? iv.status}</span>
-              </div>
-            ))}
-          </div>
-        ) : null}
-        {fin.payments.length ? (
-          <div className="flex flex-col gap-1.5">
-            <div className="text-[11px] font-bold uppercase tracking-wide text-muted">To&apos;lovlar tarixi</div>
-            {fin.payments.map((p, i) => (
-              <div key={i} className="flex justify-between text-[12.5px]">
-                <span className="text-muted">{p.date} · {PM[p.method] ?? p.method}{p.note ? ` · ${p.note}` : ""}</span>
-                <span className="font-bold text-success">+{formatSom(p.amount)} so&apos;m</span>
-              </div>
-            ))}
-          </div>
-        ) : null}
-        {!fin.invoices.length && !fin.payments.length ? <p className="text-[13px] text-muted">To&apos;lov ma&apos;lumoti yo&apos;q</p> : null}
-      </NmCard>
+  const content = () => {
+    if (tab === 'profile')
+      return <ProfileTab d={data} token={token} onLogout={() => setConfirmOut(true)} onToken={onToken} />;
+    if (tab === 'attendance') return <AttendanceTab d={data} name={parent ? name : undefined} />;
+    if (tab === 'money') return <PaymentDetail d={data} title={`${name} — to'lov`} />;
+    if (tab === 'tasks')
+      return (
+        <AssignmentsTab
+          d={data}
+          token={token}
+          openId={openAssignment}
+          onDone={() => {
+            setOpenAssignment(null);
+            setReload((x) => x + 1);
+          }}
+        />
+      );
+    return parent ? (
+      <ParentHome
+        d={data}
+        child={child ?? ''}
+        onChild={pickChild}
+        onPayments={() => setTab('money')}
+        onMarkRead={markRead}
+      />
+    ) : (
+      <StudentHome
+        d={data}
+        onSubmitAssignment={(id) => {
+          setOpenAssignment(id);
+          setTab('tasks');
+        }}
+      />
+    );
+  };
 
-      <NmCard className="p-5">
-        <div className="mb-2 text-[13px] font-extrabold text-foreground">Guruhlar</div>
-        {data.groups.length === 0 ? <p className="text-[13px] text-muted">Guruh yo&apos;q</p> : (
-          <div className="flex flex-col gap-2">
-            {data.groups.map((g) => (
-              <div key={g.id} className="flex flex-wrap justify-between gap-2 rounded-[12px] bg-background px-3 py-2 text-[13px] shadow-nm-inset-sm">
-                <span className="font-bold text-foreground">{g.name}</span>
-                <span className="text-muted">{g.teacherName} · {g.schedule} {g.time} {g.room ? `· ${g.room}` : ""}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </NmCard>
+  return shell(
+    <>
+      {/* Only while the screen really is drawn from the stored copy. Not shown
+          during a slow refresh — we do not yet know the connection is gone. */}
+      {fromCache && fail && cachedAt ? <OfflineBar at={cachedAt} kind={fail} /> : null}
+      {content()}
 
-      {data.lessons?.length ? (
-        <NmCard className="p-5">
-          <div className="mb-2 text-[13px] font-extrabold text-foreground">Kelgusi darslar</div>
-          <div className="flex flex-col gap-1.5">
-            {data.lessons.map((l, i) => (
-              <div key={i} className="flex flex-wrap justify-between gap-2 rounded-[12px] bg-background px-3 py-2 text-[12.5px] shadow-nm-inset-sm">
-                <span className="font-bold text-foreground">{l.date} · {l.time}</span>
-                <span className="text-muted">{l.group}{l.room ? ` · ${l.room}` : ""}</span>
-              </div>
-            ))}
-          </div>
-        </NmCard>
-      ) : null}
-
-      <NmCard className="p-5">
-        <div className="mb-2 text-[13px] font-extrabold text-foreground">
-          {data.gamification && isNewStudent(data.gamification) ? "Davomat" : `Davomat — ${data.attendance.rate}%`}
-        </div>
-        <div className="flex flex-col gap-1.5">
-          {data.attendance.list.slice(0, 10).map((a, i) => (
-            <div key={i} className="flex justify-between text-[12.5px]">
-              <span className="text-muted">{a.date} · {a.group}</span>
-              <span className="font-bold text-foreground">{ST[a.status] ?? a.status}{a.lateMinutes ? ` +${a.lateMinutes}'` : ""}</span>
-            </div>
-          ))}
-          {data.attendance.list.length === 0 ? <p className="text-[13px] text-muted">Ma&apos;lumot yo&apos;q</p> : null}
-        </div>
-      </NmCard>
-
-      <NmCard className="p-5">
-        <div className="mb-2 text-[13px] font-extrabold text-foreground">Uy vazifalari</div>
-        <div className="flex flex-col gap-2.5">
-          {data.assignments.slice(0, 12).map((a, i) => (
-            <PortalAssignment key={a.id || i} a={a} role={data.role} token={token} onDone={() => setReload((x) => x + 1)} />
-          ))}
-          {data.assignments.length === 0 ? <p className="text-[13px] text-muted">Vazifa yo&apos;q</p> : null}
-        </div>
-      </NmCard>
-
-      <NmCard className="p-5">
-        <div className="mb-3 text-[13px] font-extrabold text-foreground">Parolni o&apos;zgartirish</div>
-        <form onSubmit={changePw} className="flex flex-col gap-3">
-          <NmInput type="password" placeholder="Joriy parol" value={pw.cur} onChange={(e) => setPw({ ...pw, cur: e.target.value })} />
-          <NmInput type="password" placeholder="Yangi parol (kamida 4 belgi)" value={pw.nw} onChange={(e) => setPw({ ...pw, nw: e.target.value })} />
-          <div className="flex items-center gap-3">
-            <NmButton type="submit" size="sm">Saqlash</NmButton>
-            {pwMsg === "ok" ? <span className="text-[12px] font-bold text-success">Saqlandi ✓</span> : pwMsg ? <span className="text-[12px] font-bold text-danger">{pwMsg}</span> : null}
-          </div>
-        </form>
-      </NmCard>
-
-      {/* Logging out is expensive here: the login came from the centre and the
-          family cannot reset it themselves. Never a stray tap. */}
       <NmDialog open={confirmOut} onOpenChange={setConfirmOut} title="Chiqasizmi?">
         <p className="text-[13.5px] font-semibold leading-[1.55] text-foreground">
           Qayta kirish uchun login va parol kerak bo&apos;ladi.
         </p>
         <div className="mt-4 flex gap-3 max-[380px]:flex-col-reverse">
-          <NmButton variant="soft" className="flex-[1.4]" autoFocus onClick={() => setConfirmOut(false)}>
+          <NmButton variant="soft" className="min-h-[44px] flex-[1.4]" autoFocus onClick={() => setConfirmOut(false)}>
             Bekor qilish
           </NmButton>
-          <NmButton variant="danger" className="flex-1" onClick={onLogout}>
+          <NmButton variant="danger" className="min-h-[44px] flex-1" onClick={() => onLogout()}>
             Chiqish
           </NmButton>
         </div>
       </NmDialog>
-    </div>
+    </>,
+    true,
   );
 }
