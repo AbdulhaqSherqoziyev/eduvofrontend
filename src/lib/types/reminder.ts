@@ -21,7 +21,9 @@ export interface Reminder {
 }
 
 export const STAGE_META: Record<ReminderStage, { label: string; hint: string; tone: 'muted' | 'warning' | 'danger' }> = {
-  D3: { label: 'D3', hint: '3 kun kechikkan', tone: 'muted' },
-  D7: { label: 'D7', hint: '7 kun kechikkan', tone: 'warning' },
-  D14: { label: 'D14', hint: '14 kun kechikkan', tone: 'danger' },
+  // Labels read as time, not as jargon: the hint lives in a title attribute and
+  // a phone never shows it, so "D3" would be the whole message on mobile.
+  D3: { label: '3 kun', hint: '3 kun kechikkan', tone: 'muted' },
+  D7: { label: '7 kun', hint: '7 kun kechikkan', tone: 'warning' },
+  D14: { label: '14 kun', hint: '14 kun kechikkan', tone: 'danger' },
 };

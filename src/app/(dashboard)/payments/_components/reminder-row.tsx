@@ -161,9 +161,13 @@ export function ReminderRow({ reminder }: { reminder: Reminder }) {
       >
         <div className="flex flex-col gap-4">
           <p className="text-[13.5px] font-semibold leading-[1.55] text-foreground">
+            {/* "Qarz" only from day 14 — the D3/D7 templates deliberately do not
+                use the word, and the sender must picture what actually goes out. */}
             {mode === 'send'
-              ? `Telegramga ${formatSom(reminder.amount)} qarz haqida eslatma darhol yuboriladi. Yuborilgan xabarni qaytarib bo'lmaydi.`
-              : "Bu eslatma ro'yxatdan chiqadi va yuborilmaydi. Qarz to'lanmasa, keyingi bosqichda yangi eslatma tayyorlanadi."}
+              ? reminder.stage === 'D14'
+                ? `Telegramga ${formatSom(reminder.amount)} qarz haqida eslatma darhol yuboriladi. Yuborilgan xabarni qaytarib bo'lmaydi.`
+                : `Telegramga ${formatSom(reminder.amount)} to'lov haqida eslatma darhol yuboriladi. Yuborilgan xabarni qaytarib bo'lmaydi.`
+              : "Bu eslatma ro'yxatdan chiqadi va yuborilmaydi. To'lov kelmasa, keyingi bosqichda yangi eslatma tayyorlanadi."}
           </p>
           {error ? <p className="text-[13px] font-bold text-danger">{error}</p> : null}
           <div className="mt-1 flex gap-3 max-[380px]:flex-col-reverse">
@@ -177,7 +181,8 @@ export function ReminderRow({ reminder }: { reminder: Reminder }) {
               Bekor qilish
             </NmButton>
             <NmButton
-              variant={mode === 'send' ? 'primary' : 'danger'}
+              /* Skipping is the kind choice — red would punish it. */
+              variant={mode === 'send' ? 'primary' : 'soft'}
               className="flex-1"
               disabled={busy}
               onClick={confirm}
