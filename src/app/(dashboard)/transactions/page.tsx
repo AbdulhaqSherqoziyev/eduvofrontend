@@ -1,12 +1,12 @@
-import { TransactionSummary } from './_components/transaction-summary';
-import { TransactionTable } from './_components/transaction-table';
+import { Suspense } from 'react';
+import { CashView } from './_components/cash-view';
 
-/** Transactions ledger — income/expense summary strip + searchable table. */
+/** Kassa — balance, income/expense entry, approvals and the day-end count. */
 export default function TransactionsPage() {
+  // useSearchParams (the ?pending=1 anchor) needs a suspense boundary here.
   return (
-    <section className="flex flex-col gap-5">
-      <TransactionSummary />
-      <TransactionTable />
-    </section>
+    <Suspense fallback={null}>
+      <CashView />
+    </Suspense>
   );
 }

@@ -15,6 +15,12 @@ export const PERMISSIONS = {
   LESSON: ['lesson.read', 'lesson.update'],
   REPORT: ['report.finance', 'report.attendance', 'report.teacher'],
   ROLE: ['role.read', 'role.create', 'role.update', 'role.assign'],
+  // `payroll.self` — O'Z hisobi, `payroll.read` — hammaniki. Ikkisi ataylab
+  // alohida: ustozga `payroll.read` berish S1 ni buzadi (payroll spec §H.1).
+  PAYROLL: ['payroll.read', 'payroll.self', 'payroll.approve', 'payroll.pay'],
+  // `teacher.update` ga bog'lanmaydi: telefon raqamini tuzatadigan resepsion
+  // maoshni ko'rmasin [S5.2].
+  COMPENSATION: ['compensation.update'],
 } as const;
 
 type Group = keyof typeof PERMISSIONS;

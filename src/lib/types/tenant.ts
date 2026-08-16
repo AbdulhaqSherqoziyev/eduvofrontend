@@ -9,4 +9,9 @@ export interface TenantSettings {
   teacherOnlyMode: boolean;
   parentsEnabled: boolean;
   parentNotify: boolean;
+  /** Cash desk (§C.1 / §A.3). `openingAt: null` = the balance is not set yet. */
+  expenseApprovalLimit: number;
+  cashOpening: number;
+  cardOpening: number;
+  openingAt: string | null;
 }

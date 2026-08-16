@@ -1,7 +1,7 @@
 import {
   LayoutGrid, Boxes, ClipboardCheck, CreditCard, FileText, CalendarDays,
-  ArrowLeftRight, Users, GraduationCap, Compass, Layers, ShieldCheck, BarChart3,
-  UserCog, DoorOpen, Building2, UserPlus, Package, type LucideIcon,
+  Wallet, Users, GraduationCap, Compass, Layers, ShieldCheck, BarChart3,
+  UserCog, DoorOpen, Building2, UserPlus, Package, Coins, HandCoins, type LucideIcon,
 } from 'lucide-react';
 import { can } from '@/lib/auth/permissions';
 import { canViewModulesScreen, moduleOn } from '@/lib/auth/module-gate';
@@ -42,7 +42,10 @@ export const NAV_ITEMS: NavItem[] = [
   { href: '/payments', label: "To'lovlar", icon: CreditCard, permission: 'payment.read', module: 'payments', section: 'asosiy' },
   { href: '/assignments', label: 'Vazifalar', icon: FileText, permission: 'assignment.read', module: 'assignments', section: 'asosiy' },
   { href: '/schedule', label: 'Dars jadvali', icon: CalendarDays, permission: 'lesson.read', module: 'schedule', section: 'asosiy' },
-  { href: '/transactions', label: 'Tranzaksiyalar', icon: ArrowLeftRight, permission: 'transaction.read', module: 'finance', section: 'boshqaruv' },
+  // Ustozning O'Z hisobi — `payroll.self`, `payroll.read` EMAS. Ikkinchisi
+  // berilsa ustoz hammaning maoshini ko'radi va S1 buziladi (spec §H.1).
+  { href: '/my-salary', label: 'Mening ish haqim', icon: Coins, permission: 'payroll.self', module: 'payroll', section: 'asosiy' },
+  { href: '/transactions', label: 'Kassa', icon: Wallet, permission: 'transaction.read', module: 'finance', section: 'boshqaruv' },
   { href: '/leads', label: 'Lidlar', icon: UserPlus, permission: 'student.read', module: 'leads', section: 'boshqaruv' },
   { href: '/students', label: "O'quvchilar", icon: Users, permission: 'student.read', module: 'students', section: 'boshqaruv' },
   { href: '/teachers', label: "O'qituvchilar", icon: GraduationCap, permission: 'teacher.read', module: 'teachers', section: 'boshqaruv' },
@@ -50,6 +53,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: '/manage-groups', label: 'Guruhlar', icon: Layers, permission: 'group.update', module: 'groups', section: 'boshqaruv' },
   { href: '/rooms', label: 'Xonalar', icon: DoorOpen, permission: 'room.read', module: 'schedule', section: 'boshqaruv' },
   { href: '/branches', label: 'Filiallar', icon: Building2, module: 'branches', section: 'boshqaruv' },
+  { href: '/payroll', label: 'Ish haqi', icon: HandCoins, permission: 'payroll.read', module: 'payroll', section: 'boshqaruv' },
   { href: '/reports', label: 'Hisobotlar', icon: BarChart3, permission: 'report.finance', module: 'reports', section: 'boshqaruv' },
   { href: '/staff', label: 'Xodimlar', icon: UserCog, permission: 'user.read', module: 'staff_roles', section: 'boshqaruv' },
   { href: '/roles', label: 'Rollar', icon: ShieldCheck, permission: 'role.read', module: 'staff_roles', section: 'boshqaruv' },
@@ -76,7 +80,9 @@ export function moduleForPath(pathname: string): string | undefined {
 }
 
 /** Daily-work routes a teacher (teacher-only mode) is limited to. */
-export const TEACHER_NAV = new Set(['/dashboard', '/groups', '/attendance', '/schedule', '/assignments']);
+export const TEACHER_NAV = new Set([
+  '/dashboard', '/groups', '/attendance', '/schedule', '/assignments', '/my-salary',
+]);
 
 /**
  * Nav items the current user may actually see in a section:

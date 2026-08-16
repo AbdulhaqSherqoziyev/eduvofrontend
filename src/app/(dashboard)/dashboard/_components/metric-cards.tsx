@@ -10,7 +10,14 @@ import { NmCard } from '@/components/ui/nm-card';
 import { CircularProgress } from '@/components/ui/circular-progress';
 import { formatMln, formatNumber } from '@/lib/utils/format';
 
-/** Top row of 4 dashboard metric cards. */
+/**
+ * Top row of dashboard metric cards.
+ *
+ * `/dashboard/metrics` answers everyone but narrows what it sends: the money
+ * fields arrive only for a `report.finance` holder. A missing field means the
+ * card is not drawn at all — drawing `0` would tell a teacher the center earned
+ * nothing this month, which is a worse answer than no answer [Sevara].
+ */
 export function MetricCards() {
   const query = useDashboardMetrics();
 
@@ -33,26 +40,31 @@ export function MetricCards() {
   }
 
   const m = query.data;
+  const { revenue, revenueDeltaPct, expected, expectedInvoices } = m;
 
   return (
     <>
-      <div className="col-span-1 md:col-span-3">
-        <StatCard
-          label="OYLIK DAROMAD"
-          icon={<CreditCard size={20} />}
-          value={formatMln(m.revenue)}
-          accent
-          footer={<StatusPill tone="success" label={'↑ ' + m.revenueDeltaPct + '% o,tgan oyga'} />}
-        />
-      </div>
-      <div className="col-span-1 md:col-span-3">
-        <StatCard
-          label="KUTILAYOTGAN TO,LOV"
-          icon={<Clock size={20} />}
-          value={formatMln(m.expected)}
-          footer={<StatusPill tone="muted" label={m.expectedInvoices + ' ta hisob kutilmoqda'} />}
-        />
-      </div>
+      {revenue !== undefined && revenueDeltaPct !== undefined ? (
+        <div className="col-span-1 md:col-span-3">
+          <StatCard
+            label="OYLIK DAROMAD"
+            icon={<CreditCard size={20} />}
+            value={formatMln(revenue)}
+            accent
+            footer={<StatusPill tone="success" label={'↑ ' + revenueDeltaPct + '% o,tgan oyga'} />}
+          />
+        </div>
+      ) : null}
+      {expected !== undefined && expectedInvoices !== undefined ? (
+        <div className="col-span-1 md:col-span-3">
+          <StatCard
+            label="KUTILAYOTGAN TO,LOV"
+            icon={<Clock size={20} />}
+            value={formatMln(expected)}
+            footer={<StatusPill tone="muted" label={expectedInvoices + ' ta hisob kutilmoqda'} />}
+          />
+        </div>
+      ) : null}
       <div className="col-span-1 md:col-span-3">
         <StatCard
           label="FAOL O,QUVCHILAR"
