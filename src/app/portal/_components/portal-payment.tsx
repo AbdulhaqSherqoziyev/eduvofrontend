@@ -107,15 +107,23 @@ export function PaymentDetail({ d, title }: { d: Overview; title: string }) {
         <NmCard className={CARD}>
           <div className="mb-2 text-[13.5px] font-extrabold text-foreground">To&apos;lovlar tarixi</div>
           <div className="flex flex-col gap-1.5">
-            {fin.payments.map((p, i) => (
-              <div key={i} className="flex justify-between gap-2 text-[12.5px]">
-                <span className="truncate font-semibold text-muted">
-                  {dayLabel(p.date)} · {PAY_METHOD[p.method] ?? p.method}
-                  {p.note ? ` · ${p.note}` : ''}
-                </span>
-                <span className="shrink-0 font-bold text-success">+{formatSom(p.amount)}</span>
-              </div>
-            ))}
+            {fin.payments.map((p, i) => {
+              // A correction is not money coming in: no "+", no green, no note.
+              const correction = p.method === 'DISCOUNT';
+              return (
+                <div key={i} className="flex justify-between gap-2 text-[12.5px]">
+                  <span className="truncate font-semibold text-muted">
+                    {dayLabel(p.date)} · {PAY_METHOD[p.method] ?? p.method}
+                    {!correction && p.note ? ` · ${p.note}` : ''}
+                  </span>
+                  {correction ? (
+                    <span className="shrink-0 font-bold text-foreground">{formatSom(p.amount)}</span>
+                  ) : (
+                    <span className="shrink-0 font-bold text-success">+{formatSom(p.amount)}</span>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </NmCard>
       ) : null}

@@ -2,6 +2,9 @@ export interface FinanceReportRow {
   label: string;
   income: number;
   expense: number;
+  /** YYYY-MM-DD bounds of the bucket (Tashkent day). */
+  from?: string;
+  to?: string;
 }
 
 export interface FinanceCategoryRow {
@@ -17,6 +20,9 @@ export interface FinanceReport {
   months: number;
   rows: FinanceReportRow[];
   byCategory: FinanceCategoryRow[];
+  /** Resolved YYYY-MM-DD bounds the server actually reported on. */
+  from?: string;
+  to?: string;
 }
 
 export interface AttendanceReportRow {
@@ -43,6 +49,7 @@ export interface TeacherReport {
   rows: TeacherReportRow[];
 }
 
+/** Either `months` (preset) or `from` + `to` (YYYY-MM-DD, max 24 months) — never both. */
 export interface ReportParams {
   months?: number;
   from?: string;

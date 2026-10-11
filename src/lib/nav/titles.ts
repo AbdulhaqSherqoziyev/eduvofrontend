@@ -19,9 +19,13 @@ const TITLES: Record<string, [string, string]> = {
   '/staff': ['Xodimlar', "Xodimlarni qo'shish, rol biriktirish va boshqarish"],
   '/profile': ['Mening profilim', "Ism, telefon va parolni o'zgartirish"],
   '/modules': ['Tarif va modullar', "Yoqilgan bo'limlar va oylik to'lov"],
+  '/help': ["Qo'llanma", "Tizim qanday ishlaydi — savollar va javoblar"],
+  // Mock imtihonlar konsoli: design v3 puts the title row inside the screen
+  // (with its action buttons), so those screens render `ConsoleHeader` themselves.
 };
 
 export function titleForPath(pathname: string): [string, string] {
   if (pathname.startsWith('/groups/')) return ['Guruh tafsilotlari', "Davomat, vazifa va to'lovlar"];
+  if (pathname.startsWith('/exams/assignments/')) return ['Tayinlov tafsilotlari', 'Jonli kuzatuv, kirish kodlari va natijalar'];
   return TITLES[pathname] ?? ['', ''];
 }

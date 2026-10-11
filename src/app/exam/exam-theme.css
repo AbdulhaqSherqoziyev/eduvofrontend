@@ -1,0 +1,83 @@
+/*
+ * Exam player tokens (_player-design.md §A + §E). Scoped to .exam-root so the
+ * ERP's `.dark` class never leaks in (design bug #26). Every surface inside the
+ * player reads these vars — no hard-coded #fff backgrounds anywhere.
+ */
+.exam-root {
+  --x-accent: #2e6be6;
+  --x-accent-h: #1f55c4;
+  --x-rec: #d9475a;
+  --x-serif: 'Source Serif 4', Georgia, serif;
+  --x-sans: 'Manrope', system-ui, sans-serif;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--x-page);
+  color: var(--x-ink);
+  font-family: var(--x-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.exam-root button { font-family: inherit; cursor: pointer; }
+.exam-root button:disabled { cursor: not-allowed; }
+.exam-root input, .exam-root textarea, .exam-root select { font-family: inherit; }
+
+/* 22 tokens of _player-design.md v2 §E (+ derived: border, hl-fg, dark button, link, popover, disabled, track). */
+.exam-root[data-exam-theme='standard'] {
+  --x-page: #f5f6f8; --x-panel: #ffffff; --x-field: #ffffff; --x-line: #e3e8ef; --x-border: #d5dce6;
+  --x-ink: #1e2a3a; --x-sub: #4a586c; --x-muted: #7a8699; --x-sel-bg: #eaf1fe; --x-sel-fg: #1e2a3a;
+  --x-hl: #fff1c2; --x-hl-fg: inherit; --x-tile: #f4f6f9; --x-overlay: rgba(30, 42, 58, 0.35);
+  --x-warn-bg: #fff8e6; --x-warn-fg: #7a5a12; --x-warn-border: transparent; --x-ok-bg: #e5f5ee; --x-ok-fg: #1f7a55;
+  --x-err-bg: #fdecee; --x-err-fg: #c23a4c; --x-flag: #d68a1a; --x-focus: #2e6be6;
+  --x-nav-ans-bg: #1e2a3a; --x-nav-ans-fg: #ffffff;
+  --x-dark-bg: #1e2a3a; --x-dark-fg: #ffffff; --x-link: #2e6be6; --x-disabled: #b8c4d6; --x-track: #e6ebf2;
+  --x-pop-shadow: 0 20px 50px rgba(30, 42, 58, 0.2); --x-menu-shadow: 0 8px 24px rgba(30, 42, 58, 0.18); --x-pop-border: #e3e8ef;
+}
+.exam-root[data-exam-theme='contrast'] {
+  --x-page: #000000; --x-panel: #0b0b0b; --x-field: #000000; --x-line: #444444; --x-border: #444444;
+  --x-ink: #ffffff; --x-sub: #e0e0e0; --x-muted: #bdbdbd; --x-sel-bg: #0d2a66; --x-sel-fg: #ffffff;
+  --x-hl: #5a4a00; --x-hl-fg: #ffffff; --x-tile: #161616; --x-overlay: rgba(0, 0, 0, 0.7);
+  --x-warn-bg: #2a2100; --x-warn-fg: #ffd27a; --x-warn-border: transparent; --x-ok-bg: #0f2a1e; --x-ok-fg: #5fd39c;
+  --x-err-bg: #3a0f15; --x-err-fg: #ff8a96; --x-flag: #ffb547; --x-focus: #7fa8ff;
+  --x-nav-ans-bg: #ffffff; --x-nav-ans-fg: #000000;
+  --x-dark-bg: #ffffff; --x-dark-fg: #000000; --x-link: #7fa8ff; --x-disabled: #3a3f47; --x-track: #333333;
+  --x-pop-shadow: none; --x-menu-shadow: none; --x-pop-border: #444444;
+}
+.exam-root[data-exam-theme='cream'] {
+  --x-page: #f4efd9; --x-panel: #fbf7e6; --x-field: #fffdf2; --x-line: #ddd3b0; --x-border: #d3c89f;
+  --x-ink: #2b2618; --x-sub: #4f4836; --x-muted: #6b6454; --x-sel-bg: #e8e0c2; --x-sel-fg: #2b2618;
+  --x-hl: #f3e29a; --x-hl-fg: inherit; --x-tile: #f1ebd3; --x-overlay: rgba(43, 38, 24, 0.35);
+  --x-warn-bg: #fff8e6; --x-warn-fg: #7a5a12; --x-warn-border: #d68a1a; --x-ok-bg: #e5f5ee; --x-ok-fg: #1f7a55;
+  --x-err-bg: #fdecee; --x-err-fg: #c23a4c; --x-flag: #b7790f; --x-focus: #2e6be6;
+  --x-nav-ans-bg: #2b2618; --x-nav-ans-fg: #fbf7e6;
+  --x-dark-bg: #1e2a3a; --x-dark-fg: #ffffff; --x-link: #2e6be6; --x-disabled: #cdc4a5; --x-track: #e3dbbe;
+  --x-pop-shadow: 0 20px 50px rgba(30, 42, 58, 0.2); --x-menu-shadow: 0 8px 24px rgba(30, 42, 58, 0.18); --x-pop-border: #ddd3b0;
+}
+.exam-root[data-exam-font='s'] { --x-fs-passage: 15px; --x-fs-q: 14px; }
+.exam-root[data-exam-font='m'] { --x-fs-passage: 17px; --x-fs-q: 15px; }
+.exam-root[data-exam-font='l'] { --x-fs-passage: 20px; --x-fs-q: 17px; }
+
+.exam-root input:focus, .exam-root select:focus, .exam-root textarea:focus { outline: none; border-color: var(--x-accent) !important; }
+.exam-root :focus-visible { outline: 2px solid var(--x-focus); outline-offset: 2px; }
+.exam-root .x-nosel { user-select: none; -webkit-user-select: none; }
+.exam-root ::selection { background: rgba(46, 107, 230, 0.28); }
+
+/* warn10: three slow amber pulses (Sevara T26) — no endless blinking. */
+@keyframes x-pulse { 0%, 100% { background: var(--x-tile); } 50% { background: var(--x-warn-bg); border-color: var(--x-flag); } }
+.exam-root .x-timer-pulse { animation: x-pulse 600ms ease-in-out 3; }
+@keyframes x-fade-in { from { opacity: 0; } to { opacity: 1; } }
+.exam-root .x-fade-in { animation: x-fade-in 200ms ease-out both; }
+@keyframes x-pop { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: none; } }
+.exam-root .x-pop { animation: x-pop 150ms ease-out both; }
+@keyframes x-spin { to { transform: rotate(360deg); } }
+.exam-root .x-spin { animation: x-spin 0.9s linear infinite; }
+@keyframes x-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+.exam-root .x-dot-pulse { animation: x-dot 1.2s ease-in-out infinite; }
+@keyframes x-eq { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+.exam-root .x-eq { transform-origin: bottom; animation: x-eq 0.9s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .exam-root .x-eq, .exam-root .x-dot-pulse, .exam-root .x-pop, .exam-root .x-fade-in { animation: none; }
+  .exam-root .x-timer-pulse { animation: none; background: var(--x-warn-bg); }
+}
+.exam-root mark.x-hl { background: var(--x-hl); color: var(--x-hl-fg); border-radius: 2px; padding: 0; }

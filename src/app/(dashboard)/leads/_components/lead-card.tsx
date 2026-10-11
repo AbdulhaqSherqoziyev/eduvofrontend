@@ -52,7 +52,7 @@ export function LeadCard({ lead }: { lead: Lead }) {
         if (data.studentId) {
           setConvertUi({
             kind: 'duplicate',
-            message: "Bu raqamli o'quvchi bor",
+            message: data.message ?? "Bu o'quvchi allaqachon mavjud",
             studentId: data.studentId,
           });
         } else {

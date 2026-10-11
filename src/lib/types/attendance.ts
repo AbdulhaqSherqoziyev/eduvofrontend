@@ -8,6 +8,9 @@ export interface AttendanceMark {
   status: AttendanceStatus;
   lateMinutes: number;
   lateEdited?: boolean;
+  /** Lesson score (separate from homework). null = none; absent when the centre is unscored. */
+  score?: number | null;
+  scoreMax?: number | null;
 }
 
 export interface AttendanceLesson {
@@ -22,11 +25,14 @@ export interface AttendanceLesson {
 export interface AttendanceSheet {
   lesson: AttendanceLesson;
   marks: AttendanceMark[];
+  /** The centre's scale; null = unscored, so no score UI at all. */
+  scoreMax?: number | null;
 }
 
 export interface SaveAttendanceInput {
   lessonId: string;
-  marks: { studentId: string; status: AttendanceStatus; lateMinutes: number }[];
+  /** `score` left out keeps the saved value; null clears it; a number is clipped to the scale server-side. */
+  marks: { studentId: string; status: AttendanceStatus; lateMinutes: number; score?: number | null }[];
 }
 
 export const ATTENDANCE_META: Record<AttendanceStatus, { label: string; tone: PillTone; dot: string }> = {

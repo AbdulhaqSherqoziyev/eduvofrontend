@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import { NmCard } from "@/components/ui/nm-card";
 import { NmInput } from "@/components/ui/nm-input";
@@ -20,7 +21,10 @@ const HEAD =
 export function InvoiceTable() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [search, setSearch] = useState("");
+  // `/payments?search=Ism` — the student profile sends the admin here to
+  // correct one invoice, so the table opens already narrowed to that student.
+  const params = useSearchParams();
+  const [search, setSearch] = useState(() => params.get("search") ?? "");
   const [status, setStatus] = useState("");
   const query = useInvoices({
     page,

@@ -13,7 +13,8 @@ export interface PaymentRow {
   date: string;
   amount: number;
   method: string;
-  note: string;
+  /** Absent on DISCOUNT rows — the office note stays in the office. */
+  note?: string;
   period: string;
 }
 export interface LessonRow {
@@ -27,6 +28,9 @@ export interface AttendanceRow {
   group: string;
   status: string;
   lateMinutes: number;
+  /** Lesson score the teacher gave (additive; absent for unscored centres). */
+  score?: number | null;
+  scoreMax?: number | null;
 }
 export interface NotificationRow {
   id: string;
@@ -60,7 +64,14 @@ export const ATT_LABEL: Record<string, string> = {
   EXCUSED: 'Sababli',
 };
 
-export const PAY_METHOD: Record<string, string> = { CASH: 'Naqd', CLICK: 'Click', PAYME: 'Payme' };
+/**
+ * `DISCOUNT` is the office closing part of an invoice without money. The family
+ * sees it as a neutral correction — never the office's own word for it, and
+ * never the admin's note (the API leaves `note` out for these rows).
+ */
+export const PAY_METHOD: Record<string, string> = {
+  CASH: 'Naqd', CARD: 'Karta', CLICK: 'Click', PAYME: 'Payme', DISCOUNT: 'Hisob kamaytirildi',
+};
 
 export const CENTER_PHONE = '+998 77 317 05 21';
 
@@ -90,6 +101,12 @@ export function weekAttendance(list: AttendanceRow[]) {
   const week = (list ?? []).filter((a) => a.date >= from);
   const attended = week.filter((a) => a.status === 'PRESENT' || a.status === 'LATE').length;
   return { total: week.length, attended };
+}
+
+/** "Baho 4 / 5" when the teacher scored the lesson; null otherwise. */
+export function scoreLabel(a: Pick<AttendanceRow, 'score' | 'scoreMax'>): string | null {
+  if (a.score == null) return null;
+  return a.scoreMax != null ? `Baho ${a.score} / ${a.scoreMax}` : `Baho ${a.score}`;
 }
 
 /** Today's mark for the given lesson, if the teacher has already saved one. */

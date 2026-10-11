@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:'Manrope',system-ui,sans-serif;background:#E8ECF3;color:#1E2A3A;-webkit-font-smoothing:antialiased;}
+a{color:#2E6BE6;text-decoration:none;}
+a:hover{color:#1F55C4;}
+button{font-family:inherit;cursor:pointer;}
+input,textarea{font-family:inherit;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-thumb{background:#cfd7e3;border-radius:8px;border:3px solid #E8ECF3;}
+@keyframes ovl{from{opacity:0;}to{opacity:1;}}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97);}to{opacity:1;transform:none;}}
+</style>
+</helmet>
+
+<div style="display:flex;flex-direction:column;height:100vh;min-width:1280px;padding:22px;gap:20px;overflow:hidden;">
+
+  <header style="display:flex;align-items:center;gap:18px;background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:13px 20px;flex-shrink:0;">
+    <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+      <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);box-shadow:4px 4px 10px rgba(46,107,230,0.35);display:flex;align-items:center;justify-content:center;"><div style="width:16px;height:16px;border-radius:4px;background:#fff;transform:rotate(45deg);"></div></div>
+      <div><div style="font-size:18px;font-weight:800;letter-spacing:-0.4px;line-height:1;">Eduvo</div><div style="font-size:10.5px;font-weight:600;color:#7A8699;margin-top:3px;">ERP</div></div>
+    </div>
+    <div style="width:1.5px;height:36px;background:rgba(163,177,198,0.28);flex-shrink:0;"></div>
+    <div style="display:flex;gap:10px;flex-shrink:0;">
+      <button style="display:flex;align-items:center;gap:9px;height:44px;padding:0 18px;border:none;border-radius:13px;font-size:14px;font-weight:700;background:#E8ECF3;color:#7A8699;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/></svg>Asosiy</button>
+      <button style="display:flex;align-items:center;gap:9px;height:44px;padding:0 18px;border:none;border-radius:13px;font-size:14px;font-weight:700;background:#E8ECF3;color:#7A8699;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>Boshqaruv</button>
+      <button style="position:relative;display:flex;align-items:center;gap:9px;height:44px;padding:0 18px;border:none;border-radius:13px;font-size:14px;font-weight:700;background:#E8ECF3;color:#2E6BE6;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.5);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg>Imtihonlar<span style="font-size:9.5px;font-weight:800;letter-spacing:0.5px;color:#fff;background:#2E6BE6;border-radius:6px;padding:3px 6px;">YANGI</span></button>
+    </div>
+    <div style="flex:1;"></div>
+    <div style="display:flex;align-items:center;width:230px;height:44px;border-radius:13px;background:#E8ECF3;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.5);padding:0 15px;color:#9aa6b8;flex-shrink:0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input placeholder="Qidirish..." style="border:none;outline:none;background:transparent;margin-left:11px;font-size:14px;font-weight:500;color:#1E2A3A;width:100%;" />
+    </div>
+    <div style="height:44px;border-radius:13px;background:#E8ECF3;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);padding:0 16px;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;flex-shrink:0;">
+      <div style="font-size:9.5px;font-weight:700;letter-spacing:0.8px;color:#9aa6b8;">KREDIT</div>
+      <div style="font-size:15px;font-weight:800;color:#2E6BE6;">{{ creditsLabel }}</div>
+    </div>
+    <button style="position:relative;width:44px;height:44px;border:none;border-radius:13px;background:#E8ECF3;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);display:flex;align-items:center;justify-content:center;color:#5b6b82;flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span style="position:absolute;top:10px;right:11px;width:8px;height:8px;border-radius:50%;background:#E4574C;border:2px solid #E8ECF3;"></span></button>
+    <div style="width:44px;height:44px;border-radius:13px;background:#E8ECF3;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);display:flex;align-items:center;justify-content:center;color:#2E6BE6;font-weight:700;font-size:14px;flex-shrink:0;">A</div>
+  </header>
+
+  <div style="display:flex;gap:22px;flex:1;min-height:0;">
+
+    <aside style="width:236px;flex-shrink:0;background:#E8ECF3;border-radius:28px;box-shadow:-9px -9px 22px rgba(255,255,255,0.92), 9px 9px 24px rgba(163,177,198,0.5);padding:22px 16px;display:flex;flex-direction:column;height:100%;overflow-y:auto;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#9aa6b8;padding:0 10px;margin-bottom:14px;">IMTIHONLAR — MOCK TESTLAR</div>
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="6">
+        <button onClick="{{ n.go }}" style="{{ n.style }}" style-hover="color:#2E6BE6;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" style="flex-shrink:0;">
+            <sc-if value="{{ n.i1 }}"><rect x="3" y="3" width="7.5" height="7.5" rx="2"></rect><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"></rect><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"></rect><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"></rect></sc-if>
+            <sc-if value="{{ n.i2 }}"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></sc-if>
+            <sc-if value="{{ n.i3 }}"><path d="M3 3v18h18"></path><path d="M7 15l4-4 3 3 5-6"></path></sc-if>
+            <sc-if value="{{ n.i4 }}"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></sc-if>
+            <sc-if value="{{ n.i5 }}"><path d="M12 2 2 7l10 5 10-5-10-5Z"></path><path d="m2 17 10 5 10-5"></path><path d="m2 12 10 5 10-5"></path></sc-if>
+            <sc-if value="{{ n.i6 }}"><path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5"></path><path d="M18 12a1 1 0 0 0 0 2h3v-2Z"></path></sc-if>
+          </svg>
+          <span style="flex:1;">{{ n.label }}</span>
+          <sc-if value="{{ n.badge }}"><span style="min-width:22px;height:22px;border-radius:7px;background:{{ n.badgeBg }};color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 6px;">{{ n.badge }}</span></sc-if>
+        </button>
+      </sc-for>
+      <div style="height:1.5px;background:rgba(163,177,198,0.28);margin:12px 6px;"></div>
+      <button onClick="{{ openPlayer }}" style="display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:15px;border:none;background:#E8ECF3;font-size:14.5px;font-weight:600;color:#7A8699;text-align:left;" style-hover="color:#2E6BE6;">O'quvchi ko'rinishi ↗</button>
+      <div style="flex:1;"></div>
+      <div style="display:flex;align-items:center;gap:11px;padding:12px;border-radius:18px;background:#E8ECF3;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);">
+        <div style="width:38px;height:38px;border-radius:50%;background:#E8ECF3;box-shadow:inset -2px -2px 5px rgba(255,255,255,0.85), inset 2px 2px 5px rgba(163,177,198,0.5);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#2E6BE6;">A</div>
+        <div><div style="font-size:13.5px;font-weight:700;">Azizbek</div><div style="font-size:11.5px;color:#7A8699;font-weight:600;">Egasi</div></div>
+      </div>
+    </aside>
+
+    <main style="flex:1;min-width:0;overflow-y:auto;padding:4px 8px 24px 4px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:22px;">
+        <div>
+          <div style="font-size:26px;font-weight:800;letter-spacing:-0.6px;">{{ title }}</div>
+          <div style="font-size:14px;color:#7A8699;font-weight:500;margin-top:6px;">{{ subtitle }}</div>
+        </div>
+        <div style="display:flex;gap:12px;">
+          <sc-if value="{{ isCatalog }}">
+            <button onClick="{{ openAssign }}" style="height:46px;border:none;border-radius:14px;background:linear-gradient(135deg,#3D78EE,#2E6BE6);color:#fff;font-size:14px;font-weight:700;padding:0 22px;box-shadow:-4px -4px 10px rgba(255,255,255,0.5), 6px 6px 14px rgba(46,107,230,0.38);">+ Guruhga mock tayinlash</button>
+          </sc-if>
+          <sc-if value="{{ isBank }}">
+            <button style="height:46px;border:none;border-radius:14px;background:linear-gradient(135deg,#3D78EE,#2E6BE6);color:#fff;font-size:14px;font-weight:700;padding:0 22px;box-shadow:-4px -4px 10px rgba(255,255,255,0.5), 6px 6px 14px rgba(46,107,230,0.38);">Test import qilish</button>
+          </sc-if>
+        </div>
+      </div>
+
+      <!-- CATALOG -->
+      <sc-if value="{{ isCatalog }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-bottom:26px;">
+          <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+            <div style="background:#E8ECF3;border-radius:22px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:20px 22px;">
+              <div style="font-size:10.5px;font-weight:700;letter-spacing:0.8px;color:#7A8699;">{{ k.label }}</div>
+              <div style="font-size:28px;font-weight:800;letter-spacing:-0.6px;margin-top:10px;color:{{ k.color }};">{{ k.value }}</div>
+              <div style="font-size:12.5px;color:#7A8699;font-weight:600;margin-top:4px;">{{ k.sub }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:6px;width:max-content;padding:5px;border-radius:15px;background:#E8ECF3;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.5);margin-bottom:22px;">
+          <sc-for list="{{ filters }}" as="f" hint-placeholder-count="6">
+            <button onClick="{{ f.go }}" style="height:36px;padding:0 16px;border:none;border-radius:11px;font-size:13.5px;font-weight:700;background:#E8ECF3;color:{{ f.color }};box-shadow:{{ f.shadow }};">{{ f.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:22px;">
+          <sc-for list="{{ examCards }}" as="e" hint-placeholder-count="5">
+            <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:24px;display:flex;flex-direction:column;gap:18px;">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div style="width:52px;height:52px;border-radius:16px;background:#E8ECF3;box-shadow:inset -3px -3px 6px rgba(255,255,255,0.85), inset 3px 3px 6px rgba(163,177,198,0.5);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:{{ e.ink }};">{{ e.abbr }}</div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:17px;font-weight:800;letter-spacing:-0.3px;">{{ e.name }}</div>
+                  <div style="font-size:12.5px;color:#7A8699;font-weight:600;margin-top:3px;">{{ e.ver }}</div>
+                </div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;">
+                <sc-for list="{{ e.secs }}" as="s"><span style="font-size:12px;font-weight:700;color:#5b6b82;border-radius:9px;padding:6px 10px;background:#E8ECF3;box-shadow:-2px -2px 5px rgba(255,255,255,0.9), 2px 2px 5px rgba(163,177,198,0.4);">{{ s }}</span></sc-for>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:14px;border-radius:16px;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.45);">
+                <div><div style="font-size:10px;font-weight:700;letter-spacing:0.7px;color:#9aa6b8;">DAVOMIYLIK</div><div style="font-size:14px;font-weight:800;margin-top:4px;">{{ e.dur }}</div></div>
+                <div><div style="font-size:10px;font-weight:700;letter-spacing:0.7px;color:#9aa6b8;">NARX</div><div style="font-size:14px;font-weight:800;margin-top:4px;">{{ e.price }}</div></div>
+                <div><div style="font-size:10px;font-weight:700;letter-spacing:0.7px;color:#9aa6b8;">O'RTACHA</div><div style="font-size:14px;font-weight:800;margin-top:4px;">{{ e.avg }}</div></div>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <button onClick="{{ e.open }}" style="flex:1;height:42px;border:none;border-radius:13px;background:#E8ECF3;font-size:13.5px;font-weight:700;color:#1E2A3A;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);" style-active="box-shadow: inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.5);">Batafsil</button>
+                <button onClick="{{ e.assign }}" style="flex:1;height:42px;border:none;border-radius:13px;background:#E8ECF3;font-size:13.5px;font-weight:800;color:#2E6BE6;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);" style-active="box-shadow: inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.5);">Tayinlash</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-size:12px;color:#9aa6b8;font-weight:600;margin-top:22px;">Mock testlar rasmiy imtihon formatiga mos tuzilgan. Rasmiy tashkilotlar bilan bog'liq emas. SAT va TOEFL ballari taxminiy.</div>
+      </sc-if>
+
+      <!-- DETAIL -->
+      <sc-if value="{{ isDetail }}">
+        <div style="display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);gap:22px;align-items:start;">
+          <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:26px;display:flex;flex-direction:column;gap:20px;">
+            <div style="display:flex;align-items:center;gap:16px;">
+              <div style="width:60px;height:60px;border-radius:18px;background:#E8ECF3;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.45);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:{{ dx.ink }};">{{ dx.abbr }}</div>
+              <div><div style="font-size:21px;font-weight:800;letter-spacing:-0.4px;">{{ dx.name }}</div><div style="font-size:13px;color:#7A8699;font-weight:600;margin-top:4px;">{{ dx.ver }} · {{ dx.dur }}</div></div>
+            </div>
+            <div style="font-size:14px;color:#5b6b82;line-height:1.6;max-width:720px;">{{ dx.desc }}</div>
+            <div>
+              <div style="display:grid;grid-template-columns:1.6fr 0.7fr 1.2fr 1fr 150px;gap:14px;padding:0 14px 10px;font-size:10.5px;font-weight:700;letter-spacing:0.8px;color:#9aa6b8;"><div>BO'LIM</div><div>VAQT</div><div>TARKIB</div><div>BAHOLASH</div><div></div></div>
+              <sc-for list="{{ dxSecs }}" as="x" hint-placeholder-count="4">
+                <div style="display:grid;grid-template-columns:1.6fr 0.7fr 1.2fr 1fr 150px;gap:14px;align-items:center;padding:12px 14px;border-radius:14px;margin-bottom:6px;box-shadow:inset -2px -2px 5px rgba(255,255,255,0.7), inset 2px 2px 5px rgba(163,177,198,0.35);font-size:13.5px;">
+                  <div style="font-weight:800;">{{ x.title }}</div>
+                  <div style="font-weight:700;color:#5b6b82;">{{ x.dur }}</div>
+                  <div style="font-weight:600;color:#5b6b82;">{{ x.content }}</div>
+                  <div><span style="font-size:11px;font-weight:800;letter-spacing:0.4px;border-radius:7px;padding:4px 8px;color:{{ x.mFg }};background:{{ x.mBg }};">{{ x.method }}</span></div>
+                  <button onClick="{{ x.start }}" style="height:36px;border:none;border-radius:13px;background:#E8ECF3;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);font-size:12.5px;font-weight:800;color:#2E6BE6;">Bo'limni boshlash</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:24px;display:flex;flex-direction:column;gap:12px;">
+              <div style="font-size:10.5px;font-weight:700;letter-spacing:0.8px;color:#7A8699;">TO'LIQ MOCK</div>
+              <div style="font-size:28px;font-weight:800;letter-spacing:-0.5px;">{{ dx.price }}</div>
+              <button onClick="{{ startFull }}" style="height:48px;border:none;border-radius:14px;background:linear-gradient(135deg,#3D78EE,#2E6BE6);color:#fff;font-weight:700;box-shadow:-4px -4px 10px rgba(255,255,255,0.5), 6px 6px 14px rgba(46,107,230,0.38);font-size:14.5px;">To'liq mockni boshlash</button>
+              <button onClick="{{ assignFromDetail }}" style="height:44px;border:none;border-radius:13px;background:#E8ECF3;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);font-size:13.5px;font-weight:800;color:#2E6BE6;">Guruhga tayinlash</button>
+              <div style="font-size:12px;color:#7A8699;font-weight:600;line-height:1.5;">Bitta bo'lim: 1 kredit. Har imtihonda 1 ta bepul namunaviy bo'lim bor.</div>
+            </div>
+            <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:24px;display:flex;flex-direction:column;gap:14px;">
+              <div style="font-size:15px;font-weight:800;">Qanday baholanadi</div>
+              <div style="display:flex;gap:12px;"><span style="font-size:10.5px;font-weight:800;border-radius:7px;padding:4px 8px;color:#1F7A55;background:#E5F5EE;height:max-content;">AUTO</span><div style="font-size:13px;color:#5b6b82;line-height:1.55;">Javoblar kaliti bilan solishtiriladi, keyin aylantirish jadvali orqali ballga o'tkaziladi. Natija darhol chiqadi.</div></div>
+              <div style="display:flex;gap:12px;"><span style="font-size:10.5px;font-weight:800;border-radius:7px;padding:4px 8px;color:#5B3FD1;background:#EEE9FF;height:max-content;">AI</span><div style="font-size:13px;color:#5b6b82;line-height:1.55;">Writing va Speaking'ni AI rasmiy mezonlar bo'yicha 2 marta baholaydi. Natija bir necha daqiqada, oraliq ko'rinishida chiqadi.</div></div>
+              <sc-if value="{{ dx.estimate }}"><div style="font-size:12.5px;font-weight:700;color:#B7790F;line-height:1.5;">Adaptiv imtihon: rasmiy ball formulasi ochiq emas, shuning uchun ball taxminiy ko'rsatiladi.</div></sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- SCHEDULED / LIVE -->
+      <sc-if value="{{ isSchedule }}">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:22px;align-items:start;">
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <sc-for list="{{ sessions }}" as="s" hint-placeholder-count="4">
+              <div onClick="{{ s.pick }}" style="cursor:pointer;background:#E8ECF3;border-radius:20px;padding:18px 20px;box-shadow:{{ s.shadow }};display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <div style="font-size:15px;font-weight:800;">{{ s.group }}</div>
+                  <span style="font-size:11px;font-weight:800;letter-spacing:0.4px;border-radius:8px;padding:4px 9px;color:{{ s.stFg }};background:{{ s.stBg }};">{{ s.status }}</span>
+                </div>
+                <div style="font-size:13px;color:#5b6b82;font-weight:600;">{{ s.exam }}</div>
+                <div style="display:flex;justify-content:space-between;font-size:12.5px;color:#7A8699;font-weight:600;"><span>{{ s.when }}</span><span>{{ s.count }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:24px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:0.8px;color:#1F9D6B;"><span style="width:8px;height:8px;border-radius:50%;background:#1F9D6B;box-shadow:0 0 0 4px rgba(31,157,107,0.15);"></span>JONLI · 10:00–13:00</div>
+                <div style="font-size:19px;font-weight:800;margin-top:8px;">IELTS-7B · IELTS Academic, Mock 5</div>
+              </div>
+              <div style="display:flex;gap:18px;text-align:right;">
+                <div><div style="font-size:22px;font-weight:800;">19<span style="color:#9aa6b8;font-size:14px;">/22</span></div><div style="font-size:11.5px;color:#7A8699;font-weight:600;">boshladi</div></div>
+                <div><div style="font-size:22px;font-weight:800;">4</div><div style="font-size:11.5px;color:#7A8699;font-weight:600;">tugatdi</div></div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1.6fr 1fr 1.6fr 0.8fr;gap:14px;padding:0 12px 10px;font-size:10.5px;font-weight:700;letter-spacing:0.8px;color:#9aa6b8;"><div>O'QUVCHI</div><div>BO'LIM</div><div>JARAYON</div><div style="text-align:right;">OGOHLANTIRISH</div></div>
+            <sc-for list="{{ live }}" as="l" hint-placeholder-count="7">
+              <div style="display:grid;grid-template-columns:1.6fr 1fr 1.6fr 0.8fr;gap:14px;align-items:center;padding:11px 12px;border-radius:14px;margin-bottom:6px;box-shadow:inset -2px -2px 5px rgba(255,255,255,0.7), inset 2px 2px 5px rgba(163,177,198,0.35);">
+                <div style="font-size:13.5px;font-weight:700;">{{ l.name }}</div>
+                <div style="font-size:12.5px;font-weight:700;color:#5b6b82;">{{ l.sec }}</div>
+                <div style="display:flex;align-items:center;gap:10px;"><div style="flex:1;height:6px;border-radius:3px;background:#DDE3EC;"><div style="height:100%;border-radius:3px;background:{{ l.barColor }};width:{{ l.pct }};"></div></div><span style="font-size:12px;font-weight:700;color:#7A8699;width:34px;">{{ l.pct }}</span></div>
+                <div style="text-align:right;font-size:12.5px;font-weight:800;color:{{ l.warnColor }};">{{ l.warn }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- RESULTS -->
+      <sc-if value="{{ isResults }}">
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-bottom:22px;">
+          <sc-for list="{{ resKpis }}" as="k" hint-placeholder-count="4">
+            <div style="background:#E8ECF3;border-radius:22px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:20px 22px;">
+              <div style="font-size:10.5px;font-weight:700;letter-spacing:0.8px;color:#7A8699;">{{ k.label }}</div>
+              <div style="font-size:28px;font-weight:800;letter-spacing:-0.6px;margin-top:10px;">{{ k.value }}</div>
+              <div style="font-size:12.5px;color:#7A8699;font-weight:600;margin-top:4px;">{{ k.sub }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:16px 18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px 16px;">
+            <div style="font-size:16px;font-weight:800;">IELTS-7B · Mock 4 · 5-oktabr</div>
+            <button style="height:38px;border:none;border-radius:12px;background:#E8ECF3;font-size:13px;font-weight:700;color:#2E6BE6;padding:0 16px;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);">Excel'ga eksport</button>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr repeat(4,1fr) 1fr 0.8fr;gap:14px;padding:0 16px 12px;font-size:10.5px;font-weight:700;letter-spacing:0.8px;color:#9aa6b8;"><div>O'QUVCHI</div><div>LISTENING</div><div>READING</div><div>WRITING</div><div>SPEAKING</div><div>UMUMIY</div><div>CEFR</div></div>
+          <sc-for list="{{ results }}" as="r" hint-placeholder-count="8">
+            <div style="display:grid;grid-template-columns:2fr repeat(4,1fr) 1fr 0.8fr;gap:14px;align-items:center;padding:12px 16px;border-radius:14px;margin-bottom:6px;box-shadow:inset -2px -2px 5px rgba(255,255,255,0.7), inset 2px 2px 5px rgba(163,177,198,0.35);font-size:14px;">
+              <div style="font-weight:700;">{{ r.name }}</div>
+              <div style="font-weight:700;">{{ r.l }}</div>
+              <div style="font-weight:700;">{{ r.r }}</div>
+              <div style="font-weight:700;">{{ r.w }}</div>
+              <div style="font-weight:700;color:{{ r.sColor }};">{{ r.s }}</div>
+              <div style="font-size:16px;font-weight:800;color:#2E6BE6;">{{ r.o }}</div>
+              <div><span style="font-size:12px;font-weight:800;color:#5b6b82;border-radius:8px;padding:4px 9px;box-shadow:-2px -2px 5px rgba(255,255,255,0.9), 2px 2px 5px rgba(163,177,198,0.4);">{{ r.c }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- AI GRADING -->
+      <sc-if value="{{ isAi }}">
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-bottom:22px;">
+          <sc-for list="{{ aiKpis }}" as="k" hint-placeholder-count="4">
+            <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);border-radius:22px;padding:20px 22px;">
+              <div style="font-size:10.5px;font-weight:700;letter-spacing:0.8px;color:#7A8699;">{{ k.label }}</div>
+              <div style="font-size:26px;font-weight:800;letter-spacing:-0.5px;margin-top:10px;">{{ k.value }}</div>
+              <div style="font-size:12.5px;color:#7A8699;font-weight:600;margin-top:4px;">{{ k.sub }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:340px minmax(0,1fr);gap:22px;align-items:start;">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <sc-for list="{{ jobs }}" as="j" hint-placeholder-count="6">
+              <div onClick="{{ j.pick }}" style="cursor:pointer;background:#E8ECF3;border-radius:18px;padding:15px 18px;box-shadow:{{ j.shadow }};">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><div style="font-size:14.5px;font-weight:800;">{{ j.name }}</div><span style="font-size:10.5px;font-weight:800;letter-spacing:0.4px;border-radius:7px;padding:4px 8px;white-space:nowrap;color:{{ j.stFg }};background:{{ j.stBg }};">{{ j.status }}</span></div>
+                <div style="font-size:12.5px;color:#7A8699;font-weight:600;margin-top:5px;">{{ j.task }}</div>
+                <div style="font-size:12.5px;font-weight:700;color:#5b6b82;margin-top:8px;">{{ j.line }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:26px 28px;display:flex;flex-direction:column;gap:20px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;">
+              <div><div style="font-size:19px;font-weight:800;">{{ jb.name }} · {{ jb.task }}</div><div style="font-size:13px;color:#7A8699;font-weight:600;margin-top:5px;">{{ jb.meta }}</div></div>
+              <div style="text-align:right;"><div style="font-size:10.5px;font-weight:700;letter-spacing:0.8px;color:#7A8699;">YAKUNIY BALL</div><div style="font-size:30px;font-weight:800;color:#2E6BE6;letter-spacing:-0.6px;">{{ jb.final }}</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <sc-for list="{{ jb.steps }}" as="st">
+                <div style="display:flex;align-items:center;gap:8px;"><span style="height:32px;padding:0 12px;border-radius:10px;display:flex;align-items:center;font-size:12.5px;font-weight:700;color:{{ st.fg }};box-shadow:{{ st.shadow }};">{{ st.t }}</span><span style="color:#B4BDCA;font-weight:800;">{{ st.arrow }}</span></div>
+              </sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;">
+              <sc-for list="{{ jb.passes }}" as="p">
+                <div style="padding:14px 16px;border-radius:16px;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.45);"><div style="font-size:10.5px;font-weight:700;letter-spacing:0.7px;color:#9aa6b8;">{{ p.k }}</div><div style="font-size:20px;font-weight:800;margin-top:4px;color:{{ p.c }};">{{ p.v }}</div></div>
+              </sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 26px;">
+              <sc-for list="{{ jb.criteria }}" as="c" hint-placeholder-count="4">
+                <div style="display:flex;flex-direction:column;gap:7px;">
+                  <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;"><span>{{ c.name }}</span><span>{{ c.score }}</span></div>
+                  <div style="height:7px;border-radius:4px;box-shadow:inset 1px 1px 3px rgba(163,177,198,0.6);"><div style="height:100%;border-radius:4px;background:#2E6BE6;width:{{ c.w }};"></div></div>
+                  <div style="font-size:12.5px;color:#5b6b82;line-height:1.5;">{{ c.note }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="font-family:'Source Serif 4',Georgia,serif;font-size:15.5px;line-height:1.75;color:#26313F;padding:18px 20px;border-radius:16px;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.45);">{{ jb.text }}</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:700;color:#7A8699;line-height:1.5;"><span style="width:8px;height:8px;border-radius:50%;background:#5B3FD1;flex-shrink:0;"></span>O'qituvchi ball qo'ymaydi. Ikki baho 0.5 dan ko'p farq qilsa, tizim avtomatik 3-marta baholaydi va o'rtadagi (median) ballni oladi.</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- TEST BANK -->
+      <sc-if value="{{ isBank }}">
+        <div style="display:flex;gap:6px;width:max-content;padding:5px;border-radius:15px;background:#E8ECF3;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.5);margin-bottom:22px;">
+          <sc-for list="{{ bankTabs }}" as="b"><button onClick="{{ b.go }}" style="height:36px;padding:0 16px;border:none;border-radius:11px;font-size:13.5px;font-weight:700;background:#E8ECF3;color:{{ b.color }};box-shadow:{{ b.shadow }};">{{ b.label }}</button></sc-for>
+        </div>
+        <sc-if value="{{ bankTables }}">
+          <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px;align-items:start;">
+            <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:24px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><div style="font-size:16px;font-weight:800;">IELTS Listening · to'g'ri javob → band</div><span style="font-size:12px;font-weight:700;color:#7A8699;">Admin tahrirlaydi</span></div>
+              <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;">
+                <sc-for list="{{ convTable }}" as="c" hint-placeholder-count="16">
+                  <div style="padding:12px 14px;border-radius:14px;box-shadow:inset -2px -2px 5px rgba(255,255,255,0.75), inset 2px 2px 5px rgba(163,177,198,0.4);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;font-weight:700;color:#5b6b82;">{{ c.raw }}</span><span style="font-size:16px;font-weight:800;color:#2E6BE6;">{{ c.band }}</span></div>
+                </sc-for>
+              </div>
+              <div style="font-size:12.5px;color:#7A8699;font-weight:600;margin-top:16px;line-height:1.5;">Masalan, 30/40 to'g'ri javob = 7.0 band. SAT va TOEFL jadvallari taxminiy deb belgilanadi.</div>
+            </div>
+            <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:24px;display:flex;flex-direction:column;gap:12px;">
+              <div style="font-size:16px;font-weight:800;">Qabul qilinadigan variantlar</div>
+              <div style="font-size:12.5px;color:#7A8699;font-weight:600;line-height:1.5;">Bo'sh joy to'ldirishda har savolga to'g'ri yozilishlar ro'yxati. Katta-kichik harf va ortiqcha bo'shliq hisobga olinmaydi.</div>
+              <sc-for list="{{ variants }}" as="v" hint-placeholder-count="4">
+                <div style="padding:12px 14px;border-radius:14px;box-shadow:inset -2px -2px 5px rgba(255,255,255,0.75), inset 2px 2px 5px rgba(163,177,198,0.4);">
+                  <div style="font-size:12px;font-weight:800;color:#7A8699;">{{ v.q }}</div>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"><sc-for list="{{ v.list }}" as="w"><span style="font-size:12.5px;font-weight:700;border-radius:8px;padding:4px 9px;color:#1E2A3A;box-shadow:-2px -2px 5px rgba(255,255,255,0.9), 2px 2px 5px rgba(163,177,198,0.4);">{{ w }}</span></sc-for></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ bankTests }}">
+        <div style="display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px;align-items:start;">
+          <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:16px 18px;">
+            <div style="display:grid;grid-template-columns:2fr 1.1fr 0.8fr 1fr;gap:14px;padding:8px 16px 12px;font-size:10.5px;font-weight:700;letter-spacing:0.8px;color:#9aa6b8;"><div>TEST</div><div>IMTIHON</div><div>SAVOLLAR</div><div>HOLAT</div></div>
+            <sc-for list="{{ tests }}" as="t" hint-placeholder-count="7">
+              <div style="display:grid;grid-template-columns:2fr 1.1fr 0.8fr 1fr;gap:14px;align-items:center;padding:12px 16px;border-radius:14px;margin-bottom:6px;box-shadow:inset -2px -2px 5px rgba(255,255,255,0.7), inset 2px 2px 5px rgba(163,177,198,0.35);font-size:13.5px;">
+                <div style="font-weight:700;">{{ t.title }}</div>
+                <div style="font-weight:600;color:#5b6b82;">{{ t.exam }}</div>
+                <div style="font-weight:700;">{{ t.q }}</div>
+                <div><span style="font-size:11.5px;font-weight:800;border-radius:8px;padding:4px 9px;color:{{ t.fg }};background:{{ t.bg }};">{{ t.status }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:24px;display:flex;flex-direction:column;gap:16px;">
+            <div style="font-size:16px;font-weight:800;">Import</div>
+            <div style="height:130px;border-radius:18px;border:2px dashed #C3CDDB;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+              <div style="font-size:14px;font-weight:700;">JSON yoki Excel faylni tashlang</div>
+              <div style="font-size:12.5px;color:#7A8699;font-weight:600;">+ audio va rasmlar · <a href="#">shablonni yuklab olish</a></div>
+            </div>
+            <div style="padding:16px;border-radius:16px;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.45);display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:800;"><span>ielts-mock-6.json</span><span style="color:#E4574C;">2 xato</span></div>
+              <sc-for list="{{ checks }}" as="c" hint-placeholder-count="5">
+                <div style="display:flex;gap:10px;font-size:13px;line-height:1.45;color:#3A4658;"><span style="width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;background:{{ c.dot }};"></span><span>{{ c.t }}</span></div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button style="flex:1;height:42px;border:none;border-radius:13px;background:#E8ECF3;font-size:13.5px;font-weight:700;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);">Ko'rib chiqish</button>
+              <button style="flex:1;height:42px;border:none;border-radius:13px;background:#E8ECF3;font-size:13.5px;font-weight:700;color:#9aa6b8;box-shadow:inset -2px -2px 5px rgba(255,255,255,0.8), inset 2px 2px 5px rgba(163,177,198,0.4);">Nashr qilish</button>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+      </sc-if>
+
+      <!-- CREDITS -->
+      <sc-if value="{{ isCredits }}">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:22px;align-items:start;">
+          <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:26px;display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:10.5px;font-weight:700;letter-spacing:0.8px;color:#7A8699;">MARKAZ BALANSI</div>
+            <div style="font-size:48px;font-weight:800;letter-spacing:-1.5px;color:#2E6BE6;line-height:1;">{{ credits }} <span style="font-size:16px;color:#7A8699;letter-spacing:0;">kredit</span></div>
+            <div style="display:flex;flex-direction:column;gap:10px;font-size:13.5px;font-weight:600;color:#5b6b82;">
+              <div style="display:flex;justify-content:space-between;"><span>To'liq mock</span><b style="color:#1E2A3A;">2–4 kredit</b></div>
+              <div style="display:flex;justify-content:space-between;"><span>Bitta bo'lim</span><b style="color:#1E2A3A;">1 kredit</b></div>
+              <div style="display:flex;justify-content:space-between;"><span>Writing/Speaking AI baholash</span><b style="color:#1E2A3A;">narxga kiritilgan</b></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;">
+            <sc-for list="{{ packs }}" as="p" hint-placeholder-count="3">
+              <div style="background:#E8ECF3;border-radius:24px;box-shadow:-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46);padding:24px;display:flex;flex-direction:column;gap:12px;">
+                <div style="font-size:13px;font-weight:800;color:#7A8699;">{{ p.name }}</div>
+                <div style="font-size:30px;font-weight:800;letter-spacing:-0.6px;">{{ p.credits }} <span style="font-size:14px;color:#7A8699;">kredit</span></div>
+                <div style="font-size:15px;font-weight:800;color:#2E6BE6;">{{ p.price }}</div>
+                <div style="font-size:12.5px;color:#7A8699;font-weight:600;">{{ p.note }}</div>
+                <button onClick="{{ p.buy }}" style="height:42px;border:none;border-radius:13px;background:#E8ECF3;font-size:13.5px;font-weight:800;color:#2E6BE6;margin-top:6px;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);" style-active="box-shadow: inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.5);">Sotib olish</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+
+<!-- ASSIGN MODAL -->
+<sc-if value="{{ assignOpen }}">
+  <div onClick="{{ closeAssign }}" style="position:fixed;inset:0;background:rgba(30,42,58,0.28);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:40;animation:ovl .18s ease;">
+    <div onClick="{{ stop }}" style="width:520px;background:#E8ECF3;border-radius:28px;box-shadow:-9px -9px 22px rgba(255,255,255,0.6), 12px 12px 30px rgba(30,42,58,0.25);padding:30px;display:flex;flex-direction:column;gap:18px;animation:pop .2s ease;">
+      <div style="font-size:21px;font-weight:800;letter-spacing:-0.4px;">Guruhga mock tayinlash</div>
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.9px;color:#7A8699;margin-bottom:9px;">IMTIHON</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <sc-for list="{{ aExams }}" as="x"><button onClick="{{ x.pick }}" style="height:36px;padding:0 14px;border:none;border-radius:11px;font-size:13px;font-weight:700;background:#E8ECF3;color:{{ x.color }};box-shadow:{{ x.shadow }};">{{ x.label }}</button></sc-for>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.9px;color:#7A8699;margin-bottom:9px;">GURUH</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <sc-for list="{{ aGroups }}" as="g"><button onClick="{{ g.pick }}" style="height:36px;padding:0 14px;border:none;border-radius:11px;font-size:13px;font-weight:700;background:#E8ECF3;color:{{ g.color }};box-shadow:{{ g.shadow }};">{{ g.label }}</button></sc-for>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div><div style="font-size:11px;font-weight:700;letter-spacing:0.9px;color:#7A8699;margin-bottom:9px;">SANA</div><input value="12.10.2026" style="width:100%;height:46px;border:none;outline:none;border-radius:13px;padding:0 14px;font-size:14px;font-weight:700;background:#E8ECF3;color:#1E2A3A;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.5);" /></div>
+        <div><div style="font-size:11px;font-weight:700;letter-spacing:0.9px;color:#7A8699;margin-bottom:9px;">VAQT ORALIG'I</div><input value="10:00 – 13:00" style="width:100%;height:46px;border:none;outline:none;border-radius:13px;padding:0 14px;font-size:14px;font-weight:700;background:#E8ECF3;color:#1E2A3A;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.5);" /></div>
+      </div>
+      <div style="padding:14px 16px;border-radius:16px;box-shadow:inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.45);display:flex;justify-content:space-between;align-items:center;font-size:13.5px;font-weight:600;color:#5b6b82;">
+        <span>{{ aSummary }}</span><b style="font-size:16px;color:#2E6BE6;">{{ aCost }}</b>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onClick="{{ closeAssign }}" style="flex:1;height:48px;border:none;border-radius:14px;background:#E8ECF3;font-size:14px;font-weight:700;color:#5b6b82;box-shadow:-4px -4px 10px rgba(255,255,255,0.9), 4px 4px 10px rgba(163,177,198,0.46);">Bekor qilish</button>
+        <button onClick="{{ confirmAssign }}" style="flex:1.4;height:48px;border:none;border-radius:14px;background:linear-gradient(135deg,#3D78EE,#2E6BE6);color:#fff;font-size:14px;font-weight:700;box-shadow:6px 6px 14px rgba(46,107,230,0.38);">Tayinlash</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<!-- EXAM PLAYER -->
+<sc-if value="{{ playerOpen }}">
+  <div style="position:fixed;inset:0;z-index:50;background:#F5F6F8;">
+    <dc-import name="ExamPlayer" exam="{{ pExam }}" section="{{ pSection }}" speed="{{ pSpeed }}" on-exit="{{ closePlayer }}" hint-size="100%,100%" style="width:100%;height:100%;"></dc-import>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;timerSpeed&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;10x&quot;,&quot;1x&quot;],&quot;default&quot;:&quot;10x&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Demo&quot;}}">
+class Component extends DCLogic {
+  state = {
+    screen: 'catalog', filter: 'Barchasi', session: 0, job: 0, examSel: 'IELTS', bankTab: 'tests',
+    assignOpen: false, aExam: 'IELTS', aGroup: 'IELTS-7B',
+    playerOpen: false, pExam: 'IELTS', pSection: '', credits: 240
+  };
+  renderVals() {
+    const s = this.state, A = '#2E6BE6';
+    const RAISED = '-6px -6px 14px rgba(255,255,255,0.9), 6px 6px 16px rgba(163,177,198,0.46)';
+    const RSM = '-3px -3px 7px rgba(255,255,255,0.9), 3px 3px 7px rgba(163,177,198,0.42)';
+    const INSET = 'inset -3px -3px 7px rgba(255,255,255,0.85), inset 3px 3px 7px rgba(163,177,198,0.5)';
+    const go = k => () => this.setState({ screen: k });
+    const navStyle = a => ({ display:'flex', alignItems:'center', gap:'13px', flexShrink:0, width:'100%', padding:'12px 14px', marginBottom:'5px', borderRadius:'15px', border:'none', textAlign:'left', fontSize:'14.5px', background:'#E8ECF3', transition:'all .2s ease', fontWeight: a?700:600, color: a?A:'#7A8699', boxShadow: a?INSET:'none' });
+    const nav = [['catalog','Katalog'],['schedule','Rejalashtirilgan',2,'#1F9D6B'],['results','Natijalar'],['ai','AI baholash',2,'#5B3FD1'],['bank','Test banki'],['credits','Kreditlar']];
+    const navItems = nav.map(([k,label,badge,bb],i) => ({ label, ['i'+(i+1)]: true, badge: badge||null, badgeBg: bb, go: go(k), style: navStyle(s.screen===k || (k==='catalog' && s.screen==='detail')) }));
+    const titles = {
+      catalog:['Mock imtihonlar','IELTS, CEFR, SAT, TOEFL va HSK formatidagi kompyuterli mock testlar'],
+      detail:['Imtihon tafsilotlari','Format, bo\'limlar va baholash usuli'],
+      schedule:['Rejalashtirilgan mocklar','Guruhlarga tayinlangan imtihonlar va jonli kuzatuv'],
+      results:['Natijalar','Guruh bo\'yicha ballar va CEFR darajalari'],
+      ai:['AI baholash','Writing va Speaking avtomatik AI orqali baholanadi. O\'qituvchi ball qo\'ymaydi.'],
+      bank:['Test banki','Testlar, javoblar kaliti, aylantirish jadvallari'],
+      credits:['Kreditlar','Markaz balansi va paketlar']
+    };
+    const [title, subtitle] = titles[s.screen];
+    const M = { auto:['AUTO','#1F7A55','#E5F5EE'], ai:['AI','#5B3FD1','#EEE9FF'], mix:['AUTO + AI','#7A4E00','#FFF1D6'] };
+    const exams = [
+      { k:'IELTS', abbr:'IE', name:'IELTS Academic / General', ver:'4 bo\'lim · 0–9 band', secs:['Listening','Reading','Writing','Speaking'], dur:'2 s 45 d', price:'4 kredit', avg:'6.5', ink:'oklch(0.5 0.15 255)',
+        desc:'Kompyuterdagi IELTS formatida: Listening bir marta eshittiriladi, Reading split ko\'rinishda, Writing ikki topshiriq, Speaking avtomatik yoziladi. Natija har bo\'lim bo\'yicha va umumiy band.',
+        sections:[['L','Listening','30 min','40 savol · 4 qism','auto'],['R','Reading','60 min','40 savol · 3 matn','auto'],['W','Writing','60 min','2 topshiriq','ai'],['S','Speaking','11–14 min','3 qism','ai']] },
+      { k:'CEFR', abbr:'CE', name:'CEFR Multilevel', ver:'O\'zbekiston formati · B1–C1', secs:['Listening','Reading','Writing','Speaking'], dur:'2 s 40 d', price:'3 kredit', avg:'B2', ink:'oklch(0.5 0.11 160)',
+        desc:'Milliy multilevel imtihon formatida, to\'liq kompyuterda. Har ko\'nikma bo\'yicha daraja (B1, B2, C1) va umumiy daraja.',
+        sections:[['L','Listening','35 min','6 qism','auto'],['R','Reading','60 min','5 qism','auto'],['W','Writing','60 min','3 topshiriq','ai'],['S','Speaking','~15 min','3 qism','ai']] },
+      { k:'SAT', abbr:'SA', name:'Digital SAT', ver:'Adaptiv modullar · 400–1600', secs:['Reading & Writing','Math'], dur:'2 s 14 d', price:'3 kredit', avg:'1260', ink:'oklch(0.5 0.13 300)', estimate:true,
+        desc:'Har bo\'lim 2 moduldan iborat. 2-modul 1-modul natijasiga qarab osonroq yoki qiyinroq bo\'ladi. Math\'da kalkulyator va formulalar varag\'i bor. Bo\'limlar orasida 10 daqiqa tanaffus.',
+        sections:[['RW1','Reading & Writing · M1','32 min','27 savol','auto'],['RW2','Reading & Writing · M2','32 min','27 savol · adaptiv','auto'],['M1','Math · M1','35 min','22 savol','auto'],['M2','Math · M2','35 min','22 savol · adaptiv','auto']] },
+      { k:'TOEFL', abbr:'TO', name:'TOEFL iBT', ver:'2026 format · 1–6 shkala', secs:['Reading','Listening','Writing','Speaking'], dur:'~2 soat', price:'4 kredit', avg:'4.5', ink:'oklch(0.5 0.11 60)', estimate:true,
+        desc:'Yangi format: Reading va Listening adaptiv, Listening\'da oldingi savolga qaytib bo\'lmaydi. Writing\'da Build a Sentence avtomatik, email va discussion AI orqali baholanadi.',
+        sections:[['R1','Reading · M1','15 min','Complete the Words, Daily Life, Academic','auto'],['R2','Reading · M2','12 min','adaptiv','auto'],['L1','Listening · M1','12 min','Response, Conversation, Talk','auto'],['L2','Listening · M2','10 min','adaptiv','auto'],['W','Writing','23 min','Build a Sentence + 2 matn','mix'],['S','Speaking','~8 min','Repeat + Interview','ai']] },
+      { k:'HSK', abbr:'汉', name:'HSK 1–6', ver:'HSK 3.0 ga tayyor', secs:['Listening','Reading','Writing'], dur:'35–135 d', price:'2 kredit', avg:'HSK 3', ink:'oklch(0.52 0.14 20)',
+        desc:'Har daraja alohida test. Xitoy shriftlari va xitoycha yozish qo\'llab-quvvatlanadi. Namuna: HSK 4.',
+        sections:[['L','听力 Listening','30 min','45 savol','auto'],['R','阅读 Reading','40 min','40 savol','auto'],['W','书写 Writing','25 min','gap tuzish + gap yozish','mix']] }
+    ];
+    const open = (k, sec) => this.setState({ playerOpen:true, pExam:k, pSection: sec||'' });
+    const filters = ['Barchasi','IELTS','CEFR','SAT','TOEFL','HSK'].map(f => ({ label:f, go:()=>this.setState({filter:f}), color: s.filter===f?A:'#7A8699', shadow: s.filter===f?RSM:'none' }));
+    const examCards = exams.filter(e => s.filter==='Barchasi' || e.k===s.filter).map(e => ({ ...e, assign: () => this.setState({ assignOpen:true, aExam:e.k }), open: () => this.setState({ screen:'detail', examSel:e.k }) }));
+    const dx = exams.find(e => e.k===s.examSel);
+    const dxSecs = dx.sections.map(([key,t,dur,content,m]) => ({ title:t, dur, content, method:M[m][0], mFg:M[m][1], mBg:M[m][2], start: () => open(dx.k, key) }));
+    const kpis = [
+      { label:'BU OY URINISHLAR', value:'186', sub:'+42 o\'tgan oyga', color:'#1E2A3A' },
+      { label:'FAOL MOCKLAR', value:'2', sub:'hozir jonli: 1', color:'#1E2A3A' },
+      { label:'O\'RTACHA IELTS', value:'6.5', sub:'oxirgi 30 kun', color:'#1E2A3A' },
+      { label:'KREDIT', value: String(s.credits), sub:'≈ 60 to\'liq mock', color:A }
+    ];
+    const sessionsData = [
+      { group:'IELTS-7B', exam:'IELTS Academic · Mock 5 · To\'liq', when:'Bugun, 10:00–13:00', count:'19/22 boshladi', status:'JONLI', stFg:'#1F9D6B', stBg:'rgba(31,157,107,0.12)' },
+      { group:'SAT-Evening', exam:'Digital SAT · Mock 2', when:'14-okt, 15:00–18:00', count:'14 o\'quvchi', status:'REJADA', stFg:A, stBg:'rgba(46,107,230,0.1)' },
+      { group:'CEFR-B2-3', exam:'CEFR · Listening + Reading', when:'16-okt, 09:00–11:00', count:'18 o\'quvchi', status:'REJADA', stFg:A, stBg:'rgba(46,107,230,0.1)' },
+      { group:'IELTS-6A', exam:'IELTS Academic · Mock 4', when:'5-okt', count:'20/20 tugatdi', status:'YAKUNLANDI', stFg:'#7A8699', stBg:'rgba(122,134,153,0.12)' }
+    ];
+    const sessions = sessionsData.map((x,i) => ({ ...x, pick:()=>this.setState({session:i}), shadow: s.session===i?INSET:RAISED }));
+    const live = [
+      ['Aziza Karimova','Reading',62,0],['Jasur Toshmatov','Reading',48,2],['Madina Rahimova','Writing',81,0],['Bekzod Aliyev','Listening',100,0],
+      ['Nilufar Yusupova','Reading',55,1],['Sardor Qodirov','Listening',30,0],['Dilnoza Ergasheva','Tugatdi',100,0]
+    ].map(([name,sec,p,w]) => ({ name, sec, pct:p+'%', barColor: sec==='Tugatdi'?'#1F9D6B':A, warn: w?w+' tab':'—', warnColor: w?'#D68A1A':'#9aa6b8' }));
+    const resKpis = [
+      { label:'O\'RTACHA UMUMIY', value:'6.5', sub:'IELTS-7B · 20 o\'quvchi' },
+      { label:'ENG KUCHLI', value:'Listening', sub:'o\'rtacha 7.0' },
+      { label:'ENG ZAIF', value:'Writing', sub:'o\'rtacha 5.5–6.0' },
+      { label:'C1 VA YUQORI', value:'6', sub:'20 tadan' }
+    ];
+    const results = [
+      ['Aziza Karimova','7.5','7.0','6.0–6.5','6.5–7.0','7.0','C1'],['Jasur Toshmatov','6.5','6.0','5.5–6.0','6.0–6.5','6.0','B2'],
+      ['Madina Rahimova','8.0','7.5','7.0–7.5','7.0–7.5','7.5','C1'],['Bekzod Aliyev','6.0','6.5','5.5–6.0','Baholanmoqda','—','—'],
+      ['Nilufar Yusupova','7.0','6.5','6.0–6.5','6.5–7.0','6.5','B2'],['Sardor Qodirov','5.5','5.5','5.0–5.5','5.5–6.0','5.5','B2'],
+      ['Dilnoza Ergasheva','7.0','7.5','6.5–7.0','6.5–7.0','7.0','C1']
+    ].map(([name,l,r,w,sp,o,c]) => ({ name,l,r,w,s:sp,o,c, sColor: sp==='Baholanmoqda'?'#5B3FD1':'#1E2A3A' }));
+
+    const aiKpis = [
+      { label:'BUGUN BAHOLANDI', value:'142', sub:'98 writing · 44 speaking' },
+      { label:'O\'RTACHA VAQT', value:'2 d 40 s', sub:'topshirgandan natijagacha' },
+      { label:'IKKI BAHO MOS', value:'94%', sub:'farq ≤ 0.5 band' },
+      { label:'KALIBRLASH', value:'± 0.38', sub:'180 ta ekspert bahosiga nisbatan' }
+    ];
+    const ST = { done:['TAYYOR','#1F7A55','#E5F5EE'], run:['BAHOLANMOQDA','#2E6BE6','rgba(46,107,230,0.1)'], third:['3-BAHOLASH','#7A4E00','#FFF1D6'], retry:['QAYTA URINISH','#B23A2E','rgba(228,87,76,0.12)'] };
+    const jobsData = [
+      { name:'Bekzod Aliyev', task:'IELTS Speaking', kind:'s', st:'run', p:['6.0','…','—'], final:'…', step:2, meta:'IELTS-7B · Mock 5 · 10:42 da topshirildi' },
+      { name:'Aziza Karimova', task:'IELTS Writing Task 2', kind:'w', st:'done', p:['6.5','6.0','—'], final:'6.0–6.5', step:4, meta:'IELTS-7B · Mock 5 · 268 so\'z' },
+      { name:'Sardor Qodirov', task:'IELTS Writing Task 1', kind:'w', st:'third', p:['5.0','6.0','5.5'], final:'5.5–6.0', step:4, meta:'IELTS-6A · Mock 4 · 152 so\'z · farq 1.0 → 3-baholash' },
+      { name:'Kamola Islomova', task:'CEFR Writing 2', kind:'w', st:'done', p:['B2','B2','—'], final:'B2', step:4, meta:'CEFR-B2-3 · 211 so\'z' },
+      { name:'Jasur Toshmatov', task:'TOEFL Speaking', kind:'s', st:'retry', p:['…','…','—'], final:'…', step:1, meta:'Speech-to-text javob bermadi · 30 s dan keyin qayta urinadi' },
+      { name:'Madina Rahimova', task:'IELTS Speaking', kind:'s', st:'done', p:['7.0','7.0','—'], final:'7.0–7.5', step:4, meta:'IELTS-7B · Mock 5 · 5 javob' }
+    ];
+    const jobs = jobsData.map((j,i) => ({ name:j.name, task:j.task, status:ST[j.st][0], stFg:ST[j.st][1], stBg:ST[j.st][2], line: 'Natija: '+j.final, pick:()=>this.setState({job:i}), shadow: s.job===i?INSET:RAISED }));
+    const jd = jobsData[s.job];
+    const stepNames = jd.kind==='s' ? ['Audio yuklandi','Speech-to-text','AI: fluency, lug\'at, grammatika','Talaffuz API','Birlashtirish'] : ['Matn qabul qilindi','So\'z soni (kod)','AI: 1-baholash','AI: 2-baholash','Natija'];
+    const steps = stepNames.map((t,i) => ({ t, arrow: i<stepNames.length-1?'→':'', fg: i<=jd.step ? (i===jd.step && jd.st!=='done' ? A : '#1E2A3A') : '#9aa6b8', shadow: i<=jd.step ? RSM : INSET }));
+    const critW = [['Task Response','6.5','Ikkala fikr muhokama qilingan, o\'z pozitsiyasi aniq. Bitta aniq misol qo\'shish kerak.'],['Coherence & Cohesion','6.5','Paragraflar mantiqiy. Bog\'lovchilar takrorlanadi ("firstly", "secondly").'],['Lexical Resource','6.0','Lug\'at yetarli, lekin "many", "good" ko\'p takrorlangan.'],['Grammar','5.5','"it have" kabi moslashuv xatolari. Murakkab gaplarda vergul yetishmaydi.']];
+    const critS = [['Fluency & Coherence','6.5','Uzoq gapira oladi, ba\'zan to\'xtalishlar bor.'],['Lexical Resource','6.0','Savoldagi so\'zlarni takrorlaydi, paraphrase kam.'],['Grammar','6.0','Oddiy va murakkab gaplar aralash, zamon xatolari bor.'],['Pronunciation (API)','6.5','Umuman tushunarli, uzun so\'zlarda urg\'u xato.']];
+    const crit = (jd.kind==='s'?critS:critW).map(([name,score,note]) => ({ name, score: jd.st==='done'||jd.st==='third' ? score : '…', w: jd.st==='done'||jd.st==='third' ? Math.round(parseFloat(score)/9*100)+'%' : '0%', note }));
+    const jb = { name:jd.name, task:jd.task, meta:jd.meta, final:jd.final, steps, criteria: crit,
+      passes: [{ k:'1-BAHOLASH', v:jd.p[0], c:'#1E2A3A' },{ k:'2-BAHOLASH', v:jd.p[1], c:'#1E2A3A' },{ k:'3-BAHOLASH (MEDIAN)', v:jd.p[2], c: jd.p[2]!=='—' ? '#7A4E00' : '#9aa6b8' }],
+      text: jd.kind==='s' ? 'Transkript: "Well, I think the place that changed the most is the old bazaar near my house. Before, it was, um, quite small and crowded, but now there is a new building…"' : 'Many people believe that public transport should be free for everyone. In my opinion it have many benefits for both cities and residents. Firstly, reducing fares encourages commuters to leave their cars at home…' };
+
+    const tests = [
+      ['IELTS Academic · Mock 6','IELTS','80 + 2 + 3','Qoralama'],['IELTS Academic · Mock 5','IELTS','80 + 2 + 3','Nashr'],
+      ['IELTS General · Mock 2','IELTS','80 + 2 + 3','Nashr'],['CEFR Multilevel · Test 3','CEFR','70 + 3 + 4','Nashr'],
+      ['Digital SAT · Mock 2','SAT','98','Nashr'],['TOEFL iBT · Mock 1','TOEFL','62 + 5 + 8','Qoralama'],['HSK 4 · Test 1','HSK','100','Nashr']
+    ].map(([title,exam,q,st]) => ({ title, exam, q, status: st, fg: st==='Nashr'?'#1F9D6B':'#7A8699', bg: st==='Nashr'?'rgba(31,157,107,0.12)':'rgba(122,134,153,0.12)' }));
+    const checks = [
+      ['ok','Listening: 40 savol, 4 audio fayl topildi'],['ok','Reading: 40 savol, 3 matn'],
+      ['err','Savol 27: javob kaliti yo\'q'],['err','listening-part3.mp3 fayli yuklanmagan'],
+      ['warn','Savol 14: qabul qilinadigan variantlar kiritilmagan (colour/color)']
+    ].map(([k,t]) => ({ t, dot: k==='ok'?'#1F9D6B':k==='err'?'#E4574C':'#D68A1A' }));
+    const bankTabs = [['tests','Testlar'],['tables','Aylantirish jadvallari']].map(([k,l]) => ({ label:l, go:()=>this.setState({bankTab:k}), color: s.bankTab===k?A:'#7A8699', shadow: s.bankTab===k?RSM:'none' }));
+    const convTable = [['39–40','9.0'],['37–38','8.5'],['35–36','8.0'],['32–34','7.5'],['30–31','7.0'],['26–29','6.5'],['23–25','6.0'],['18–22','5.5'],['16–17','5.0'],['13–15','4.5'],['10–12','4.0'],['8–9','3.5'],['6–7','3.0'],['4–5','2.5'],['2–3','2.0'],['0–1','0–1']].map(([raw,band])=>({raw,band}));
+    const variants = [
+      { q:'Q2 · Yearly fee: £___', list:['25','twenty-five','twenty five'] },
+      { q:'Q4 · Meet at the ___', list:['gate','main gate','the gate'] },
+      { q:'Q8 · Reefs cover … of the ___ floor', list:['ocean','sea'] },
+      { q:'Q14 · ___ of the building', list:['colour','color'] }
+    ];
+    const packs = [
+      { name:'Start', credits:50, price:'450 000 so\'m', note:'≈ 12 to\'liq mock' },
+      { name:'Markaz', credits:200, price:'1 600 000 so\'m', note:'≈ 50 to\'liq mock · 11% tejash' },
+      { name:'Pro', credits:500, price:'3 750 000 so\'m', note:'≈ 125 to\'liq mock · 17% tejash' }
+    ].map(p => ({ ...p, buy: () => this.setState(st => ({ credits: st.credits + p.credits })) }));
+    const groupSizes = { 'IELTS-7B':22, 'IELTS-6A':20, 'SAT-Evening':14, 'CEFR-B2-3':18 };
+    const costs = { IELTS:4, CEFR:3, SAT:3, TOEFL:4, HSK:2 };
+    const aExams = Object.keys(costs).map(k => ({ label:k, pick:()=>this.setState({aExam:k}), color: s.aExam===k?A:'#7A8699', shadow: s.aExam===k?INSET:RSM }));
+    const aGroups = Object.keys(groupSizes).map(k => ({ label:k, pick:()=>this.setState({aGroup:k}), color: s.aGroup===k?A:'#7A8699', shadow: s.aGroup===k?INSET:RSM }));
+    const n = groupSizes[s.aGroup], c = costs[s.aExam];
+    return {
+      navItems, title, subtitle, creditsLabel: s.credits + ' kr', credits: s.credits,
+      isCatalog: s.screen==='catalog', isDetail: s.screen==='detail', isSchedule: s.screen==='schedule', isResults: s.screen==='results',
+      isAi: s.screen==='ai', isBank: s.screen==='bank', isCredits: s.screen==='credits',
+      kpis, filters, examCards, dx, dxSecs, startFull: () => open(dx.k), assignFromDetail: () => this.setState({ assignOpen:true, aExam:dx.k }),
+      sessions, live, resKpis, results, aiKpis, jobs, jb,
+      tests, checks, bankTabs, bankTests: s.bankTab==='tests', bankTables: s.bankTab==='tables', convTable, variants, packs,
+      assignOpen: s.assignOpen, aExams, aGroups,
+      aSummary: s.aGroup + ' · ' + n + ' o\'quvchi × ' + c + ' kredit', aCost: (n*c) + ' kredit',
+      openAssign: () => this.setState({ assignOpen:true }), closeAssign: () => this.setState({ assignOpen:false }),
+      stop: e => e.stopPropagation(),
+      confirmAssign: () => this.setState(st => ({ assignOpen:false, screen:'schedule', credits: st.credits - n*c })),
+      playerOpen: s.playerOpen, pExam: s.pExam, pSection: s.pSection, pSpeed: this.props.timerSpeed || '10x',
+      openPlayer: () => open('IELTS'), closePlayer: () => this.setState({ playerOpen:false })
+    };
+  }
+}
+</script>
+</body>
+</html>

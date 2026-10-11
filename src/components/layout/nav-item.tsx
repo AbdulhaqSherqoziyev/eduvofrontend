@@ -10,10 +10,12 @@ interface NavItemLinkProps {
   icon: LucideIcon;
   active: boolean;
   onClick?: () => void;
+  /** Optional count chip on the right (design v3: green sessions / purple AI queue). */
+  badge?: { count: number; color: string } | null;
 }
 
 /** One sidebar nav link; active state is the pressed-in (inset) look. */
-export function NavItemLink({ href, label, icon: Icon, active, onClick }: NavItemLinkProps) {
+export function NavItemLink({ href, label, icon: Icon, active, onClick, badge }: NavItemLinkProps) {
   return (
     <Link
       href={href}
@@ -25,7 +27,16 @@ export function NavItemLink({ href, label, icon: Icon, active, onClick }: NavIte
       )}
     >
       <Icon className="size-5 flex-shrink-0" strokeWidth={2} />
-      <span>{label}</span>
+      <span className={badge ? 'flex-1' : undefined}>{label}</span>
+      {badge && badge.count > 0 ? (
+        <span
+          className="flex h-[22px] min-w-[22px] items-center justify-center rounded-[7px] px-1.5 text-[11px] font-extrabold text-white"
+          style={{ background: badge.color }}
+        >
+          {badge.count}
+        </span>
+      ) : null}
     </Link>
   );
 }
+

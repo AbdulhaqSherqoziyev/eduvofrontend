@@ -7,7 +7,7 @@ import { Pencil } from 'lucide-react';
 import { NmDialog } from '@/components/ui/nm-dialog';
 import { NmButton } from '@/components/ui/nm-button';
 import { NmIconButton } from '@/components/ui/nm-icon-button';
-import { useUpdateGroup } from '@/lib/hooks/use-groups';
+import { useGroup, useUpdateGroup } from '@/lib/hooks/use-groups';
 import type { Group, GroupLevel } from '@/lib/types/group';
 import { CreateGroupFields } from './create-group-fields';
 import { groupSchema, type GroupFormValues } from './group-schema';
@@ -16,6 +16,9 @@ import { groupSchema, type GroupFormValues } from './group-schema';
 export function EditGroupDialog({ group }: { group: Group }) {
   const [open, setOpen] = useState(false);
   const update = useUpdateGroup(group.id);
+  // The list row has no `customPriceCount` — only GET /groups/:id carries it
+  // (and only for payment.read). Fetched while the dialog is open.
+  const detail = useGroup(open ? group.id : '');
   const form = useForm<GroupFormValues>({
     resolver: zodResolver(groupSchema),
     defaultValues: {
@@ -58,7 +61,10 @@ export function EditGroupDialog({ group }: { group: Group }) {
       }
     >
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <CreateGroupFields form={form} />
+        <CreateGroupFields
+          form={form}
+          priceNotice={{ groupId: group.id, price: group.price, customPriceCount: detail.data?.customPriceCount }}
+        />
         <div className="mt-6 flex gap-3">
           <NmButton type="button" variant="soft" className="flex-1" onClick={() => setOpen(false)}>
             Bekor qilish

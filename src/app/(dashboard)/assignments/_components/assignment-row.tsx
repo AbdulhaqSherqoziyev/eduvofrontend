@@ -27,7 +27,7 @@ export function AssignmentRow({ assignment, n }: { assignment: Assignment; n: nu
         {submittedCount}/{totalCount} topshirdi
       </div>
       <StatusPill label={meta.label} tone={meta.tone} />
-      <AssignmentRowActions id={assignment.id} title={title} />
+      <AssignmentRowActions id={assignment.id} title={title} scoreMax={assignment.scoreMax ?? null} />
     </div>
   );
 }

@@ -1,0 +1,56 @@
+/**
+ * Digital SAT player strings that `_player-texts.md` does not cover yet
+ * (sat.md §4/§6, _player-design.md G11). Chrome stays English by default like
+ * Bluebook; listed in the frontend report for Sevara to move into her file.
+ */
+export const SAT_TEXT = {
+  'sat.module_n': ['Module {n}', '{n}-modul'],
+  'sat.back': ['Back', 'Orqaga'],
+  'sat.grid_title': ['{title}: questions', '{title}: savollar'],
+  'sat.legend_current': ['Current', 'Joriy'],
+  'sat.legend_unanswered': ['Unanswered', 'Javobsiz'],
+  'sat.legend_review': ['For Review', "Ko'rib chiqish uchun"],
+  'sat.go_review': ['Go to Review Page', "Ko'rib chiqish sahifasiga o'tish"],
+  'sat.check_title': ['Check Your Work', "Ishingizni tekshiring"],
+  'sat.check_body': ['You can return to any question until time runs out.', "Vaqt tugaguncha istalgan savolga qaytishingiz mumkin."],
+  'sat.finish_module': ['Finish module', 'Modulni tugatish'],
+  'sat.eliminator': ['ABC eliminator', 'ABC chizish'],
+  'sat.undo': ['Undo', 'Qaytarish'],
+  'sat.cross_out': ['Cross out option {k}', '{k} variantini chizish'],
+  'sat.spr_placeholder': ['Enter your answer', 'Javobingizni kiriting'],
+  'sat.spr_hint': ['Up to 5 characters (6 with a minus sign). Fractions and decimals accepted. No mixed numbers.', "5 tagacha belgi (minus bilan 6). Kasr va o'nlik son qabul qilinadi. Aralash son kiritilmaydi."],
+  'sat.answer_preview': ['Answer Preview:', "Javob ko'rinishi:"],
+  'sat.calc_graphing': ['Graphing calculator', 'Grafik kalkulyator'],
+  'sat.calc_scientific': ['Scientific calculator', 'Ilmiy kalkulyator'],
+  'sat.calc_to_scientific': ['Scientific', 'Ilmiy'],
+  'sat.calc_to_graphing': ['Graphing', 'Grafik'],
+  'sat.calc_loading': ['Loading the calculator…', 'Kalkulyator yuklanmoqda…'],
+  'sat.calc_failed': ["The calculator didn't load. Your answers are safe. Check the connection and try again.", "Kalkulyator yuklanmadi. Javoblaringiz saqlangan. Internetni tekshirib, qayta urinib ko'ring."],
+  'sat.calc_unavailable': ['The calculator is not available in this mock yet. Your answers are safe — you can keep working.', "Bu mockda kalkulyator hozircha yo'q. Javoblaringiz saqlangan — ishlashda davom eting."],
+  'sat.reference_title': ['Reference sheet', 'Formulalar varag\'i'],
+  'sat.ref_arc': ['The number of degrees of arc in a circle is 360.', 'Aylana yoyi graduslari soni 360 ga teng.'],
+  'sat.ref_rad': ['The number of radians of arc in a circle is 2π.', 'Aylana yoyi radianlari soni 2π ga teng.'],
+  'sat.ref_tri': ['The sum of the measures in degrees of the angles of a triangle is 180.', "Uchburchak burchaklari yig'indisi 180 gradus."],
+  'sat.more': ['More', "Ko'proq"],
+  'sat.line_reader': ['Line reader', "Qator o'qish chizg'ichi"],
+  'sat.zoom': ['Zoom', 'Kattalashtirish'],
+  'sat.zoom_in': ['Zoom in', 'Kattalashtirish'],
+  'sat.zoom_out': ['Zoom out', 'Kichiklashtirish'],
+  'sat.zoom_reset': ['Reset', 'Asl holat'],
+  'sat.break_label': ['SCHEDULED BREAK', 'REJALASHTIRILGAN TANAFFUS'],
+  'sat.spr_field_note': ['Decimal must fill the field: 0.666 or .6666 (not .666).', "O'nlik javob maydonni to'ldirishi kerak: 0.666 yoki .6666 (.666 emas)."],
+  'sat.range': ['Estimated range {a}–{b}', 'Taxminiy oraliq: {a}–{b}'],
+  'sat.saving_module': ['Saving your answers…', 'Javoblaringiz saqlanmoqda…'],
+  'sat.break_over': ['Break is over. Math Module 1 is starting…', 'Tanaffus tugadi. Matematika 1-moduli boshlanmoqda…'],
+  'sat.break_ended_away': ['The break ended while you were away. Math Module 1 starts when you continue.', "Siz yo'qligingizda tanaffus tugadi. Davom etsangiz, Matematika 1-moduli boshlanadi."],
+  // Default Bluebook directions (same HTML subset as `sections[].intro`, rendered by <RichText>),
+  // shown when the exam config has no `intro` for the section.
+  'sat.directions_rw': [
+    '<p>The questions in this section cover a range of topics in reading and writing. Each question has one or more passages, possibly accompanied by a table or graph. Read each passage and question carefully, and then choose the best answer to the question based on the passage(s).</p><p>All questions in this section are multiple-choice with four answer choices. Each question has a single best answer.</p>',
+    "<p>Bu bo'limdagi savollar o'qish va yozish bo'yicha turli mavzularni qamrab oladi. Har bir savolda bir yoki bir nechta matn bo'ladi, ba'zan jadval yoki grafik bilan. Har bir matn va savolni diqqat bilan o'qing, so'ng matn(lar)ga asoslanib eng to'g'ri javobni tanlang.</p><p>Bu bo'limdagi barcha savollar to'rtta variantli test. Har bir savolning bitta eng to'g'ri javobi bor.</p>",
+  ],
+  'sat.directions_math': [
+    '<p>The questions in this section address a number of important math skills. Use of a calculator is permitted for all questions. A reference sheet, calculator, and these directions can be accessed throughout the test.</p><p>Unless otherwise indicated:</p><ul><li>All variables and expressions represent real numbers.</li><li>Figures provided are drawn to scale.</li><li>All figures lie in a plane.</li><li>The domain of a given function <em>f</em> is the set of all real numbers <em>x</em> for which <em>f</em>(<em>x</em>) is a real number.</li></ul><p><strong>For multiple-choice questions</strong>, solve each problem and choose the correct answer from the choices provided. Each multiple-choice question has a single correct answer.</p><p><strong>For student-produced response questions</strong>, solve each problem and enter your answer as follows:</p><ul><li>If you find more than one correct answer, enter only one answer.</li><li>You can enter up to 5 characters for a positive answer and up to 6 characters (including the negative sign) for a negative answer.</li><li>If your answer is a fraction that doesn’t fit in the provided space, enter the decimal equivalent.</li><li>If your answer is a decimal that doesn’t fit in the provided space, enter it by truncating or rounding at the fourth digit.</li><li>If your answer is a mixed number (such as 3½), enter it as an improper fraction (7/2) or its decimal equivalent (3.5).</li><li>Don’t enter symbols such as a percent sign, comma, or dollar sign.</li></ul>',
+    "<p>Bu bo'limdagi savollar muhim matematik ko'nikmalarni tekshiradi. Barcha savollarda kalkulyatordan foydalanish mumkin. Formulalar varag'i, kalkulyator va ushbu yo'riqnoma test davomida har doim ochiq.</p><p>Agar boshqacha ko'rsatilmagan bo'lsa:</p><ul><li>Barcha o'zgaruvchilar va ifodalar haqiqiy sonlarni bildiradi.</li><li>Berilgan chizmalar masshtabda chizilgan.</li><li>Barcha chizmalar bitta tekislikda yotadi.</li><li><em>f</em> funksiyaning aniqlanish sohasi — <em>f</em>(<em>x</em>) haqiqiy son bo'ladigan barcha haqiqiy <em>x</em> sonlar to'plami.</li></ul><p><strong>Test savollarida</strong> masalani yeching va berilgan variantlardan to'g'ri javobni tanlang. Har bir test savolining bitta to'g'ri javobi bor.</p><p><strong>Javob kiritiladigan (SPR) savollarda</strong> masalani yeching va javobni quyidagicha kiriting:</p><ul><li>Bir nechta to'g'ri javob topsangiz, faqat bittasini kiriting.</li><li>Musbat javob uchun 5 tagacha, manfiy javob uchun (minus belgisi bilan) 6 tagacha belgi kiritish mumkin.</li><li>Javobingiz kasr bo'lib maydonga sig'masa, uning o'nlik ko'rinishini kiriting.</li><li>Javobingiz o'nlik son bo'lib maydonga sig'masa, to'rtinchi raqamda kesib yoki yaxlitlab kiriting.</li><li>Javobingiz aralash son bo'lsa (masalan, 3½), uni noto'g'ri kasr (7/2) yoki o'nlik (3.5) ko'rinishida kiriting.</li><li>Foiz, vergul yoki dollar kabi belgilarni kiritmang.</li></ul>",
+  ],
+} satisfies Record<string, [string, string]>;

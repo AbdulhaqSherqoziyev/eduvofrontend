@@ -19,6 +19,8 @@ export interface Assignment {
   submittedCount: number;
   totalCount: number;
   status: AssignmentStatus;
+  /** Centre scale sealed at creation (§A.14); null = not scored, Bajardi/Qilmadi only. */
+  scoreMax: number | null;
   files?: AssignmentFile[];
 }
 

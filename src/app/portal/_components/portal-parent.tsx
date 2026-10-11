@@ -87,11 +87,13 @@ function todaySentence(d: Overview, name: string): string {
   }
   const mark = todayMark(d.attendance?.list ?? [], today);
   if (!mark) return `${name} bugun ${today.time} dagi darsda. Davomat hali belgilanmagan.`;
+  // "..., baho 4 / 5." only when the teacher scored the lesson — a plain fact, no verdict.
+  const score = mark.score != null ? `, baho ${mark.score}${mark.scoreMax != null ? ` / ${mark.scoreMax}` : ''}` : '';
   switch (mark.status) {
     case 'PRESENT':
-      return `${name} bugun ${today.time} dagi darsga keldi.`;
+      return `${name} bugun ${today.time} dagi darsga keldi${score}.`;
     case 'LATE':
-      return `${name} bugun ${today.time} dagi darsga kech keldi.`;
+      return `${name} bugun ${today.time} dagi darsga kech keldi${score}.`;
     case 'ABSENT':
       return `${name} bugun ${today.time} dagi darsga kelmadi.`;
     case 'EXCUSED':

@@ -5,6 +5,7 @@ import { sectionForPath, visibleNavItems, type NavSection } from '@/lib/nav/item
 import { useTenantFlags } from '@/lib/hooks/use-tenant-settings';
 import { useModuleGateVersion } from '@/lib/hooks/use-module-gate';
 import { NavItemLink } from './nav-item';
+import { ExamsNavExtras, useExamNavBadges } from '@/components/exams-center/nav-extras';
 import { UserCard } from './user-card';
 import { SectionSwitch } from './section-switch';
 import { useMobileNav } from './mobile-nav';
@@ -13,6 +14,7 @@ import { cn } from '@/lib/utils/cn';
 const SECTION_LABEL: Record<NavSection, string> = {
   asosiy: 'ASOSIY — KUNDALIK ISH',
   boshqaruv: 'BOSHQARUV — SOZLAMALAR',
+  imtihonlar: 'IMTIHONLAR — MOCK TESTLAR',
 };
 
 /** Floating neomorphic sidebar; an off-canvas drawer on mobile. */
@@ -25,6 +27,7 @@ export function Sidebar() {
   useModuleGateVersion();
   const items = visibleNavItems(section, teacherOnlyMode);
   const { open, setOpen } = useMobileNav();
+  const examBadges = useExamNavBadges(section === 'imtihonlar');
 
   return (
     <>
@@ -52,17 +55,31 @@ export function Sidebar() {
           {SECTION_LABEL[section]}
         </div>
         <nav className="flex flex-col">
-          {items.map((item) => (
-            <NavItemLink
-              key={item.href}
-              href={item.href}
-              label={item.label}
-              icon={item.icon}
-              active={pathname === item.href || pathname.startsWith(`${item.href}/`)}
-              onClick={() => setOpen(false)}
-            />
-          ))}
+          {items.map((item) => {
+            const link = (
+              <NavItemLink
+                key={item.href}
+                href={item.href}
+                label={item.label}
+                icon={item.icon}
+                active={pathname === item.href || pathname.startsWith(`${item.href}/`)}
+                onClick={() => setOpen(false)}
+                badge={item.badge ? examBadges[item.badge] : null}
+              />
+            );
+            return item.divider ? (
+              <div
+                key={item.href}
+                className="mt-2 border-t border-[rgba(163,177,198,0.28)] pt-2 dark:border-[rgba(255,255,255,0.06)]"
+              >
+                {link}
+              </div>
+            ) : (
+              link
+            );
+          })}
         </nav>
+        {section === 'imtihonlar' ? <ExamsNavExtras /> : null}
         <div className="flex-1" />
         <UserCard />
       </aside>

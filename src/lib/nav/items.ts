@@ -1,13 +1,14 @@
 import {
   LayoutGrid, Boxes, ClipboardCheck, CreditCard, FileText, CalendarDays,
   Wallet, Users, GraduationCap, Compass, Layers, ShieldCheck, BarChart3,
-  UserCog, DoorOpen, Building2, UserPlus, Package, Coins, HandCoins, type LucideIcon,
+  UserCog, DoorOpen, Building2, UserPlus, Package, Coins, HandCoins, LifeBuoy, LineChart,
+  type LucideIcon,
 } from 'lucide-react';
 import { can } from '@/lib/auth/permissions';
 import { canViewModulesScreen, moduleOn } from '@/lib/auth/module-gate';
 import { isSuperAdmin } from '@/lib/auth/session';
 
-export type NavSection = 'asosiy' | 'boshqaruv';
+export type NavSection = 'asosiy' | 'boshqaruv' | 'imtihonlar';
 
 export interface NavItem {
   href: string;
@@ -26,6 +27,10 @@ export interface NavItem {
    */
   manageOnly?: boolean;
   section: NavSection;
+  /** Thin separator above the item (sets "Qo'llanma" apart from daily work). */
+  divider?: boolean;
+  /** Count badge key, resolved by the sidebar (design v3: live+upcoming sessions, AI queue). */
+  badge?: 'examSessions' | 'examGrading';
 }
 
 /**
@@ -45,6 +50,8 @@ export const NAV_ITEMS: NavItem[] = [
   // Ustozning O'Z hisobi — `payroll.self`, `payroll.read` EMAS. Ikkinchisi
   // berilsa ustoz hammaning maoshini ko'radi va S1 buziladi (spec §H.1).
   { href: '/my-salary', label: 'Mening ish haqim', icon: Coins, permission: 'payroll.self', module: 'payroll', section: 'asosiy' },
+  // Hamma uchun: modul/ruxsat yo'q. Kontent o'zi menyu qoidasi bilan filtrlanadi.
+  { href: '/help', label: "Qo'llanma", icon: LifeBuoy, section: 'asosiy', divider: true },
   { href: '/transactions', label: 'Kassa', icon: Wallet, permission: 'transaction.read', module: 'finance', section: 'boshqaruv' },
   { href: '/leads', label: 'Lidlar', icon: UserPlus, permission: 'student.read', module: 'leads', section: 'boshqaruv' },
   { href: '/students', label: "O'quvchilar", icon: Users, permission: 'student.read', module: 'students', section: 'boshqaruv' },
@@ -58,11 +65,20 @@ export const NAV_ITEMS: NavItem[] = [
   { href: '/staff', label: 'Xodimlar', icon: UserCog, permission: 'user.read', module: 'staff_roles', section: 'boshqaruv' },
   { href: '/roles', label: 'Rollar', icon: ShieldCheck, permission: 'role.read', module: 'staff_roles', section: 'boshqaruv' },
   { href: '/modules', label: 'Tarif va modullar', icon: Package, manageOnly: true, section: 'boshqaruv' },
+  // Mock imtihonlar — markaz konsoli (design v3 sidebar). `/exams` (indekssiz)
+  // o'quvchi hub'iga tegishli, shuning uchun konsol `/exams/catalog` dan boshlanadi.
+  { href: '/exams/catalog', label: 'Katalog', icon: LayoutGrid, permission: 'exam.read', module: 'mock_exams', section: 'imtihonlar' },
+  { href: '/exams/assignments', label: 'Rejalashtirilgan', icon: CalendarDays, permission: 'exam.read', module: 'mock_exams', section: 'imtihonlar', badge: 'examSessions' },
+  { href: '/exams/results', label: 'Natijalar', icon: LineChart, permission: 'exam.read', module: 'mock_exams', section: 'imtihonlar' },
+  { href: '/exams/ai', label: 'AI baholash', icon: ClipboardCheck, permission: 'exam.read', module: 'mock_exams', section: 'imtihonlar', badge: 'examGrading' },
+  { href: '/exams/tests', label: 'Test banki', icon: Layers, permission: 'exam.read', module: 'mock_exams', section: 'imtihonlar' },
+  { href: '/exams/credits', label: 'Kreditlar', icon: Wallet, permission: 'exam.read', module: 'mock_exams', section: 'imtihonlar' },
 ];
 
 export const SECTION_HOME: Record<NavSection, string> = {
   asosiy: '/dashboard',
   boshqaruv: '/transactions',
+  imtihonlar: '/exams/catalog',
 };
 
 export function sectionForPath(pathname: string): NavSection {
@@ -81,7 +97,9 @@ export function moduleForPath(pathname: string): string | undefined {
 
 /** Daily-work routes a teacher (teacher-only mode) is limited to. */
 export const TEACHER_NAV = new Set([
-  '/dashboard', '/groups', '/attendance', '/schedule', '/assignments', '/my-salary',
+  '/dashboard', '/groups', '/attendance', '/schedule', '/assignments', '/my-salary', '/help',
+  // O'qituvchi o'z guruhiga mock tayinlaydi va natijani ko'radi (kontrakt §2, TeacherScope).
+  '/exams/catalog', '/exams/assignments', '/exams/results',
 ]);
 
 /**
@@ -109,5 +127,5 @@ export function visibleNavItems(section: NavSection, teacherOnly = false): NavIt
 
 /** Sections that have at least one visible item for the current user. */
 export function visibleSections(teacherOnly = false): NavSection[] {
-  return (['asosiy', 'boshqaruv'] as NavSection[]).filter((s) => visibleNavItems(s, teacherOnly).length > 0);
+  return (['asosiy', 'boshqaruv', 'imtihonlar'] as NavSection[]).filter((s) => visibleNavItems(s, teacherOnly).length > 0);
 }

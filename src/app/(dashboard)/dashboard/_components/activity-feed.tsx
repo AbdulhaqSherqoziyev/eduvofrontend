@@ -27,7 +27,7 @@ export function ActivityFeed() {
         query={query}
         loading={<RowsSkeleton rows={5} />}
         isEmpty={(d) => d.length === 0}
-        empty={<EmptyState title="Faoliyat yo,q" />}
+        empty={<EmptyState title="Faoliyat yo'q" />}
       >
         {(list) => (
           <div className="flex flex-col">

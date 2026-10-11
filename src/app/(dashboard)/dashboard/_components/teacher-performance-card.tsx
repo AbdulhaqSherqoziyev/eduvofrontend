@@ -21,7 +21,7 @@ export function TeacherPerformanceCard() {
         query={query}
         loading={<RowsSkeleton rows={5} />}
         isEmpty={(d) => d.length === 0}
-        empty={<EmptyState title="Ma,lumot yo,q" />}
+        empty={<EmptyState title="Ma'lumot yo'q" />}
       >
         {(list) => (
           <div className="flex flex-col gap-3.5">

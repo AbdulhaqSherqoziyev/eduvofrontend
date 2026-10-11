@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:'Manrope','Noto Sans SC',system-ui,sans-serif;background:#F5F6F8;color:#1E2A3A;-webkit-font-smoothing:antialiased;}
+a{color:#2E6BE6;text-decoration:none;}
+a:hover{color:#1F55C4;}
+button{font-family:inherit;cursor:pointer;}
+input,textarea,select{font-family:inherit;}
+</style>
+</helmet>
+
+<div style="position:relative;width:100%;height:100vh;min-width:1180px;display:flex;flex-direction:column;background:{{ th.page }};color:{{ th.ink }};overflow:hidden;">
+
+<!-- ============ PRE-CHECK ============ -->
+<sc-if value="{{ isCheck }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;overflow:auto;display:flex;flex-direction:column;align-items:center;padding:48px 24px;gap:26px;">
+    <div style="text-align:center;">
+      <div style="font-size:12.5px;font-weight:800;letter-spacing:1.2px;color:#7A8699;">{{ ex.name }} · {{ modeLabel }}</div>
+      <div style="font-size:30px;font-weight:800;letter-spacing:-0.6px;margin-top:10px;">Check your setup</div>
+      <div style="font-size:15px;color:#7A8699;font-weight:500;margin-top:8px;">The exam opens in fullscreen. Timers start as soon as each section begins.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,440px);gap:16px;">
+      <sc-if value="{{ needAudio }}">
+        <div style="background:#fff;border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;"><div style="font-size:16px;font-weight:800;">Headphones</div><span style="font-size:12px;font-weight:800;border-radius:7px;padding:4px 9px;color:{{ chkA.fg }};background:{{ chkA.bg }};">{{ chkA.label }}</span></div>
+          <div style="font-size:13.5px;color:#7A8699;line-height:1.5;">Play the sample and set a comfortable volume. During Listening you can change volume only.</div>
+          <div style="display:flex;align-items:center;gap:14px;">
+            <button onClick="{{ testAudio }}" style="height:38px;border:1.5px solid #D5DCE6;background:#fff;border-radius:10px;font-size:13px;font-weight:700;padding:0 14px;">{{ audioBtn }}</button>
+            <input type="range" min="0" max="100" value="{{ volume }}" onChange="{{ onVolume }}" style="flex:1;accent-color:#2E6BE6;" />
+            <span style="font-size:13px;font-weight:700;color:#4A586C;width:38px;">{{ volume }}%</span>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ needMic }}">
+        <div style="background:#fff;border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;"><div style="font-size:16px;font-weight:800;">Microphone</div><span style="font-size:12px;font-weight:800;border-radius:7px;padding:4px 9px;color:{{ chkM.fg }};background:{{ chkM.bg }};">{{ chkM.label }}</span></div>
+          <div style="font-size:13.5px;color:#7A8699;line-height:1.5;">Record 5 seconds and play it back. Speaking answers are recorded automatically.</div>
+          <div style="display:flex;align-items:center;gap:14px;">
+            <button onClick="{{ testMic }}" style="height:38px;border:1.5px solid #D5DCE6;background:#fff;border-radius:10px;font-size:13px;font-weight:700;padding:0 14px;">{{ micBtn }}</button>
+            <div style="flex:1;height:28px;display:flex;align-items:center;gap:3px;">
+              <sc-for list="{{ micBars }}" as="b" hint-placeholder-count="30"><div style="flex:1;border-radius:2px;background:{{ b.c }};height:{{ b.h }};"></div></sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+      <div style="background:#fff;border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;"><div style="font-size:16px;font-weight:800;">Connection</div><span style="font-size:12px;font-weight:800;color:#1F9D6B;background:#E5F5EE;border-radius:7px;padding:4px 9px;">Stable</span></div>
+        <div style="display:flex;gap:28px;">
+          <div><div style="font-size:24px;font-weight:800;">38 <span style="font-size:13px;color:#7A8699;">Mbps</span></div><div style="font-size:12px;color:#7A8699;font-weight:600;">Download</div></div>
+          <div><div style="font-size:24px;font-weight:800;">46 <span style="font-size:13px;color:#7A8699;">ms</span></div><div style="font-size:12px;color:#7A8699;font-weight:600;">Latency</div></div>
+          <div><div style="font-size:24px;font-weight:800;">100<span style="font-size:13px;color:#7A8699;">%</span></div><div style="font-size:12px;color:#7A8699;font-weight:600;">Media preloaded</div></div>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-size:16px;font-weight:800;">Rules</div>
+        <sc-for list="{{ rules }}" as="r" hint-placeholder-count="4">
+          <div style="display:flex;gap:10px;font-size:13.5px;color:#4A586C;line-height:1.45;"><span style="width:6px;height:6px;border-radius:50%;background:#2E6BE6;margin-top:7px;flex-shrink:0;"></span><span>{{ r }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="width:896px;background:#fff;border-radius:18px;padding:20px 24px;">
+      <div style="font-size:12px;font-weight:800;letter-spacing:1px;color:#7A8699;margin-bottom:12px;">SECTIONS IN ORDER</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <sc-for list="{{ agenda }}" as="a" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:10px;height:40px;padding:0 14px;border-radius:10px;background:#F4F6F9;font-size:13px;font-weight:700;">
+            <span>{{ a.title }}</span><span style="color:#7A8699;">{{ a.dur }}</span>
+            <span style="font-size:10.5px;font-weight:800;letter-spacing:0.4px;border-radius:6px;padding:3px 7px;color:{{ a.mFg }};background:{{ a.mBg }};">{{ a.method }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button onClick="{{ exit }}" style="height:52px;border:1.5px solid #D5DCE6;background:#fff;border-radius:14px;font-size:15px;font-weight:700;padding:0 22px;">Cancel</button>
+      <button onClick="{{ startExam }}" style="height:52px;border:none;border-radius:14px;font-size:15.5px;font-weight:800;padding:0 30px;color:#fff;background:{{ startBg }};">Enter fullscreen and start</button>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ============ SECTION INTRO ============ -->
+<sc-if value="{{ isIntro }}">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+    <div style="width:620px;background:#fff;border-radius:22px;padding:40px;display:flex;flex-direction:column;gap:20px;">
+      <sc-if value="{{ prevDone }}"><div style="display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:700;color:#1F9D6B;"><span style="width:20px;height:20px;border-radius:50%;background:#E5F5EE;display:flex;align-items:center;justify-content:center;font-size:12px;">✓</span>{{ prevTitle }} submitted and locked</div></sc-if>
+      <div>
+        <div style="font-size:12.5px;font-weight:800;letter-spacing:1px;color:#7A8699;">SECTION {{ secNo }} OF {{ secCount }}</div>
+        <div style="font-size:32px;font-weight:800;letter-spacing:-0.7px;margin-top:8px;">{{ sec.title }}</div>
+        <sc-if value="{{ sec.variantName }}"><div style="font-size:13.5px;font-weight:700;color:#2E6BE6;margin-top:6px;">Adaptive module: {{ sec.variantName }}</div></sc-if>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;">
+        <div style="background:#F4F6F9;border-radius:12px;padding:14px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.6px;color:#7A8699;">TIME</div><div style="font-size:18px;font-weight:800;margin-top:4px;">{{ introDur }}</div></div>
+        <div style="background:#F4F6F9;border-radius:12px;padding:14px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.6px;color:#7A8699;">CONTENT</div><div style="font-size:18px;font-weight:800;margin-top:4px;">{{ introCount }}</div></div>
+        <div style="background:#F4F6F9;border-radius:12px;padding:14px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.6px;color:#7A8699;">SCORING</div><div style="font-size:18px;font-weight:800;margin-top:4px;">{{ introMethod }}</div></div>
+      </div>
+      <div style="font-size:14.5px;color:#4A586C;line-height:1.6;">{{ sec.intro }}</div>
+      <button onClick="{{ beginSection }}" style="height:52px;border:none;border-radius:14px;background:#2E6BE6;color:#fff;font-size:15.5px;font-weight:800;">Start {{ sec.title }}</button>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ============ BREAK ============ -->
+<sc-if value="{{ isBreak }}">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:#1E2A3A;color:#fff;">
+    <div style="font-size:13px;font-weight:800;letter-spacing:1.2px;color:#9DB8F5;">SCHEDULED BREAK</div>
+    <div style="font-size:84px;font-weight:800;letter-spacing:-2px;font-variant-numeric:tabular-nums;line-height:1;">{{ timeStr }}</div>
+    <div style="font-size:15px;color:#AEB9CB;max-width:460px;text-align:center;line-height:1.55;">You can resume early. When the break ends, the Math section starts automatically.</div>
+    <button onClick="{{ endBreak }}" style="height:50px;border:none;border-radius:14px;background:#fff;color:#1E2A3A;font-size:15px;font-weight:800;padding:0 28px;">Resume testing</button>
+  </div>
+</sc-if>
+
+<!-- ============ SECTION ============ -->
+<sc-if value="{{ isSection }}">
+  <div style="height:60px;flex-shrink:0;background:{{ th.panel }};border-bottom:1px solid {{ th.line }};display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 22px;">
+    <div style="display:flex;align-items:center;gap:12px;min-width:0;"><span style="font-size:14.5px;font-weight:800;white-space:nowrap;">{{ ex.short }} mock</span><span style="color:#C3CBD7;">/</span><span style="font-size:14.5px;font-weight:600;color:{{ th.sub }};white-space:nowrap;">{{ sec.title }}</span></div>
+    <div style="display:flex;align-items:center;gap:10px;height:38px;padding:0 14px;border-radius:10px;background:{{ timerBg }};">
+      <sc-if value="{{ timerShown }}"><span style="font-size:17px;font-weight:800;font-variant-numeric:tabular-nums;color:{{ timerFg }};">{{ timeStr }}</span><span style="font-size:12.5px;font-weight:700;color:{{ timerFg }};">left</span></sc-if>
+      <sc-if value="{{ timerHidden }}"><span style="font-size:13px;font-weight:700;color:#7A8699;">Timer hidden</span></sc-if>
+      <span style="width:1px;height:16px;background:#D5DCE6;"></span>
+      <span onClick="{{ toggleTimer }}" style="font-size:12.5px;font-weight:700;color:#2E6BE6;cursor:pointer;">{{ timerToggleLabel }}</span>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;">
+      <span style="font-size:12.5px;font-weight:600;color:{{ th.sub }};margin-right:6px;white-space:nowrap;">Aziza Karimova · 204118</span>
+      <sc-if value="{{ isSat }}">
+        <sc-if value="{{ sec.calc }}">
+          <button onClick="{{ toggleCalc }}" style="height:36px;padding:0 12px;border-radius:9px;border:1.5px solid {{ th.line }};background:{{ calcBg }};color:{{ calcFg }};font-size:12.5px;font-weight:700;">Calculator</button>
+          <button onClick="{{ toggleRef }}" style="height:36px;padding:0 12px;border-radius:9px;border:1.5px solid {{ th.line }};background:{{ refBg }};color:{{ refFg }};font-size:12.5px;font-weight:700;">Reference</button>
+        </sc-if>
+      </sc-if>
+      <button onClick="{{ cycleFont }}" style="height:36px;padding:0 12px;border-radius:9px;border:1.5px solid {{ th.line }};background:transparent;color:{{ th.ink }};font-size:13px;font-weight:800;">Aa {{ fontLabel }}</button>
+      <button onClick="{{ cycleTheme }}" style="height:36px;padding:0 12px;border-radius:9px;border:1.5px solid {{ th.line }};background:transparent;color:{{ th.ink }};font-size:12.5px;font-weight:700;">{{ themeLabel }}</button>
+    </div>
+  </div>
+
+  <sc-if value="{{ offline }}">
+    <div style="height:38px;flex-shrink:0;background:#FFF8E6;border-bottom:1px solid #F3E3B8;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13.5px;font-weight:700;color:#7A5A12;"><span style="width:8px;height:8px;border-radius:50%;background:#D68A1A;"></span>Reconnecting… your answers are saved on this device.</div>
+  </sc-if>
+
+  <sc-if value="{{ isListening }}">
+    <div style="flex-shrink:0;padding:14px 22px 0;">
+      <div style="background:{{ th.panel }};border:1px solid {{ th.line }};border-radius:14px;padding:12px 18px;display:flex;align-items:center;gap:16px;">
+        <div style="display:flex;align-items:flex-end;gap:3px;height:20px;width:22px;">
+          <sc-for list="{{ eqBars }}" as="b"><div style="width:4px;border-radius:2px;background:{{ b.c }};height:{{ b.h }};"></div></sc-for>
+        </div>
+        <span style="font-size:13.5px;font-weight:800;white-space:nowrap;">{{ audioLabel }}</span>
+        <div style="flex:1;height:5px;border-radius:3px;background:#E6EBF2;"><div style="height:100%;border-radius:3px;background:#2E6BE6;width:{{ audioPct }};"></div></div>
+        <span style="font-size:12.5px;font-weight:700;color:#7A8699;white-space:nowrap;">{{ audioNote }}</span>
+        <span style="font-size:12px;font-weight:700;color:#7A8699;">Vol</span>
+        <input type="range" min="0" max="100" value="{{ volume }}" onChange="{{ onVolume }}" style="width:90px;accent-color:#1E2A3A;" />
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- generic questions (listening / reading / writing objective parts) -->
+  <sc-if value="{{ showGeneric }}">
+    <div style="flex:1;min-height:0;display:flex;">
+      <sc-if value="{{ hasPassage }}">
+        <div style="width:{{ splitW }};flex-shrink:0;padding:32px 44px;overflow:auto;background:{{ th.panel }};user-select:none;">
+          <div style="font-size:12px;font-weight:800;letter-spacing:1px;color:#7A8699;margin-bottom:12px;">{{ part.label }}</div>
+          <sc-if value="{{ part.ptitle }}"><div style="font-family:'Source Serif 4','Noto Sans SC',Georgia,serif;font-size:25px;font-weight:600;line-height:1.25;margin-bottom:16px;">{{ part.ptitle }}</div></sc-if>
+          <div style="font-family:'Source Serif 4','Noto Sans SC',Georgia,serif;font-size:{{ fs.passage }};line-height:1.75;max-width:640px;display:flex;flex-direction:column;gap:14px;">
+            <sc-for list="{{ paras }}" as="p" hint-placeholder-count="4">
+              <p onClick="{{ p.toggle }}" style="margin:0;cursor:text;border-radius:4px;background:{{ p.hl }};"><b>{{ p.k }}</b> {{ p.t }}</p>
+            </sc-for>
+          </div>
+          <div style="font-size:12px;color:#9AA6B8;font-weight:600;margin-top:16px;">Click a paragraph to highlight it. Copying is disabled.</div>
+        </div>
+        <div onMouseDown="{{ startDrag }}" style="width:14px;flex-shrink:0;background:{{ th.page }};display:flex;align-items:center;justify-content:center;cursor:col-resize;border-left:1px solid {{ th.line }};border-right:1px solid {{ th.line }};"><div style="width:4px;height:40px;border-radius:2px;background:#C9D1DD;"></div></div>
+      </sc-if>
+      <div style="flex:1;min-width:0;overflow:auto;padding:28px 36px;">
+        <div style="max-width:{{ qColW }};margin:0 auto;display:flex;flex-direction:column;gap:12px;">
+          <div>
+            <div style="font-size:12px;font-weight:800;letter-spacing:1px;color:#7A8699;">{{ part.label }} · {{ part.range }}</div>
+            <div style="font-size:{{ fs.q }};color:{{ th.sub }};line-height:1.55;margin-top:6px;">{{ part.instr }}</div>
+          </div>
+          <sc-if value="{{ part.heading }}"><div style="font-size:16px;font-weight:800;text-align:center;padding:8px 0 2px;">{{ part.heading }}</div></sc-if>
+          <sc-for list="{{ qs }}" as="q" hint-placeholder-count="5">
+            <div onClick="{{ q.focus }}" style="background:{{ th.panel }};border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;border:{{ q.border }};">
+              <div style="display:flex;gap:12px;align-items:flex-start;font-size:{{ fs.q }};line-height:1.5;">
+                <span style="font-weight:800;min-width:24px;height:24px;border-radius:6px;background:{{ q.nBg }};color:{{ q.nFg }};display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">{{ q.n }}</span>
+                <div style="flex:1;display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+                  <sc-if value="{{ q.q }}"><span>{{ q.q }}</span></sc-if>
+                  <sc-if value="{{ q.isGap }}"><span>{{ q.pre }}</span><input value="{{ q.val }}" onChange="{{ q.onText }}" spellcheck="false" autocomplete="off" style="height:34px;width:170px;border-radius:8px;border:1.5px solid {{ th.line }};background:{{ th.field }};color:{{ th.ink }};padding:0 10px;font-size:15px;font-weight:700;outline:none;" style-focus="border-color:#2E6BE6;" /><span>{{ q.post }}</span></sc-if>
+                  <sc-if value="{{ q.isCtw }}"><span>{{ q.pre }}<b>{{ q.stem }}</b></span><input value="{{ q.val }}" onChange="{{ q.onText }}" spellcheck="false" autocomplete="off" style="height:32px;width:{{ q.w }};border:none;border-bottom:2px solid #2E6BE6;background:{{ th.field }};color:{{ th.ink }};padding:0 6px;font-size:15px;font-weight:700;letter-spacing:2px;outline:none;" /><span>{{ q.post }}</span></sc-if>
+                </div>
+              </div>
+              <sc-if value="{{ q.img }}"><div style="margin-left:36px;height:120px;width:220px;border-radius:10px;border:1.5px solid #E3E8EF;background:repeating-linear-gradient(135deg,#F6F8FB 0 10px,#EEF2F7 10px 20px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#7A8699;">{{ q.img }}</div></sc-if>
+              <sc-if value="{{ q.isChoice }}">
+                <div style="display:flex;flex-direction:column;gap:6px;padding-left:36px;">
+                  <sc-if value="{{ q.multiNote }}"><div style="font-size:12.5px;font-weight:700;color:#7A8699;">{{ q.multiNote }}</div></sc-if>
+                  <sc-for list="{{ q.opts }}" as="o">
+                    <div onClick="{{ o.pick }}" style="display:flex;align-items:center;gap:12px;min-height:42px;border-radius:10px;padding:8px 12px;cursor:pointer;border:1.5px solid {{ o.bd }};background:{{ o.bg }};font-size:{{ fs.q }};">
+                      <span style="width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;background:{{ o.kBg }};color:{{ o.kFg }};">{{ o.k }}</span><span>{{ o.t }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ q.isTf }}">
+                <div style="display:flex;gap:8px;padding-left:36px;flex-wrap:wrap;">
+                  <sc-for list="{{ q.opts }}" as="o"><button onClick="{{ o.pick }}" style="height:34px;padding:0 14px;border-radius:8px;font-size:12.5px;font-weight:800;border:1.5px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }};">{{ o.t }}</button></sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ q.isSelect }}">
+                <div style="padding-left:36px;">
+                  <select value="{{ q.val }}" onChange="{{ q.onSel }}" style="height:38px;min-width:280px;border-radius:9px;border:1.5px solid {{ th.line }};background:{{ th.field }};color:{{ th.ink }};padding:0 10px;font-size:14px;font-weight:600;">
+                    <sc-for list="{{ q.opts }}" as="o"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
+                  </select>
+                </div>
+              </sc-if>
+              <sc-if value="{{ q.isOrder }}">
+                <div style="padding-left:36px;display:flex;flex-direction:column;gap:10px;">
+                  <sc-if value="{{ q.ctx }}"><div style="font-size:14px;color:{{ th.sub }};font-style:italic;">{{ q.ctx }}</div></sc-if>
+                  <div style="min-height:46px;border-radius:10px;border:1.5px dashed #C3CDDB;padding:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+                    <sc-for list="{{ q.chosen }}" as="c"><button onClick="{{ c.remove }}" style="height:32px;padding:0 12px;border:none;border-radius:8px;background:#2E6BE6;color:#fff;font-size:14px;font-weight:700;">{{ c.t }}</button></sc-for>
+                    <sc-if value="{{ q.emptyChosen }}"><span style="font-size:13px;color:#9AA6B8;font-weight:600;padding:0 6px;">Click the words in order</span></sc-if>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                    <sc-for list="{{ q.bank }}" as="c"><button onClick="{{ c.add }}" style="height:32px;padding:0 12px;border-radius:8px;border:1.5px solid {{ th.line }};background:{{ th.field }};color:{{ th.ink }};font-size:14px;font-weight:700;">{{ c.t }}</button></sc-for>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- writing essay -->
+  <sc-if value="{{ showEssay }}">
+    <div style="flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:16px;padding:18px 22px;">
+      <div style="background:{{ th.panel }};border:1px solid {{ th.line }};border-radius:16px;padding:26px 30px;display:flex;flex-direction:column;gap:14px;overflow:auto;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:1px;color:#7A8699;">{{ part.label }} · {{ part.hint }}</div>
+        <div style="font-size:{{ fs.q }};line-height:1.65;white-space:pre-line;">{{ part.prompt }}</div>
+        <div style="font-size:14px;color:{{ th.sub }};font-weight:700;">{{ part.minLabel }}</div>
+        <sc-if value="{{ part.img }}"><div style="flex:1;min-height:200px;border-radius:12px;border:1.5px solid #E3E8EF;background:repeating-linear-gradient(135deg,#F6F8FB 0 10px,#EEF2F7 10px 20px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#7A8699;">{{ part.img }}</div></sc-if>
+      </div>
+      <div style="background:{{ th.panel }};border:1px solid {{ th.line }};border-radius:16px;display:flex;flex-direction:column;overflow:hidden;">
+        <textarea value="{{ essayVal }}" onChange="{{ onEssay }}" onPaste="{{ blockPaste }}" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="{{ essayPh }}" style="flex:1;border:none;outline:none;resize:none;padding:26px 30px;font-family:'Source Serif 4','Noto Sans SC',Georgia,serif;font-size:{{ fs.passage }};line-height:1.75;background:transparent;color:{{ th.ink }};"></textarea>
+        <div style="height:52px;flex-shrink:0;border-top:1px solid {{ th.line }};display:flex;align-items:center;justify-content:space-between;padding:0 22px;">
+          <span style="font-size:12.5px;font-weight:700;color:#7A8699;">Spellcheck off · paste disabled · {{ saveNote }}</span>
+          <span style="font-size:14px;font-weight:800;color:{{ wcColor }};">{{ wcLabel }}</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- speaking -->
+  <sc-if value="{{ isSpeaking }}">
+    <div style="flex:1;overflow:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:24px;">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+        <sc-for list="{{ spSteps }}" as="st"><div style="height:8px;width:36px;border-radius:4px;background:{{ st.c }};"></div></sc-for>
+      </div>
+      <div style="width:660px;background:{{ th.panel }};border:1px solid {{ th.line }};border-radius:18px;padding:28px 32px;display:flex;flex-direction:column;gap:14px;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:1px;color:#7A8699;">{{ spItem.part }} · QUESTION {{ spNo }} OF {{ spTotal }}</div>
+        <div style="font-size:21px;font-weight:800;letter-spacing:-0.3px;line-height:1.4;">{{ spItem.q }}</div>
+        <sc-if value="{{ spItem.cue }}"><div style="font-size:15px;color:{{ th.sub }};line-height:1.7;white-space:pre-line;">{{ spItem.cue }}</div></sc-if>
+        <sc-if value="{{ spItem.img }}"><div style="height:150px;border-radius:12px;border:1.5px solid #E3E8EF;background:repeating-linear-gradient(135deg,#F6F8FB 0 10px,#EEF2F7 10px 20px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#7A8699;">{{ spItem.img }}</div></sc-if>
+      </div>
+      <div style="width:660px;background:{{ th.panel }};border:1px solid {{ th.line }};border-radius:18px;padding:20px 24px;display:flex;align-items:center;gap:18px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:800;white-space:nowrap;color:{{ spStageColor }};"><span style="width:10px;height:10px;border-radius:50%;background:{{ spStageColor }};"></span>{{ spStageLabel }}</div>
+        <div style="flex:1;height:40px;display:flex;align-items:center;gap:3px;">
+          <sc-for list="{{ wave }}" as="b" hint-placeholder-count="48"><div style="flex:1;border-radius:2px;background:{{ b.c }};height:{{ b.h }};"></div></sc-for>
+        </div>
+        <div style="font-size:17px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;">{{ spClock }}</div>
+      </div>
+      <div style="font-size:13px;color:#7A8699;font-weight:600;">{{ spNote }}</div>
+    </div>
+  </sc-if>
+
+  <!-- SAT -->
+  <sc-if value="{{ isSat }}">
+    <div style="flex:1;min-height:0;display:flex;position:relative;">
+      <sc-if value="{{ satQ.passage }}">
+        <div style="width:50%;padding:36px 48px;overflow:auto;background:{{ th.panel }};border-right:1px solid {{ th.line }};font-family:'Source Serif 4',Georgia,serif;font-size:{{ fs.passage }};line-height:1.75;user-select:none;">{{ satQ.passage }}</div>
+      </sc-if>
+      <div style="flex:1;overflow:auto;padding:32px 44px;">
+        <div style="max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid {{ th.line }};padding-bottom:12px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="width:34px;height:34px;border-radius:9px;background:#1E2A3A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">{{ satNo }}</span>
+              <span onClick="{{ toggleFlag }}" style="font-size:13.5px;font-weight:700;color:{{ satFlagColor }};display:flex;align-items:center;gap:6px;cursor:pointer;"><span style="width:10px;height:10px;border-radius:50%;border:2px solid #D68A1A;background:{{ satFlagDot }};"></span>Mark for review</span>
+            </div>
+            <span onClick="{{ toggleElim }}" style="font-size:12.5px;font-weight:800;border-radius:7px;padding:5px 9px;cursor:pointer;color:{{ elimFg }};background:{{ elimBg }};">ABC eliminator</span>
+          </div>
+          <div style="font-size:{{ fs.q }};line-height:1.65;white-space:pre-line;">{{ satQ.q }}</div>
+          <sc-if value="{{ satQ.isSpr }}">
+            <input value="{{ satVal }}" onChange="{{ onSatText }}" placeholder="Enter your answer" style="height:52px;width:220px;border-radius:10px;border:1.5px solid {{ th.line }};background:{{ th.field }};color:{{ th.ink }};padding:0 14px;font-size:18px;font-weight:700;outline:none;" />
+            <div style="font-size:12.5px;color:#7A8699;font-weight:600;">Fractions (7/2) and decimals (3.5) are accepted. Up to 5 characters.</div>
+          </sc-if>
+          <sc-for list="{{ satOpts }}" as="o">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div onClick="{{ o.pick }}" style="flex:1;min-height:54px;border-radius:12px;display:flex;align-items:center;gap:14px;padding:10px 16px;cursor:pointer;font-size:{{ fs.q }};border:1.5px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }};text-decoration:{{ o.strike }};">
+                <span style="width:28px;height:28px;border-radius:50%;border:1.5px solid {{ o.bd }};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;">{{ o.k }}</span><span>{{ o.t }}</span>
+              </div>
+              <sc-if value="{{ elimOn }}"><button onClick="{{ o.elim }}" style="width:52px;height:30px;border:1.5px solid {{ th.line }};background:transparent;border-radius:8px;font-size:11.5px;font-weight:800;color:#7A8699;text-decoration:{{ o.elimDeco }};">{{ o.elimLabel }}</button></sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <sc-if value="{{ calcOpen }}">
+        <div style="position:absolute;right:28px;top:20px;width:380px;height:420px;background:#fff;border-radius:16px;box-shadow:0 20px 50px rgba(30,42,58,0.2);display:flex;flex-direction:column;overflow:hidden;z-index:5;">
+          <div style="height:40px;background:#1E2A3A;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:13px;font-weight:700;"><span>Graphing calculator</span><span onClick="{{ toggleCalc }}" style="cursor:pointer;color:#AEB9CB;">Close</span></div>
+          <div style="flex:1;background:repeating-linear-gradient(135deg,#F6F8FB 0 10px,#EEF2F7 10px 20px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#7A8699;">embedded graphing calculator</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ refOpen }}">
+        <div style="position:absolute;left:28px;top:20px;width:360px;background:#fff;border-radius:16px;box-shadow:0 20px 50px rgba(30,42,58,0.2);overflow:hidden;z-index:5;">
+          <div style="height:40px;background:#1E2A3A;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:13px;font-weight:700;"><span>Reference sheet</span><span onClick="{{ toggleRef }}" style="cursor:pointer;color:#AEB9CB;">Close</span></div>
+          <div style="padding:16px 18px;display:flex;flex-direction:column;gap:8px;font-size:14px;color:#1E2A3A;">
+            <sc-for list="{{ formulas }}" as="f"><div style="display:flex;justify-content:space-between;border-bottom:1px solid #F1F4F8;padding-bottom:6px;"><span style="color:#7A8699;font-weight:600;">{{ f.k }}</span><b>{{ f.v }}</b></div></sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ satGridOpen }}">
+        <div style="position:absolute;left:50%;bottom:12px;transform:translateX(-50%);width:460px;background:#fff;border-radius:16px;box-shadow:0 20px 50px rgba(30,42,58,0.22);padding:18px 20px;z-index:6;">
+          <div style="font-size:14px;font-weight:800;margin-bottom:12px;">{{ sec.title }}: questions</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <sc-for list="{{ satGrid }}" as="g"><div onClick="{{ g.go }}" style="position:relative;width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;cursor:pointer;background:{{ g.bg }};color:{{ g.fg }};box-shadow:{{ g.ring }};">{{ g.n }}<sc-if value="{{ g.flag }}"><span style="position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:#D68A1A;border:2px solid #fff;"></span></sc-if></div></sc-for>
+          </div>
+          <div style="display:flex;gap:16px;font-size:12px;color:#7A8699;font-weight:700;margin-top:14px;"><span>■ Answered</span><span style="color:#B4BDCA;">■ Unanswered</span><span style="color:#D68A1A;">● For review</span></div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- bottom bars -->
+  <sc-if value="{{ showQNav }}">
+    <div style="height:70px;flex-shrink:0;background:{{ th.panel }};border-top:1px solid {{ th.line }};display:flex;align-items:center;gap:14px;padding:0 22px;">
+      <div style="flex:1;display:flex;gap:14px;overflow-x:auto;">
+        <sc-for list="{{ navParts }}" as="p" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:7px;flex-shrink:0;opacity:{{ p.op }};">
+            <span onClick="{{ p.go }}" style="font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;color:{{ p.color }};">{{ p.label }}</span>
+            <div style="display:flex;gap:2px;">
+              <sc-for list="{{ p.items }}" as="b"><div onClick="{{ b.go }}" style="position:relative;min-width:24px;height:30px;padding:0 4px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;cursor:pointer;background:{{ b.bg }};color:{{ b.fg }};box-shadow:{{ b.ring }};">{{ b.n }}<sc-if value="{{ b.flag }}"><span style="position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;background:#D68A1A;border:2px solid #fff;"></span></sc-if></div></sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ canFlag }}"><button onClick="{{ toggleFlag }}" style="height:40px;border:1.5px solid {{ th.line }};background:transparent;border-radius:10px;font-size:13px;font-weight:700;padding:0 14px;color:#B7790F;white-space:nowrap;">{{ flagLabel }}</button></sc-if>
+      <sc-if value="{{ canBack }}"><button onClick="{{ prevPart }}" style="height:40px;border:1.5px solid {{ th.line }};background:transparent;color:{{ th.ink }};border-radius:10px;font-size:13px;font-weight:700;padding:0 16px;">Previous</button></sc-if>
+      <sc-if value="{{ hasNextPart }}"><button onClick="{{ nextPart }}" style="height:40px;border:none;background:#2E6BE6;color:#fff;border-radius:10px;font-size:13px;font-weight:800;padding:0 20px;">Next</button></sc-if>
+      <button onClick="{{ askFinish }}" style="height:40px;border:none;background:#1E2A3A;color:#fff;border-radius:10px;font-size:13px;font-weight:800;padding:0 18px;white-space:nowrap;">Finish section</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{ isSat }}">
+    <div style="height:64px;flex-shrink:0;background:{{ th.panel }};border-top:1px solid {{ th.line }};display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 22px;">
+      <span style="font-size:13.5px;font-weight:700;">Aziza Karimova</span>
+      <button onClick="{{ toggleGrid }}" style="height:38px;padding:0 18px;border:none;border-radius:10px;background:#1E2A3A;color:#fff;font-size:13.5px;font-weight:800;">Question {{ satNo }} of {{ satTotal }} ▴</button>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button onClick="{{ satPrev }}" style="height:40px;border:1.5px solid {{ th.line }};background:transparent;color:{{ th.ink }};border-radius:10px;font-size:13px;font-weight:700;padding:0 16px;">Back</button>
+        <button onClick="{{ satNext }}" style="height:40px;border:none;background:#2E6BE6;color:#fff;border-radius:10px;font-size:13px;font-weight:800;padding:0 20px;">{{ satNextLabel }}</button>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ isSpeaking }}">
+    <div style="height:56px;flex-shrink:0;background:{{ th.panel }};border-top:1px solid {{ th.line }};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#7A8699;">Speaking advances automatically. The section ends after the last answer.</div>
+  </sc-if>
+
+  <sc-if value="{{ confirmOpen }}">
+    <div style="position:absolute;inset:0;background:rgba(30,42,58,0.35);display:flex;align-items:center;justify-content:center;z-index:20;">
+      <div style="width:460px;background:#fff;color:#1E2A3A;border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:14px;">
+        <div style="font-size:20px;font-weight:800;">Finish {{ sec.title }}?</div>
+        <div style="font-size:14.5px;color:#4A586C;line-height:1.55;">{{ confirmText }}</div>
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button onClick="{{ cancelFinish }}" style="flex:1;height:46px;border:1.5px solid #D5DCE6;background:#fff;border-radius:12px;font-size:14px;font-weight:700;">Keep working</button>
+          <button onClick="{{ confirmFinish }}" style="flex:1;height:46px;border:none;background:#1E2A3A;color:#fff;border-radius:12px;font-size:14px;font-weight:800;">Finish and lock</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</sc-if>
+
+<!-- ============ RESULTS ============ -->
+<sc-if value="{{ isResults }}">
+  <div style="flex:1;overflow:auto;background:#EEF1F6;color:#1E2A3A;">
+    <div style="max-width:1240px;margin:0 auto;padding:36px 32px 56px;display:flex;flex-direction:column;gap:20px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#7A8699;">{{ ex.name }} · {{ modeLabel }}</div>
+          <div style="font-size:30px;font-weight:800;letter-spacing:-0.7px;margin-top:6px;">Your results</div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button onClick="{{ restart }}" style="height:42px;border:none;border-radius:12px;background:#fff;font-size:14px;font-weight:700;padding:0 18px;">Retake</button>
+          <button onClick="{{ exit }}" style="height:42px;border:none;border-radius:12px;background:#2E6BE6;color:#fff;font-size:14px;font-weight:700;padding:0 18px;">Back to Eduvo</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;">
+        <div style="background:#1E2A3A;color:#fff;border-radius:18px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;min-height:180px;">
+          <div style="font-size:12px;font-weight:800;letter-spacing:1px;color:#9DB8F5;">{{ overall.label }}</div>
+          <div style="font-size:60px;font-weight:800;letter-spacing:-2px;line-height:1;">{{ overall.value }}</div>
+          <div style="font-size:13px;color:#AEB9CB;font-weight:600;line-height:1.5;">{{ overall.sub }}</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;">
+          <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+            <div onClick="{{ g.pick }}" style="cursor:pointer;background:#fff;border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;gap:8px;border:2px solid {{ g.bd }};">
+              <div style="font-size:13px;font-weight:800;color:#4A586C;">{{ g.name }}</div>
+              <div style="font-size:30px;font-weight:800;letter-spacing:-0.6px;color:{{ g.color }};">{{ g.score }}</div>
+              <div style="font-size:12px;color:#7A8699;font-weight:600;">{{ g.sub }}</div>
+              <span style="align-self:flex-start;font-size:10.5px;font-weight:800;letter-spacing:0.4px;border-radius:6px;padding:3px 7px;color:{{ g.mFg }};background:{{ g.mBg }};">{{ g.method }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <sc-if value="{{ pending }}">
+        <div style="background:#fff;border-radius:16px;padding:16px 20px;display:flex;align-items:center;gap:16px;">
+          <span style="font-size:14px;font-weight:800;white-space:nowrap;">AI is grading Writing and Speaking</span>
+          <div style="flex:1;height:6px;border-radius:3px;background:#EEF1F5;"><div style="height:100%;border-radius:3px;background:#2E6BE6;width:{{ gradePct }};"></div></div>
+          <span style="font-size:12.5px;font-weight:700;color:#7A8699;white-space:nowrap;">{{ gradeStep }}</span>
+        </div>
+      </sc-if>
+
+      <div style="background:#fff;border-radius:18px;padding:24px 26px;display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:18px;font-weight:800;">{{ det.name }}</div>
+          <span style="font-size:12px;font-weight:700;color:#7A8699;">{{ det.how }}</span>
+        </div>
+
+        <sc-if value="{{ det.isObjective }}">
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;">
+            <sc-for list="{{ det.rows }}" as="r" hint-placeholder-count="8">
+              <div style="display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #F1F4F8;">
+                <span style="width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;background:{{ r.bg }};color:{{ r.fg }};">{{ r.n }}</span>
+                <div style="font-size:13.5px;line-height:1.45;min-width:0;"><span style="color:#7A8699;">Yours:</span> <b>{{ r.yours }}</b><sc-if value="{{ r.wrong }}"><span style="color:#7A8699;"> · Correct: </span><b style="color:#1F9D6B;">{{ r.correct }}</b></sc-if></div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ det.isAi }}">
+          <sc-if value="{{ det.pending }}"><div style="font-size:14px;color:#7A8699;font-weight:600;padding:20px 0;">Grading… results appear here automatically.</div></sc-if>
+          <sc-if value="{{ det.done }}">
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 28px;">
+              <sc-for list="{{ det.criteria }}" as="c" hint-placeholder-count="4">
+                <div style="display:flex;flex-direction:column;gap:7px;">
+                  <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;"><span>{{ c.name }}</span><span>{{ c.score }}</span></div>
+                  <div style="height:6px;border-radius:3px;background:#EEF1F5;"><div style="height:100%;border-radius:3px;background:#2E6BE6;width:{{ c.w }};"></div></div>
+                  <div style="font-size:12.5px;color:#5D6B80;line-height:1.5;">{{ c.note }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <sc-for list="{{ det.facts }}" as="f"><span style="font-size:12px;font-weight:700;color:#4A586C;background:#F1F4F8;border-radius:8px;padding:6px 10px;">{{ f }}</span></sc-for>
+            </div>
+            <sc-for list="{{ det.texts }}" as="t">
+              <div style="border-top:1px solid #EEF1F5;padding-top:14px;">
+                <div style="font-size:12px;font-weight:800;letter-spacing:0.8px;color:#7A8699;margin-bottom:8px;">{{ t.label }}</div>
+                <div style="font-family:'Source Serif 4','Noto Sans SC',Georgia,serif;font-size:15px;line-height:1.75;color:#26313F;white-space:pre-line;">{{ t.body }}</div>
+              </div>
+            </sc-for>
+          </sc-if>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;exam&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;IELTS&quot;,&quot;CEFR&quot;,&quot;SAT&quot;,&quot;TOEFL&quot;,&quot;HSK&quot;],&quot;default&quot;:&quot;IELTS&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;section&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;speed&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;10x&quot;,&quot;1x&quot;],&quot;default&quot;:&quot;10x&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onExit&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+class Component extends DCLogic {
+  static EXAMS = {
+    IELTS: { name:'IELTS Academic (mock)', short:'IELTS', scale:'ielts', sections:[
+      { key:'L', group:'Listening', kind:'listening', title:'Listening', dur:1800, review:120, intro:'The recording plays once and starts automatically. You can move between parts while listening. You get 2 minutes at the end to check your answers.', parts:[
+        { label:'Part 1', instr:'Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.', heading:'Riverside Community Garden: membership', qs:[
+          { t:'gap', pre:'Opening day:', post:'', ans:['saturday'] },
+          { t:'gap', pre:'Yearly fee: £', post:'', ans:['25','twenty-five','twenty five'] },
+          { t:'gap', pre:'Members must bring their own', post:'', ans:['gloves'] },
+          { t:'gap', pre:'Meet at the', post:'beside the café', ans:['gate','main gate'] } ] },
+        { label:'Part 2', instr:'Choose the correct letter, A, B or C.', qs:[
+          { t:'mcq', q:'The garden first opened in', o:['1998','2004','2011'], a:1 },
+          { t:'mcq', q:'Most of the volunteers are', o:['retired residents','university students','local teachers'], a:0 },
+          { t:'mcq', q:'What will change in the spring?', o:['the opening hours','the entrance fee','the location of the tool shed'], a:2 } ] },
+        { label:'Part 3', instr:'Choose TWO letters, A–E.', qs:[
+          { t:'multi', q:'Which TWO things will the students include in their presentation?', o:['a survey of residents','photographs of the site','a cost comparison','interviews with planners','a short video'], a:[1,3] },
+          { t:'mcq', q:'What does the tutor say about their data?', o:['It is too old','The sample is small','It needs a clearer chart'], a:1 } ] },
+        { label:'Part 4', instr:'Complete the notes. Write ONE WORD AND/OR A NUMBER for each answer.', heading:'Coral reefs', qs:[
+          { t:'gap', pre:'Reefs cover less than 1% of the', post:'floor', ans:['ocean','sea'] },
+          { t:'gap', pre:'Main threat: rising water', post:'', ans:['temperature','temperatures'] },
+          { t:'gap', pre:'Recovery can take up to', post:'years', ans:['10','ten'] } ] } ] },
+      { key:'R', group:'Reading', kind:'reading', title:'Reading', dur:3600, intro:'Three passages. The passage scrolls on the left, questions are on the right. You can move between passages at any time.', parts:[
+        { label:'Passage 1', ptitle:'The quiet return of urban rivers', instr:'Do the following statements agree with the information in the passage? Choose TRUE, FALSE or NOT GIVEN.', paras:[
+          ['A','For most of the twentieth century, cities treated small rivers as a problem to be engineered away. Streams were straightened, lined with concrete and often buried beneath roads. By 1970, more than half of the original waterways in several European capitals had disappeared from view.'],
+          ['B','The practice of reopening these channels, known as daylighting, began as a small experiment in Zurich in the 1980s. Engineers found that open water handled heavy rainfall better than pipes, which often overflowed during storms.'],
+          ['C','Seoul\'s Cheonggyecheon project made the idea famous. A highway was removed and the stream restored, producing a corridor several degrees cooler than nearby streets in summer. Critics noted that much of the water is pumped in from elsewhere.'],
+          ['D','Ecologists remain cautious. Fish and insects do return, but often in fewer species than planners predict.'] ], qs:[
+          { t:'tfng', q:'Several European capitals had lost most of their original waterways by 1970.', a:0 },
+          { t:'tfng', q:'Daylighting was first tested in Seoul.', a:1 },
+          { t:'tfng', q:'Open channels coped with storms better than underground pipes.', a:0 },
+          { t:'tfng', q:'Cheonggyecheon attracts more tourists than any other site in Seoul.', a:2 },
+          { t:'tfng', q:'Restored rivers usually support as many species as planners expect.', a:1 } ] },
+        { label:'Passage 2', ptitle:'Sleep and memory', instr:'Choose the correct heading for each paragraph from the list.', paras:[
+          ['A','During deep sleep, the brain replays patterns of activity recorded during the day. Researchers believe this replay moves memories from short-term to long-term storage.'],
+          ['B','Students who slept after learning a word list recalled 20 per cent more words the next morning than those who stayed awake for the same period.'],
+          ['C','Not all sleep is equal. Short naps help with facts, while the dreaming stage appears to support creative problem-solving.'] ],
+          hlist:['i  Different stages, different benefits','ii  A nightly rehearsal','iii  Why students avoid sleep','iv  Evidence from a word test','v  The cost of poor sleep'], qs:[
+          { t:'select', q:'Paragraph A', a:1 },{ t:'select', q:'Paragraph B', a:3 },{ t:'select', q:'Paragraph C', a:0 } ] },
+        { label:'Passage 3', ptitle:'The economics of attention', instr:'Choose the correct letter, A, B, C or D.', paras:[
+          ['A','When information is abundant, attention becomes scarce. Companies now compete less for customers\' money than for their time.'],
+          ['B','Some economists argue that free services are paid for with attention, which is then sold to advertisers. Others say this view ignores the real value users receive.'] ], qs:[
+          { t:'mcq', q:'According to the writer, what has become scarce?', o:['information','money','attention','advertising'], a:2 },
+          { t:'mcq', q:'What do the two groups of economists disagree about?', o:['whether services are free','how attention is measured','the size of the advertising market','the value users get from free services'], a:3 } ] } ] },
+      { key:'W', group:'Writing', kind:'writing', title:'Writing', dur:3600, ai:true, intro:'Two tasks. Spend about 20 minutes on Task 1 and 40 minutes on Task 2. Word count is shown live.', parts:[
+        { label:'Task 1', essay:true, min:150, hint:'about 20 minutes', img:'bar chart: household energy by source, 3 countries, 2024', prompt:'The chart below shows the share of household energy use by source in three countries in 2024.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.' },
+        { label:'Task 2', essay:true, min:250, hint:'about 40 minutes', prompt:'Some people believe that public transport should be free for everyone. Others think passengers should pay the full cost.\nDiscuss both views and give your own opinion.' } ] },
+      { key:'S', group:'Speaking', kind:'speaking', title:'Speaking', ai:true, intro:'Questions appear one at a time. After the preparation time, recording starts automatically. Answers cannot be re-recorded.', items:[
+        { part:'PART 1', q:'Do you work or are you a student?', prep:5, talk:30 },
+        { part:'PART 1', q:'What do you usually do at the weekend?', prep:5, talk:30 },
+        { part:'PART 2', q:'Describe a place in your city that has changed a lot.', cue:'You should say:\nwhere it is\nwhat it was like before\nhow it has changed\nand explain how you feel about the change.', prep:60, talk:120 },
+        { part:'PART 3', q:'Why do some cities change faster than others?', prep:5, talk:60 },
+        { part:'PART 3', q:'Should governments protect old buildings?', prep:5, talk:60 } ] } ] },
+
+    CEFR: { name:'CEFR Multilevel (mock)', short:'CEFR', scale:'cefr', sections:[
+      { key:'L', group:'Listening', kind:'listening', title:'Listening', dur:2100, review:0, intro:'Recordings play once. Answer while you listen.', parts:[
+        { label:'Part 1', instr:'You will hear short conversations. Choose the correct answer.', qs:[
+          { t:'mcq', q:'Where are the speakers?', o:['at a bank','in a library','at a train station'], a:2 },
+          { t:'mcq', q:'What time does the lesson start?', o:['9:15','9:30','9:50'], a:1 },
+          { t:'mcq', q:'Why is the woman calling?', o:['to cancel a booking','to change a date','to ask for a refund'], a:1 } ] },
+        { label:'Part 2', instr:'Complete the notes. Write NO MORE THAN TWO WORDS.', heading:'City museum tour', qs:[
+          { t:'gap', pre:'The tour begins in the', post:'', ans:['main hall','hall'] },
+          { t:'gap', pre:'Visitors cannot use', post:'in the gallery', ans:['flash','cameras','camera flash'] },
+          { t:'gap', pre:'Tickets for students cost', post:'', ans:['20000','20,000','20 000'] } ] } ] },
+      { key:'R', group:'Reading', kind:'reading', title:'Reading', dur:3600, intro:'Read the texts and answer the questions. You can move between parts.', parts:[
+        { label:'Part 1', ptitle:'Notices', instr:'Which notice says this? Choose the correct letter.', paras:[['A','Library closed on Friday for staff training. Returns box open.'],['B','Swimming pool: children under 10 must be with an adult.'],['C','Free Wi-Fi in the café. Ask staff for the password.']], hlist:['Notice A','Notice B','Notice C'], qs:[
+          { t:'select', q:'You can give back books when the building is closed.', a:0 },
+          { t:'select', q:'Young children cannot be alone here.', a:1 },
+          { t:'select', q:'You need to ask someone to get online.', a:2 } ] },
+        { label:'Part 2', ptitle:'Working from home', instr:'Choose True, False or No information.', paras:[
+          ['','Since 2020, many companies in Tashkent have let staff work from home two days a week. A survey of 800 workers found that most felt more productive, although younger employees missed contact with colleagues. Few companies plan to return to full office work.'] ], qs:[
+          { t:'tf3', q:'Some workers can stay at home for part of the week.', a:0 },
+          { t:'tf3', q:'Younger employees preferred working from home.', a:1 },
+          { t:'tf3', q:'The survey was paid for by the government.', a:2 } ] } ] },
+      { key:'W', group:'Writing', kind:'writing', title:'Writing', dur:3600, ai:true, intro:'Task 1 has two letters based on one situation. Task 2 is an essay.', parts:[
+        { label:'Task 1.1', essay:true, min:50, hint:'informal letter', prompt:'Your sports club is moving to a new building next month.\nWrite a letter to your friend. Tell them about the move and how you feel about it.' },
+        { label:'Task 1.2', essay:true, min:120, hint:'formal letter', prompt:'Write a letter to the club manager. Say what you like about the new building and suggest one improvement.' },
+        { label:'Task 2', essay:true, min:180, hint:'essay', prompt:'Some people think young people should take a gap year before university. Do you agree or disagree?' } ] },
+      { key:'S', group:'Speaking', kind:'speaking', title:'Speaking', ai:true, intro:'Your answers are recorded. Preparation time is shown before each answer.', items:[
+        { part:'PART 1.1', q:'What do you like about your neighbourhood?', prep:5, talk:30 },
+        { part:'PART 1.2', q:'Compare the two pictures. Which place would you prefer to study in?', img:'two photos: quiet library / busy café', prep:10, talk:45 },
+        { part:'PART 2', q:'Talk about a skill you learned outside school.', cue:'Say what it is, how you learned it and why it is useful.', prep:60, talk:120 },
+        { part:'PART 3', q:'"Online learning will replace classrooms." Give arguments for and against.', prep:60, talk:120 } ] } ] },
+
+    SAT: { name:'Digital SAT (mock)', short:'SAT', scale:'sat', sections:[
+      { key:'RW1', group:'Reading and Writing', kind:'sat', title:'Reading and Writing · Module 1', dur:1920, intro:'Module 1 of 2. Your result here decides whether Module 2 is easier or harder.', parts:[{ qs:[
+        { t:'mcq', passage:'In 1903 the botanist Ynes Mexia was not yet born, but by the 1920s she had become one of the most productive plant collectors of her time, gathering over 145,000 specimens across Latin America.', q:'Which choice best states the main idea of the text?', o:['Mexia began collecting plants as a child.','Mexia was a highly productive plant collector.','Mexia studied plants only in Mexico.','Mexia disagreed with other botanists.'], a:1 },
+        { t:'mcq', passage:'The new bridge, designed to withstand strong winds, ______ by engineers for nearly a decade before construction began.', q:'Which choice completes the text so that it conforms to the conventions of Standard English?', o:['was studied','studying','to study','have studied'], a:0 },
+        { t:'mcq', passage:'Many desert plants open their pores only at night. ______, they lose far less water than plants that open them during the day.', q:'Which choice completes the text with the most logical transition?', o:['However','As a result','For instance','Meanwhile'], a:1 } ] }] },
+      { key:'RW2', group:'Reading and Writing', kind:'sat', title:'Reading and Writing · Module 2', dur:1920, adaptive:{ from:0, easy:{ parts:[{ qs:[
+          { t:'mcq', passage:'Maria planted tomatoes in May. By August, the plants were taller than she was.', q:'What does the text say about the plants?', o:['They died in August.','They grew very tall.','They were planted in August.','They were not tomatoes.'], a:1 },
+          { t:'mcq', passage:'The library ______ open until 9 p.m. on weekdays.', q:'Which choice completes the text?', o:['are','is','be','being'], a:1 } ] }] },
+        hard:{ parts:[{ qs:[
+          { t:'mcq', passage:'Although early critics dismissed the novel as sentimental, later scholars argued that its emotional excess was a deliberate strategy, one that exposed the limits of the genre it appeared to celebrate.', q:'Which choice best describes the function of the underlined claim about later scholars?', o:['It supports the early critics.','It reframes a perceived weakness as intentional.','It summarises the novel\'s plot.','It questions the novel\'s authorship.'], a:1 },
+          { t:'mcq', passage:'The committee, along with several advisers, ______ expected to publish its findings in March.', q:'Which choice completes the text?', o:['are','were','is','have been'], a:2 } ] }] } } },
+      { key:'BR', kind:'break', title:'Break', dur:600 },
+      { key:'M1', group:'Math', kind:'sat', calc:true, title:'Math · Module 1', dur:2100, intro:'Calculator and reference sheet are available. Some questions need you to type your own answer.', parts:[{ qs:[
+        { t:'mcq', q:'A line passes through (2, 5) and (6, 17). What is the y-intercept?', o:['−1','−1/2','1','3'], a:0 },
+        { t:'spr', q:'If 3x + 7 = 28, what is the value of x?', ans:['7'] },
+        { t:'mcq', q:'A shirt costs $40 after a 20% discount. What was the original price?', o:['$48','$50','$52','$60'], a:1 } ] }] },
+      { key:'M2', group:'Math', kind:'sat', calc:true, title:'Math · Module 2', dur:2100, adaptive:{ from:3, easy:{ parts:[{ qs:[
+          { t:'spr', q:'What is 15% of 80?', ans:['12'] },
+          { t:'mcq', q:'Which value of x satisfies 2x = 18?', o:['6','8','9','16'], a:2 } ] }] },
+        hard:{ parts:[{ qs:[
+          { t:'spr', q:'The function f(x) = x² − 6x + c has exactly one real root. What is c?', ans:['9'] },
+          { t:'mcq', q:'A circle has equation x² + y² − 4x + 6y = 12. What is its radius?', o:['3','5','√12','25'], a:1 } ] }] } } } ] },
+
+    TOEFL: { name:'TOEFL iBT (mock, 2026 format)', short:'TOEFL', scale:'toefl', sections:[
+      { key:'R1', group:'Reading', kind:'reading', title:'Reading · Module 1', dur:900, intro:'Adaptive. Your Module 1 result decides the difficulty of Module 2.', parts:[
+        { label:'Complete the Words', instr:'Fill in the missing letters to complete the text.', qs:[
+          { t:'ctw', pre:'Most plants ne', stem:'', ans:['ed'], post:' sunlight to grow.', w:'50px' },
+          { t:'ctw', pre:'They take in water thr', stem:'', ans:['ough'], post:' their roots.', w:'70px' },
+          { t:'ctw', pre:'Leaves turn light into en', stem:'', ans:['ergy'], post:'.', w:'70px' },
+          { t:'ctw', pre:'This pro', stem:'', ans:['cess'], post:' is called photosynthesis.', w:'70px' } ] },
+        { label:'Read in Daily Life', ptitle:'Notice: campus gym', instr:'Read the notice and answer the questions.', paras:[['','From 1 November the campus gym will open at 6:00 instead of 7:00. Students must show their ID card at the entrance. Towels are no longer provided.']], qs:[
+          { t:'mcq', q:'What will change in November?', o:['the price','the opening time','the location','the ID rules'], a:1 },
+          { t:'mcq', q:'What should students bring now?', o:['a towel','a timetable','a ticket','a friend'], a:0 } ] },
+        { label:'Academic Passage', ptitle:'Why bees dance', instr:'Choose the best answer.', paras:[['','Honeybees share the location of food through a "waggle dance". The angle of the dance shows the direction relative to the sun, and the length of the waggle shows distance.']], qs:[
+          { t:'mcq', q:'What does the length of the waggle show?', o:['the type of flower','the direction','the distance','the time of day'], a:2 } ] } ] },
+      { key:'R2', group:'Reading', kind:'reading', title:'Reading · Module 2', dur:720, adaptive:{ from:0,
+        easy:{ parts:[{ label:'Read in Daily Life', ptitle:'Email from a teacher', instr:'Choose the best answer.', paras:[['','Hi class, tomorrow\'s lesson is moved to Room 204. Please bring your essays.']], qs:[{ t:'mcq', q:'Where is the lesson?', o:['Room 104','Room 204','the library','online'], a:1 },{ t:'mcq', q:'What should students bring?', o:['books','essays','laptops','nothing'], a:1 }] }] },
+        hard:{ parts:[{ label:'Academic Passage', ptitle:'Urban heat islands', instr:'Choose the best answer.', paras:[['','Dense surfaces such as asphalt absorb heat by day and release it at night, so cities stay warmer than surrounding rural areas. Planting trees and using reflective roofs can reduce this effect, although the benefits vary with climate.']], qs:[{ t:'mcq', q:'Why do cities stay warm at night?', o:['more people live there','surfaces release stored heat','there is less wind','factories run at night'], a:1 },{ t:'mcq', q:'What does the passage suggest about solutions?', o:['They work equally everywhere','Their effect depends on climate','They are too expensive','They increase heat'], a:1 }] }] } } },
+      { key:'L1', group:'Listening', kind:'listening', noBack:true, title:'Listening · Module 1', dur:720, review:0, intro:'Each recording plays once. You cannot go back to earlier questions.', parts:[
+        { label:'Choose a Response', instr:'Listen to the speaker and choose the best response.', qs:[{ t:'mcq', q:'"Do you know if the library is open on Sunday?"', o:['Yes, I read it last week.','I think it opens at noon.','It\'s on the second floor.'], a:1 }] },
+        { label:'Conversation', instr:'Listen to the conversation and answer.', qs:[{ t:'mcq', q:'Why does the student visit the office?', o:['to change a course','to pay a fee','to get a book'], a:0 },{ t:'mcq', q:'What will the student do next?', o:['email the professor','go home','buy a ticket'], a:0 }] },
+        { label:'Academic Talk', instr:'Listen to part of a lecture.', qs:[{ t:'mcq', q:'What is the talk mainly about?', o:['how glaciers move','why oceans are salty','how rivers form deltas'], a:0 }] } ] },
+      { key:'L2', group:'Listening', kind:'listening', noBack:true, title:'Listening · Module 2', dur:600, review:0, adaptive:{ from:2,
+        easy:{ parts:[{ label:'Announcement', instr:'Listen to the announcement.', qs:[{ t:'mcq', q:'What is closed today?', o:['the cafeteria','the gym','the bookstore'], a:0 }] }] },
+        hard:{ parts:[{ label:'Academic Talk', instr:'Listen to part of a lecture.', qs:[{ t:'mcq', q:'Why does the professor mention coffee?', o:['to give an example of a market','to change the topic','to describe her morning'], a:0 },{ t:'mcq', q:'What can be inferred about the theory?', o:['It is widely rejected','It has limited evidence','It was proven last year'], a:1 }] }] } } },
+      { key:'W', group:'Writing', kind:'writing', title:'Writing', dur:1380, ai:true, mixed:true, intro:'Build a Sentence is scored automatically. The email and the academic discussion are scored by AI.', parts:[
+        { label:'Build a Sentence', instr:'Put the words in the correct order.', qs:[
+          { t:'order', ctx:'A: Did you finish the report?', tokens:['yet','haven\'t','I','it','started'], ans:'I haven\'t started it yet' },
+          { t:'order', ctx:'A: Where is the meeting?', tokens:['in','room','is','the','it','big'], ans:'it is in the big room' },
+          { t:'order', ctx:'A: Why are you late?', tokens:['bus','missed','I','the'], ans:'I missed the bus' } ] },
+        { label:'Write an Email', essay:true, min:80, hint:'7 minutes', prompt:'Your professor moved the exam to a day when you have a job interview. Write an email to the professor: explain the problem and ask for a solution.' },
+        { label:'Academic Discussion', essay:true, min:100, hint:'10 minutes', prompt:'Professor: Should universities require students to take courses outside their major?\nKim: Yes, it makes students more flexible.\nAli: No, it wastes time and money.\nWrite a response that adds your own view.' } ] },
+      { key:'S', group:'Speaking', kind:'speaking', title:'Speaking', ai:true, intro:'Listen and repeat, then answer interview questions. All answers are recorded.', items:[
+        { part:'LISTEN AND REPEAT', q:'"Please return your books to the front desk."', prep:3, talk:10 },
+        { part:'LISTEN AND REPEAT', q:'"The lab will be closed for cleaning on Monday."', prep:3, talk:10 },
+        { part:'TAKE AN INTERVIEW', q:'What do you enjoy most about your studies?', prep:3, talk:45 },
+        { part:'TAKE AN INTERVIEW', q:'Some people prefer to study alone. What about you?', prep:3, talk:45 } ] } ] },
+
+    HSK: { name:'HSK 4 (mock)', short:'HSK', scale:'hsk', sections:[
+      { key:'L', group:'听力 Listening', kind:'listening', title:'听力 Listening', dur:1800, review:0, intro:'Each recording plays once. Answer while you listen.', parts:[
+        { label:'第一部分', instr:'判断对错。Listen and decide if the statement is right (对) or wrong (错).', qs:[
+          { t:'tf2', q:'★ 他明天去北京。', a:0 },{ t:'tf2', q:'★ 这家饭馆的菜很贵。', a:1 } ] },
+        { label:'第二部分', instr:'请选出正确答案。Choose the correct answer.', qs:[
+          { t:'mcq', q:'女的想做什么？', o:['买衣服','看电影','去银行','学游泳'], a:1 },
+          { t:'mcq', q:'他们在哪儿？', o:['机场','医院','教室','超市'], a:3 } ] } ] },
+      { key:'R', group:'阅读 Reading', kind:'reading', title:'阅读 Reading', dur:2400, intro:'Choose the correct word or answer.', parts:[
+        { label:'第一部分', instr:'选词填空。Choose the word that fits.', qs:[
+          { t:'mcq', q:'这个问题太难了，我___明白。', o:['不太','非常','已经','一直'], a:0 },
+          { t:'mcq', q:'他每天早上都___跑步。', o:['坚持','以为','打扰','禁止'], a:0 } ] },
+        { label:'第二部分', ptitle:'短文', instr:'根据短文选择正确答案。', paras:[['','小王上个月开始学习做饭。刚开始的时候，他做的菜不好吃，但是他没有放弃。现在，朋友们都喜欢来他家吃饭。']], qs:[
+          { t:'mcq', q:'小王现在做饭怎么样？', o:['不好吃','很好吃','不做了','很慢'], a:1 } ] } ] },
+      { key:'W', group:'书写 Writing', kind:'writing', title:'书写 Writing', dur:1500, ai:true, mixed:true, intro:'Part 1 (sentence order) is scored automatically. Part 2 (write a sentence) is scored by AI.', parts:[
+        { label:'第一部分', instr:'完成句子。Put the words in order.', qs:[
+          { t:'order', zh:true, tokens:['很','这本书','有意思'], ans:'这本书很有意思' },
+          { t:'order', zh:true, tokens:['我','把','作业','完成了'], ans:'我把作业完成了' } ] },
+        { label:'第二部分', essay:true, min:10, zh:true, hint:'看图，用词造句', img:'picture: a girl reading in a park', prompt:'请结合图片用"认真"造句。\nWrite one sentence using 认真 that describes the picture.' } ] } ] }
+  };
+
+  state = this.fresh();
+  fresh() {
+    return { phase:'check', si:0, pi:0, cur:null, ans:{}, flags:{}, essays:{}, hl:{}, left:0, audio:0, timerHidden:false,
+      font:1, theme:0, confirm:false, done:[], variant:{}, heard:false, mic:false, micT:0, volume:70, offline:false,
+      sp:{ i:0, stage:'prep', t:0 }, satI:0, elimOn:false, elim:{}, calc:false, ref:false, grid:false, split:50, grade:0, detIdx:0, saved:0 };
+  }
+  exKey() { return this.props.exam || 'IELTS'; }
+  exam() { return Component.EXAMS[this.exKey()] || Component.EXAMS.IELTS; }
+  speed() { return this.props.speed === '1x' ? 1 : 10; }
+  order() {
+    const ex = this.exam(); const only = this.props.section;
+    const all = ex.sections.map((s,i)=>i);
+    if (!only) return all;
+    const idx = ex.sections.findIndex(s => s.key === only);
+    return idx >= 0 ? [idx] : all;
+  }
+  getSec(i) {
+    const base = this.exam().sections[i]; if (!base) return null;
+    if (!base.adaptive) return base;
+    const v = this.state.variant[i] || 'hard';
+    return { ...base, ...base.adaptive[v], variantName: v === 'hard' ? 'harder' : 'easier' };
+  }
+  qid(si,pi,qi){ return si+'.'+pi+'.'+qi; }
+  norm(s){ return String(s==null?'':s).toLowerCase().replace(/[.,!?'"]/g,'').replace(/\s+/g,' ').trim().replace(/^(the|a|an) /,''); }
+  num(s){ s=String(s||'').trim(); if(s.includes('/')){ const [a,b]=s.split('/').map(Number); return b? a/b : NaN; } return Number(s); }
+  correct(q, v) {
+    if (v == null || v === '') return false;
+    if (q.t==='gap'||q.t==='ctw') return q.ans.some(a => this.norm(a)===this.norm(v));
+    if (q.t==='spr') return q.ans.some(a => Math.abs(this.num(a)-this.num(v))<1e-6);
+    if (q.t==='multi') return Array.isArray(v) && v.length===q.a.length && q.a.every(x=>v.includes(x));
+    if (q.t==='order') return Array.isArray(v) && this.norm(v.map(i=>q.tokens[i]).join(q.zh?'':' ')) === this.norm(q.ans);
+    return v === q.a;
+  }
+  answerText(q, v) {
+    if (v == null || v === '' || (Array.isArray(v)&&!v.length)) return '—';
+    const L = 'ABCDEFG';
+    if (q.t==='mcq') return L[v]+'. '+q.o[v];
+    if (q.t==='multi') return v.slice().sort().map(i=>L[i]).join(', ');
+    if (q.t==='tfng') return ['TRUE','FALSE','NOT GIVEN'][v];
+    if (q.t==='tf3') return ['True','False','No information'][v];
+    if (q.t==='tf2') return ['对','错'][v];
+    if (q.t==='select') return 'option '+(v+1);
+    if (q.t==='order') return v.map(i=>q.tokens[i]).join(q.zh?'':' ');
+    return String(v);
+  }
+  keyText(q, sec) {
+    const L = 'ABCDEFG';
+    if (q.t==='gap'||q.t==='ctw'||q.t==='spr') return q.ans[0];
+    if (q.t==='mcq') return L[q.a]+'. '+q.o[q.a];
+    if (q.t==='multi') return q.a.map(i=>L[i]).join(', ');
+    if (q.t==='tfng') return ['TRUE','FALSE','NOT GIVEN'][q.a];
+    if (q.t==='tf3') return ['True','False','No information'][q.a];
+    if (q.t==='tf2') return ['对','错'][q.a];
+    if (q.t==='select') { const p = (sec.parts||[]).find(pp=>pp.qs.includes(q)); return p && p.hlist ? p.hlist[q.a] : String(q.a); }
+    if (q.t==='order') return q.ans;
+    return '';
+  }
+  objItems(si) {
+    const sec = this.getSec(si); const out = [];
+    (sec.parts||[]).forEach((p,pi)=>{ if (p.essay) return; (p.qs||[]).forEach((q,qi)=> out.push({ q, id:this.qid(si,pi,qi), sec })); });
+    return out;
+  }
+  ratio(si) { const it = this.objItems(si); if (!it.length) return 0; return it.filter(x=>this.correct(x.q, this.state.ans[x.id])).length / it.length; }
+
+  componentDidMount() {
+    this.iv = setInterval(() => this.tick(), 1000);
+    this.onMove = e => { if (!this.drag) return; const w = window.innerWidth; this.setState({ split: Math.min(70, Math.max(30, e.clientX / w * 100)) }); };
+    this.onUp = () => { this.drag = false; };
+    window.addEventListener('mousemove', this.onMove); window.addEventListener('mouseup', this.onUp);
+  }
+  componentWillUnmount() { clearInterval(this.iv); window.removeEventListener('mousemove', this.onMove); window.removeEventListener('mouseup', this.onUp); }
+  tick() {
+    const s = this.state, k = this.speed();
+    if (s.micT > 0) this.setState({ micT: s.micT - 1, mic: s.micT - 1 === 0 ? true : s.mic });
+    if (s.phase === 'results') { if (s.grade < 12) this.setState({ grade: s.grade + 1 }); return; }
+    if (s.phase === 'break') { const left = s.left - k; if (left <= 0) this.endBreak(); else this.setState({ left }); return; }
+    if (s.phase !== 'section') return;
+    const sec = this.getSec(s.si);
+    if (sec.kind === 'speaking') {
+      const it = sec.items[s.sp.i]; let { i, stage, t } = s.sp; t += k;
+      if (stage === 'prep' && t >= it.prep) { stage = 'rec'; t = 0; }
+      else if (stage === 'rec' && t >= it.talk) {
+        if (i + 1 >= sec.items.length) { this.finishSection(); return; }
+        i += 1; stage = 'prep'; t = 0;
+      }
+      this.setState({ sp: { i, stage, t } }); return;
+    }
+    const left = s.left - k;
+    const audioTotal = sec.kind === 'listening' ? sec.dur - (sec.review || 0) : 0;
+    const upd = { left, saved: s.saved + 1 };
+    if (sec.kind === 'listening') upd.audio = Math.min(audioTotal, s.audio + k);
+    if (left <= 0) { this.finishSection(); return; }
+    this.setState(upd);
+  }
+  startExam() {
+    try { if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{}); } catch(e) {}
+    const first = this.order()[0];
+    this.setState({ phase: 'intro', si: first });
+  }
+  beginSection() {
+    const s = this.state; const base = this.exam().sections[s.si];
+    const variant = { ...s.variant };
+    if (base.adaptive) variant[s.si] = this.ratio(base.adaptive.from) >= 0.6 ? 'hard' : 'easy';
+    this.setState({ variant }, () => {
+      const sec = this.getSec(s.si);
+      this.setState({ phase: sec.kind === 'break' ? 'break' : 'section', left: sec.dur || 0, audio: 0, pi: 0, cur: this.qid(s.si,0,0), sp:{ i:0, stage:'prep', t:0 }, satI:0, grid:false, calc:false, ref:false, confirm:false });
+    });
+  }
+  endBreak() { this.advance(); }
+  finishSection() { this.setState(st => ({ done: [...st.done, st.si], confirm:false }), () => this.advance()); }
+  advance() {
+    const ord = this.order(); const pos = ord.indexOf(this.state.si);
+    if (pos + 1 >= ord.length) { this.setState({ phase:'results', grade:0, detIdx:0 }); try { if (document.fullscreenElement) document.exitFullscreen(); } catch(e){} return; }
+    const nxt = ord[pos+1]; const base = this.exam().sections[nxt];
+    if (base.kind === 'break') { this.setState({ si: nxt, phase:'break', left: base.dur }); return; }
+    this.setState({ si: nxt, phase:'intro' });
+  }
+  setAns(id, v) { this.setState(st => ({ ans: { ...st.ans, [id]: v }, cur:id, saved:0 })); }
+
+  scoreFor(scale, r, extra) {
+    if (scale==='ielts') { const raw = Math.round(r*40); const t=[[39,9],[37,8.5],[35,8],[32,7.5],[30,7],[26,6.5],[23,6],[18,5.5],[16,5],[13,4.5],[10,4],[8,3.5],[6,3],[4,2.5],[2,2],[1,1]]; const f=t.find(x=>raw>=x[0]); return f?f[1]:0; }
+    if (scale==='cefr') return Math.round(r*75);
+    if (scale==='toefl') { const cap = extra==='easy'?4.5:6; return Math.min(cap, Math.round((1+r*5)*2)/2); }
+    if (scale==='hsk') return Math.round(r*100);
+    return 0;
+  }
+  cefrLevel(p){ return p>=65?'C1':p>=51?'B2':p>=38?'B1':'Below B1'; }
+  ieltsToCefr(b){ return b>=8.5?'C2':b>=7?'C1':b>=5.5?'B2':b>=4?'B1':'A2'; }
+  toeflToCefr(b){ return b>=6?'C2':b>=5?'C1':b>=4?'B2':b>=3?'B1':'A2'; }
+  aiEssay(text, min, zh) {
+    const t = String(text||'').trim();
+    const words = zh ? t.replace(/\s/g,'').length : (t.match(/\S+/g)||[]).length;
+    if (!words) return { words, band:0, crit:null };
+    const toks = zh ? t.replace(/\s/g,'').split('') : t.toLowerCase().match(/[a-z']+/g)||[];
+    const variety = toks.length ? new Set(toks).size / toks.length : 0;
+    const ratio = words / min;
+    let base = 3.5 + Math.min(ratio,1.2)*2.5 + variety*1.5; base = Math.max(3, Math.min(8.5, Math.round(base*2)/2));
+    const tr = ratio < 1 ? Math.max(3, base-1) : base;
+    const crit = [
+      ['Task Response', tr, ratio < 1 ? 'Below the minimum length ('+words+'/'+min+'). This caps the task score.' : 'All parts of the task are addressed. Develop the main idea with one specific example.'],
+      ['Coherence & Cohesion', base, 'Clear paragraphing. Use a wider range of linking words between ideas.'],
+      ['Lexical Resource', Math.min(9, base + (variety>0.65?0.5:0)), variety>0.65 ? 'Good range of vocabulary with few repetitions.' : 'Several words are repeated. Try synonyms for key terms.'],
+      ['Grammar', Math.max(3, base-0.5), 'Mostly accurate. Check subject–verb agreement and article use.'] ];
+    const band = Math.round(crit.reduce((a,c)=>a+c[1],0)/4*2)/2;
+    return { words, band, crit };
+  }
+
+  computeResults() {
+    const s = this.state, ex = this.exam(), ord = this.order(), aiDone = s.grade >= 8;
+    const groups = {};
+    ord.forEach(si => { const sec = this.getSec(si); if (sec.kind==='break') return; (groups[sec.group] = groups[sec.group] || []).push(si); });
+    const out = Object.keys(groups).map(name => {
+      const sis = groups[name]; const secs = sis.map(i=>this.getSec(i)); const sec0 = secs[0];
+      const objs = sis.flatMap(i => this.objItems(i));
+      const nCorrect = objs.filter(x=>this.correct(x.q, s.ans[x.id])).length;
+      const r = objs.length ? nCorrect/objs.length : 0;
+      const isAi = !!sec0.ai; const mixed = !!sec0.mixed;
+      let essays = [], spk = null;
+      if (sec0.kind==='writing') essays = (sec0.parts||[]).map((p,pi)=>({ p, res: p.essay ? this.aiEssay(s.essays[sis[0]+'.'+pi], p.min, p.zh) : null })).filter(e=>e.res);
+      if (sec0.kind==='speaking') spk = { items: sec0.items.length, crit:[['Fluency & Coherence',6.5,'Speaks at length with some hesitation. Fewer fillers ("um", "like") would help.'],['Lexical Resource',6.0,'Adequate range. Paraphrase more instead of repeating the question.'],['Grammar',6.0,'Mix of simple and complex sentences; some tense errors.'],['Pronunciation (separate API)',6.5,'Generally clear. Word stress on longer words is sometimes misplaced.']] };
+      const aiBand = essays.length ? Math.round(essays.reduce((a,e)=>a+e.res.band,0)/essays.length*2)/2 : spk ? 6.0 : 0;
+      let score='—', num=null, sub='', color='#1E2A3A';
+      const pend = isAi && !aiDone;
+      const variant = secs.map(x=>x.variantName).filter(Boolean)[0];
+      if (ex.scale==='ielts') {
+        if (isAi) { num = aiBand; score = pend ? 'Grading…' : (num ? num.toFixed(1)+'–'+(Math.min(9,num+0.5)).toFixed(1) : '0'); sub = spk ? spk.items+' answers recorded' : essays.map(e=>e.res.words+' words').join(' · '); }
+        else { num = this.scoreFor('ielts', r); score = num.toFixed(1); sub = nCorrect+' / '+objs.length+' correct (scaled to 40)'; }
+      } else if (ex.scale==='cefr') {
+        num = isAi ? Math.round(Math.max(0,(aiBand-3))/6*75) : this.scoreFor('cefr', r);
+        score = pend ? 'Grading…' : this.cefrLevel(num); sub = pend ? 'AI grading' : num+' / 75 points';
+      } else if (ex.scale==='sat') {
+        const hard = secs.some(x=>x.variantName==='harder');
+        num = Math.round((200 + r*(hard?600:430))/10)*10; score = String(num); sub = nCorrect+' / '+objs.length+' correct · module 2 '+(variant||'');
+      } else if (ex.scale==='toefl') {
+        const easy = secs.some(x=>x.variantName==='easier');
+        if (isAi) { const objPart = objs.length ? 1+r*5 : null; const aiPart = sec0.kind==='speaking' ? 4.5 : Math.max(1, aiBand/9*6); num = Math.round(((objPart!=null?(objPart+aiPart)/2:aiPart))*2)/2; }
+        else num = this.scoreFor('toefl', r, easy?'easy':'hard');
+        score = pend ? 'Grading…' : num.toFixed(1); sub = isAi ? (mixed ? 'Build a Sentence '+nCorrect+'/'+objs.length+' + AI' : 'AI graded') : nCorrect+' / '+objs.length+' correct'+(variant?' · module 2 '+variant:'');
+      } else if (ex.scale==='hsk') {
+        if (isAi) { const essayPts = essays.length ? Math.round(Math.min(1, essays[0].res.words/ (essays[0].p.min*1.5))*50) : 0; num = Math.round(r*50) + essayPts; }
+        else num = this.scoreFor('hsk', r);
+        score = pend ? 'Grading…' : String(num); sub = pend ? 'AI grading' : num+' / 100';
+      }
+      if (pend) color = '#9AA6B8';
+      const method = isAi ? (mixed ? 'AUTO + AI' : (sec0.kind==='speaking' ? 'AI + PRONUNCIATION API' : 'AI')) : 'AUTO · ANSWER KEY';
+      const estimate = (ex.scale==='sat'||ex.scale==='toefl');
+      return { name, sis, secs, sec0, objs, nCorrect, isAi, mixed, essays, spk, score, num, sub, color, pend, method, estimate };
+    });
+    return out;
+  }
+
+  renderVals() {
+    const s = this.state, ex = this.exam(), A = '#2E6BE6', sp = this.speed();
+    const THEMES = [
+      { page:'#F5F6F8', panel:'#FFFFFF', ink:'#1E2A3A', sub:'#4A586C', line:'#E3E8EF', field:'#FFFFFF', label:'Standard' },
+      { page:'#000000', panel:'#0B0B0B', ink:'#FFFFFF', sub:'#E6E6E6', line:'#444444', field:'#000000', label:'White on black' },
+      { page:'#F4EFD9', panel:'#FBF7E6', ink:'#1A1A1A', sub:'#3B3B3B', line:'#DDD3B0', field:'#FFFDF2', label:'Cream' } ];
+    const th = THEMES[s.theme];
+    const FS = [{ passage:'15px', q:'14px', l:'S' },{ passage:'17px', q:'15px', l:'M' },{ passage:'20px', q:'17px', l:'L' }][s.font];
+    const fmt = n => { n = Math.max(0, Math.round(n)); const m = Math.floor(n/60), x = n%60; return (m<10?'0':'')+m+':'+(x<10?'0':'')+x; };
+    const ord = this.order();
+    const allSecs = ord.map(i=>this.exam().sections[i]);
+    const needAudio = allSecs.some(x=>x.kind==='listening'), needMic = allSecs.some(x=>x.kind==='speaking');
+    const ready = (!needAudio || s.heard) && (!needMic || s.mic);
+    const methodOf = x => x.kind==='break' ? null : x.ai ? (x.mixed ? ['AUTO + AI','#7A4E00','#FFF1D6'] : ['AI','#5B3FD1','#EEE9FF']) : ['AUTO','#1F7A55','#E5F5EE'];
+    const agenda = allSecs.map(x => { const m = methodOf(x) || ['BREAK','#4A586C','#EEF1F5']; return { title:x.title, dur: x.dur ? Math.round(x.dur/60)+' min' : '~'+Math.round(x.items.reduce((a,b)=>a+b.prep+b.talk,0)/60)+' min', method:m[0], mFg:m[1], mBg:m[2] }; });
+    const rules = [
+      'Sections run in order. A finished section is locked and cannot be reopened.',
+      needAudio ? 'Listening audio plays once. It cannot be paused or replayed.' : 'The timer keeps running if you leave the page.',
+      ex.scale==='sat'||ex.scale==='toefl' ? 'Module 2 adapts to your Module 1 result. Scores are estimates.' : 'Answers save automatically every second.',
+      'Leaving fullscreen or switching tabs is recorded.' ];
+    const micBars = Array.from({length:32},(_,i)=>({ h:(s.micT>0||s.mic ? 5+Math.round(Math.abs(Math.sin(i*1.7+s.micT))*20) : 4)+'px', c: s.mic ? '#2E6BE6' : s.micT>0 ? '#D9475A' : '#D5DCE6' }));
+    const okTag = ok => ok ? { label:'Passed', fg:'#1F9D6B', bg:'#E5F5EE' } : { label:'Required', fg:'#B7790F', bg:'#FFF4DE' };
+
+    const base = { th, fs:FS, ex, modeLabel: this.props.section ? 'Single section' : 'Full mock',
+      isCheck: s.phase==='check', isIntro: s.phase==='intro', isBreak: s.phase==='break', isSection: s.phase==='section', isResults: s.phase==='results',
+      needAudio, needMic, chkA: okTag(s.heard), chkM: okTag(s.mic), audioBtn: s.heard ? 'Play again' : 'Play sample', micBtn: s.micT>0 ? 'Recording… '+s.micT+'s' : s.mic ? 'Record again' : 'Record 5 s', micBars,
+      volume: s.volume, onVolume: e => this.setState({ volume: Number(e.target.value) }),
+      testAudio: () => this.setState({ heard:true }), testMic: () => this.setState({ micT:5, mic:false }),
+      rules, agenda, startBg: ready ? A : '#B8C4D6', startExam: () => { if (ready) this.startExam(); },
+      exit: () => { try { if (document.fullscreenElement) document.exitFullscreen(); } catch(e){} this.props.onExit && this.props.onExit(); },
+      restart: () => this.setState(this.fresh()),
+      timeStr: fmt(s.left), beginSection: () => this.beginSection(), endBreak: () => this.endBreak(),
+      cycleFont: () => this.setState(st=>({ font:(st.font+1)%3 })), fontLabel: FS.l,
+      cycleTheme: () => this.setState(st=>({ theme:(st.theme+1)%3 })), themeLabel: th.label,
+      toggleTimer: () => this.setState(st=>({ timerHidden:!st.timerHidden })), timerShown: !s.timerHidden, timerHidden: s.timerHidden, timerToggleLabel: s.timerHidden ? 'Show' : 'Hide',
+      timerBg: s.left <= 300 && !s.timerHidden ? '#FDECEE' : (s.theme===1 ? '#1A1A1A' : '#F1F4F8'), timerFg: s.left <= 300 ? '#C23A4C' : th.ink,
+      offline: s.offline, confirmOpen: s.confirm,
+      askFinish: () => this.setState({ confirm:true }), cancelFinish: () => this.setState({ confirm:false }), confirmFinish: () => this.finishSection()
+    };
+
+    if (s.phase === 'results') return { ...base, ...this.resultVals() };
+    const sec = this.getSec(s.si) || this.exam().sections[0];
+    const pos = ord.indexOf(s.si);
+    const prevSi = ord[pos-1]; const prevSec = prevSi!=null ? this.exam().sections[prevSi] : null;
+    const qCount = (sec.parts||[]).reduce((a,p)=>a+(p.essay?0:p.qs.length),0), essayCount = (sec.parts||[]).filter(p=>p.essay).length;
+    const introCount = sec.kind==='speaking' ? sec.items.length+' questions' : [qCount?qCount+' questions':null, essayCount?essayCount+' tasks':null].filter(Boolean).join(' + ');
+    const m = methodOf(sec);
+    const vals = { ...base, sec, secNo: pos+1, secCount: ord.length, prevDone: !!prevSec && s.done.includes(prevSi), prevTitle: prevSec ? prevSec.title : '',
+      introDur: sec.dur ? Math.round(sec.dur/60)+' min' : '~'+Math.round((sec.items||[]).reduce((a,b)=>a+b.prep+b.talk,0)/60)+' min', introCount, introMethod: m ? (m[0]==='AUTO'?'Answer key':m[0]==='AI'?'AI':'Key + AI') : '',
+      isListening: sec.kind==='listening', isSpeaking: sec.kind==='speaking', isSat: sec.kind==='sat' };
+
+    if (s.phase !== 'section') return { ...vals, showGeneric:false, showEssay:false, showQNav:false, isListening:false, isSpeaking:false, isSat:false };
+
+    if (sec.kind === 'speaking') {
+      const it = sec.items[s.sp.i]; const rec = s.sp.stage==='rec';
+      const remain = (rec ? it.talk : it.prep) - s.sp.t;
+      return { ...vals, showGeneric:false, showEssay:false, showQNav:false, spItem: it, spNo: s.sp.i+1, spTotal: sec.items.length,
+        spSteps: sec.items.map((x,i)=>({ c: i < s.sp.i ? '#1E2A3A' : i===s.sp.i ? A : '#D5DCE6' })),
+        spStageLabel: rec ? 'Recording' : (it.part.indexOf('REPEAT')>=0 ? 'Listen' : 'Preparation'), spStageColor: rec ? '#D9475A' : A,
+        spClock: fmt(remain) + ' / ' + fmt(rec ? it.talk : it.prep),
+        wave: Array.from({length:52},(_,i)=>({ h: (rec ? 4+Math.round(Math.abs(Math.sin(i*0.9+s.sp.t*0.7)*Math.cos(i*0.37))*32) : 4)+'px', c: rec ? th.ink : '#D5DCE6' })),
+        spNote: rec ? 'Recording stops automatically at '+fmt(it.talk)+'. Then the next question begins.' : 'Recording starts automatically when preparation ends.' };
+    }
+
+    if (sec.kind === 'sat') {
+      const qs = sec.parts[0].qs; const qi = Math.min(s.satI, qs.length-1); const q = qs[qi]; const id = this.qid(s.si,0,qi); const v = s.ans[id];
+      const L = 'ABCD';
+      const satOpts = q.t==='mcq' ? q.o.map((t,i)=>{ const on = v===i, el = !!(s.elim[id]||{})[i]; return { k:L[i], t, bd: on?A:'#D5DCE6', bg: on?'#EAF1FE':th.panel, fg: el?'#B4BDCA':th.ink, strike: el?'line-through':'none',
+        pick: () => this.setAns(id, i), elim: () => this.setState(st=>({ elim:{ ...st.elim, [id]:{ ...(st.elim[id]||{}), [i]: !(st.elim[id]||{})[i] } } })), elimLabel: el?'Undo':L[i], elimDeco: el?'none':'line-through' }; }) : [];
+      const satGrid = qs.map((qq,i)=>{ const iid=this.qid(s.si,0,i); const a = s.ans[iid]!=null && s.ans[iid]!==''; const c = i===qi; return { n:i+1, flag: !!s.flags[iid], go:()=>this.setState({ satI:i, grid:false }), bg: c?'#fff':a?'#1E2A3A':'#F1F4F8', fg: c?A:a?'#fff':'#7A8699', ring: c?'inset 0 0 0 2px '+A:'none' }; });
+      const last = qi === qs.length-1;
+      return { ...vals, showGeneric:false, showEssay:false, showQNav:false, satQ:{ ...q, isSpr: q.t==='spr' }, satNo: qi+1, satTotal: qs.length, satOpts, satVal: v||'',
+        onSatText: e => this.setAns(id, e.target.value.slice(0,6)), satGrid, satGridOpen: s.grid, toggleGrid: () => this.setState(st=>({ grid:!st.grid })),
+        satFlagColor: s.flags[id] ? '#B7790F' : th.sub, satFlagDot: s.flags[id] ? '#D68A1A' : 'transparent', toggleFlag: () => this.setState(st=>({ flags:{ ...st.flags, [id]: !st.flags[id] } })),
+        elimOn: s.elimOn, toggleElim: () => this.setState(st=>({ elimOn:!st.elimOn })), elimFg: s.elimOn?'#fff':A, elimBg: s.elimOn?A:'#EAF1FE',
+        calcOpen: s.calc, refOpen: s.ref, toggleCalc: () => this.setState(st=>({ calc:!st.calc })), toggleRef: () => this.setState(st=>({ ref:!st.ref })),
+        calcBg: s.calc?'#1E2A3A':'transparent', calcFg: s.calc?'#fff':th.ink, refBg: s.ref?'#1E2A3A':'transparent', refFg: s.ref?'#fff':th.ink,
+        formulas: [{k:'Circle area',v:'A = πr²'},{k:'Circumference',v:'C = 2πr'},{k:'Rectangle',v:'A = lw'},{k:'Triangle',v:'A = ½bh'},{k:'Pythagoras',v:'c² = a² + b²'},{k:'Cylinder',v:'V = πr²h'},{k:'Sphere',v:'V = 4/3 πr³'}],
+        satPrev: () => this.setState(st=>({ satI: Math.max(0, st.satI-1) })), satNextLabel: last ? 'Finish module' : 'Next',
+        satNext: () => last ? this.setState({ confirm:true }) : this.setState(st=>({ satI: st.satI+1 })),
+        confirmText: this.unansweredText(s.si) };
+    }
+
+    // listening / reading / writing
+    const parts = sec.parts; const pi = Math.min(s.pi, parts.length-1); const part = parts[pi];
+    let n0 = 0; const starts = parts.map(p => { const st = n0; n0 += p.essay ? 0 : p.qs.length; return st; });
+    const L = 'ABCDEFG';
+    const qs = part.essay ? [] : part.qs.map((q,qi)=>{
+      const id = this.qid(s.si,pi,qi), v = s.ans[id], n = starts[pi]+qi+1, isCur = s.cur===id;
+      const answered = v!=null && v!=='' && !(Array.isArray(v)&&!v.length);
+      const o = { n, q: (q.t==='gap'||q.t==='ctw') ? '' : (q.t==='order' ? '' : q.q), pre:q.pre, post:q.post, stem:q.stem, w:q.w||'80px', ctx:q.ctx, img:q.img,
+        isGap:q.t==='gap', isCtw:q.t==='ctw', isChoice:q.t==='mcq'||q.t==='multi', isTf:['tfng','tf3','tf2'].includes(q.t), isSelect:q.t==='select', isOrder:q.t==='order',
+        val: v==null ? '' : v, border: isCur ? '2px solid '+A : '2px solid transparent', nBg: answered?'#1E2A3A':'#EEF1F5', nFg: answered?'#fff':'#4A586C',
+        focus: () => { if (s.cur!==id) this.setState({ cur:id }); }, onText: e => this.setAns(id, e.target.value), multiNote: q.t==='multi' ? 'Choose TWO answers' : '' };
+      if (o.isChoice) o.opts = q.o.map((t,i)=>{ const on = q.t==='multi' ? (v||[]).includes(i) : v===i; return { k:L[i], t, bd: on?A:th.line, bg: on?(s.theme===1?'#0D2A66':'#EAF1FE'):th.field, kBg: on?A:'#EEF1F5', kFg: on?'#fff':'#4A586C',
+        pick: () => { if (q.t==='multi') { let cur = (v||[]).slice(); cur = cur.includes(i) ? cur.filter(x=>x!==i) : (cur.length<2 ? [...cur,i] : cur); this.setAns(id, cur); } else this.setAns(id, i); } }; });
+      if (o.isTf) { const labels = q.t==='tfng'?['TRUE','FALSE','NOT GIVEN']:q.t==='tf3'?['True','False','No information']:['对 Right','错 Wrong'];
+        o.opts = labels.map((t,i)=>({ t, bd: v===i?A:th.line, bg: v===i?A:th.field, fg: v===i?'#fff':th.sub, pick: () => this.setAns(id, i) })); }
+      if (o.isSelect) { o.opts = [{ v:'', t:'Choose…' }, ...part.hlist.map((t,i)=>({ v:String(i), t }))]; o.val = v==null?'':String(v); o.onSel = e => this.setAns(id, e.target.value===''?null:Number(e.target.value)); }
+      if (o.isOrder) { const chosen = v||[]; o.chosen = chosen.map((ti,ci)=>({ t:q.tokens[ti], remove: () => this.setAns(id, chosen.filter((_,k)=>k!==ci)) })); o.emptyChosen = !chosen.length;
+        o.bank = q.tokens.map((t,ti)=>({ t, ti })).filter(x=>!chosen.includes(x.ti)).map(x=>({ t:x.t, add: () => this.setAns(id, [...chosen, x.ti]) })); }
+      return o;
+    });
+    const range = part.essay ? (part.minLabel||'') : 'Questions '+(starts[pi]+1)+(part.qs.length>1?'–'+(starts[pi]+part.qs.length):'');
+    const paras = (part.paras||[]).map((p,i)=>{ const k = s.si+'.'+pi+'.'+i; return { k:p[0], t:p[1], hl: s.hl[k] ? '#FFF1C2' : 'transparent', toggle: () => this.setState(st=>({ hl:{ ...st.hl, [k]: !st.hl[k] } })) }; });
+    const noBack = !!sec.noBack;
+    const navParts = parts.map((p,ppi)=>{
+      const locked = noBack && ppi < pi;
+      const items = p.essay ? [{ n: p.label.replace('Task ','T').replace('Write an ','').replace('Academic ','').slice(0,10), flag:false, go: () => !locked && this.setState({ pi:ppi }),
+          bg: ppi===pi?'#fff':((s.essays[s.si+'.'+ppi]||'').trim()?'#1E2A3A':'#F1F4F8'), fg: ppi===pi?A:((s.essays[s.si+'.'+ppi]||'').trim()?'#fff':'#7A8699'), ring: ppi===pi?'inset 0 0 0 2px '+A:'none' }]
+        : p.qs.map((q,qi)=>{ const id=this.qid(s.si,ppi,qi); const v=s.ans[id]; const a = v!=null && v!=='' && !(Array.isArray(v)&&!v.length); const c = s.cur===id;
+          return { n: starts[ppi]+qi+1, flag: !!s.flags[id], go: () => { if (!locked) this.setState({ pi:ppi, cur:id }); }, bg: c?'#fff':a?'#1E2A3A':'#F1F4F8', fg: c?A:a?'#fff':'#7A8699', ring: c?'inset 0 0 0 2px '+A:'none' }; });
+      return { label: p.label, items, op: locked ? 0.45 : 1, color: ppi===pi ? A : '#7A8699', go: () => { if (!locked) this.setState({ pi:ppi, cur: p.essay ? null : this.qid(s.si,ppi,0) }); } };
+    });
+    const audioTotal = sec.kind==='listening' ? sec.dur - (sec.review||0) : 1;
+    const audioDone = sec.kind==='listening' && s.audio >= audioTotal;
+    const essayKey = s.si+'.'+pi; const essayVal = s.essays[essayKey] || '';
+    const words = part.zh ? essayVal.replace(/\s/g,'').length : (essayVal.trim().match(/\S+/g)||[]).length;
+    const showEssay = !!part.essay;
+    return { ...vals, part: { ...part, range, minLabel: part.essay ? (part.zh ? 'At least '+part.min+' characters.' : 'Write at least '+part.min+' words.') : '' }, qs, paras,
+      showGeneric: !showEssay, showEssay, hasPassage: !!(part.paras && part.paras.length), splitW: s.split+'%', qColW: part.paras ? '760px' : '860px',
+      startDrag: e => { e.preventDefault(); this.drag = true; },
+      showQNav: true, navParts, canFlag: !showEssay, flagLabel: s.flags[s.cur] ? 'Unflag' : 'Flag for review',
+      toggleFlag: () => s.cur && this.setState(st=>({ flags:{ ...st.flags, [st.cur]: !st.flags[st.cur] } })),
+      canBack: !noBack && pi > 0, hasNextPart: pi < parts.length-1,
+      prevPart: () => this.setState(st=>({ pi: st.pi-1, cur: parts[st.pi-1].essay ? null : this.qid(st.si, st.pi-1, 0) })),
+      nextPart: () => this.setState(st=>({ pi: st.pi+1, cur: parts[st.pi+1].essay ? null : this.qid(st.si, st.pi+1, 0) })),
+      eqBars: [10,18,8,14].map((h,i)=>({ h: (audioDone ? 4 : 4+Math.abs(Math.sin(s.audio*0.9+i))*16)+'px', c: audioDone ? '#C9D1DD' : A })),
+      audioLabel: audioDone ? (sec.review ? 'Review time' : 'Audio finished') : 'Audio playing · '+part.label, audioPct: Math.min(100, s.audio/audioTotal*100)+'%',
+      audioNote: audioDone ? (sec.review ? 'Check your answers' : 'Finish when ready') : 'Plays once · no pause or replay',
+      essayVal, onEssay: e => this.setState(st=>({ essays:{ ...st.essays, [essayKey]: e.target.value }, saved:0 })), blockPaste: e => e.preventDefault(),
+      essayPh: part.zh ? '在这里写…' : 'Start writing here…', wcLabel: words+(part.zh?' characters':' words')+' / min '+part.min, wcColor: words >= (part.min||0) ? '#1F9D6B' : th.ink,
+      saveNote: s.saved < 2 ? 'saved' : 'autosaved '+s.saved+' s ago',
+      confirmText: this.unansweredText(s.si) };
+  }
+  unansweredText(si) {
+    const sec = this.getSec(si); const s = this.state; let un = 0, short = 0;
+    (sec.parts||[]).forEach((p,pi)=>{ if (p.essay) { const t = s.essays[si+'.'+pi]||''; const w = p.zh ? t.replace(/\s/g,'').length : (t.trim().match(/\S+/g)||[]).length; if (w < p.min) short++; return; }
+      p.qs.forEach((q,qi)=>{ const v = s.ans[this.qid(si,pi,qi)]; if (v==null||v===''||(Array.isArray(v)&&!v.length)) un++; }); });
+    const bits = []; if (un) bits.push(un+' question'+(un>1?'s are':' is')+' unanswered'); if (short) bits.push(short+' task'+(short>1?'s are':' is')+' under the minimum length');
+    return (bits.length ? bits.join(' and ')+'. ' : 'All questions answered. ') + 'After you finish, this section is locked and you cannot return to it.';
+  }
+  resultVals() {
+    const s = this.state, ex = this.exam(), A = '#2E6BE6';
+    const G = this.computeResults();
+    const anyAi = G.some(g=>g.isAi), pending = anyAi && s.grade < 8;
+    let overall;
+    if (ex.scale==='ielts') { const ok = G.every(g=>!g.pend); const nums = G.map(g=>g.num||0); const avg = nums.reduce((a,b)=>a+b,0)/Math.max(1,nums.length); const band = Math.round(avg*2)/2;
+      overall = { label: ok ? 'OVERALL BAND' : 'OVERALL BAND · WAITING FOR AI', value: ok ? band.toFixed(1) : '…', sub: ok ? 'CEFR equivalent: '+this.ieltsToCefr(band)+'. Writing and Speaking are shown as a range.' : 'Listening and Reading are final. Writing and Speaking are being graded.' }; }
+    else if (ex.scale==='cefr') { const ok = G.every(g=>!g.pend); const avg = G.reduce((a,g)=>a+(g.num||0),0)/Math.max(1,G.length);
+      overall = { label:'OVERALL LEVEL', value: ok ? this.cefrLevel(avg) : '…', sub: ok ? Math.round(avg)+' / 75 average across skills' : 'Writing and Speaking are being graded.' }; }
+    else if (ex.scale==='sat') { const tot = G.reduce((a,g)=>a+(g.num||0),0); overall = { label:'ESTIMATED TOTAL', value:String(tot), sub:'400–1600 scale. Estimated: the official adaptive scoring formula is not public.' }; }
+    else if (ex.scale==='toefl') { const ok = G.every(g=>!g.pend); const avg = Math.round(G.reduce((a,g)=>a+(g.num||0),0)/Math.max(1,G.length)*2)/2;
+      overall = { label:'ESTIMATED OVERALL', value: ok ? avg.toFixed(1) : '…', sub: ok ? '1–6 scale · CEFR equivalent: '+this.toeflToCefr(avg)+'. Estimated score.' : 'Writing and Speaking are being graded.' }; }
+    else { const ok = G.every(g=>!g.pend); const tot = G.reduce((a,g)=>a+(g.num||0),0); const max = G.length*100;
+      overall = { label:'TOTAL SCORE', value: ok ? tot+'' : '…', sub: ok ? 'out of '+max+'. Pass mark: '+Math.round(max*0.6)+'. '+(tot>=max*0.6?'Passed.':'Not passed yet.') : 'Writing is being graded.' }; }
+    const idx = Math.min(s.detIdx, G.length-1);
+    const groups = G.map((g,i)=>{ const m = g.isAi ? (g.mixed?['#7A4E00','#FFF1D6']:['#5B3FD1','#EEE9FF']) : ['#1F7A55','#E5F5EE'];
+      return { name:g.name, score:g.score, sub: g.sub + (g.estimate && !g.pend ? ' · estimate' : ''), color:g.color, method:g.method, mFg:m[0], mBg:m[1], bd: i===idx?A:'transparent', pick: () => this.setState({ detIdx:i }) }; });
+    const g = G[idx];
+    const rows = g.objs.map((x,i)=>{ const ok = this.correct(x.q, s.ans[x.id]); return { n:i+1, yours: this.answerText(x.q, s.ans[x.id]), correct: this.keyText(x.q, x.sec), wrong: !ok, bg: ok?'#E5F5EE':'#FDECEE', fg: ok?'#1F9D6B':'#C23A4C' }; });
+    let det = { name: g.name, how: '', isObjective: !g.isAi || g.mixed, isAi: g.isAi, pending: g.pend, done: !g.pend, rows, criteria:[], facts:[], texts:[] };
+    if (!g.isAi) det.how = 'Scored automatically against the answer key, then converted with the score table. Accepted spelling variants count as correct.';
+    if (g.isAi) {
+      det.how = g.sec0.kind==='speaking' ? 'Speech-to-text → AI grades fluency, vocabulary, grammar. Pronunciation is graded by a separate API from the audio.' : 'AI graded each response twice against the official public criteria. Word count is calculated by the system.';
+      if (g.essays.length) {
+        const first = g.essays.find(e=>e.res.crit) ;
+        det.criteria = first ? first.res.crit.map(c=>({ name:c[0], score: ex.scale==='ielts' ? c[1].toFixed(1) : (ex.scale==='toefl' ? (Math.round(c[1]/9*6*2)/2).toFixed(1) : Math.round(c[1]/9*100)+'%'), w: Math.round(c[1]/9*100)+'%', note:c[2] })) : [];
+        if (!first) det.criteria = [{ name:'No text submitted', score:'0', w:'0%', note:'The task was left empty, so it scores zero.' }];
+        det.facts = g.essays.map(e=> e.p.label+': '+e.res.words+(e.p.zh?' characters':' words')+(e.res.words<e.p.min?' (below '+e.p.min+')':'') ).concat(['Pass 1 and pass 2 agreed within 0.5', 'Shown as a range']);
+        det.texts = g.essays.map(e=>({ label: e.p.label+' · your response', body: (s.essays[g.sis[0]+'.'+g.sec0.parts.indexOf(e.p)]||'').trim() || '(empty)' }));
+      }
+      if (g.spk) {
+        det.criteria = g.spk.crit.map(c=>({ name:c[0], score: ex.scale==='ielts' ? c[1].toFixed(1) : ex.scale==='toefl' ? (Math.round(c[1]/9*6*2)/2).toFixed(1) : Math.round(c[1]/9*100)+'%', w: Math.round(c[1]/9*100)+'%', note:c[2] }));
+        det.facts = [g.spk.items+' answers recorded', 'Speech-to-text transcript', 'Pronunciation API', 'Shown as a range'];
+        det.texts = [{ label:'Transcript sample (speech-to-text)', body:'"Well, I think the place that changed the most is the old bazaar near my house. Before, it was, um, quite small and crowded, but now there is a new building with a parking area…"' }];
+      }
+    }
+    return { overall, groups, det, pending, gradePct: Math.min(100, s.grade/8*100)+'%',
+      gradeStep: s.grade < 3 ? 'Transcribing speech…' : s.grade < 6 ? 'Pass 1 and pass 2…' : 'Combining scores…',
+      isListening:false, isSpeaking:false, isSat:false, showGeneric:false, showEssay:false, showQNav:false };
+  }
+}
+</script>
+</body>
+</html>

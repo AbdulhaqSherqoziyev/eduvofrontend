@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { studentsApi } from '../api/students';
+import { enrollmentsApi, studentsApi } from '../api/students';
 import type {
-  CreateStudentInput, ParentCredentialsInput, SetStudentCredentialsInput, StudentListParams,
+  ParentCredentialsInput, SetStudentCredentialsInput, StudentListParams,
+  UpdateEnrollmentPriceInput, UpdateStudentInput,
 } from '../types/student';
 
 const KEY = 'students';
@@ -32,10 +33,30 @@ export function useCreateStudent() {
   return useMutation({ mutationFn: studentsApi.create, onSuccess: invalidate });
 }
 
+/** Group changes rewrite this month's invoices — refresh the money views too. */
+function useInvalidateWithMoney() {
+  const qc = useQueryClient();
+  return () => {
+    qc.invalidateQueries({ queryKey: [KEY] });
+    qc.invalidateQueries({ queryKey: ['groups'] });
+    qc.invalidateQueries({ queryKey: ['invoices'] });
+    qc.invalidateQueries({ queryKey: ['payment-summary'] });
+  };
+}
+
 export function useUpdateStudent(id: string) {
-  const invalidate = useInvalidate();
+  const invalidate = useInvalidateWithMoney();
   return useMutation({
-    mutationFn: (input: Partial<CreateStudentInput>) => studentsApi.update(id, input),
+    mutationFn: (input: UpdateStudentInput) => studentsApi.update(id, input),
+    onSuccess: invalidate,
+  });
+}
+
+/** Add the student to one more group (POST /students/:id/enrollments). */
+export function useAddStudentGroup(id: string) {
+  const invalidate = useInvalidateWithMoney();
+  return useMutation({
+    mutationFn: (groupId: string) => studentsApi.addGroup(id, groupId),
     onSuccess: invalidate,
   });
 }
@@ -88,4 +109,22 @@ export function useCreateParent(id: string) {
 export function useSetParentCredentials(id: string, parentId: string) {
   return useCredMutation(id, (input: ParentCredentialsInput) =>
     studentsApi.setParentCredentials(id, parentId, input));
+}
+
+/**
+ * A student's own price. No optimistic update: whether this month's invoice
+ * moves is the server's call (`appliedTo`). Profile and roster both refresh.
+ */
+export function useUpdateEnrollmentPrice(enrollmentId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: UpdateEnrollmentPriceInput) => enrollmentsApi.setPrice(enrollmentId, input),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [KEY] });
+      qc.invalidateQueries({ queryKey: ['groups'] });
+      // CURRENT_PERIOD rewrites this month's invoice — the payments table too.
+      qc.invalidateQueries({ queryKey: ['invoices'] });
+      qc.invalidateQueries({ queryKey: ['payment-summary'] });
+    },
+  });
 }

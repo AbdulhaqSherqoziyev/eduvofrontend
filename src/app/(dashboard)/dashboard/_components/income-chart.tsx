@@ -26,7 +26,7 @@ export function IncomeChart() {
         query={query}
         loading={<Skeleton className="h-[240px] w-full" />}
         isEmpty={(d) => d.length === 0}
-        empty={<EmptyState title="Ma,lumot yo,q" />}
+        empty={<EmptyState title="Ma'lumot yo'q" />}
       >
         {(data) => {
           const { linePath, areaPath, points } = buildChart(data);

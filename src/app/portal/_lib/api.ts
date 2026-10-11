@@ -147,7 +147,7 @@ export interface PendingMarks {
   groupId: string;
   groupName: string;
   at: string;
-  marks: { studentId: string; status: string; lateMinutes: number }[];
+  marks: { studentId: string; status: string; lateMinutes: number; score?: number | null }[];
 }
 
 export function readPending(lessonId: string): PendingMarks | null {

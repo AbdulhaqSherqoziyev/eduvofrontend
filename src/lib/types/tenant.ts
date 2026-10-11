@@ -14,4 +14,8 @@ export interface TenantSettings {
   cashOpening: number;
   cardOpening: number;
   openingAt: string | null;
+  /** Homework scale (§A.14): 0 = not scored, otherwise the maximum score for NEW assignments. */
+  homeworkScale: number;
+  /** TWO | THREE — stored for a later wave, not shown in the UI. */
+  homeworkMode: 'TWO' | 'THREE';
 }

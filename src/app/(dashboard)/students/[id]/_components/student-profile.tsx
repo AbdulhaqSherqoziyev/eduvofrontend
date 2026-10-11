@@ -1,8 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { CalendarCheck, ChevronLeft, ClipboardList, CreditCard, Users, Wallet } from 'lucide-react';
+import { CalendarCheck, ChevronLeft, ClipboardList, CreditCard, Plus, Users, Wallet } from 'lucide-react';
 import { NmCard } from '@/components/ui/nm-card';
+import { NmButton } from '@/components/ui/nm-button';
+import { can } from '@/lib/auth/permissions';
+import { ADD_TO_GROUP } from '@/lib/utils/group-move';
 import { Avatar } from '@/components/ui/avatar';
 import { StatusPill } from '@/components/shared/status-pill';
 import { QueryBoundary } from '@/components/shared/query-boundary';
@@ -12,7 +16,11 @@ import { formatSom } from '@/lib/utils/format';
 import { formatDate } from '@/lib/utils/date';
 import { cn } from '@/lib/utils/cn';
 import { INVOICE_STATUS_META, type InvoiceStatus } from '@/lib/types/payment';
-import { STUDENT_STATUS_META } from '@/lib/types/student';
+import { STUDENT_STATUS_META, type StudentProfileGroup } from '@/lib/types/student';
+import { NO_GROUPS } from '@/lib/utils/price-labels';
+import { EnrollmentPriceDialog } from './enrollment-price-dialog';
+import { ProfileGroupCard } from './profile-group-card';
+import { GroupChangeDialog } from './group-change-dialog';
 
 function Stat({ label, value, tone }: { label: string; value: string; tone?: 'success' | 'warning' | 'danger' | 'muted' }) {
   const color =
@@ -25,9 +33,9 @@ function Stat({ label, value, tone }: { label: string; value: string; tone?: 'su
   );
 }
 
-function SectionTitle({ icon: Icon, children }: { icon: typeof Users; children: React.ReactNode }) {
+function SectionTitle({ icon: Icon, children, className }: { icon: typeof Users; children: React.ReactNode; className?: string }) {
   return (
-    <div className="mb-3 flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-[0.6px] text-muted">
+    <div className={cn('mb-3 flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-[0.6px] text-muted', className)}>
       <Icon className="size-4 text-primary" strokeWidth={2.2} /> {children}
     </div>
   );
@@ -36,6 +44,10 @@ function SectionTitle({ icon: Icon, children }: { icon: typeof Users; children: 
 /** Full student profile: header, groups, attendance, finance, assignments. */
 export function StudentProfileView({ id }: { id: string }) {
   const query = useStudentProfile(id);
+  const [priceGroup, setPriceGroup] = useState<StudentProfileGroup | null>(null);
+  // null = closed; { from: undefined } = add one more group; { from } = move out of it.
+  const [groupChange, setGroupChange] = useState<{ from?: StudentProfileGroup } | null>(null);
+  const canChangeGroups = can('student.update');
 
   return (
     <section className="flex flex-col gap-5">
@@ -78,25 +90,25 @@ export function StudentProfileView({ id }: { id: string }) {
 
               <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
                 <NmCard className="p-[20px]">
-                  <SectionTitle icon={Users}>Guruhlari</SectionTitle>
+                  <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                    <SectionTitle icon={Users} className="mb-0">Guruhlari</SectionTitle>
+                    {canChangeGroups ? (
+                      <NmButton type="button" variant="soft" size="sm" onClick={() => setGroupChange({})}>
+                        <Plus className="size-[15px]" strokeWidth={2.4} /> {ADD_TO_GROUP}
+                      </NmButton>
+                    ) : null}
+                  </div>
                   {p.groups.length === 0 ? (
-                    <p className="text-[13px] font-semibold text-muted">Guruhga biriktirilmagan.</p>
+                    <p className="text-[13px] font-semibold text-muted">{NO_GROUPS}</p>
                   ) : (
                     <div className="flex flex-col gap-2.5">
                       {p.groups.map((g) => (
-                        <Link key={g.id} href={`/groups/${g.id}`}
-                          className="flex items-center justify-between rounded-[14px] bg-background px-4 py-3 shadow-nm-sm nm-pressable">
-                          <div className="min-w-0">
-                            <div className="truncate text-[13.5px] font-bold text-foreground">{g.name}</div>
-                            <div className="truncate text-[12px] font-semibold text-muted">
-                              {[g.subjectName, g.teacherName].filter(Boolean).join(' · ') || '—'}
-                            </div>
-                          </div>
-                          <div className="text-right text-[12px] font-semibold text-muted">
-                            <div>{[g.schedule, g.startTime].filter(Boolean).join(' · ')}</div>
-                            <div className="font-bold text-foreground">{formatSom(g.price)} / oy</div>
-                          </div>
-                        </Link>
+                        <ProfileGroupCard
+                          key={g.id}
+                          group={g}
+                          onEditPrice={() => setPriceGroup(g)}
+                          onMove={() => setGroupChange({ from: g })}
+                        />
                       ))}
                     </div>
                   )}
@@ -166,6 +178,28 @@ export function StudentProfileView({ id }: { id: string }) {
                   {p.assignments.avgScore != null ? p.assignments.avgScore : '—'}
                 </p>
               </NmCard>
+
+              {priceGroup ? (
+                <EnrollmentPriceDialog
+                  key={priceGroup.enrollmentId}
+                  open
+                  onOpenChange={(o) => { if (!o) setPriceGroup(null); }}
+                  studentName={p.fullName}
+                  // Live row, so a refetch after saving reaches the open dialog.
+                  group={p.groups.find((g) => g.enrollmentId === priceGroup.enrollmentId) ?? priceGroup}
+                />
+              ) : null}
+
+              {groupChange ? (
+                <GroupChangeDialog
+                  key={groupChange.from?.enrollmentId ?? 'add'}
+                  open
+                  onOpenChange={(o) => { if (!o) setGroupChange(null); }}
+                  studentId={p.id}
+                  memberGroupIds={p.groups.map((g) => g.id)}
+                  from={groupChange.from}
+                />
+              ) : null}
             </>
           );
         }}

@@ -21,6 +21,8 @@ export interface Group {
   attendanceRate: number;
   level: GroupLevel;
   createdAt: string;
+  /** Students paying their own price here. `GET /groups/:id` only, `payment.read` only. */
+  customPriceCount?: number;
 }
 
 export interface RosterEntry {
@@ -30,6 +32,9 @@ export interface RosterEntry {
   status: StudentStatus;
   balance: number;
   recentAttendance: AttendanceStatus[];
+  /** Present only for `payment.read` (never for the teacher). null = group price, 0 = free. */
+  customPrice?: number | null;
+  effectivePrice?: number;
 }
 
 export interface CreateGroupInput {

@@ -20,7 +20,7 @@ export function DebtorsCard() {
         query={query}
         loading={<RowsSkeleton rows={5} />}
         isEmpty={(d) => d.length === 0}
-        empty={<EmptyState title="Qarzdorlar yo,q" />}
+        empty={<EmptyState title="Qarzdorlar yo'q" />}
       >
         {(list) => (
           <>

@@ -9,13 +9,28 @@ import {
   ATT_LABEL,
   lessonSplit,
   nextLessonLine,
+  scoreLabel,
   todayLessonLine,
+  type AttendanceRow,
   type Overview,
 } from '../_lib/types';
 import { PortalAssignment, type AssignmentRow } from './portal-assignment';
 import { GamificationCard, RatingBreakdown, RatingChip, StreakWell, isNewStudent } from './portal-gamification';
+import { PortalMockCard } from '@/components/exams-hub/portal-mock-card';
 
 const CARD = 'p-4 sm:p-5';
+
+/** "Keldi +5' · Baho 4 / 5" — the word first, the score (when there is one) after it. */
+function AttendanceWord({ a }: { a: AttendanceRow }) {
+  const score = scoreLabel(a);
+  return (
+    <span className="shrink-0 font-bold text-foreground">
+      {ATT_LABEL[a.status] ?? a.status}
+      {a.lateMinutes ? ` +${a.lateMinutes}'` : ''}
+      {score ? <span className="font-semibold text-muted"> · {score}</span> : null}
+    </span>
+  );
+}
 
 /** Homework the child still owes, soonest first. */
 export function pendingAssignments(list: AssignmentRow[]): AssignmentRow[] {
@@ -82,6 +97,9 @@ export function StudentHome({
         </NmCard>
       )}
 
+      {/* Mock imtihonlar (_hub-design.md §6) — hidden by itself when the module is off. */}
+      <PortalMockCard />
+
       {g && !isNewStudent(g) ? <StreakWell streak={g.streak} /> : null}
       {g ? <GamificationCard g={g} rating={d.rating} role={d.role} hideStreak /> : null}
 
@@ -94,10 +112,7 @@ export function StudentHome({
                 <span className="truncate font-semibold text-muted">
                   {dotDate(a.date)} · {a.group}
                 </span>
-                <span className="shrink-0 font-bold text-foreground">
-                  {ATT_LABEL[a.status] ?? a.status}
-                  {a.lateMinutes ? ` +${a.lateMinutes}'` : ''}
-                </span>
+                <AttendanceWord a={a} />
               </div>
             ))}
           </div>
@@ -174,10 +189,7 @@ export function AttendanceTab({ d, name }: { d: Overview; name?: string }) {
                 <span className="truncate font-semibold text-muted">
                   {dotDate(a.date)} · {a.group}
                 </span>
-                <span className="shrink-0 font-bold text-foreground">
-                  {ATT_LABEL[a.status] ?? a.status}
-                  {a.lateMinutes ? ` +${a.lateMinutes}'` : ''}
-                </span>
+                <AttendanceWord a={a} />
               </div>
             ))}
           </div>

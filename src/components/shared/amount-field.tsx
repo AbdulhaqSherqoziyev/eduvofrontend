@@ -20,6 +20,8 @@ interface AmountFieldProps {
   error?: string;
   /** Extra lines under the words (balance hint, approval-limit notice). */
   children?: React.ReactNode;
+  /** Defaults to "0"; a sample figure where "0" would read as a real answer (free). */
+  placeholder?: string;
 }
 
 /**
@@ -31,7 +33,7 @@ interface AmountFieldProps {
  * silently — a minus sign would let a negative amount through validation.
  */
 export function AmountField({
-  label, id = 'amount', value, onChange, autoFocus, disabled, error, children,
+  label, id = 'amount', value, onChange, autoFocus, disabled, error, children, placeholder = '0',
 }: AmountFieldProps) {
   const words = somToWords(Number(value || 0));
   return (
@@ -43,7 +45,7 @@ export function AmountField({
           inputMode="numeric"
           autoFocus={autoFocus}
           disabled={disabled}
-          placeholder="0"
+          placeholder={placeholder}
           value={value ? formatNumber(Number(value)) : ''}
           onChange={(e) => onChange(e.target.value.replace(/\D/g, '').replace(/^0+(?=\d)/, ''))}
           className="h-[54px] pr-[62px] text-[20px] font-extrabold text-primary"

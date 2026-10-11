@@ -1,0 +1,1174 @@
+{
+ "chrome.next": [
+  "Next",
+  "Keyingi"
+ ],
+ "chrome.previous": [
+  "Previous",
+  "Oldingi"
+ ],
+ "chrome.flag": [
+  "Flag for review",
+  "Ko'rib chiqishga belgilash"
+ ],
+ "chrome.unflag": [
+  "Unflag",
+  "Belgini olish"
+ ],
+ "chrome.flag_sat": [
+  "Mark for Review",
+  "Ko'rib chiqishga belgilash"
+ ],
+ "chrome.flagged": [
+  "Flagged",
+  "Belgilangan"
+ ],
+ "chrome.finish_section": [
+  "Finish section",
+  "Bo'limni tugatish"
+ ],
+ "chrome.question_n_of_total": [
+  "Question {n} of {total}",
+  "Savol {n} / {total}"
+ ],
+ "chrome.timer_hide": [
+  "Hide timer",
+  "Taymerni yashirish"
+ ],
+ "chrome.timer_show": [
+  "Show timer",
+  "Taymerni ko'rsatish"
+ ],
+ "chrome.timer_hidden": [
+  "Timer hidden",
+  "Taymer yashirilgan"
+ ],
+ "chrome.timer_locked_tip": [
+  "The timer stays visible for the last 5 minutes.",
+  "Oxirgi 5 daqiqada taymer ko'rinib turadi."
+ ],
+ "chrome.review": [
+  "Review",
+  "Ko'rib chiqish"
+ ],
+ "chrome.settings": [
+  "Settings",
+  "Sozlamalar"
+ ],
+ "chrome.directions": [
+  "Directions",
+  "Yo'riqnoma"
+ ],
+ "chrome.help": [
+  "Help",
+  "Yordam"
+ ],
+ "chrome.directions_timer_note": [
+  "The timer keeps running while this window is open.",
+  "Bu oyna ochiq turganda ham vaqt yuradi."
+ ],
+ "chrome.close": [
+  "Close",
+  "Yopish"
+ ],
+ "chrome.volume": [
+  "Volume",
+  "Ovoz balandligi"
+ ],
+ "chrome.text_size": [
+  "Text size",
+  "Matn o'lchami"
+ ],
+ "chrome.font_s": [
+  "Small",
+  "Kichik"
+ ],
+ "chrome.font_m": [
+  "Medium",
+  "O'rta"
+ ],
+ "chrome.font_l": [
+  "Large",
+  "Katta"
+ ],
+ "chrome.theme": [
+  "Colours",
+  "Ranglar"
+ ],
+ "chrome.theme_standard": [
+  "Standard",
+  "Standart"
+ ],
+ "chrome.theme_wob": [
+  "White on black",
+  "Qora fonda oq"
+ ],
+ "chrome.theme_cream": [
+  "Cream",
+  "Krem"
+ ],
+ "chrome.interface_lang": [
+  "Interface language",
+  "Interfeys tili"
+ ],
+ "chrome.interface_en": [
+  "English",
+  "English"
+ ],
+ "chrome.interface_uz": [
+  "O'zbekcha",
+  "O'zbekcha"
+ ],
+ "chrome.return_fullscreen": [
+  "Return to fullscreen",
+  "To'liq ekranga qaytish"
+ ],
+ "chrome.continue": [
+  "Continue",
+  "Davom etish"
+ ],
+ "chrome.start_section": [
+  "Start {section}",
+  "{section} bo'limini boshlash"
+ ],
+ "chrome.keep_working": [
+  "Keep working",
+  "Davom etaman"
+ ],
+ "chrome.finish_and_lock": [
+  "Finish and lock",
+  "Tugatish va yopish"
+ ],
+ "chrome.cancel": [
+  "Cancel",
+  "Bekor qilish"
+ ],
+ "chrome.enter_fullscreen_start": [
+  "Enter fullscreen and start",
+  "To'liq ekranga o'tish va boshlash"
+ ],
+ "chrome.try_interface": [
+  "Try the interface",
+  "Interfeysni sinab ko'rish"
+ ],
+ "chrome.check_again": [
+  "Check again",
+  "Qayta tekshirish"
+ ],
+ "chrome.play_sample": [
+  "Play sample",
+  "Namunani eshitish"
+ ],
+ "chrome.play_again": [
+  "Play again",
+  "Qayta eshitish"
+ ],
+ "chrome.record_5s": [
+  "Record 5 s",
+  "5 soniya yozish"
+ ],
+ "chrome.play_back": [
+  "Play back",
+  "Eshitib ko'rish"
+ ],
+ "chrome.finish_answer": [
+  "Finish answer",
+  "Javobni tugatish"
+ ],
+ "chrome.repeat_question": [
+  "Repeat question",
+  "Savolni qayta eshitish"
+ ],
+ "chrome.repeat_question_used": [
+  "Question repeated",
+  "Savol qayta eshittirildi"
+ ],
+ "chrome.take_another_mock": [
+  "Take another mock",
+  "Yana bir mock topshirish"
+ ],
+ "chrome.practice_type": [
+  "Practice: {type} · {n} questions",
+  "Mashq: {type} · {n} ta savol"
+ ],
+ "chrome.back_to_eduvo": [
+  "Back to Eduvo",
+  "Eduvo'ga qaytish"
+ ],
+ "chrome.retry": [
+  "Retry",
+  "Qayta urinish"
+ ],
+ "chrome.highlight": [
+  "Highlight",
+  "Belgilash"
+ ],
+ "chrome.note": [
+  "Note",
+  "Eslatma"
+ ],
+ "chrome.clear": [
+  "Clear",
+  "Tozalash"
+ ],
+ "chrome.notes_panel": [
+  "Notes",
+  "Qaydlar"
+ ],
+ "chrome.calculator": [
+  "Calculator",
+  "Kalkulyator"
+ ],
+ "chrome.reference": [
+  "Reference",
+  "Formulalar"
+ ],
+ "chrome.next_task": [
+  "Next task",
+  "Keyingi topshiriq"
+ ],
+ "chrome.back_to_question": [
+  "Back to question",
+  "Savolga qaytish"
+ ],
+ "chrome.resume_testing": [
+  "Resume testing",
+  "Testni davom ettirish"
+ ],
+ "chrome.view_results": [
+  "View results",
+  "Natijalarni ko'rish"
+ ],
+ "precheck.title": [
+  "Before you start",
+  "Boshlashdan oldin"
+ ],
+ "precheck.nothing_started": [
+  "Nothing has started yet — the timer is not running.",
+  "Hali hech narsa boshlanmadi, vaqt yurmayapti."
+ ],
+ "precheck.subtitle": [
+  "Check your headphones, microphone and connection. Take your time.",
+  "Naushnik, mikrofon va internetni tekshiring. Shoshilmang."
+ ],
+ "precheck.lang_note": [
+  "Exam buttons are in English, like in the real exam.",
+  "Tugmalar haqiqiy imtihondagidek ingliz tilida."
+ ],
+ "precheck.status_not_checked": [
+  "Not checked yet",
+  "Hali tekshirilmagan"
+ ],
+ "precheck.status_checking": [
+  "Checking…",
+  "Tekshirilmoqda…"
+ ],
+ "precheck.status_ready": [
+  "Ready",
+  "Tayyor"
+ ],
+ "precheck.status_attention": [
+  "Needs attention",
+  "E'tibor bering"
+ ],
+ "precheck.headphones_title": [
+  "Headphones",
+  "Naushnik"
+ ],
+ "precheck.headphones_body": [
+  "Put on your headphones and press Play sample. Adjust the volume until the voice is clear.",
+  "Naushnikni taqing va \"Namunani eshitish\"ni bosing. Ovoz aniq eshitilguncha balandligini sozlang."
+ ],
+ "precheck.headphones_yes": [
+  "I can hear it clearly",
+  "Aniq eshityapman"
+ ],
+ "precheck.headphones_no": [
+  "I can't hear anything",
+  "Hech narsa eshitilmayapti"
+ ],
+ "precheck.mic_title": [
+  "Microphone",
+  "Mikrofon"
+ ],
+ "precheck.mic_body": [
+  "Press Record 5 s, say one sentence, then play it back.",
+  "\"5 soniya yozish\"ni bosing, bitta jumla ayting, keyin eshitib ko'ring."
+ ],
+ "precheck.mic_permission": [
+  "Your browser will ask for microphone access. Choose Allow.",
+  "Brauzer mikrofonga ruxsat so'raydi. \"Ruxsat berish\"ni tanlang."
+ ],
+ "precheck.mic_recording": [
+  "Recording… {s}",
+  "Yozilmoqda… {s}"
+ ],
+ "precheck.mic_yes": [
+  "I can hear my voice",
+  "Ovozimni eshityapman"
+ ],
+ "precheck.mic_quiet_room": [
+  "Speaking is recorded. A quiet place makes the recording clearer.",
+  "Speaking yoziladi. Tinch joyda yozuv aniqroq chiqadi."
+ ],
+ "precheck.conn_title": [
+  "Connection",
+  "Internet"
+ ],
+ "precheck.conn_measuring": [
+  "Measuring your connection…",
+  "Ulanish o'lchanmoqda…"
+ ],
+ "precheck.conn_stable": [
+  "Stable",
+  "Barqaror"
+ ],
+ "precheck.conn_weak": [
+  "Slow connection. You can still start — answers are saved on this device and sent when the connection improves.",
+  "Ulanish sekin. Baribir boshlashingiz mumkin — javoblar shu qurilmada saqlanadi va ulanish yaxshilanganda yuboriladi."
+ ],
+ "precheck.conn_offline": [
+  "No connection. Connect to the internet, then press Check again.",
+  "Internet yo'q. Internetga ulaning, keyin \"Qayta tekshirish\"ni bosing."
+ ],
+ "precheck.media_loading": [
+  "Loading exam audio · {p}%",
+  "Imtihon audiosi yuklanmoqda · {p}%"
+ ],
+ "precheck.media_ready": [
+  "Exam audio loaded",
+  "Imtihon audiosi yuklandi"
+ ],
+ "precheck.fullscreen_title": [
+  "Fullscreen",
+  "To'liq ekran"
+ ],
+ "precheck.fullscreen_body": [
+  "The exam opens in fullscreen to help you focus.",
+  "Diqqatingiz chalg'imasligi uchun imtihon to'liq ekranda ochiladi."
+ ],
+ "precheck.ime_title": [
+  "Chinese input",
+  "Xitoycha yozish"
+ ],
+ "precheck.ime_body": [
+  "Switch your keyboard to Chinese (Pinyin) and type 你好 in the box.",
+  "Klaviaturani xitoycha (Pinyin) ga o'tkazing va maydonga 你好 deb yozing."
+ ],
+ "precheck.ime_placeholder": [
+  "Type 你好",
+  "你好 deb yozing"
+ ],
+ "precheck.ime_passed": [
+  "Chinese input works",
+  "Xitoycha yozish ishlayapti"
+ ],
+ "precheck.ime_needed": [
+  "Needed for the Writing section",
+  "Writing bo'limi uchun kerak"
+ ],
+ "precheck.ime_help_title": [
+  "How to turn on Chinese input",
+  "Xitoycha yozishni qanday yoqish mumkin"
+ ],
+ "precheck.ime_help_win": [
+  "Windows: Settings → Time & language → Language → Add Chinese (Simplified). Switch with Win + Space.",
+  "Windows: Sozlamalar → Vaqt va til → Til → Xitoy (soddalashtirilgan) qo'shing. Win + Space bilan almashtiring."
+ ],
+ "precheck.ime_help_mac": [
+  "macOS: System Settings → Keyboard → Input Sources → add Pinyin – Simplified. Switch with Ctrl + Space.",
+  "macOS: Tizim sozlamalari → Klaviatura → Kiritish manbalari → Pinyin – Simplified qo'shing. Ctrl + Space bilan almashtiring."
+ ],
+ "precheck.ime_fullscreen_note": [
+  "The Chinese input window won't take you out of fullscreen.",
+  "Xitoycha yozish oynasi to'liq ekrandan chiqarib yubormaydi."
+ ],
+ "precheck.try_title": [
+  "Try the interface",
+  "Interfeysni sinab ko'ring"
+ ],
+ "precheck.try_body": [
+  "2 minutes · 3 practice questions, a short audio and a 10-second recording. Not scored.",
+  "2 daqiqa · 3 ta mashq savoli, qisqa audio va 10 soniyalik yozuv. Baholanmaydi."
+ ],
+ "precheck.try_bar": [
+  "Practice mode — not scored. The real exam timer has not started.",
+  "Mashq rejimi — baholanmaydi. Imtihon vaqti hali boshlanmagan."
+ ],
+ "precheck.try_exit": [
+  "Back to checks",
+  "Tekshiruvga qaytish"
+ ],
+ "precheck.try_done": [
+  "That's how it works. You're ready when you are.",
+  "Hammasi shunday ishlaydi. Tayyor bo'lsangiz, boshlang."
+ ],
+ "precheck.audio_only_toggle": [
+  "Exam mode: questions as audio only",
+  "Imtihon rejimi: savollar faqat ovozda"
+ ],
+ "precheck.audio_only_hint": [
+  "Like the real IELTS Speaking test — question text will not appear on screen.",
+  "Haqiqiy IELTS Speaking'dagidek — savol matni ekranda chiqmaydi."
+ ],
+ "precheck.rules_title": [
+  "Rules",
+  "Qoidalar"
+ ],
+ "precheck.rule_timer": [
+  "Each section has its own timer. It keeps running even if you close the browser.",
+  "Har bo'limning o'z taymeri bor. Brauzer yopilsa ham vaqt yuraveradi."
+ ],
+ "precheck.rule_lock": [
+  "After you finish a section, you can't go back to it.",
+  "Bo'limni tugatgach, unga qaytib bo'lmaydi."
+ ],
+ "precheck.rule_autosave": [
+  "Your answers save automatically, even if the internet drops.",
+  "Javoblaringiz avtomatik saqlanadi, internet uzilsa ham."
+ ],
+ "precheck.rule_exits": [
+  "Leaving fullscreen or switching tabs is noted in your report. It doesn't stop the exam.",
+  "To'liq ekrandan chiqish yoki boshqa oynaga o'tish hisobotda qayd etiladi. Imtihonni to'xtatmaydi."
+ ],
+ "precheck.rule_ielts": [
+  "IELTS-format mock · Listening audio plays once · Writing has no spellcheck.",
+  "IELTS formatidagi mock · Listening audiosi bir marta eshittiriladi · Writing'da imlo tekshiruvi yo'q."
+ ],
+ "precheck.rule_cefr": [
+  "CEFR-format practice test: structure, timing and the 75-point scale follow the official format; the interface is not official and not linked to UZBMB. Each recording plays twice.",
+  "CEFR formatidagi mashq testi: tuzilma, vaqt va 75 ballik shkala rasmiyga mos; interfeys rasmiy emas va UZBMB bilan bog'liq emas. Har yozuv ikki marta eshittiriladi."
+ ],
+ "precheck.rule_sat": [
+  "Digital SAT-format mock · 2 modules per section · 10-minute break between sections · Calculator in Math.",
+  "Digital SAT formatidagi mock · har bo'limda 2 modul · bo'limlar orasida 10 daqiqa tanaffus · Math'da kalkulyator bor."
+ ],
+ "precheck.rule_toefl": [
+  "TOEFL iBT-format mock · In Listening you can't go back to earlier questions · Each Writing and Speaking task has its own timer.",
+  "TOEFL iBT formatidagi mock · Listening'da oldingi savollarga qaytib bo'lmaydi · Writing va Speaking'da har topshiriqning o'z taymeri bor."
+ ],
+ "precheck.rule_hsk": [
+  "HSK-format mock · Answers are typed with Chinese (Pinyin) input · Listening plays {n} time(s).",
+  "HSK formatidagi mock · Javoblar xitoycha (Pinyin) klaviaturada yoziladi · Listening {n} marta eshittiriladi."
+ ],
+ "precheck.cta_hint": [
+  "Finish the checks above to start",
+  "Boshlash uchun yuqoridagi tekshiruvlarni tugating"
+ ],
+ "intro.prev_submitted": [
+  "✓ {section} submitted",
+  "✓ {section} bo'limi topshirildi"
+ ],
+ "intro.section_n_of_m": [
+  "SECTION {n} OF {m}",
+  "BO'LIM {n} / {m}"
+ ],
+ "intro.tile_time": [
+  "TIME",
+  "VAQT"
+ ],
+ "intro.tile_content": [
+  "CONTENT",
+  "TARKIB"
+ ],
+ "intro.tile_scoring": [
+  "SCORING",
+  "BAHOLASH"
+ ],
+ "intro.time_value": [
+  "{min} minutes",
+  "{min} daqiqa"
+ ],
+ "intro.content_questions": [
+  "{n} questions · {parts} parts",
+  "{n} ta savol · {parts} ta qism"
+ ],
+ "intro.content_tasks": [
+  "{n} tasks",
+  "{n} ta topshiriq"
+ ],
+ "intro.scoring_auto": [
+  "Scored automatically",
+  "Avtomatik baholanadi"
+ ],
+ "intro.scoring_ai": [
+  "Estimated by AI · a teacher checks when needed",
+  "AI taxmini · kerak bo'lsa o'qituvchi tekshiradi"
+ ],
+ "intro.timer_note": [
+  "The timer starts when you press Start.",
+  "Vaqt \"Start\" bosilgandan keyin boshlanadi."
+ ],
+ "intro.plays_once": [
+  "Audio plays once · no pause or replay",
+  "Audio bir marta · pauza va qaytarish yo'q"
+ ],
+ "intro.plays_twice": [
+  "Each recording plays twice",
+  "Har yozuv ikki marta eshittiriladi"
+ ],
+ "intro.loading": [
+  "Preparing audio… {p}%",
+  "Audio tayyorlanmoqda… {p}%"
+ ],
+ "intro.suggested_time": [
+  "Suggested: {min} min for {task}",
+  "Tavsiya: {task} uchun {min} daqiqa"
+ ],
+ "intro.cefr_typed": [
+  "In the official exam Writing is handwritten; here you type.",
+  "Rasmiy imtihonda Writing qo'lda yoziladi, bu yerda klaviaturada yozasiz."
+ ],
+ "intro.section_continues": [
+  "Section continues",
+  "Bo'lim davom etadi"
+ ],
+ "intro.module_submitted": [
+  "Module {n} submitted",
+  "{n}-modul topshirildi"
+ ],
+ "intro.speaking_later": [
+  "You can take Speaking now or later, in a quiet room.",
+  "Speaking'ni hozir yoki keyinroq, tinch xonada topshirishingiz mumkin."
+ ],
+ "intro.break_title": [
+  "Break · {t}",
+  "Tanaffus · {t}"
+ ],
+ "intro.break_body": [
+  "Stand up, drink some water. When the break ends, you'll continue to Math.",
+  "O'rningizdan turing, suv iching. Tanaffus tugagach Math bo'limiga o'tasiz."
+ ],
+ "timer.warn10": [
+  "10 minutes left",
+  "10 daqiqa qoldi"
+ ],
+ "timer.warn5": [
+  "5 minutes left — check unanswered questions",
+  "5 daqiqa qoldi — javobsiz savollarni tekshiring"
+ ],
+ "timer.task_n_of_m": [
+  "Task {n} of {m}",
+  "Topshiriq {n} / {m}"
+ ],
+ "timer.time_is_up": [
+  "Time is up",
+  "Vaqt tugadi"
+ ],
+ "timer.speaking_elapsed": [
+  "{elapsed} / {total}",
+  "{elapsed} / {total}"
+ ],
+ "timer.aria": [
+  "Time remaining: {min} minutes {sec} seconds",
+  "Qolgan vaqt: {min} daqiqa {sec} soniya"
+ ],
+ "timeup.title": [
+  "Time's up.",
+  "Vaqt tugadi."
+ ],
+ "timeup.body": [
+  "Your answers were submitted.",
+  "Javoblaringiz topshirildi."
+ ],
+ "timeup.writing_saved": [
+  "Your text was saved exactly as written.",
+  "Matningiz yozilganidek saqlandi."
+ ],
+ "timeup.next": [
+  "Next: {section} · {min} minutes",
+  "Keyingi: {section} · {min} daqiqa"
+ ],
+ "timeup.last": [
+  "That was the last section. Your results are being prepared.",
+  "Bu oxirgi bo'lim edi. Natijalaringiz tayyorlanmoqda."
+ ],
+ "banner.offline": [
+  "Reconnecting… Your answers are saved on this device. Keep going.",
+  "Ulanish tiklanmoqda… Javoblaringiz shu qurilmada saqlangan. Davom etavering."
+ ],
+ "banner.offline_long": [
+  "Still reconnecting. The timer continues on the server — your answers are safe on this device.",
+  "Ulanish hali tiklanmoqda. Vaqt server bo'yicha davom etmoqda — javoblaringiz shu qurilmada saqlangan."
+ ],
+ "banner.online_again": [
+  "Back online · everything synced",
+  "Ulanish tiklandi · hammasi saqlandi"
+ ],
+ "banner.fullscreen_exited": [
+  "You left fullscreen. The exam continues and the timer is running.",
+  "Siz to'liq ekrandan chiqdingiz. Imtihon davom etmoqda, vaqt yuribdi."
+ ],
+ "banner.tab_noted": [
+  "Switching away was noted. Your exam continues.",
+  "Boshqa oynaga o'tish qayd etildi. Imtihon davom etmoqda."
+ ],
+ "banner.audio_loading": [
+  "Loading audio… {p}% — your time isn't running yet.",
+  "Audio yuklanmoqda… {p}% — vaqtingiz hali yurmayapti."
+ ],
+ "banner.audio_failed": [
+  "The audio didn't load — this is on our side. Your time isn't running.",
+  "Audio yuklanmadi — bu bizning tomondagi muammo. Vaqtingiz ketmayapti."
+ ],
+ "banner.audio_report_skip": [
+  "Report & skip",
+  "Xabar berish va o'tkazib yuborish"
+ ],
+ "banner.audio_report_skip_note": [
+  "This part will be marked as a technical issue, not as wrong answers. Your center will see the report.",
+  "Bu qism texnik nosozlik deb belgilanadi, xato javob sifatida emas. Markazingiz xabarni ko'radi."
+ ],
+ "banner.mic_silent": [
+  "We can't hear you — check your microphone",
+  "Ovozingiz eshitilmayapti — mikrofonni tekshiring"
+ ],
+ "banner.recording_queued": [
+  "Your recording is saved on this device and will upload when the connection returns.",
+  "Yozuvingiz shu qurilmada saqlandi, ulanish tiklanganda yuboriladi."
+ ],
+ "listening.countdown": [
+  "Audio starts in {n} — read questions {a}–{b}",
+  "Audio {n} soniyadan keyin — {a}–{b} savollarni o'qing"
+ ],
+ "listening.prep": [
+  "Part {p} · Audio starts in {t} — read questions {a}–{b}",
+  "{p}-qism · Audio {t} dan keyin — {a}–{b} savollarni o'qing"
+ ],
+ "listening.playing": [
+  "Audio playing · Part {n} of {m}",
+  "Audio eshittirilmoqda · Qism {n} / {m}"
+ ],
+ "listening.play_1_of_2": [
+  "Playing 1 of 2",
+  "1-eshittirish (2 tadan)"
+ ],
+ "listening.play_2_of_2": [
+  "Playing 2 of 2",
+  "2-eshittirish (2 tadan)"
+ ],
+ "listening.plays_once": [
+  "Plays once · no pause or replay",
+  "Bir marta · pauza va qaytarish yo'q"
+ ],
+ "listening.review": [
+  "Review time — check your answers",
+  "Tekshirish vaqti — javoblaringizni ko'rib chiqing"
+ ],
+ "listening.all_finished": [
+  "All recordings finished — check your answers · {t} left",
+  "Barcha yozuvlar tugadi — javoblarni tekshiring · {t} qoldi"
+ ],
+ "listening.questions_after": [
+  "Listen carefully. Questions appear after the recording.",
+  "Diqqat bilan tinglang. Savollar yozuvdan keyin chiqadi."
+ ],
+ "listening.finish_after_chain": [
+  "Available after all recordings finish",
+  "Barcha yozuvlar tugagach ochiladi"
+ ],
+ "writing.task_label": [
+  "Task {n}",
+  "{n}-topshiriq"
+ ],
+ "writing.min_words": [
+  "Write at least {n} words",
+  "Kamida {n} so'z yozing"
+ ],
+ "writing.count_min": [
+  "{n} words · minimum {m}",
+  "{n} so'z · kamida {m}"
+ ],
+ "writing.count_target": [
+  "{n} words · target {a}–{b}",
+  "{n} so'z · maqsad {a}–{b}"
+ ],
+ "writing.count_over": [
+  "{n} words · above {b}",
+  "{n} so'z · {b} dan oshdi"
+ ],
+ "writing.footer": [
+  "Spellcheck off · paste disabled · autosaved {s} s ago",
+  "Imlo tekshiruvi o'chiq · tashqaridan qo'yish o'chiq · {s} soniya oldin saqlandi"
+ ],
+ "writing.saving": [
+  "Saving…",
+  "Saqlanmoqda…"
+ ],
+ "writing.paste_blocked": [
+  "Pasting from outside the exam is turned off.",
+  "Imtihondan tashqaridan matn qo'yish o'chirilgan."
+ ],
+ "writing.hsk_count": [
+  "汉字 {h} · 标点 {p} · min {m}",
+  "汉字 {h} · 标点 {p} · kamida {m}"
+ ],
+ "writing.hsk_read_phase": [
+  "Reading time · {t}",
+  "O'qish vaqti · {t}"
+ ],
+ "writing.hsk_text_hidden": [
+  "The text is now hidden. Write your summary.",
+  "Matn yashirildi. Endi qisqa bayonni yozing."
+ ],
+ "writing.image_unavailable": [
+  "Image unavailable",
+  "Rasm yuklanmadi"
+ ],
+ "speaking.part_n": [
+  "Part {n}",
+  "{n}-qism"
+ ],
+ "speaking.question_n_of_m": [
+  "Question {n} of {m}",
+  "Savol {n} / {m}"
+ ],
+ "speaking.listen": [
+  "Listen…",
+  "Tinglang…"
+ ],
+ "speaking.think": [
+  "Think about your answer · {t}",
+  "Javobingiz haqida o'ylang · {t}"
+ ],
+ "speaking.countdown": [
+  "Answer in 3… 2… 1…",
+  "Javob 3… 2… 1…"
+ ],
+ "speaking.speak_now": [
+  "Speak now",
+  "Gapiring"
+ ],
+ "speaking.recording": [
+  "Recording",
+  "Yozilmoqda"
+ ],
+ "speaking.saving": [
+  "Saving…",
+  "Saqlanmoqda…"
+ ],
+ "speaking.saved": [
+  "Saved ✓",
+  "Saqlandi ✓"
+ ],
+ "speaking.cant_hear": [
+  "We can't hear you — check your microphone",
+  "Ovozingiz eshitilmayapti — mikrofonni tekshiring"
+ ],
+ "speaking.auto_advance": [
+  "Speaking advances automatically",
+  "Speaking avtomatik davom etadi"
+ ],
+ "speaking.auto_stop": [
+  "Recording stops automatically at {t}",
+  "Yozuv {t} da avtomatik to'xtaydi"
+ ],
+ "speaking.finish_available_in": [
+  "Available after {s} s",
+  "{s} soniyadan keyin ochiladi"
+ ],
+ "speaking.once_only": [
+  "Each answer is recorded once.",
+  "Har javob bir marta yoziladi."
+ ],
+ "speaking.notes_label": [
+  "Your notes (not graded)",
+  "Qaydlaringiz (baholanmaydi)"
+ ],
+ "speaking.task_card": [
+  "Task card",
+  "Topshiriq kartasi"
+ ],
+ "speaking.listen_repeat_header": [
+  "LISTEN AND REPEAT · {n} OF {m}",
+  "TINGLANG VA TAKRORLANG · {n} / {m}"
+ ],
+ "speaking.interviewer_listening": [
+  "Interviewer is listening",
+  "Suhbatdosh tinglayapti"
+ ],
+ "speaking.for": [
+  "For",
+  "Tarafdor"
+ ],
+ "speaking.against": [
+  "Against",
+  "Qarshi"
+ ],
+ "finish.title": [
+  "Finish {section}?",
+  "{section} bo'limini tugatasizmi?"
+ ],
+ "finish.unanswered_one": [
+  "1 question unanswered:",
+  "1 ta savol javobsiz:"
+ ],
+ "finish.unanswered_other": [
+  "{n} questions unanswered:",
+  "{n} ta savol javobsiz:"
+ ],
+ "finish.chip_hint": [
+  "Click a number to go to that question.",
+  "Raqamni bossangiz, o'sha savolga o'tasiz."
+ ],
+ "finish.flagged": [
+  "{n} flagged for review:",
+  "{n} ta savol belgilangan:"
+ ],
+ "finish.all_answered": [
+  "All questions answered.",
+  "Barcha savollarga javob berildi."
+ ],
+ "finish.time_left": [
+  "You still have {t}.",
+  "Vaqt hali bor: {t}."
+ ],
+ "finish.below_min": [
+  "{task}: {n} of {m} words.",
+  "{task}: {n} so'z ({m} dan)."
+ ],
+ "finish.no_return": [
+  "After finishing you can't return to this section.",
+  "Tugatgach bu bo'limga qaytib bo'lmaydi."
+ ],
+ "finish.next_preview": [
+  "Next: {section} · {min} minutes",
+  "Keyingi: {section} · {min} daqiqa"
+ ],
+ "finish.next_task_title": [
+  "Move to the next task?",
+  "Keyingi topshiriqqa o'tasizmi?"
+ ],
+ "finish.next_task_body": [
+  "You can't come back to this task. You still have {t}.",
+  "Bu topshiriqqa qaytib bo'lmaydi. Vaqt hali bor: {t}."
+ ],
+ "finish.submitting": [
+  "Submitting…",
+  "Topshirilmoqda…"
+ ],
+ "finish.submitted_toast": [
+  "{section} submitted",
+  "{section} bo'limi topshirildi"
+ ],
+ "resume.title": [
+  "Welcome back",
+  "Xush kelibsiz"
+ ],
+ "resume.body": [
+  "Your exam continues where you left off.",
+  "Imtihon to'xtagan joyidan davom etadi."
+ ],
+ "resume.section_time": [
+  "{section} · {t} left",
+  "{section} · {t} qoldi"
+ ],
+ "resume.saved": [
+  "{n} answers saved",
+  "{n} ta javob saqlangan"
+ ],
+ "resume.timer_note": [
+  "The timer kept running on the server while you were away.",
+  "Siz yo'qligingizda vaqt server bo'yicha davom etdi."
+ ],
+ "resume.audio_note": [
+  "Audio continues from where it is now; missed parts are not replayed.",
+  "Audio hozirgi joyidan davom etadi; o'tib ketgan qism qayta eshittirilmaydi."
+ ],
+ "resume.time_ended": [
+  "Time for {section} ended while you were away. Your saved answers were submitted.",
+  "Siz yo'qligingizda {section} bo'limi vaqti tugadi. Saqlangan javoblaringiz topshirildi."
+ ],
+ "results.estimated": [
+  "Estimated",
+  "Taxminiy"
+ ],
+ "results.estimated_tip": [
+  "Based on a conversion table — not an official score.",
+  "Rasmiy ball emas — konversiya jadvali asosida."
+ ],
+ "results.ai_range": [
+  "{a}–{b} — AI estimate. An official examiner may differ by half a band.",
+  "{a}–{b} — AI taxmini. Rasmiy imtihonda ekzaminator yarim bandga farq qilishi mumkin."
+ ],
+ "results.lr_raw": [
+  "{n}/{total} correct — the band is estimated from a conversion table.",
+  "{total} tadan {n} ta to'g'ri — band konversiya jadvalidan taxminiy."
+ ],
+ "results.ws_in_progress": [
+  "Writing & Speaking in progress",
+  "Writing va Speaking baholanmoqda"
+ ],
+ "results.grading_writing": [
+  "Writing is being graded — usually a few minutes.",
+  "Writing baholanmoqda — odatda bir necha daqiqa."
+ ],
+ "results.grading_speaking": [
+  "Speaking is being graded — usually 5–15 min, up to 1 hour at peak times.",
+  "Speaking baholanmoqda — odatda 5–15 daqiqa, band paytlarda 1 soatgacha."
+ ],
+ "results.can_leave": [
+  "You can leave — we'll notify you when it's ready.",
+  "Chiqib ketishingiz mumkin — tayyor bo'lgach xabar beramiz."
+ ],
+ "results.others_ready": [
+  "Your other results are ready below.",
+  "Qolgan natijalaringiz quyida tayyor."
+ ],
+ "results.strip_received": [
+  "Received",
+  "Qabul qilindi"
+ ],
+ "results.strip_transcribing": [
+  "Transcribing",
+  "Matnga o'girilmoqda"
+ ],
+ "results.strip_scoring": [
+  "Scoring",
+  "Baholanmoqda"
+ ],
+ "results.strip_double_check": [
+  "Double-checking",
+  "Qayta tekshirilmoqda"
+ ],
+ "results.strip_ready": [
+  "Ready",
+  "Tayyor"
+ ],
+ "results.human_review": [
+  "A teacher is double-checking this score (up to 24 h). Your other results are ready.",
+  "Bu ballni o'qituvchi qayta tekshirmoqda (24 soatgacha). Qolgan natijalar tayyor."
+ ],
+ "results.delayed": [
+  "Grading is taking longer than usual. We'll notify you when it's ready — nothing you need to do.",
+  "Baholash odatdagidan uzoqroq davom etmoqda. Tayyor bo'lgach xabar beramiz — sizdan hech narsa talab qilinmaydi."
+ ],
+ "results.no_response": [
+  "No response for this task — no score yet.",
+  "Bu topshiriqqa javob yo'q — hozircha ball yo'q."
+ ],
+ "results.cefr_score": [
+  "{n}/75",
+  "{n}/75"
+ ],
+ "results.cefr_to_next": [
+  "{n}/75 — {k} to {level}",
+  "{n}/75 — {level} gacha {k} ball"
+ ],
+ "results.cefr_cert_note": [
+  "Certificate levels start at B1 ({min}/75).",
+  "Sertifikat darajalari B1 ({min}/75) dan boshlanadi."
+ ],
+ "results.ielts_next_step": [
+  "{from} → {to}: +{k} correct in {section}",
+  "{from} → {to}: {section} bo'limida yana {k} ta to'g'ri javob"
+ ],
+ "results.personal_best": [
+  "Personal best",
+  "Shaxsiy eng yaxshi natija"
+ ],
+ "results.since_last": [
+  "{delta} since last",
+  "Oldingisiga nisbatan {delta}"
+ ],
+ "results.same_as_last": [
+  "Same as last time",
+  "Oldingisi bilan bir xil"
+ ],
+ "results.mock_n": [
+  "Mock #{n}",
+  "Mock #{n}"
+ ],
+ "results.your_answer": [
+  "Your answer: {answer}",
+  "Sizning javobingiz: {answer}"
+ ],
+ "results.correct_answer": [
+  "Correct: {answer}",
+  "To'g'ri javob: {answer}"
+ ],
+ "results.no_answer": [
+  "No answer",
+  "Javob berilmagan"
+ ],
+ "results.show_in_passage": [
+  "Show in passage",
+  "Matnda ko'rsatish"
+ ],
+ "results.explanation": [
+  "Explanation",
+  "Izoh"
+ ],
+ "results.strengths": [
+  "What worked",
+  "Nima yaxshi chiqdi"
+ ],
+ "results.next_steps": [
+  "Next steps",
+  "Keyingi qadamlar"
+ ],
+ "results.listen_answer": [
+  "Listen to your answer",
+  "Javobingizni eshitish"
+ ],
+ "results.transcript": [
+  "Transcript",
+  "Matn ko'rinishi"
+ ],
+ "results.transcript_note": [
+  "Automatic transcript — it may contain small errors.",
+  "Avtomatik matn — kichik xatolar bo'lishi mumkin."
+ ],
+ "results.audio_only_mode": [
+  "Taken in exam mode (audio only)",
+  "Imtihon rejimida topshirilgan (faqat ovoz)"
+ ],
+ "results.no_overall": [
+  "The overall band needs all four skills. Take Speaking to see it.",
+  "Umumiy band uchun to'rtala ko'nikma kerak. Ko'rish uchun Speaking'ni topshiring."
+ ],
+ "results.disclaimer": [
+  "Practice result — not an official certificate.",
+  "Mashq natijasi — rasmiy sertifikat emas."
+ ],
+ "results.trend_empty": [
+  "Complete another mock to see your progress.",
+  "Natija dinamikasini ko'rish uchun yana bir mock topshiring."
+ ],
+ "gate.title": [
+  "Mock exams work on a computer only",
+  "Mock imtihonlar faqat kompyuterda ishlaydi"
+ ],
+ "gate.body_mobile": [
+  "Open this link on a laptop or desktop computer.",
+  "Bu havolani noutbuk yoki kompyuterda oching."
+ ],
+ "gate.body_narrow": [
+  "The window is too narrow. Maximize the browser window or zoom out (Ctrl and −).",
+  "Oyna juda tor. Brauzer oynasini kattalashtiring yoki kichraytiring (Ctrl va −)."
+ ],
+ "gate.mid_attempt": [
+  "The timer keeps running. Widen the window to continue — your answers are saved.",
+  "Vaqt yurmoqda. Davom etish uchun oynani kengaytiring — javoblaringiz saqlangan."
+ ],
+ "errors.mic_denied": [
+  "Microphone access is off. Click the lock icon in the address bar → Microphone → Allow, then \"Check again\".",
+  "Mikrofonga ruxsat berilmagan. Manzil qatoridagi qulf belgisini bosing → Mikrofon → Ruxsat berish, keyin \"Qayta tekshirish\"."
+ ],
+ "errors.mic_not_found": [
+  "No microphone found. Plug in headphones with a microphone, then \"Check again\".",
+  "Mikrofon topilmadi. Mikrofonli naushnikni ulang, keyin \"Qayta tekshirish\"."
+ ],
+ "errors.no_sound": [
+  "No sound yet. Check your headphones and system volume, then \"Play again\".",
+  "Ovoz eshitilmayapti. Naushnikni va kompyuter ovozini tekshiring, keyin \"Qayta eshitish\"."
+ ],
+ "errors.browser_unsupported": [
+  "This browser can't record audio. Please open the exam in the latest Chrome or Edge.",
+  "Bu brauzer ovoz yoza olmaydi. Imtihonni Chrome yoki Edge'ning so'nggi versiyasida oching."
+ ],
+ "errors.media_failed": [
+  "Could not load the audio — this is on our side, your time isn't running.",
+  "Audio yuklanmadi — bu bizning tomondagi muammo, vaqtingiz ketmayapti."
+ ],
+ "errors.report_sent": [
+  "Report sent. Your center can see it.",
+  "Xabar yuborildi. Markazingiz uni ko'ra oladi."
+ ],
+ "errors.insufficient_balance": [
+  "This mock isn't available on your account yet. Ask your center to add it.",
+  "Bu mock hisobingizda hali mavjud emas. Markazingizdan qo'shib berishni so'rang."
+ ],
+ "errors.insufficient_balance_center": [
+  "Not enough balance: this costs {price} so'm, available {balance} so'm. Top up to continue.",
+  "Balans yetarli emas: narxi {price} so'm, mavjud {balance} so'm. Davom etish uchun hisobni to'ldiring."
+ ],
+ "errors.window_not_open": [
+  "This mock opens on {date} at {time}.",
+  "Bu mock {date} kuni soat {time} da ochiladi."
+ ],
+ "errors.window_closed": [
+  "The time window for this mock ended on {date} at {time}. Ask your center for a new one.",
+  "Bu mock muddati {date} kuni soat {time} da tugagan. Markazingizdan yangisini so'rang."
+ ],
+ "errors.attempt_locked": [
+  "This attempt is already submitted. Your results are on the results page.",
+  "Bu urinish allaqachon topshirilgan. Natijalaringiz natijalar sahifasida."
+ ],
+ "errors.stage_locked": [
+  "This section's time has ended. Your saved answers were submitted.",
+  "Bu bo'lim vaqti tugadi. Saqlangan javoblaringiz topshirildi."
+ ],
+ "errors.session_expired": [
+  "Your session ended. Sign in again — the exam will continue where you left off.",
+  "Sessiya tugadi. Qayta kiring — imtihon to'xtagan joyidan davom etadi."
+ ],
+ "errors.server": [
+  "Something went wrong on our side. Your answers are saved. Try again in a moment.",
+  "Bizning tomonda nosozlik yuz berdi. Javoblaringiz saqlangan. Birozdan keyin qayta urinib ko'ring."
+ ],
+ "hub.no_overall_v1": [
+  "The overall band is calculated together with Speaking — Speaking is coming soon.",
+  "Umumiy band Speaking bilan birga hisoblanadi — Speaking tez orada qo'shiladi."
+ ],
+ "hub.assigned_by_center": [
+  "Assigned by your center",
+  "Markaz tayinlagan"
+ ],
+ "hub.center_pays": [
+  "Paid by your center",
+  "Markaz to'laydi"
+ ],
+ "hub.self_practice_off": [
+  "Self-practice isn't available yet. You'll start in the session your center assigns.",
+  "Mustaqil mashq hozircha yo'q. Markaz tayinlagan sessiyada boshlaysiz."
+ ],
+ "hub.start_body_assigned": [
+  "Your center covers this mock. The device check comes first — the timer starts after it.",
+  "To'lovni markaz qiladi. Avval qurilma tekshiruvi — vaqt undan keyin boshlanadi."
+ ],
+ "hub.repeat_variant_note": [
+  "You've done all variants. On a repeated variant your score may not show your real level — the questions will be familiar.",
+  "Barcha variantlarni ishlagansiz. Takroriy variantda natija darajangizni aniq ko'rsatmasligi mumkin — savollar tanish bo'ladi."
+ ],
+ "hub.weak_type_review": [
+  "Show these questions",
+  "Shu savollarni ko'rish"
+ ],
+ "hub.active_attempt": [
+  "You have an unfinished attempt: {section}, {t} left.",
+  "Sizda tugallanmagan urinish bor: {section}, {t} qoldi."
+ ],
+ "hub.start_failed": [
+  "Couldn't start — try again. Nothing was charged.",
+  "Boshlab bo'lmadi — qayta urinib ko'ring. Hech narsa yechilmadi."
+ ],
+ "hub.code_mismatch": [
+  "The code or name doesn't match. Check the spelling or ask your center's administrator for the code again.",
+  "Kod yoki ism mos kelmadi. Yozilishini tekshiring yoki kodni markaz administratoridan qayta so'rang."
+ ],
+ "hub.too_many_tries": [
+  "Too many attempts. Try again in {s} s.",
+  "Urinishlar ko'p bo'ldi. {s} soniyadan keyin qayta urinib ko'ring."
+ ],
+ "precheck.tour_timer": [
+  "Time left. You can hide it — it comes back for the last 5 minutes.",
+  "Qolgan vaqt. Yashirish mumkin — oxirgi 5 daqiqada qaytib chiqadi."
+ ],
+ "precheck.tour_navigator": [
+  "Question numbers. Dark means answered. Click a number to jump to it.",
+  "Savol raqamlari. To'q rang — javob berilgan. Raqamni bossangiz, o'sha savolga o'tasiz."
+ ],
+ "precheck.tour_flag": [
+  "Not sure? Flag the question and come back to it later.",
+  "Ishonchingiz komil emasmi? Savolni belgilab, keyin qayting."
+ ],
+ "precheck.tour_finish": [
+  "Finish section always asks first and shows what's unanswered.",
+  "\"Finish section\" doim avval so'raydi va javobsiz savollarni ko'rsatadi."
+ ],
+ "chrome.skip": [
+  "Skip",
+  "O'tkazib yuborish"
+ ]
+}

@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils/cn';
 
-export type PillTone = 'success' | 'danger' | 'warning' | 'muted' | 'primary';
+export type PillTone = 'success' | 'danger' | 'warning' | 'muted' | 'primary' | 'ai';
 
 const tones: Record<PillTone, string> = {
   success: 'text-success bg-[rgba(43,182,115,0.14)]',
@@ -8,6 +8,8 @@ const tones: Record<PillTone, string> = {
   warning: 'text-warning bg-[rgba(232,161,58,0.17)]',
   muted: 'text-[#5b6b82] bg-[rgba(122,134,153,0.16)]',
   primary: 'text-primary bg-[rgba(46,107,230,0.12)]',
+  /** AI grading (mock exams): violet, never red. */
+  ai: 'text-[#5B3FD1] bg-[#EEE9FF]',
 };
 
 interface StatusPillProps {
