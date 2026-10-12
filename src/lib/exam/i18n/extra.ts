@@ -54,8 +54,21 @@ export const EXTRA = {
   'x.preview_result_badge': ['Preview', 'Preview'],
   'x.back_to_console': ['Back to the console', 'Konsolga qaytish'],
   'x.task_n': ['Task {n}', '{n}-topshiriq'],
-  'x.ai_estimate': ['AI ESTIMATE', 'AI TAXMINI'],
   'x.criteria': ['Criteria', 'Mezonlar'],
   // Override of `_player-texts.md` (Sevara final review 10-10): v1 has no push, so no "we'll notify you".
   'results.can_leave': ["You can leave — your result will appear on this page and in “My results”.", "Chiqib ketishingiz mumkin — natija shu sahifada va «Natijalarim»da paydo bo'ladi."],
+  // Abdulhaq 2026-10-12 (overrides `_player-texts.md`): no "estimated / taxmin" wording anywhere on results.
+  'results.lr_raw': ['{n}/{total} correct', "{total} tadan {n} ta to'g'ri"],
+  'intro.scoring_ai': ['Scored by AI · a teacher checks when needed', "AI baholaydi · kerak bo'lsa o'qituvchi tekshiradi"],
+  // Result summary + overall card (§1.10 estimatedOverall / summary / evidence, 2026-10-12)
+  'x.overall_band': ['OVERALL BAND', 'UMUMIY BAND'],
+  'x.overall_total': ['TOTAL SCORE', 'JAMI BALL'],
+  'x.overall_basis': ['Based on {list}', "{list} bo'yicha"],
+  'x.overall_pending': ['Calculated once {list} is graded', '{list} baholangach hisoblanadi'],
+  'x.summary_title': ['Summary', 'Xulosa'],
+  'x.n_of_total': ['{n} of {total} correct', "{total} tadan {n} ta to'g'ri"],
+  'x.type_review_again': ['{total} questions · review again', "{total} ta savol · qayta ko'rib chiqing"],
+  'x.strongest': ['Strongest', 'Eng kuchli'],
+  'x.weakest': ['Needs more practice', "Ko'proq mashq kerak"],
+  'x.evidence': ['Evidence', 'Dalil'],
 } satisfies Record<string, [string, string]>;

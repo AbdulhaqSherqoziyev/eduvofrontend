@@ -58,3 +58,14 @@ export function parseFeedback(s: string | null | undefined): FeedbackBlocks {
   out.summary = summary.length ? summary.join('\n') : null;
   return out;
 }
+
+/** §2c / v1.8: prefer the structured `feedbackDetail` when the API sends it, else parse the text. */
+export function feedbackOf(a: { feedback?: string | null; feedbackDetail?: unknown }): FeedbackBlocks {
+  const d = a.feedbackDetail as { summary?: unknown; strengths?: unknown; nextSteps?: unknown } | null | undefined;
+  if (d && typeof d === 'object') {
+    const list = (v: unknown) => (Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string' && x.trim().length > 0) : []);
+    const out = { summary: typeof d.summary === 'string' && d.summary.trim() ? d.summary.trim() : null, strengths: list(d.strengths), nextSteps: list(d.nextSteps) };
+    if (out.summary || out.strengths.length || out.nextSteps.length) return out;
+  }
+  return parseFeedback(a.feedback);
+}

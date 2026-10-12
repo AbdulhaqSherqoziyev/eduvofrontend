@@ -39,7 +39,6 @@ export const SAT_TEXT = {
   'sat.zoom_reset': ['Reset', 'Asl holat'],
   'sat.break_label': ['SCHEDULED BREAK', 'REJALASHTIRILGAN TANAFFUS'],
   'sat.spr_field_note': ['Decimal must fill the field: 0.666 or .6666 (not .666).', "O'nlik javob maydonni to'ldirishi kerak: 0.666 yoki .6666 (.666 emas)."],
-  'sat.range': ['Estimated range {a}–{b}', 'Taxminiy oraliq: {a}–{b}'],
   'sat.saving_module': ['Saving your answers…', 'Javoblaringiz saqlanmoqda…'],
   'sat.break_over': ['Break is over. Math Module 1 is starting…', 'Tanaffus tugadi. Matematika 1-moduli boshlanmoqda…'],
   'sat.break_ended_away': ['The break ended while you were away. Math Module 1 starts when you continue.', "Siz yo'qligingizda tanaffus tugadi. Davom etsangiz, Matematika 1-moduli boshlanadi."],

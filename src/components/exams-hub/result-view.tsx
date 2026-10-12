@@ -4,12 +4,14 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { ResultSummary } from '@/components/exam/results/ResultSummary';
 import { NmCard } from '@/components/ui/nm-card';
 import { NmSegmented } from '@/components/ui/nm-segmented';
 import { dayLong, examTitle, hm } from '@/lib/exam/hub-format';
 import type { ExamFamily } from '@/lib/exam/hub-types';
 import { ht } from '@/lib/exam/i18n/hub';
 import { resultFacts } from '@/lib/exam/result-facts';
+import { buildSummary } from '@/lib/exam/result-summary';
 import { errCode } from '@/lib/exam/hub-api';
 import { useExamDetail, useHubNow, useResult } from '@/lib/exam/use-hub';
 import { assignmentPhase } from '@/lib/exam/hub-derive';
@@ -56,6 +58,7 @@ export function ResultView({ id }: { id: string }) {
   const att = d?.attempts.find((a) => a.id === id);
   const variant = att ? d?.tests.find((t) => t.id === att.testId)?.title : null;
   const sections = r.sections.filter((s) => s.status !== 'NOT_TAKEN');
+  const summary = buildSummary(r);
   const cur = sections.find((s) => s.key === (sel ?? typeSection)) ?? sections[0];
   const name = examTitle(r.examName ?? r.examCode);
   const when = att?.finishedAt ?? att?.startedAt;
@@ -96,6 +99,9 @@ export function ResultView({ id }: { id: string }) {
         </div>
       </div>
       <GradingStrip r={r} />
+      {summary.sections.length || summary.nextSteps.length ? (
+        <NmCard className="rounded-[24px] p-6 max-md:p-4"><ResultSummary data={summary} locale="uz" /></NmCard>
+      ) : null}
 
       {sections.length > 1 ? (
         <div className="-mx-1 overflow-x-auto px-1 py-1">

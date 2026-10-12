@@ -492,8 +492,8 @@
   "Avtomatik baholanadi"
  ],
  "intro.scoring_ai": [
-  "Estimated by AI · a teacher checks when needed",
-  "AI taxmini · kerak bo'lsa o'qituvchi tekshiradi"
+  "Scored by AI · a teacher checks when needed",
+  "AI baholaydi · kerak bo'lsa o'qituvchi tekshiradi"
  ],
  "intro.timer_note": [
   "The timer starts when you press Start.",
@@ -879,21 +879,9 @@
   "Time for {section} ended while you were away. Your saved answers were submitted.",
   "Siz yo'qligingizda {section} bo'limi vaqti tugadi. Saqlangan javoblaringiz topshirildi."
  ],
- "results.estimated": [
-  "Estimated",
-  "Taxminiy"
- ],
- "results.estimated_tip": [
-  "Based on a conversion table — not an official score.",
-  "Rasmiy ball emas — konversiya jadvali asosida."
- ],
- "results.ai_range": [
-  "{a}–{b} — AI estimate. An official examiner may differ by half a band.",
-  "{a}–{b} — AI taxmini. Rasmiy imtihonda ekzaminator yarim bandga farq qilishi mumkin."
- ],
  "results.lr_raw": [
-  "{n}/{total} correct — the band is estimated from a conversion table.",
-  "{total} tadan {n} ta to'g'ri — band konversiya jadvalidan taxminiy."
+  "{n}/{total} correct",
+  "{total} tadan {n} ta to'g'ri"
  ],
  "results.ws_in_progress": [
   "Writing & Speaking in progress",

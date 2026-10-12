@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ChevronDown, LineChart } from 'lucide-react';
+import { NmSwitch } from '@/components/ui/nm-switch';
 import { QueryBoundary } from '@/components/shared/query-boundary';
 import { EmptyState } from '@/components/shared/empty-state';
 import { RowsSkeleton, Skeleton } from '@/components/shared/skeleton';
@@ -21,7 +22,7 @@ const sessionTitle = (s: Assignment) =>
   [s.groupName ?? s.title, s.testTitle, s.mode === 'section' && s.sectionKey ? capitalize(s.sectionKey) : null, dayMonthFull(new Date(s.windowStart))]
     .filter(Boolean).join(' · ');
 
-/** Natijalar (design v3 RESULTS): KPI row → one session table with Excel export. */
+/** Natijalar (design v3 RESULTS): KPI row → one session table with Excel export; rows open `/exams/results/[attemptId]`. */
 export function ResultsView() {
   const router = useRouter();
   const params = useSearchParams();
@@ -31,9 +32,19 @@ export function ResultsView() {
   const fromUrl = params.get('assignmentId');
   const assignmentId = fromUrl ?? [...list].sort((a, b) => b.windowStart.localeCompare(a.windowStart))[0]?.id ?? '';
   const waiting = fromUrl == null && sessions.isLoading;
-  const results = useExamResults({ assignmentId: assignmentId || undefined }, !waiting);
+  // "Sinov urinishlarini ko'rsatish" (staff previews, `includePreview`) — kept in the URL so "back" from a detail keeps it.
+  const includePreview = params.get('preview') === '1';
+  const results = useExamResults({ assignmentId: assignmentId || undefined, includePreview: includePreview || undefined }, !waiting);
   const session = list.find((s) => s.id === assignmentId);
-  const pick = (id: string) => router.replace(`/exams/results?assignmentId=${encodeURIComponent(id)}`);
+  const go = (next: { assignmentId?: string; preview?: boolean }) => {
+    const q = new URLSearchParams(params.toString());
+    if (next.assignmentId !== undefined) q.set('assignmentId', next.assignmentId);
+    if (next.preview !== undefined) { if (next.preview) q.set('preview', '1'); else q.delete('preview'); }
+    // Previews belong to no session → turning them on with no explicit session shows "Barcha natijalar".
+    if (next.preview && !q.has('assignmentId')) q.set('assignmentId', '');
+    router.replace(`/exams/results?${q.toString()}`);
+  };
+  const pick = (id: string) => go({ assignmentId: id });
 
   return (
     <section className="flex flex-col pb-6">
@@ -58,10 +69,25 @@ export function ResultsView() {
                   </select>
                   <ChevronDown className="pointer-events-none absolute right-0 size-4 text-muted" />
                 </label>
-                <ExportButton assignmentId={assignmentId} disabled={data.rows.length === 0} />
+                <div className="flex flex-wrap items-center gap-4">
+                  <label className="flex cursor-pointer items-center gap-2.5 text-[13px] font-bold text-[#5b6b82]">
+                    <NmSwitch checked={includePreview} onCheckedChange={(v) => go({ preview: v })} aria-label="Sinov urinishlarini ko'rsatish" />
+                    Sinov urinishlarini ko&apos;rsatish
+                  </label>
+                  <ExportButton assignmentId={assignmentId} disabled={data.rows.filter((r) => !r.isPreview).length === 0} />
+                </div>
               </div>
               {data.rows.length === 0 ? (
-                <EmptyState icon={<LineChart className="size-6" />} title="Hali natija yo'q" hint="O'quvchilar tayinlangan mockni topshirgach, ballar shu yerda chiqadi." />
+                includePreview ? (
+                  <EmptyState icon={<LineChart className="size-6" />} title="Hali natija yo'q" hint="O'quvchi yoki sinov urinishi tugagach, ballar shu yerda chiqadi." />
+                ) : (
+                  <EmptyState
+                    icon={<LineChart className="size-6" />}
+                    title="Hali o'quvchi urinishi yo'q"
+                    hint="O'quvchilar tayinlangan mockni topshirgach, ballar shu yerda chiqadi. Katalogdagi «Sinab ko'rish» urinishlaringizni ham ko'rishingiz mumkin."
+                    action={<SoftButton className="h-[38px] rounded-[12px] px-4 text-[13px] font-bold text-primary" onClick={() => go({ preview: true })}>Sinov urinishlarini ko&apos;rish</SoftButton>}
+                  />
+                )
               ) : (
                 <ResultsTable rows={data.rows} />
               )}

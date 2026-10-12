@@ -1,11 +1,10 @@
 'use client';
-/** ScoreCard (§4): neutral ink number, "Taxminiy", distance line. Never coloured, never red. */
+/** ScoreCard (§4): neutral ink number, "AI" chip on AI sections, distance line. No "estimated" chip (Abdulhaq 10-12). Never red. */
 import { Flag, Hourglass, UserCheck } from 'lucide-react';
 import { NmSkeleton } from '@/components/ui/nm-skeleton';
 import { cefrTarget } from '@/lib/exam/hub-derive';
 import type { ExamFamily } from '@/lib/exam/hub-types';
 import { ht } from '@/lib/exam/i18n/hub';
-import { satRange } from '@/lib/exam/sat/flow';
 import type { ResultResp, ResultSection } from '@/lib/exam/types';
 import { cn } from '@/lib/utils/cn';
 
@@ -27,12 +26,7 @@ function Distance({ s, family, cert }: { s: ResultSection; family: ExamFamily; c
       </>
     );
   }
-  const range = family === 'SAT' ? satRange(s.scaled) : null;
-  const rangeLine = range ? <div className="text-[12px] font-semibold text-muted">{ht('sat.range', { a: range[0], b: range[1] })}</div> : null;
-  if (s.raw != null && s.max != null) {
-    return <>{s.raw >= s.max ? line(ht('hubx.scale_top')) : line(ht('results.lr_raw', { n: s.raw, total: s.max }))}{rangeLine}</>;
-  }
-  if (rangeLine) return rangeLine;
+  if (s.raw != null && s.max != null) return s.raw >= s.max ? line(ht('hubx.scale_top')) : line(ht('results.lr_raw', { n: s.raw, total: s.max }));
   return null;
 }
 
@@ -69,10 +63,7 @@ export function ScoreCard({ s, family, cert, selected, onSelect }: Props) {
       {ready ? (
         <span className="flex flex-wrap items-center gap-2">
           <span className="text-[44px] font-extrabold leading-none tracking-[-1px] text-[#1E2A3A] tabular-nums max-md:text-[36px]">{s.label}</span>
-          {s.estimated ? (
-            <span title={ht('results.estimated_tip')} className="rounded-[7px] bg-[#DDE3EC] px-2 py-0.5 text-[10.5px] font-extrabold text-[#5b6b82]">{ht('results.estimated')}</span>
-          ) : null}
-          {isAi(s) ? <span className="rounded-[7px] bg-[#EEE9FF] px-2 py-0.5 text-[10.5px] font-extrabold text-[#5B3FD1]">{ht('hubx.ai_estimate')}</span> : null}
+          {isAi(s) ? <span className="rounded-[7px] bg-[#EEE9FF] px-2 py-0.5 text-[10.5px] font-extrabold text-[#5B3FD1]">{ht('x.ai_badge')}</span> : null}
         </span>
       ) : grading ? (
         <NmSkeleton h={44} className="w-24" />

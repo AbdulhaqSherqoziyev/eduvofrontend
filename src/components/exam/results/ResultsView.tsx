@@ -1,8 +1,9 @@
 'use client';
 /**
  * Objective results (design A15/G10, Sevara T30–T37). Outside the player theme
- * (Eduvo brand). No overall without Speaking (hub.no_overall_v1); W shows
- * "in progress" until stage 4. "Practice: …" is not shown in v1 (H3).
+ * (Eduvo brand). Dark card: overall band / SAT total from `estimatedOverall` (§1.10,
+ * 2026-10-12) with "… bo'yicha"; "Xulosa" (per-type lines + next steps) under the cards.
+ * No "estimated" wording anywhere (Abdulhaq 10-12).
  * While `status` is PARTIAL the page re-reads the result every 15 s (contract §1.10).
  * `isPreview` (staff, 2.11 token): no "My results" / portal links — the result
  * lives only on this page; the back button closes the preview tab (opened by
@@ -13,11 +14,13 @@ import { examApi } from '@/lib/exam/api';
 import type { ExamFamily } from '@/lib/exam/hub-types';
 import { t, type Locale, type TextKey } from '@/lib/exam/i18n';
 import type { ResultResp, ResultSection } from '@/lib/exam/types';
+import { buildSummary } from '@/lib/exam/result-summary';
 import { AiTaskPanel } from './AiTaskPanel';
+import { OverallBlock } from './OverallBlock';
+import { ResultSummary } from './ResultSummary';
 import { PassageModal } from './PassageModal';
 import { ReviewList } from './ReviewList';
 
-const badge = (ai: boolean) => (ai ? { c: '#5B3FD1', b: '#EEE9FF' } : { c: '#1F7A55', b: '#E5F5EE' });
 const POLL_MS = 15_000;
 const CONSOLE_URL = '/exams/catalog';
 const isAiSection = (key: string) => key === 'writing' || key === 'speaking';
@@ -74,10 +77,11 @@ export function ResultsView({ attemptId, locale, isPreview = false }: { attemptI
   const grading = sections.some((s) => s.status === 'GRADING' || s.status === 'PENDING');
   const taken = sections.map((s) => s.title).join(', ');
   const card = { background: '#fff', borderRadius: 18 } as const;
+  const summary = buildSummary(r);
 
   return (
     <div style={{ maxWidth: 1240, margin: '0 auto', padding: '36px 32px 56px', display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <style>{`@media (max-width: 720px){.xr-pad{padding:20px 16px 40px !important}.xr-head{flex-direction:column;align-items:stretch !important}.xr-top{grid-template-columns:1fr !important}.xr-strip{flex-wrap:wrap}.xr-actions a,.xr-actions button{flex:1;justify-content:center}}`}</style>
+      <style>{`@media (max-width: 720px){.xr-pad{padding:20px 16px 40px !important}.xr-head{flex-direction:column;align-items:stretch !important}.xr-top{grid-template-columns:1fr !important}.xr-strip{flex-wrap:wrap}.xr-actions a,.xr-actions button{flex:1;justify-content:center}.xr-sum{padding:18px 16px !important}.xr-rev{grid-template-columns:1fr !important}}`}</style>
       <div className="xr-head" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16 }}>
         <div>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#7A8699', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
@@ -101,23 +105,19 @@ export function ResultsView({ attemptId, locale, isPreview = false }: { attemptI
         <div style={{ ...card, padding: '32px 24px', textAlign: 'center', color: '#4A586C', fontWeight: 600, fontSize: 14 }}>{t('x.result_empty', locale)}</div>
       ) : (
         <div className="xr-top" style={{ display: 'grid', gridTemplateColumns: '300px minmax(0,1fr)', gap: 16 }}>
-          <div style={{ background: '#1E2A3A', color: '#fff', borderRadius: 18, padding: 24, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 12, minHeight: 180 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: 1, color: '#9DB8F5' }}>{(r.overall && !sat ? r.overall.label : `${r.examName ?? r.examCode} — ${taken}`).toUpperCase()}</div>
-            {r.overall ? <div style={{ fontSize: 60, fontWeight: 800, letterSpacing: -2, lineHeight: 1 }}>{r.overall.value}</div> : null}
-            <div style={{ fontSize: 13, color: '#AEB9CB', fontWeight: 600, lineHeight: 1.5 }}>{r.overall ? t('results.estimated_tip', locale) : t('hub.no_overall_v1', locale)}</div>
+          <div style={{ background: '#1E2A3A', color: '#fff', borderRadius: 18, padding: 24, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12, minHeight: 180 }}>
+            <OverallBlock r={r} locale={locale} fallbackTitle={`${r.examName ?? r.examCode} — ${taken}`} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 12 }}>
             {sections.map((s, i) => {
-              const ai = isAiSection(s.key) || s.status === 'GRADING' || s.status === 'NEEDS_HUMAN';
-              const b = badge(ai);
+              const ai = isAiSection(s.key);
               return (
-                <button key={s.key} type="button" onClick={() => setSel(i)} style={{ ...card, textAlign: 'left', padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 8, border: `2px solid ${i === sel ? '#2E6BE6' : 'transparent'}`, cursor: 'pointer' }}>
+                <button key={s.key} type="button" onClick={() => setSel(i)} aria-pressed={i === sel} style={{ ...card, textAlign: 'left', padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 8, border: `2px solid ${i === sel ? '#2E6BE6' : 'transparent'}`, cursor: 'pointer' }}>
                   <span style={{ fontSize: 13, fontWeight: 800, color: '#4A586C' }}>{s.title}</span>
-                  <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: -0.6, color: '#1E2A3A', display: 'flex', alignItems: 'center', gap: 8 }}>
-                    {s.label ?? '…'}{s.estimated && s.label && <span title={t('results.estimated_tip', locale)} style={{ fontSize: 10.5, fontWeight: 800, color: '#4A586C', background: '#F1F4F8', borderRadius: 6, padding: '3px 7px', letterSpacing: 0.3 }}>{t('results.estimated', locale)}</span>}
+                  <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: -0.6, color: '#1E2A3A', display: 'flex', alignItems: 'center', gap: 8, fontVariantNumeric: 'tabular-nums' }}>
+                    {s.label ?? '…'}{ai && <span style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: 0.4, borderRadius: 6, padding: '3px 7px', color: '#5B3FD1', background: '#EEE9FF' }}>{t('x.ai_badge', locale)}</span>}
                   </span>
                   <span style={{ fontSize: 12, color: '#7A8699', fontWeight: 600 }}>{sub(s, locale, family)}{s.level ? ` · ${s.level}` : ''}</span>
-                  <span style={{ alignSelf: 'flex-start', fontSize: 10.5, fontWeight: 800, letterSpacing: 0.4, borderRadius: 6, padding: '3px 7px', color: b.c, background: b.b }}>{t(ai ? 'x.ai_badge' : 'x.auto_badge', locale)}</span>
                 </button>
               );
             })}
@@ -133,6 +133,9 @@ export function ResultsView({ attemptId, locale, isPreview = false }: { attemptI
       )}
       {isPreview && !grading && sections.length > 0 && <div style={{ fontSize: 13, color: '#7A8699', fontWeight: 600 }}>{t('x.preview_result_note', locale)}</div>}
       {r.certificate && <div style={{ fontSize: 13, color: '#7A8699' }}>{t('results.cefr_cert_note', locale, { min: r.certificate.min })}</div>}
+      {summary.sections.length > 0 || summary.nextSteps.length > 0 ? (
+        <div className="xr-sum" style={{ ...card, padding: '24px 26px' }}><ResultSummary data={summary} locale={locale} /></div>
+      ) : null}
       {det && (
         <div style={{ ...card, padding: '24px 26px', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>

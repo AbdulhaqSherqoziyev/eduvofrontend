@@ -45,6 +45,16 @@ export function useExamResults(q: ResultsQuery, enabled = true) {
   return useQuery({ queryKey: [KEY, 'results', q], queryFn: () => centerExamsApi.results(q), placeholderData: keepPreviousData, enabled });
 }
 
+/** Staff full result of one attempt; re-read every 15 s while Writing/Speaking are graded. */
+export function useExamAttemptResult(id: string) {
+  return useQuery({
+    queryKey: [KEY, 'attempt-result', id],
+    queryFn: () => centerExamsApi.attemptResult(id),
+    enabled: !!id,
+    refetchInterval: (q) => (q.state.data?.status === 'PARTIAL' ? 15_000 : false),
+  });
+}
+
 function useInvalidate() {
   const qc = useQueryClient();
   return () => qc.invalidateQueries({ queryKey: [KEY] });

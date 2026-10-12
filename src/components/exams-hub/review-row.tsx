@@ -1,5 +1,6 @@
 'use client';
-/** ReviewRow (§4 / player G10): grey number always, green "To'g'ri javob" chip, no red, no strike-through. */
+/** ReviewRow (§4 / player G10): grey number always, green "To'g'ri javob" chip, no red, no strike-through.
+ * Not-correct rows: amber left rail + warm tint (10-12). Opens explanation + `evidence` (§1.10). */
 import { Check, ChevronDown, TextSearch } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
@@ -7,6 +8,7 @@ import { BoldText } from '@/components/exam/shell/BoldText';
 import { NmButton } from '@/components/ui/nm-button';
 import { ht } from '@/lib/exam/i18n/hub';
 import { correctLabel, rowNo } from '@/lib/exam/review-label';
+import { evidenceText } from '@/lib/exam/result-summary';
 import type { ReviewRow as Row } from '@/lib/exam/types';
 import { cn } from '@/lib/utils/cn';
 
@@ -15,15 +17,17 @@ const MathText = dynamic(() => import('@/components/exam/sat/MathText').then((m)
 
 const fmt = (v: Row['yours']) => (Array.isArray(v) ? v.join(', ') : v ?? '');
 
-export function ReviewRow({ r, onPassage }: { r: Row; onPassage?: (anchor: string) => void }) {
-  const [open, setOpen] = useState(false);
+/** `defaultOpen` — the staff result page's "Hammasini ochish" (remount with a new key to apply). */
+export function ReviewRow({ r, onPassage, defaultOpen = false }: { r: Row; onPassage?: (anchor: string) => void; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   const yours = fmt(r.yours);
   // SAT Math: LaTeX in explanations + the "fill the field" note on a short decimal (contract §1b hint)
   const math = r.sectionKey === 'math';
   const sprNote = r.hint === 'DECIMAL_NOT_FULL';
-  const canOpen = !!(r.explanation || sprNote || (r.passageAnchor && onPassage));
+  const evidence = evidenceText(r.evidence);
+  const canOpen = !!(r.explanation || evidence || sprNote || (r.passageAnchor && onPassage));
   return (
-    <div className="rounded-[14px] shadow-nm-inset-sm">
+    <div className={cn('rounded-[14px] shadow-nm-inset-sm', !r.isCorrect && 'border-l-[3px] border-[#E0A93B] bg-[#FFF8EA] dark:bg-[#E0A93B]/10')}>
       <button
         type="button"
         onClick={() => canOpen && setOpen((o) => !o)}
@@ -44,6 +48,11 @@ export function ReviewRow({ r, onPassage }: { r: Row; onPassage?: (anchor: strin
           {r.explanation ? (
             <p className="text-[13.5px] leading-[1.6] text-[#5b6b82]" style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}>
               <b className="font-sans text-[12.5px]">{ht('results.explanation')}: </b>{math ? <MathText text={r.explanation} bold /> : <BoldText text={r.explanation} />}
+            </p>
+          ) : null}
+          {evidence ? (
+            <p className="rounded-[10px] bg-white/70 px-3 py-2 text-[13.5px] leading-[1.6] text-[#5b6b82]" style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}>
+              <b className="font-sans text-[12.5px]">{ht('x.evidence')}: </b>«{evidence}»
             </p>
           ) : null}
           {sprNote ? <p className="text-[13px] font-semibold text-[#5b6b82]">{ht('sat.spr_field_note')}</p> : null}

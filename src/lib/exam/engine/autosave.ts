@@ -66,15 +66,19 @@ export function useAutosave({ attemptId, stageKey, active, dispatch, onLocked }:
     if (!active || !stageKey) return;
     const hb = window.setInterval(() => { if (Date.now() - lastSent.current > 29_000) void flush(); }, 5000);
     const online = () => void flush();
+    // a backgrounded / frozen tab (phone app switch) skips heartbeats — catch up the moment it is back
+    const visible = () => { if (document.visibilityState === 'visible' && (dirty.current.size || Date.now() - lastSent.current > 29_000)) void flush(); };
     const exit = () => {
       if (!dirty.current.size) return;
       examApi.saveOnExit(attemptId, { stageKey, answers: Array.from(dirty.current.entries()).map(([questionId, a]) => ({ questionId, value: a.value, uiState: null, clientSeq: a.seq })) });
     };
     window.addEventListener('online', online);
+    document.addEventListener('visibilitychange', visible);
     window.addEventListener('pagehide', exit);
     return () => {
       window.clearInterval(hb);
       window.removeEventListener('online', online);
+      document.removeEventListener('visibilitychange', visible);
       window.removeEventListener('pagehide', exit);
     };
   }, [active, stageKey, attemptId, flush]);

@@ -9,10 +9,19 @@ import { examApi } from '../api';
 import type { MediaRef } from '../types';
 
 const blobs = new Map<string, string>();
+const listeners = new Set<() => void>();
+const notify = () => listeners.forEach((l) => l());
 
 /** Practice mode registers its synthesized clip here. */
 export function registerBlob(assetId: string, url: string) {
   blobs.set(assetId, url);
+  notify();
+}
+
+/** useSyncExternalStore subscription: fires whenever a blob lands. */
+export function subscribeBlobs(fn: () => void): () => void {
+  listeners.add(fn);
+  return () => { listeners.delete(fn); };
 }
 
 export function blobUrlFor(assetId: string | null | undefined): string | null {
@@ -32,6 +41,33 @@ async function loadOne(ref: MediaRef, onBytes: (n: number) => void, signal: Abor
     onBytes(value.byteLength);
   }
   blobs.set(ref.assetId, URL.createObjectURL(new Blob(parts, { type: ref.mime || res.headers.get('Content-Type') || 'audio/mpeg' })));
+  notify();
+}
+
+const imageInflight = new Map<string, Promise<boolean>>();
+
+/**
+ * Images (Writing Task 1 chart, map/plan, SAT figure) are fetched to a Blob too,
+ * but never gate a start: the <img> falls back to the signed URL meanwhile. Once
+ * a blob exists the picture survives URL expiry (15 min) and task switches.
+ * data:/blob:/mock: URLs (mock + practice) need no fetch.
+ */
+export function prefetchImage(ref: MediaRef): Promise<boolean> {
+  if (ref.kind !== 'image' || !ref.url || /^(data:|blob:|mock:)/.test(ref.url)) return Promise.resolve(false);
+  if (blobs.has(ref.assetId)) return Promise.resolve(true);
+  const cur = imageInflight.get(ref.assetId);
+  if (cur) return cur;
+  const p = (async () => {
+    const ctrl = new AbortController();
+    const tm = setTimeout(() => ctrl.abort(), 20_000);
+    try { await loadOne(ref, () => undefined, ctrl.signal); return true; } catch { return false; } finally { clearTimeout(tm); imageInflight.delete(ref.assetId); }
+  })();
+  imageInflight.set(ref.assetId, p);
+  return p;
+}
+
+export function prefetchImages(refs: MediaRef[]): void {
+  for (const r of refs) if (r.kind === 'image') void prefetchImage(r);
 }
 
 export interface PreloadState { progress: number; ready: boolean; error: boolean; failCount: number; bytesPerSec: number | null; retry: () => void }

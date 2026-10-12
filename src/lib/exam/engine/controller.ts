@@ -8,7 +8,7 @@ import { useAutosave } from './autosave';
 import { decideBoot } from './boot';
 import { serverNow, useClockSync } from './clock';
 import { requestFullscreen, useIntegrity } from './integrity';
-import { blobUrlFor, useMediaPreload } from './media';
+import { blobUrlFor, prefetchImages, useMediaPreload } from './media';
 import { reducer } from './reducer';
 import { flatQuestions, tasksOf } from './selectors';
 import { initialState, type Highlight, type UiPrefs } from './state';
@@ -52,6 +52,10 @@ export function useExamController(attemptId: string) {
   // before a stage: preload its audio while no timer runs; in a section only as a fallback
   // when the backend sent no `preload` (then the timer is already running — Bekzod req).
   const media = useMediaPreload(['precheck', 'intro', 'welcome', 'tryout'].includes(s.phase) ? s.preload : s.phase === 'section' ? s.media : []);
+  // images: fetched to blobs in the background (never gating) — before the stage from `preload`,
+  // in the stage from `media`, so Task 1 charts / maps survive URL expiry and flaky links.
+  useEffect(() => { prefetchImages(s.preload); }, [s.preload]);
+  useEffect(() => { prefetchImages(s.media); }, [s.media]);
 
   // ── answers ──
   const setAnswer = useCallback((ids: string[], value: AnswerValue) => {
@@ -87,6 +91,29 @@ export function useExamController(attemptId: string) {
     for (const [id, a] of Object.entries(cur.answers)) if (!a.synced && ids.has(id)) autosave.queue([id], a.v, a.seq);
     return { ok: true, resp };
   }, [attemptId, autosave, boot]);
+
+  /**
+   * Fresh signed media URLs for the running stage. `start` is idempotent (same
+   * deadline, new URLs — backend StageStartService), so an <img> whose URL failed
+   * or expired can ask again. Single-flight, at most once per 4 s.
+   */
+  const refreshing = useRef<{ p: Promise<boolean> | null; at: number }>({ p: null, at: 0 });
+  const refreshMedia = useCallback(async (): Promise<boolean> => {
+    const r0 = refreshing.current;
+    if (r0.p) return r0.p;
+    if (Date.now() - r0.at < 4000) return false;
+    const cur = live.current;
+    if (cur.phase !== 'section' || !cur.stageKey) return false;
+    const sk = cur.stageKey;
+    r0.at = Date.now();
+    r0.p = (async () => {
+      const r = await examApi.startStage(attemptId, sk);
+      if (!r.ok || r.data.stage.stageKey !== sk) return false;
+      dispatch({ t: 'MEDIA', stageKey: sk, refs: r.data.media });
+      return true;
+    })().finally(() => { refreshing.current.p = null; });
+    return r0.p;
+  }, [attemptId]);
 
   const nextInfo = useCallback(() => {
     const cur = live.current;
@@ -148,7 +175,7 @@ export function useExamController(attemptId: string) {
     for (const p of c.parts) if (p.audioAssetId && !blobUrlFor(p.audioAssetId)) await examApi.reportSkip(attemptId, started.resp.stage.stageKey, p.part);
   }, [attemptId, beginStage]);
 
-  return { s, dispatch, stage, sectionCfg, stageCfg, media, setAnswer, beginStage, submit, timeOut, setUi, reportSkip, integrity, boot };
+  return { s, dispatch, stage, sectionCfg, stageCfg, media, setAnswer, beginStage, submit, timeOut, setUi, reportSkip, integrity, boot, refreshMedia };
 }
 
 export type ExamCtl = ReturnType<typeof useExamController>;

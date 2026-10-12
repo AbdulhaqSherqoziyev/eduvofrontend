@@ -3,7 +3,6 @@ export const HUB_RESULTS = {
   'hubx.your_result': 'Natijangiz',
   'hubx.variant_line': 'Variant: {v}',
   'hubx.n_sections_result': "{n} ta bo'lim natijasi",
-  'hubx.ai_estimate': 'AI taxmini',
   'hubx.scale_top': 'Shkalaning eng yuqori balli',
   'hubx.review_title': "Javoblarni ko'rib chiqish",
   'hubx.n_of_total': '{total} tadan {n} ta to\'g\'ri',
@@ -18,7 +17,6 @@ export const HUB_RESULTS = {
   // Hub layout: the other section cards sit above the Writing panel.
   'hubx.others_ready_above': 'Qolgan natijalaringiz yuqorida tayyor.',
   'hubx.words_fact': "{n} so'z · kamida {m}",
-  'hubx.range_fact': "Oraliq ko'rinishida",
   'hubx.prog_title': 'Natijalarim',
   'hubx.stat_mocks': 'MOCKLAR',
   'hubx.stat_best': 'SHAXSIY ENG YAXSHI',

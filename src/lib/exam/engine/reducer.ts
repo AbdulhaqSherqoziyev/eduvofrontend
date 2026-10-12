@@ -22,6 +22,7 @@ export type Action =
   | { t: 'TIMEUP_START'; next: { title: string; minutes: number } | null; writing: boolean }
   | { t: 'TIMEUP_ACK' }
   | { t: 'PRELOAD'; refs: MediaRef[] }
+  | { t: 'MEDIA'; stageKey: string; refs: MediaRef[] }
   | { t: 'FS'; exited: boolean }
   | { t: 'TAB_NOTED'; at: number | null };
 
@@ -79,6 +80,9 @@ export function reducer(s: ExamState, a: Action): ExamState {
       return {
         ...s, stages, stageKey: r.nextStageKey, content: null, media: [], preload: r.preload, highlights: [], flags: {}, modal: null, submitting: false, submitError: null,
         prevSubmitted: a.title, phase, timeup: a.reason === 'timeout' ? { next: a.next, writing: a.writing, acked: true } : null, partIdx: 0, currentQ: null,
+        // the server just answered — a SYNC_FAIL left over from a failed submit try must not
+        // greet the next section with a stale "Reconnecting…" banner
+        syncFailSince: null, backOnlineAt: s.syncFailSince != null ? Date.now() : s.backOnlineAt,
       };
     }
     case 'TIMEUP_START':
@@ -87,6 +91,14 @@ export function reducer(s: ExamState, a: Action): ExamState {
       return { ...s, phase: s.stageKey ? 'intro' : 'complete', timeup: null };
     case 'PRELOAD':
       return { ...s, preload: a.refs };
+    case 'MEDIA': {
+      // fresh signed URLs for the running stage (idempotent re-start); never touches answers/deadline
+      if (s.phase !== 'section' || s.stageKey !== a.stageKey || !a.refs.length) return s;
+      const fresh = new Map(a.refs.map((r) => [r.assetId, r]));
+      const media = s.media.map((m) => fresh.get(m.assetId) ?? m);
+      for (const r of a.refs) if (!s.media.some((m) => m.assetId === r.assetId)) media.push(r);
+      return { ...s, media };
+    }
     case 'FS':
       return { ...s, fsExited: a.exited };
     case 'TAB_NOTED':

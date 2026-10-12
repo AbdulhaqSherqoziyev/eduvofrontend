@@ -46,9 +46,3 @@ export function autoStarts(stages: StageBrief[], stageKey: string | null | undef
 
 export const hasCalculator = (cfg: StageCfg | null | undefined) => !!cfg?.tools_extra?.includes('graphing_calculator');
 export const hasReference = (cfg: StageCfg | null | undefined) => !!cfg?.tools_extra?.includes('reference_sheet');
-
-/** "Estimated" band around a scaled SAT score (contract §1b: ±range_delta, 30 by default),
- *  section 200–800; the total is the sum of the section bands. */
-export function satRange(scaled: number, delta = 30, lo = 200, hi = 800): [number, number] {
-  return [Math.max(lo, scaled - delta), Math.min(hi, scaled + delta)];
-}

@@ -23,7 +23,7 @@ export const HUB_DETAIL = {
   'hubx.try_interface': "Interfeysni sinab ko'ring · 2 daqiqa, baholanmaydi",
   'hubx.how_graded': 'Qanday baholanadi',
   'hubx.how_auto': "Javoblar kaliti bilan solishtiriladi, keyin aylantirish jadvali orqali ballga o'tkaziladi. Natija darhol chiqadi.",
-  'hubx.how_ai': "Writing'ni AI rasmiy mezonlar bo'yicha baholaydi va qayta tekshiradi. Natija bir necha daqiqada, oraliq ko'rinishida chiqadi.",
+  'hubx.how_ai': "Writing'ni AI rasmiy mezonlar bo'yicha baholaydi va qayta tekshiradi. Natija bir necha daqiqada chiqadi.",
   'hubx.assigned_session': 'TAYINLANGAN SESSIYA',
   'hubx.starts_in': 'Boshlanishiga {t}',
   'hubx.unfinished_section': 'Tugallanmagan · {s}',

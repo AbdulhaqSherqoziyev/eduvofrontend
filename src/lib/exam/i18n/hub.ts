@@ -14,7 +14,7 @@ const HUBX = {
   'hubx.tab_progress': 'Natijalarim',
   'hubx.back_cabinet': 'Kabinetga qaytish',
   'hubx.sign_out': 'Chiqish',
-  'hubx.footer': "Bu mashq testlari rasmiy imtihon formatiga mos tuzilgan, lekin IELTS hamkorlari, UZBMB va boshqa rasmiy tashkilotlar bilan bog'liq emas. Ballar taxminiy (estimated).",
+  'hubx.footer': "Bu mashq testlari rasmiy imtihon formatiga mos tuzilgan, lekin IELTS hamkorlari, UZBMB va boshqa rasmiy tashkilotlar bilan bog'liq emas.",
   'hubx.title': 'Mock imtihonlar',
   'hubx.lead': "Real imtihon formatida mashq qiling. Listening va Reading natijasi darhol, Writing — bir necha daqiqada.",
   'hubx.assigned': 'Tayinlangan',

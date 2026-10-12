@@ -150,7 +150,13 @@ export interface ReviewRow {
   correctText?: string[] | null;
   /** contract v1.4: the stage the question belonged to (`rw_m1`, `math_m2`, `listening`…) — SAT rows read "M1·4" since `no` restarts per module. */
   stageKey?: string;
+  /** Not in the v1.8 contract (evidence = `passageAnchor`); drawn only if a later version sends it (string or {text}). */
+  evidence?: unknown;
 }
+/** §1.10 v1.8 `overallBand` (2026-10-12): overall from the READY sections (IELTS without Speaking, SAT 400–1600). */
+export interface EstimatedOverall { value: number | null; label: string | null; level?: string | null; basis: string[]; missing: string[]; pending?: boolean }
+export interface SummaryTypeLine { type: string; label?: string | null; correct: number; total: number }
+export interface ResultSummarySection { section: string; title?: string; correct: number | null; total: number | null; byType: SummaryTypeLine[]; weakest?: unknown[]; strongest?: unknown[]; tasks?: unknown[] }
 export interface ResultResp {
   attemptId: string; examCode: string; mode: 'full' | 'section'; status: 'PARTIAL' | 'FINAL';
   sections: ResultSection[];
@@ -163,5 +169,9 @@ export interface ResultResp {
   examName?: string; // req: "IELTS Academic · Full mock" header
   passages?: { sectionKey: string; part: number; title: string | null; passageHtml: string }[]; // req: "Show in passage"
   practice?: { type: string; label: string; questions: number }; // req: T35 "Practice: <type> · N questions"
+  overallBand?: EstimatedOverall | null;
+  /** pre-v1.8 working name of `overallBand` (tolerated). */
+  estimatedOverall?: EstimatedOverall | null;
+  summary?: { sections?: ResultSummarySection[]; nextSteps?: string[] } | null;
   serverNow: Iso;
 }

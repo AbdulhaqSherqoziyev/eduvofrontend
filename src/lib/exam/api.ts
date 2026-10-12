@@ -54,7 +54,9 @@ let token: string | null = null;
 export function setExamToken(t: string | null) { token = t; }
 
 async function req<T>(path: string, method = 'GET', body?: unknown): Promise<ExamResult<T>> {
-  if (typeof navigator !== 'undefined' && navigator.onLine === false) return { ok: false, kind: 'network' };
+  // No navigator.onLine short-circuit: it can read false while the link works (Chrome on Linux /
+  // VPN / Wi-Fi hand-over) and would silence autosave, heartbeat and integrity together. A truly
+  // offline fetch rejects at once anyway.
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   const t0 = performance.now();

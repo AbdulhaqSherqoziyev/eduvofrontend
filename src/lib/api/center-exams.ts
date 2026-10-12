@@ -51,10 +51,24 @@ export interface ResultRow {
   attemptId: string; studentId: string; fullName: string; examCode: string; testTitle: string | null;
   mode: 'full' | 'section'; status: AttemptStatus; finishedAt: string | null;
   sections: ResultSection[]; overall: number | null; integrityCount: number;
+  /** `?includePreview=1` (2026-10-12): staff preview attempts ("Sinov") and who ran them. */
+  isPreview?: boolean; previewBy?: { id: string; fullName: string } | null;
+  /** v1.8: overall from the READY sections (also when Speaking is missing). */
+  overallBand?: { value: number | null; label: string | null } | null;
 }
 export type ResultRowFull = ResultRow & Partial<ResultRowV3>;
 export interface Results { rows: ResultRowFull[]; kpis?: ResultKpis }
-export interface ResultsQuery { assignmentId?: string; groupId?: string; examCode?: string; from?: string; to?: string }
+export interface ResultsQuery { assignmentId?: string; groupId?: string; examCode?: string; from?: string; to?: string; includePreview?: boolean }
+
+/** Contract §2c (v1.8). Staff-only fields are optional and read defensively (see `staff-result.ts`). */
+export type StaffAttemptResult = import('@/lib/exam/types').ResultResp & {
+  isPreview?: boolean; previewBy?: { id: string; fullName: string } | null;
+  student?: { id: string; fullName: string; group: { id: string; name: string } | null } | null;
+  assignment?: { id: string; title: string | null } | null;
+  test?: { id: string; title: string | null } | null;
+  attemptStatus?: string; startedAt?: string | null; finishedAt?: string | null;
+  integrity?: unknown; timing?: unknown; essays?: unknown;
+};
 
 export interface PreviewSession { attemptId: string; token: string; expiresAt: string }
 export interface AccessCode { studentId: string; fullName: string; code: string }
@@ -73,7 +87,9 @@ export const centerExamsApi = {
   remove: (id: string) => api.delete<{ ok: true }>(`/exams/assignments/${id}`).then((r) => r.data),
   live: (id: string) => api.get<Live>(`/exams/assignments/${id}/live`).then((r) => r.data),
   results: (q: ResultsQuery) =>
-    api.get<Results>('/exams/results', { params: cleanParams(q) }).then((r) => r.data),
+    api.get<Results>('/exams/results', { params: cleanParams({ ...q, includePreview: q.includePreview ? 1 : undefined }) }).then((r) => r.data),
+  /** Staff full result (2026-10-12): the student's §1.10 result + essay text, student, assignment, integrity, timing. */
+  attemptResult: (id: string) => api.get<StaffAttemptResult>(`/exams/attempts/${id}/result`).then((r) => r.data),
   preview: (testId: string, sectionKey?: string) =>
     api.post<PreviewSession>('/exams/attempts/preview', cleanParams({ testId, sectionKey })).then((r) => r.data),
   accessCodes: (assignmentId: string, studentIds?: string[]) =>
