@@ -1,7 +1,7 @@
 'use client';
 /** Player root: tokens/theme scope, desktop gate, phase → screen. */
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ExamContext } from '@/lib/exam/engine/context';
 import { useExamController } from '@/lib/exam/engine/controller';
 import { autoStarts, isSat } from '@/lib/exam/sat/flow';
@@ -38,6 +38,13 @@ function Player({ attemptId, onComplete }: { attemptId: string; onComplete: () =
   const host = useExamHost();
   const { s } = ctl;
   const l = s.ui.locale;
+  // host ran its own system check (mock.eduvo.uz Exam Start) → no second pre-check screen
+  const skipPre = useRef<boolean | null>(null);
+  if (skipPre.current === null) skipPre.current = host.skipPrecheck?.() ?? false;
+  const dispatch = ctl.dispatch;
+  useEffect(() => {
+    if (s.phase === 'precheck' && skipPre.current) dispatch({ t: 'PHASE', phase: 'intro' });
+  }, [s.phase, dispatch]);
   // Digital SAT: own module screen, break, and intro-less module handoff (sat.md §4)
   const sat = isSat(s.config);
   useEffect(() => {
@@ -54,7 +61,7 @@ function Player({ attemptId, onComplete }: { attemptId: string; onComplete: () =
       ? host.renderAuthExpired({ retry: () => void ctl.boot(), locale: l })
       : <Message locale={l} k="errors.session_expired" action={{ label: t('x.open_portal', l), on: () => { window.location.href = '/portal'; } }} />; break;
     case 'error': body = <Message locale={l} k={s.error?.code === 'ATTEMPT_NOT_FOUND' ? 'errors.attempt_locked' : s.error?.kind === 'network' ? 'banner.offline' : 'errors.server'} action={{ label: t('chrome.retry', l), on: () => void ctl.boot() }} />; break;
-    case 'precheck': body = <PreCheck />; break;
+    case 'precheck': body = skipPre.current ? <Centered><Spinner size={22} /></Centered> : <PreCheck />; break;
     case 'tryout': body = <TryInterface />; break;
     case 'welcome': body = <WelcomeBack />; break;
     case 'intro': body = handoff ? <SatHandoff /> : <SectionIntro />; break;

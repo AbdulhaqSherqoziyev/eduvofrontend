@@ -20,5 +20,14 @@
     "back": "Qaytdingiz. Javoblaringiz saqlandi.",
     "email": "Email",
     "password": "Parol"
+  },
+  "help": {
+    "button": "Yordam",
+    "title": "Yordam",
+    "close": "Yopish",
+    "instrLang": "Ko‘rsatmalar tili",
+    "nav": "Savollar o‘rtasida o‘tish uchun Next va Back tugmalari yoki pastdagi raqamlardan foydalaning. Review savolni keyinroq topishingiz uchun belgilaydi.",
+    "tech": "Yordam paytida taymer to‘xtamaydi. Texnik muammo bo‘lsa, support@eduvo.uz manziliga test ID {id} bilan yozing.",
+    "techNoId": "Yordam paytida taymer to‘xtamaydi. Texnik muammo bo‘lsa, support@eduvo.uz manziliga yozing."
   }
 }

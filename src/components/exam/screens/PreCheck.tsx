@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useExam, useT } from '@/lib/exam/engine/context';
 import { requestFullscreen } from '@/lib/exam/engine/integrity';
 import type { TextKey } from '@/lib/exam/i18n';
+import { useExamHost } from '../host';
 import { LangSwitch } from '../shell/SettingsMenu';
 import { Btn, Caps } from '../shell/ui';
 import { CheckCard, hint, type CheckStatus } from './precheck/CheckCard';
@@ -20,6 +21,7 @@ const RULE_BY_FAMILY: Record<string, TextKey> = { IELTS: 'precheck.rule_ielts', 
 
 export function PreCheck() {
   const { s, dispatch, media } = useExam();
+  const host = useExamHost();
   const { t } = useT();
   const cfg = s.config!;
   const main = s.stages.filter((x) => !x.separateSitting);
@@ -85,7 +87,7 @@ export function PreCheck() {
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
         <div style={{ display: 'flex', gap: 14 }}>
-          <Btn h={52} style={{ fontSize: 15, borderRadius: 14, padding: '0 22px' }} onClick={() => { window.location.href = '/portal'; }}>{t('chrome.cancel')}</Btn>
+          <Btn h={52} style={{ fontSize: 15, borderRadius: 14, padding: '0 22px' }} onClick={() => { window.location.href = host.cancelHref ?? '/portal'; }}>{t('chrome.cancel')}</Btn>
           <Btn h={52} variant="accent" disabled={!ready} style={{ fontSize: 15.5, borderRadius: 14, padding: '0 30px' }}
             onClick={() => { requestFullscreen(); dispatch({ t: 'PHASE', phase: 'intro' }); }}>{t('chrome.enter_fullscreen_start')}</Btn>
         </div>

@@ -39,6 +39,13 @@ export function useExamController(attemptId: string) {
   useEffect(() => { void boot(); }, [boot]);
 
   useClockSync(s.phase !== 'boot' && s.phase !== 'error' && s.phase !== 'auth');
+  // running stage's deadline on this device (read by the mock site's signed-out modal)
+  const runningDeadline = s.phase === 'section' ? stage?.deadlineAt ?? null : null;
+  const betweenStages = s.phase === 'intro' || s.phase === 'timeup' || s.phase === 'complete';
+  useEffect(() => {
+    if (runningDeadline) store.saveDeadline(attemptId, runningDeadline);
+    else if (betweenStages) store.saveDeadline(attemptId, null);
+  }, [attemptId, runningDeadline, betweenStages]);
 
   // ── persistence of prefs/flags/highlights ──
   useEffect(() => { if (s.attempt) store.saveUi(attemptId, s.ui); }, [attemptId, s.ui, s.attempt]);

@@ -12,8 +12,9 @@ import { setExamToken } from '@/lib/exam/api';
 import { useLang } from '@/lib/mock/hooks/use-lang';
 import { sx } from '@/lib/mock/sx';
 import { useToast } from '../toast';
+import { TimeLeft, useTimeLeft } from './time-left';
 
-export function SessionModal({ onBack }: { onBack: () => void }) {
+export function SessionModal({ attemptId, onBack }: { attemptId: string; onBack: () => void }) {
   const t = useTranslations('player.session');
   const tc = useTranslations('common');
   const { href } = useLang();
@@ -24,6 +25,8 @@ export function SessionModal({ onBack }: { onBack: () => void }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<{ kind: 'field' | 'warn' | 'err'; text: string } | null>(null);
   const pwRef = useRef<HTMLInputElement>(null);
+  const left = useTimeLeft(attemptId);
+  const timeUp = left !== null && left <= 0;
   useEffect(() => { pwRef.current?.focus(); }, []);
 
   const submit = async (e: React.FormEvent) => {
@@ -53,11 +56,15 @@ export function SessionModal({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="m-modal-wrap" style={sx('position:absolute;background:rgba(15,20,30,.45)')}>
-      <form className="m-modal" role="dialog" aria-modal="true" aria-label={t('title')} onSubmit={submit} noValidate lang={undefined}
+      <form className="m-modal" role="dialog" aria-modal="true" aria-label={t('title')} onSubmit={submit} noValidate lang={undefined} style={sx('color:var(--ink)')}
         onKeyDown={(e) => { if (e.key === 'Escape') e.preventDefault(); }}>
-        <span className="m-pill m-pill--warn" style={sx('align-self:flex-start')}>{t('chip')}</span>
+        <div style={sx('display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px')}>
+          <span className="m-pill m-pill--warn" style={sx('align-self:flex-start')}>{t('chip')}</span>
+          {timeUp && <span style={sx('font-size:13px;font-weight:700;color:var(--warn)')}>{t('timeUp')}</span>}
+        </div>
         <h2 style={sx('margin:0;font-size:22px;font-weight:800')}>{t('title')}</h2>
         <p style={sx('margin:0;color:var(--ink2);font-size:15px;line-height:var(--lh-body)')}>{t('body')}</p>
+        {left !== null && !timeUp && <TimeLeft ms={left} />}
         <label className="m-field">{t('email')}
           <input className="m-input" type="email" dir="ltr" value={email} readOnly={!!known} onChange={(e) => setEmail(e.target.value)} style={sx('text-align:start')} />
         </label>

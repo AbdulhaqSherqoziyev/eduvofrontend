@@ -60,6 +60,10 @@ export const store = {
   activeStage: (id: string) => read<string | null>(`${id}:active`, null),
   setActiveStage: (id: string, stageKey: string | null) => write(`${id}:active`, stageKey),
 
+  /** Server deadline of the running stage — lets a host show "Time left" while signed out (mock §5.2). */
+  deadline: (id: string) => read<string | null>(`${id}:deadline`, null),
+  saveDeadline: (id: string, deadlineAt: string | null) => write(`${id}:deadline`, deadlineAt),
+
   locale: () => read<'en' | 'uz' | null>('locale', null),
   saveLocale: (l: 'en' | 'uz') => write('locale', l),
 };

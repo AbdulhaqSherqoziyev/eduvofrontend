@@ -7,6 +7,7 @@
  */
 import { useState, type ReactNode } from 'react';
 import { useExam, useT } from '@/lib/exam/engine/context';
+import { useExamHost } from '../host';
 import type { FontKey } from '@/lib/exam/engine/state';
 import { isSat } from '@/lib/exam/sat/flow';
 import { RichText } from './RichText';
@@ -21,6 +22,7 @@ export function TopBar({ sectionTitle, remaining, pulse, short, noWarn, extra }:
   const { s, setUi, sectionCfg } = useExam();
   const { t } = useT();
   const [dirOpen, setDirOpen] = useState(false);
+  const host = useExamHost();
   const cand = s.attempt?.candidate;
   const font = s.ui.font;
   const sat = isSat(s.config);
@@ -30,6 +32,7 @@ export function TopBar({ sectionTitle, remaining, pulse, short, noWarn, extra }:
   return (
     <div style={{ height: 60, flexShrink: 0, background: 'var(--x-panel)', borderBottom: '1px solid var(--x-line)', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', padding: '0 22px', position: 'relative', zIndex: 10 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+        {host.topBarBrand}
         <span style={{ fontSize: 14.5, fontWeight: 800, whiteSpace: 'nowrap' }}>{short ?? s.config?.short ?? s.config?.family} {t('x.mock')}</span>
         <span style={{ color: 'var(--x-muted)' }}>/</span>
         <span style={{ fontSize: 14.5, fontWeight: 600, color: 'var(--x-sub)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{sectionTitle}</span>
@@ -40,7 +43,8 @@ export function TopBar({ sectionTitle, remaining, pulse, short, noWarn, extra }:
         {cand && <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--x-sub)', marginRight: 6, whiteSpace: 'nowrap' }}>{cand.name}{cand.code ? ` · ${cand.code}` : ''}</span>}
         {!sat && dirBtn}
         {extra}
-        <button type="button" style={{ ...btn, fontSize: 13, fontWeight: 800 }} aria-label={t('chrome.text_size')}
+        {host.topBarTools}
+        <button type="button" style={{ ...btn, fontSize: 13, fontWeight: 800, whiteSpace: 'nowrap' }} aria-label={t('chrome.text_size')}
           onClick={() => setUi({ font: FONTS[(FONTS.indexOf(font) + 1) % 3] })}>Aa {font.toUpperCase()}</button>
         <SettingsMenu />
       </div>
