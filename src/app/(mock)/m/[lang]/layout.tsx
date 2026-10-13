@@ -7,6 +7,7 @@ import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { LOCALES, RTL_LOCALES, dirOf, htmlLang, isLocale, isTranslated, type MockLocale } from '@/i18n/locales';
+import { CookieNotice } from '@/components/mock-site/cookie-notice';
 import { fontVarsFor } from '@/lib/mock/fonts';
 import { MOCK_ORIGIN } from '@/lib/mock/seo';
 import '../../mock.css';
@@ -54,7 +55,7 @@ export default async function MockRootLayout({ children, params: { lang } }: { c
       </head>
       <body>
         {/* only `common` goes to every client bundle; pages add their own namespaces where needed */}
-        <NextIntlClientProvider locale={locale} messages={{ common: messages.common }}>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider locale={locale} messages={{ common: messages.common }}>{children}<CookieNotice /></NextIntlClientProvider>
       </body>
     </html>
   );

@@ -1,0 +1,127 @@
+{
+  "meta": {
+    "title": "Yordam markazi",
+    "description": "Eduvo Mock imtihonlari, to‘lovlar, akkaunt va texnik sozlash bo‘yicha javoblar.",
+    "contactTitle": "Qo‘llab-quvvatlash bilan aloqa",
+    "contactDescription": "Eduvo Mock qo‘llab-quvvatlash jamoasiga email yoki Telegram orqali yozing."
+  },
+  "h1": "Yordam markazi",
+  "sub": "Testlar, to‘lovlar va akkaunt haqidagi ko‘p beriladigan savollarga javoblar.",
+  "search": "Yordamdan qidirish",
+  "noResults": "“{q}” bo‘yicha hech narsa topilmadi. Boshqa so‘zlar bilan qidiring yoki bizga yozing.",
+  "groups": {
+    "exams": "Imtihonlar",
+    "payments": "To‘lovlar",
+    "account": "Akkaunt",
+    "technical": "Texnik"
+  },
+  "faq": {
+    "exams": [
+      {
+        "q": "Qaysi imtihonlarni topshirsam bo‘ladi?",
+        "a": "IELTS Academic va Digital SAT. CEFR, TOEFL iBT va HSK tez orada ochiladi — ochilganda emailga xabar olishni so‘rashingiz mumkin."
+      },
+      {
+        "q": "Bu rasmiy imtihon yoki sertifikatmi?",
+        "a": "Yo‘q. Eduvo Mock — kompyuterdagi imtihon formatidagi mashq testi. U rasmiy sertifikat emas va IELTS, British Council, IDP, Cambridge yoki College Board bilan bog‘liq emas."
+      },
+      {
+        "q": "Testim qanday baholanadi?",
+        "a": "Listening, Reading va SAT javoblari topshirishingiz bilan baholanadi. Writing har bir rasmiy mezon bo‘yicha AI tomonidan baholanadi, odatda 2–4 daqiqada; natija sahifasi o‘zi yangilanadi."
+      },
+      {
+        "q": "Bir xil test ikki marta tushadimi?",
+        "a": "Yo‘q. Boshlagan testingiz sizga boshqa hech qachon berilmaydi, hatto uning faqat bitta bo‘limini topshirgan bo‘lsangiz ham."
+      },
+      {
+        "q": "Bepul bo‘lim nima?",
+        "a": "Har bir imtihonda bitta bo‘lim bepul: IELTS Listening yoki Reading, yoki SAT Reading and Writing. Writing bepul bo‘limga kirmaydi."
+      },
+      {
+        "q": "Testni to‘xtatib tursam bo‘ladimi?",
+        "a": "Yo‘q. Haqiqiy imtihondagidek, bo‘lim boshlangach taymer to‘xtamaydi. Internet uzilsa, javoblaringiz saqlanadi — davom etish uchun tezroq qayta ulaning."
+      }
+    ],
+    "payments": [
+      {
+        "q": "To‘lovimni kim qayta ishlaydi?",
+        "a": "USD va EUR’dagi karta to‘lovlarini Merchant of Record — Paddle.com qayta ishlaydi. Kvitansiya va bank ko‘chirmasida Paddle nomi ko‘rinadi."
+      },
+      {
+        "q": "Kreditlar qancha amal qiladi?",
+        "a": "Xarid sanasidan boshlab 12 oy."
+      },
+      {
+        "q": "Pulimni qaytarib olsam bo‘ladimi?",
+        "a": "Ha, ishlatilmagan kreditlar uchun xariddan keyin 14 kun ichida. Boshlangan mock uchun pul qaytarilmaydi, agar uni bizdagi texnik nosozlik to‘xtatmagan bo‘lsa. Batafsil — [Pulni qaytarish siyosati](/refunds)da."
+      },
+      {
+        "q": "AI Writing’imni baholay olmasa-chi?",
+        "a": "Kredit hisobingizga avtomatik qaytadi. Bizga yozishingiz shart emas."
+      },
+      {
+        "q": "To‘lov o‘tdi, lekin kreditlar yo‘q.",
+        "a": "Kreditlar to‘lov provayderi to‘lovni tasdiqlaganda qo‘shiladi, odatda bir daqiqa ichida. Buyurtma sahifasini ochib \"Holatni tekshirish\"ni bosing. Kreditlar baribir ko‘rinmasa, kvitansiya raqami bilan bizga yozing."
+      }
+    ],
+    "account": [
+      {
+        "q": "Tasdiqlash emaili kelmadi.",
+        "a": "Spam papkasini tekshiring, keyin tasdiqlash sahifasida \"Qayta yuborish\"ni bosing. Kiritgan manzilingiz to‘g‘riligiga ishonch hosil qiling."
+      },
+      {
+        "q": "Parolni qanday tiklayman?",
+        "a": "Kirish sahifasida \"Parolni unutdingizmi\"ni bosing va emailingizni kiriting. Yangi parol o‘rnatish uchun havola yuboramiz."
+      },
+      {
+        "q": "Interfeys tilini o‘zgartirsam bo‘ladimi?",
+        "a": "Ha, sarlavhadagi yoki profilingizdagi til tugmasidan foydalaning. Imtihon materiallari ingliz tilida qoladi; interfeys va AI izohi siz tanlagan tilda bo‘ladi."
+      },
+      {
+        "q": "Akkauntimni qanday o‘chiraman?",
+        "a": "Akkaunt bo‘limida \"Akkauntni o‘chirish\"ni tanlang yoki support@eduvo.uz ga yozing. Akkauntingiz 14 kundan keyin butunlay o‘chiriladi."
+      }
+    ],
+    "technical": [
+      {
+        "q": "Testni telefonda topshirsam bo‘ladimi?",
+        "a": "Yo‘q. Imtihon pleyeri, haqiqiy kompyuterdagi imtihon kabi, ekran eni kamida 1280 px bo‘lgan kompyuterni talab qiladi. Telefonda saytni ko‘rish, to‘lov qilish va natijalarni ko‘rish mumkin."
+      },
+      {
+        "q": "Qaysi brauzerdan foydalanay?",
+        "a": "Kompyuterda Chrome, Edge, Firefox yoki Safari’ning yangi versiyasi. Saytga to‘liq ekran va ovozga ruxsat bering."
+      },
+      {
+        "q": "Quloqchin kerakmi?",
+        "a": "IELTS Listening uchun ha. Audio haqiqiy imtihondagidek bir marta eshittiriladi."
+      },
+      {
+        "q": "Internet uzilib qolsa nima bo‘ladi?",
+        "a": "Javoblaringiz avtomatik saqlanadi. Qayta ulanayotganimiz haqida banner chiqadi; aloqa tiklangach, to‘xtagan joyingizdan davom etasiz."
+      }
+    ]
+  },
+  "stillNeed": "Hali ham yordam kerakmi?",
+  "contactCta": "Qo‘llab-quvvatlashga yozish",
+  "contact": {
+    "h1": "Qo‘llab-quvvatlash bilan aloqa",
+    "sub": "Bizga email yoki Telegram orqali yozing. O‘zbek, rus va ingliz tillarida javob beramiz.",
+    "subEmailOnly": "Bizga email orqali yozing. O‘zbek, rus va ingliz tillarida javob beramiz.",
+    "emailTitle": "Email",
+    "emailText": "To‘lov, pulni qaytarish va akkaunt bo‘yicha savollar uchun eng qulayi.",
+    "emailCta": "Email yozish",
+    "telegramTitle": "Telegram",
+    "telegramText": "Testlar va sayt bo‘yicha tezkor savollar.",
+    "telegramCta": "Telegramni ochish",
+    "includeTitle": "Tezroq javob berishimiz uchun quyidagilarni yozing:",
+    "include": [
+      "Eduvo Mock akkauntingizdagi email manzil;",
+      "savolingiz test haqida bo‘lsa — test ID (masalan, IA-0142);",
+      "savolingiz to‘lov haqida bo‘lsa — kvitansiya raqami (EM- bilan boshlanadi);",
+      "xatolik ko‘rsangiz — skrinshot."
+    ],
+    "paddle": "Karta bilan to‘langan buyurtmalarni Merchant of Record — Paddle.com yuritadi. To‘lov bo‘yicha savollar bilan paddle.net’dagi Paddle xaridorlarni qo‘llab-quvvatlash xizmatiga ham murojaat qilishingiz mumkin.",
+    "copy": "Manzilni nusxalash",
+    "copied": "Email manzil nusxalandi"
+  }
+}

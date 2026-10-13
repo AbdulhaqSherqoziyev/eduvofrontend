@@ -3,8 +3,11 @@
 import { useState } from 'react';
 import { sx } from '@/lib/mock/sx';
 
-export function FaqDesktop({ items }: { items: Array<{ q: string; a: string }> }) {
-  const [open, setOpen] = useState(0);
+/** `initial` = index open on mount (-1: all closed). */
+export interface FaqItem { q: string; a: React.ReactNode }
+
+export function FaqDesktop({ items, initial = 0 }: { items: FaqItem[]; initial?: number }) {
+  const [open, setOpen] = useState(initial);
   return (
     <div style={sx('display:flex;flex-direction:column;gap:14px')}>
       {items.map((f, i) => (
@@ -19,8 +22,8 @@ export function FaqDesktop({ items }: { items: Array<{ q: string; a: string }> }
   );
 }
 
-export function FaqPhone({ items }: { items: Array<{ q: string; a: string }> }) {
-  const [open, setOpen] = useState(0);
+export function FaqPhone({ items, initial = 0 }: { items: FaqItem[]; initial?: number }) {
+  const [open, setOpen] = useState(initial);
   return (
     <div className="m-rows">
       {items.map((f, i) => (

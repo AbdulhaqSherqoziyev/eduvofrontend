@@ -89,5 +89,11 @@
     "disabled": "Eduvo Mock is updating. Try again in a few minutes.",
     "tryAgain": "Try again",
     "reload": "Reload"
+  },
+  "cookieNotice": {
+    "text": "We use only necessary cookies: to keep you signed in and to remember your language. No analytics or advertising.",
+    "more": "Cookie policy",
+    "ok": "OK",
+    "label": "Cookie notice"
   }
 }

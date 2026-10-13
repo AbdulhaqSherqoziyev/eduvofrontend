@@ -1,0 +1,412 @@
+{
+  "meta": {
+    "terms": {
+      "title": "Foydalanish shartlari",
+      "description": "mock.eduvo.uz saytidagi Eduvo Mock mashq testlaridan foydalanish shartlari."
+    },
+    "privacy": {
+      "title": "Maxfiylik siyosati",
+      "description": "Eduvo Mock qanday shaxsiy ma’lumotlarni yig‘adi, nima uchun, qancha saqlaydi va sizning huquqlaringiz."
+    },
+    "refunds": {
+      "title": "Pulni qaytarish siyosati",
+      "description": "Eduvo Mock kreditlari uchun pul qaytarish: ishlatilmagan kreditlar 14 kun ichida, kreditlarning avtomatik qaytishi."
+    },
+    "cookies": {
+      "title": "Cookie siyosati",
+      "description": "Eduvo Mock faqat zaruriy cookie’lardan foydalanadi: kirish sessiyasi va til."
+    }
+  },
+  "updated": "Oxirgi yangilanish: {date}",
+  "toc": "Ushbu sahifada",
+  "other": "Boshqa hujjatlar",
+  "questions": "Bu sahifa bo‘yicha savolingiz bormi? support@eduvo.uz manziliga yozing.",
+  "terms": {
+    "title": "Foydalanish shartlari",
+    "intro": "Bu shartlar mock.eduvo.uz saytidagi Eduvo Mock’dan foydalanganingizda amal qiladi. Akkaunt ochish yoki kredit sotib olishdan oldin ularni o‘qib chiqing.",
+    "sections": [
+      {
+        "id": "about",
+        "h": "1. Ushbu shartlar haqida",
+        "body": [
+          "Eduvo Mock (\"xizmat\", \"biz\") — Eduvo (eduvo.uz) mahsuloti. Xizmat kompyuterda topshiriladigan IELTS Academic va Digital SAT formatidagi mashq mock imtihonlarini topshirish va natijalarni ko‘rish imkonini beradi.",
+          "Akkaunt ochib, test topshirib yoki kredit sotib olib, siz ushbu shartlarga va [Maxfiylik siyosati](/privacy)ga rozilik bildirasiz. Rozi bo‘lmasangiz, xizmatdan foydalanmang."
+        ]
+      },
+      {
+        "id": "seller",
+        "h": "2. Sizga kim sotadi",
+        "body": [
+          "Buyurtmalarimiz onlayn reseller — Paddle.com orqali amalga oshiriladi. Paddle.com barcha buyurtmalarimiz bo‘yicha Merchant of Record (rasmiy sotuvchi) hisoblanadi. Mijozlarning barcha murojaatlarini Paddle ko‘rib chiqadi va qaytarishlarni amalga oshiradi.",
+          "Paddle orqali to‘lov qilganingizda, to‘lovga Paddle’ning xaridor shartlari ham amal qiladi. Kvitansiyada va bank ko‘chirmasida Paddle nomi ko‘rinadi.",
+          "O‘zbekistondagi ayrim o‘quvchilarga UZS’da mahalliy to‘lov usuli taklif qilinishi mumkin. Bunday buyurtmalarni Eduvo to‘g‘ridan-to‘g‘ri sotadi va qo‘llab-quvvatlaydi; bu haqda to‘lovdan oldin checkout sahifasida yoziladi."
+        ]
+      },
+      {
+        "id": "practice",
+        "h": "3. Mashq testlari, rasmiy imtihon emas",
+        "body": [
+          "Eduvo Mock mashq testlarini taqdim etadi. Eduvo Mock’dagi natija — mashq natijasi. U rasmiy imtihon natijasi emas va biz sertifikat bermaymiz.",
+          "Eduvo Mock IELTS, British Council, IDP, Cambridge University Press & Assessment yoki College Board bilan bog‘liq emas, ular tomonidan tasdiqlanmagan. IELTS — o‘z egalarining savdo belgisi. SAT — College Board’ning savdo belgisi. Bu nomlarni faqat test formatini tavsiflash uchun ishlatamiz."
+        ]
+      },
+      {
+        "id": "account",
+        "h": "4. Akkauntingiz",
+        "body": [
+          "Akkaunt ochish uchun kamida 16 yoshda bo‘lishingiz kerak. 16 yoshdan kichik bo‘lsangiz, ota-onangiz yoki qonuniy vakilingiz siz uchun ushbu shartlarga rozilik bildirishi va xizmatdan foydalanishingizni nazorat qilishi kerak.",
+          [
+            "Ro‘yxatdan o‘tishda to‘g‘ri ma’lumot bering va email manzilingizni dolzarb saqlang.",
+            "Parolingizni hech kimga bermang. Har bir akkaunt faqat bitta odam uchun.",
+            "Akkauntingizdan boshqa birov foydalangan deb o‘ylasangiz, support@eduvo.uz manziliga xabar bering."
+          ]
+        ]
+      },
+      {
+        "id": "credits",
+        "h": "5. Kreditlar va narxlar",
+        "body": [
+          "Siz to‘liq mock yoki bitta bo‘lim uchun kredit sotib olasiz. Narxlar [Narxlar](/pricing) sahifasida va to‘lovdan oldin checkout’da ko‘rsatiladi. Soliqlar (qo‘llaniladigan bo‘lsa) narxga kiritilgan.",
+          "Kreditlar sotib olingan kundan boshlab 12 oy amal qiladi. 12 oy ichida ishlatilmagan kreditlar muddati tugaydi.",
+          "Kreditlar shaxsiy. Ularni boshqa akkauntga o‘tkazib yoki naqd pulga almashtirib bo‘lmaydi.",
+          "Agar AI Writing’ingizni baholay olmasa yoki bizdagi texnik nosozlik mockingizni to‘xtatsa, kredit hisobingizga avtomatik qaytadi."
+        ]
+      },
+      {
+        "id": "refunds",
+        "h": "6. Pulni qaytarish",
+        "body": [
+          "Pulni qaytarish [Pulni qaytarish siyosati](/refunds)ga muvofiq amalga oshiriladi. Qisqasi: ishlatilmagan kreditlar uchun xariddan keyin 14 kun ichida pul to‘liq qaytariladi. Boshlangan mock uchun pul qaytarilmaydi, bizdagi texnik nosozlik bundan mustasno."
+        ]
+      },
+      {
+        "id": "use",
+        "h": "7. Halol foydalanish",
+        "body": [
+          "Xizmatdan foydalanganda quyidagilarni qilmaslikka rozilik bildirasiz:",
+          [
+            "test savollari, matnlar, audio yoki javoblarni nusxalash, yozib olish, skrinshot qilish, e’lon qilish yoki tarqatish;",
+            "akkauntingizni boshqaga berish yoki siz uchun boshqa odamning test topshirishi;",
+            "xizmatga kirish uchun bot, skript yoki boshqa avtomatik vositalardan foydalanish;",
+            "vaqt cheklovlari, xavfsizlik tekshiruvlari yoki to‘lovni chetlab o‘tishga urinish;",
+            "xizmat yoki boshqa o‘quvchilarning ishiga xalaqit berish."
+          ],
+          "Ushbu qoidalarni buzgan akkauntni to‘xtatib qo‘yishimiz yoki yopishimiz mumkin. Bunday holda sababini emailda yozamiz."
+        ]
+      },
+      {
+        "id": "content",
+        "h": "8. Test materiallari va sizning ishingiz",
+        "body": [
+          "Testlar, savollar, audio, izohlar va xizmat dizayni Eduvo yoki litsenziya beruvchilarimizga tegishli. Biz sizga ulardan faqat o‘z mashqingiz uchun foydalanish bo‘yicha shaxsiy, boshqaga o‘tkazilmaydigan huquq beramiz.",
+          "Javoblaringiz va insholaringiz sizniki bo‘lib qoladi. Testni baholash, natijalarni ko‘rsatish va progressni saqlash uchun ularni saqlash va qayta ishlashimizga ruxsat berasiz."
+        ]
+      },
+      {
+        "id": "ai",
+        "h": "9. AI baholash",
+        "body": [
+          "Listening, Reading va SAT javoblari topshirilganda baholanadi. Writing rasmiy ochiq mezonlar bo‘yicha AI modellari tomonidan baholanadi va har bir mezon bo‘yicha izoh beriladi. AI izohi mashq uchun izoh bo‘lib, rasmiy ekzaminator bahosi emas.",
+          "Writing’ni baholash uchun insho matnini ismingiz yoki emailingizsiz AI provayderga yuboramiz. Batafsil — [Maxfiylik siyosati](/privacy)da."
+        ]
+      },
+      {
+        "id": "availability",
+        "h": "10. Xizmatdagi o‘zgarishlar",
+        "body": [
+          "Xizmat doim ishlashi uchun harakat qilamiz, lekin texnik ishlar yoki nosozliklar sababli u vaqtincha to‘xtashi mumkin. Agar bizdagi nosozlik siz boshlagan mockni to‘xtatsa, kredit avtomatik qaytadi.",
+          "Funksiyalarni qo‘shishimiz, o‘zgartirishimiz yoki olib tashlashimiz mumkin. Pulini to‘lagan kreditlaringizni pulini qaytarmasdan olib qo‘ymaymiz."
+        ]
+      },
+      {
+        "id": "liability",
+        "h": "11. Javobgarlik",
+        "body": [
+          "Xizmat mashq uchun taqdim etiladi. Qonun ruxsat bergan darajada biz bilvosita zararlar uchun, shuningdek mashq natijalariga asoslanib qabul qilgan qarorlaringiz uchun (masalan, rasmiy imtihonga qachon yoki yozilish-yozilmaslik) javobgar emasmiz.",
+          "Qonun ruxsat bergan darajada har qanday da’vo bo‘yicha umumiy javobgarligimiz da’vo tegishli bo‘lgan kreditlar uchun to‘lagan summangiz bilan cheklanadi.",
+          "Ushbu shartlardagi hech narsa iste’molchi huquqlari to‘g‘risidagi qonun bo‘yicha shartnoma bilan cheklab bo‘lmaydigan huquqlaringizni cheklamaydi."
+        ]
+      },
+      {
+        "id": "ending",
+        "h": "12. Akkauntni yopish",
+        "body": [
+          "Akkauntingizni istalgan vaqtda akkaunt sozlamalaridan yoki support@eduvo.uz manziliga yozib o‘chirishingiz mumkin. O‘chirish 14 kundan keyin yakuniy bo‘ladi — [Maxfiylik siyosati](/privacy)da yozilganidek.",
+          "Akkaunt o‘chirilganda ishlatilmagan kreditlar yo‘qoladi, agar ular hali [Pulni qaytarish siyosati](/refunds) bo‘yicha qaytarilishi mumkin bo‘lmasa. Pulni qaytarishni akkauntni o‘chirishdan oldin so‘rang."
+        ]
+      },
+      {
+        "id": "changes",
+        "h": "13. Shartlardagi o‘zgarishlar",
+        "body": [
+          "Ushbu shartlarni yangilashimiz mumkin. Sahifa tepasidagi sana oxirgi versiyani ko‘rsatadi. O‘zgarish siz uchun muhim bo‘lsa, u kuchga kirishidan oldin emailda xabar beramiz. Shundan keyin ham xizmatdan foydalansangiz, yangi shartlar amal qiladi."
+        ]
+      },
+      {
+        "id": "contact",
+        "h": "14. Aloqa",
+        "body": [
+          "Ushbu shartlar bo‘yicha savollar: support@eduvo.uz.",
+          "Paddle orqali to‘langan buyurtma, kvitansiya yoki pulni qaytarish bo‘yicha savollar: support@eduvo.uz yoki paddle.net’dagi Paddle xaridorlarni qo‘llab-quvvatlash xizmati."
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Maxfiylik siyosati",
+    "intro": "Bu siyosat Eduvo Mock qanday shaxsiy ma’lumotlarni yig‘ishi, ulardan nima uchun foydalanishi, kim bilan ulashishi va sizning qanday huquqlaringiz borligini tushuntiradi.",
+    "sections": [
+      {
+        "id": "who",
+        "h": "1. Biz kimmiz",
+        "body": [
+          "Eduvo Mock (mock.eduvo.uz) — Eduvo (eduvo.uz) mahsuloti. Eduvo Mock’da shaxsiy ma’lumotlaringizdan qanday foydalanishni biz belgilaymiz va buning uchun javobgarmiz. Biz bilan support@eduvo.uz orqali bog‘lanishingiz mumkin."
+        ]
+      },
+      {
+        "id": "collect",
+        "h": "2. Qanday ma’lumot yig‘amiz",
+        "body": [
+          [
+            "Akkaunt: email manzilingiz, ismingiz va parolingiz (faqat xeshlangan holda saqlanadi). Google orqali kirsangiz, Google’dan email manzilingiz va ismingizni olamiz.",
+            "Profil: mamlakatingiz, interfeys tili, maqsadli imtihon, maqsadli ball va imtihon sanasi (agar kiritsangiz).",
+            "Testlar: javoblaringiz, insholaringiz, belgilar va vaqt, hamda ulardan hisoblangan natijalar.",
+            "Buyurtmalar: nima sotib olganingiz, narx, valyuta, mamlakat va buyurtma holati. Karta raqamingizni olmaymiz va saqlamaymiz.",
+            "Texnik: IP manzilingiz, brauzer va qurilma turi, xizmat xavfsiz va to‘g‘ri ishlashi uchun kerakli loglar."
+          ]
+        ]
+      },
+      {
+        "id": "use",
+        "h": "3. Nima uchun foydalanamiz",
+        "body": [
+          [
+            "akkauntingizni yaratish, yuritish va tizimga kiritish uchun;",
+            "testlarni berish, baholash, natija va progressingizni ko‘rsatish uchun;",
+            "Writing’ni AI bilan baholash va izoh berish uchun;",
+            "sotib olgan kreditlaringizni qo‘shish va xaridlar tarixini saqlash uchun;",
+            "sizga kerakli emaillarni yuborish uchun: email tasdiqlash, parolni tiklash, natija tayyor, Writing baholandi;",
+            "xizmatni firibgarlik va suiiste’moldan himoya qilish uchun;",
+            "sizni aniqlab bo‘lmaydigan statistika asosida testlarimizni yaxshilash uchun."
+          ],
+          "Ma’lumotlaringizdan siz so‘ragan xizmatni ko‘rsatish uchun, xizmatni xavfsiz saqlash va yaxshilashdagi qonuniy manfaatimiz uchun hamda qonun yozuvlarni saqlashni talab qilgan hollarda foydalanamiz. Ma’lumotlaringizni sotmaymiz va reklama ko‘rsatmaymiz."
+        ]
+      },
+      {
+        "id": "ai",
+        "h": "4. Writing’ni AI bilan baholash",
+        "body": [
+          "Writing’ingizni baholash uchun insho matni va topshiriq shartini AI model provayderiga yuboramiz. Ular bilan birga ismingiz, email manzilingiz yoki boshqa akkaunt ma’lumotlari yuborilmaydi. Provayder baho va izohni qaytaradi, biz ularni natijangiz bilan saqlaymiz."
+        ]
+      },
+      {
+        "id": "payments",
+        "h": "5. To‘lovlar",
+        "body": [
+          "To‘lovlarni Merchant of Record — Paddle.com qayta ishlaydi. Karta yoki hamyon ma’lumotlarini bizning saytda emas, Paddle checkout’ida kiritasiz va biz ularni hech qachon saqlamaymiz. Paddle to‘lov ma’lumotlaringizdan o‘z maxfiylik siyosati asosida foydalanadi. Paddle’dan faqat kreditlaringizni qo‘shish uchun keraklisini olamiz: buyurtma holati, summa, valyuta va mamlakat."
+        ]
+      },
+      {
+        "id": "share",
+        "h": "6. Ma’lumotlarni kim bilan ulashamiz",
+        "body": [
+          "Shaxsiy ma’lumotlarni faqat xizmatni yuritishda yordam beradigan provayderlar bilan va faqat ularga kerakli qismini ulashamiz:",
+          [
+            "xosting provayderimiz: serverlarimiz Germaniyada (YeI);",
+            "akkaunt va natija emaillarini yuborish uchun email xizmati;",
+            "Writing’ni baholash uchun AI model provayderlari (faqat insho matni, 4-bo‘limga qarang);",
+            "to‘lov va pulni qaytarish uchun Paddle;",
+            "Google orqali kirishni tanlasangiz — Google;",
+            "ro‘yxatdan o‘tish va parol formalaridagi xavfsizlik tekshiruvi uchun Cloudflare."
+          ],
+          "Qonun talab qilganda ham ma’lumotlarni taqdim etamiz."
+        ]
+      },
+      {
+        "id": "transfers",
+        "h": "7. Xalqaro uzatish",
+        "body": [
+          "Serverlarimiz Yevropa Ittifoqida. Ayrim provayderlar, masalan AI model va email provayderlari, ma’lumotlarni boshqa davlatlarda, jumladan AQShda qayta ishlashi mumkin."
+        ]
+      },
+      {
+        "id": "retention",
+        "h": "8. Ma’lumotlarni qancha saqlaymiz",
+        "body": [
+          [
+            "Akkaunt, profil va test ma’lumotlari: akkauntingiz ochiq ekan.",
+            "Akkauntni o‘chirganingizdan keyin: shaxsiy ma’lumotlaringiz va insholaringiz 14 kundan keyin o‘chiriladi. Test natijalari statistika uchun faqat sizni aniqlab bo‘lmaydigan shaklda saqlanishi mumkin.",
+            "Buyurtma yozuvlari: soliq va buxgalteriya qonunlari talab qilgan muddat davomida.",
+            "Xavfsizlik loglari: cheklangan muddat, keyin o‘chiriladi."
+          ]
+        ]
+      },
+      {
+        "id": "rights",
+        "h": "9. Sizning huquqlaringiz",
+        "body": [
+          "Shaxsiy ma’lumotlaringizni ko‘rish, nusxasini olish, tuzatish yoki o‘chirishni so‘rashingiz, ayrim foydalanishlarga e’tiroz bildirishingiz yoki ularni cheklashni so‘rashingiz mumkin. Profil ma’lumotlarining ko‘pini akkaunt sozlamalarida o‘zingiz o‘zgartirasiz.",
+          "Akkauntni o‘chirish: akkaunt sozlamalarida \"Akkauntni o‘chirish\"ni tanlang yoki akkauntingizdagi emaildan support@eduvo.uz manziliga yozing. Akkaunt 14 kundan keyin butunlay o‘chiriladi. Shu vaqtgacha o‘chirishni bekor qilishni so‘rashingiz mumkin.",
+          "Agar YeI yoki Buyuk Britaniyada bo‘lsangiz va ma’lumotlaringiz noto‘g‘ri qayta ishlangan deb hisoblasangiz, mahalliy ma’lumotlarni himoya qilish organiga ham shikoyat qilishingiz mumkin."
+        ]
+      },
+      {
+        "id": "cookies",
+        "h": "10. Cookie’lar",
+        "body": [
+          "Faqat zaruriy cookie’lardan foydalanamiz: biri sizni tizimda saqlaydi, biri tilingizni eslab qoladi. Tema tanlovingiz brauzeringizda saqlanadi. Analitika yoki reklama cookie’laridan foydalanmaymiz. Batafsil — [Cookie siyosati](/cookies)."
+        ]
+      },
+      {
+        "id": "children",
+        "h": "11. Bolalar",
+        "body": [
+          "Eduvo Mock 16 yosh va undan kattalar uchun. Yoshroq o‘quvchilar undan faqat ota-ona yoki qonuniy vakil roziligi bilan foydalanishi mumkin. 16 yoshdan kichik bola bunday roziliksiz ma’lumot bergan deb o‘ylasangiz, bizga yozing — ularni o‘chiramiz."
+        ]
+      },
+      {
+        "id": "security",
+        "h": "12. Xavfsizlik",
+        "body": [
+          "Har bir ulanishda HTTPS ishlatamiz, parollarni faqat xeshlangan holda saqlaymiz va jamoamizda shaxsiy ma’lumotlarga kirish huquqini cheklaymiz."
+        ]
+      },
+      {
+        "id": "changes",
+        "h": "13. O‘zgarishlar va aloqa",
+        "body": [
+          "Bu siyosatni yangilashimiz mumkin. Tepadagi sana oxirgi versiyani ko‘rsatadi, muhim o‘zgarishlar haqida emailda xabar beramiz.",
+          "Ma’lumotlaringiz bo‘yicha savol yoki so‘rovlar: support@eduvo.uz."
+        ]
+      }
+    ]
+  },
+  "refunds": {
+    "title": "Pulni qaytarish siyosati",
+    "intro": "Bu siyosat Eduvo Mock kreditlari uchun pulni qachon qaytarib olishingiz mumkinligi va buni qanday so‘rashni tushuntiradi.",
+    "sections": [
+      {
+        "id": "seller",
+        "h": "1. Pulni kim qaytaradi",
+        "body": [
+          "Buyurtmalarimiz onlayn reseller — Paddle.com orqali amalga oshiriladi. Paddle.com barcha buyurtmalarimiz bo‘yicha Merchant of Record (rasmiy sotuvchi) hisoblanadi. Mijozlarning barcha murojaatlarini Paddle ko‘rib chiqadi va qaytarishlarni amalga oshiradi.",
+          "Paddle orqali to‘langan buyurtmalar uchun pulni Paddle siz to‘lagan usulga qaytaradi."
+        ]
+      },
+      {
+        "id": "unused",
+        "h": "2. Ishlatilmagan kreditlar: 14 kun ichida to‘liq qaytarish",
+        "body": [
+          "Kreditlaringizni ishlatmagan bo‘lsangiz, xarid sanasidan boshlab 14 kun ichida pulingiz to‘liq qaytariladi."
+        ]
+      },
+      {
+        "id": "started",
+        "h": "3. Boshlangan mocklar",
+        "body": [
+          "Mock yoki bo‘limni boshlash uchun ishlatilgan kredit uchun pul qaytarilmaydi, chunki test materiallari sizga allaqachon ko‘rsatilgan.",
+          "Bundan bizdagi texnik nosozlik mustasno. Nosozlik mockingizni to‘xtatsa, kredit hisobingizga avtomatik qaytadi. Agar qaytmagan bo‘lsa, bizga yozing — tuzatamiz."
+        ]
+      },
+      {
+        "id": "automatic",
+        "h": "4. Kreditning avtomatik qaytishi",
+        "body": [
+          "Quyidagi hollarda so‘rashingiz shart emas — kredit hisobingizga avtomatik qaytadi:",
+          [
+            "AI Writing’ingizni baholay olmadi;",
+            "bizdagi texnik nosozlik mockingizni to‘xtatdi."
+          ]
+        ]
+      },
+      {
+        "id": "expiry",
+        "h": "5. Muddati o‘tgan kreditlar",
+        "body": [
+          "Kreditlar xarid sanasidan boshlab 12 oy amal qiladi. Muddati o‘tgan kreditlar uchun pul qaytarilmaydi."
+        ]
+      },
+      {
+        "id": "how",
+        "h": "6. Pulni qaytarishni qanday so‘rash mumkin",
+        "body": [
+          "Akkauntingizdagi email manzildan support@eduvo.uz ga yozing. Kvitansiya raqamini (EM- bilan boshlanadi) yoki xarid sanasini ko‘rsating.",
+          "Shuningdek, kvitansiya emailidagi ma’lumotlar bilan paddle.net’dagi Paddle xaridorlarni qo‘llab-quvvatlash xizmatiga murojaat qilishingiz mumkin.",
+          "Qaytarish tasdiqlangach, Paddle pulni siz to‘lagan usulga qaytaradi. Bankingizda ko‘rinishi bir necha ish kuni olishi mumkin."
+        ]
+      },
+      {
+        "id": "rights",
+        "h": "7. Qonuniy huquqlaringiz",
+        "body": [
+          "Agar YeI yoki Buyuk Britaniyada bo‘lsangiz, xariddan 14 kun ichida voz kechish huquqiga egasiz. Mockni boshlaganingizda test materiallarini darhol taqdim etishimizni so‘raysiz va o‘sha mock uchun ishlatilgan kredit bo‘yicha voz kechish huquqini yo‘qotasiz.",
+          "Bu siyosat mamlakatingizdagi iste’molchi huquqlari to‘g‘risidagi qonun bo‘yicha huquqlaringizni cheklamaydi."
+        ]
+      }
+    ]
+  },
+  "cookies": {
+    "title": "Cookie siyosati",
+    "intro": "Cookie — sayt brauzeringizda saqlaydigan kichik fayl. Bu sahifada Eduvo Mock ishlatadigan cookie’lar ro‘yxati keltirilgan.",
+    "sections": [
+      {
+        "id": "necessary",
+        "h": "1. Biz ishlatadigan cookie’lar",
+        "body": [
+          "Faqat sayt ishlashi uchun zarur bo‘lgan cookie’lardan foydalanamiz:",
+          [
+            "mock_rt: sizni tizimda saqlaydi. Kirganingizda o‘rnatiladi va 30 kundan keyin yoki tizimdan chiqqaningizda o‘chadi.",
+            "NEXT_LOCALE: tanlagan tilingizni eslab qoladi. 12 oydan keyin o‘chadi."
+          ],
+          "Bu cookie’lar zaruriy bo‘lgani uchun roziligingiz talab qilinmaydi. Ular borligini bilishingiz uchun qisqa xabar ko‘rsatamiz."
+        ]
+      },
+      {
+        "id": "storage",
+        "h": "2. Brauzer xotirasi",
+        "body": [
+          "Bir nechta sozlamani brauzeringizning local storage’ida ham saqlaymiz. Ular qurilmangizdan chiqmaydi:",
+          [
+            "yorug‘ yoki qorong‘i tema;",
+            "cookie xabarini ko‘rganingiz;",
+            "sessiyani tekshirish kerakmi-yo‘qligini bilish uchun kirish belgisi."
+          ]
+        ]
+      },
+      {
+        "id": "none",
+        "h": "3. Nimalardan foydalanmaymiz",
+        "body": [
+          "Analitika, reklama yoki kuzatuv cookie’laridan foydalanmaymiz va reklama beruvchilarga saytimizda cookie o‘rnatishga ruxsat bermaymiz."
+        ]
+      },
+      {
+        "id": "third",
+        "h": "4. Boshqa xizmatlar",
+        "body": [
+          "Ayrim xizmatlar faqat siz ulardan foydalanganda o‘z cookie’larini o‘rnatadi:",
+          [
+            "Google — Google orqali kirsangiz;",
+            "Cloudflare — ro‘yxatdan o‘tish va parol formalaridagi xavfsizlik tekshiruvi uchun;",
+            "Paddle — to‘lov oynasini ochganingizda."
+          ],
+          "Ularning o‘z cookie va maxfiylik siyosatlari amal qiladi."
+        ]
+      },
+      {
+        "id": "control",
+        "h": "5. Cookie’larni boshqarish",
+        "body": [
+          "Cookie’larni brauzer sozlamalarida o‘chirishingiz yoki bloklashingiz mumkin. Zaruriy cookie’larni bloklasangiz, tizimda qola olmaysiz."
+        ]
+      },
+      {
+        "id": "contact",
+        "h": "6. Aloqa",
+        "body": [
+          "Cookie’lar bo‘yicha savollar: support@eduvo.uz. Ma’lumotlardan qanday foydalanishimiz haqida batafsil: [Maxfiylik siyosati](/privacy)."
+        ]
+      }
+    ]
+  }
+}

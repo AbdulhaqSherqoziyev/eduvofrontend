@@ -7,7 +7,7 @@ export const MOCK_PROD_HOST = 'mock.eduvo.uz';
 export const MOCK_ORIGIN = `https://${MOCK_PROD_HOST}`;
 
 /** Public marketing pages (path after `/{lang}`) that go into sitemap.xml. */
-export const INDEXABLE_PAGES = ['', '/ielts', '/sat', '/pricing', '/how-it-works'] as const;
+export const INDEXABLE_PAGES = ['', '/ielts', '/sat', '/pricing', '/how-it-works', '/help', '/help/contact', '/terms', '/privacy', '/refunds', '/cookies'] as const;
 
 /**
  * canonical + hreflang for a page. Only reviewed translations are listed as alternates; a locale

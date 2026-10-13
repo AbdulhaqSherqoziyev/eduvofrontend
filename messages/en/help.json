@@ -1,0 +1,127 @@
+{
+  "meta": {
+    "title": "Help center",
+    "description": "Answers about Eduvo Mock exams, payments, your account and technical setup.",
+    "contactTitle": "Contact support",
+    "contactDescription": "Contact the Eduvo Mock support team by email or Telegram."
+  },
+  "h1": "Help center",
+  "sub": "Answers to common questions about tests, payments and your account.",
+  "search": "Search help",
+  "noResults": "Nothing matches “{q}”. Try other words or contact us.",
+  "groups": {
+    "exams": "Exams",
+    "payments": "Payments",
+    "account": "Account",
+    "technical": "Technical"
+  },
+  "faq": {
+    "exams": [
+      {
+        "q": "Which exams can I take?",
+        "a": "IELTS Academic and Digital SAT. CEFR, TOEFL iBT and HSK are coming soon; you can ask to be emailed when they open."
+      },
+      {
+        "q": "Is this an official exam or certificate?",
+        "a": "No. Eduvo Mock is a practice test in the format of the computer-delivered exam. It is not an official certificate and is not affiliated with IELTS, British Council, IDP, Cambridge or College Board."
+      },
+      {
+        "q": "How is my test scored?",
+        "a": "Listening, Reading and SAT answers are scored as soon as you submit. Writing is graded by AI on each official criterion, usually within 2–4 minutes, and the result page updates on its own."
+      },
+      {
+        "q": "Will I get the same test twice?",
+        "a": "No. A test you have already started is never given to you again, even if you only took one section of it."
+      },
+      {
+        "q": "What is the free section?",
+        "a": "One section per exam is free: IELTS Listening or Reading, or SAT Reading and Writing. Writing is not part of the free section."
+      },
+      {
+        "q": "Can I pause a test?",
+        "a": "No. Like the real exam, the timer keeps running once a section starts. If your connection drops, your answers are saved; reconnect quickly to continue."
+      }
+    ],
+    "payments": [
+      {
+        "q": "Who processes my payment?",
+        "a": "Card payments in USD and EUR are processed by Paddle.com, our Merchant of Record. Paddle's name appears on your receipt and bank statement."
+      },
+      {
+        "q": "How long are credits valid?",
+        "a": "12 months from the purchase date."
+      },
+      {
+        "q": "Can I get a refund?",
+        "a": "Yes, for unused credits within 14 days of purchase. A started mock is not refunded unless a technical fault on our side stopped it. See the [Refund policy](/refunds) for details."
+      },
+      {
+        "q": "What if the AI cannot grade my Writing?",
+        "a": "The credit returns to your account automatically. You do not need to contact us."
+      },
+      {
+        "q": "My payment went through but I have no credits.",
+        "a": "Credits are added when the payment provider confirms the payment, usually within a minute. Open your order page and press Check status. If credits still do not appear, contact us with your receipt number."
+      }
+    ],
+    "account": [
+      {
+        "q": "I did not get the confirmation email.",
+        "a": "Check your spam folder, then press Resend email on the confirmation page. Make sure the address you typed is correct."
+      },
+      {
+        "q": "How do I reset my password?",
+        "a": "On the login page, press Forgot password and enter your email. We send a link to set a new password."
+      },
+      {
+        "q": "Can I change the interface language?",
+        "a": "Yes, use the language button in the header or in your profile. Exam content stays in English; the interface and AI feedback follow your language."
+      },
+      {
+        "q": "How do I delete my account?",
+        "a": "In Account, choose Delete account, or write to support@eduvo.uz. Your account is removed for good after 14 days."
+      }
+    ],
+    "technical": [
+      {
+        "q": "Can I take a test on my phone?",
+        "a": "No. The exam player needs a computer with a screen at least 1280 px wide, like the real computer-delivered exam. You can browse, pay and see results on your phone."
+      },
+      {
+        "q": "Which browser should I use?",
+        "a": "A recent Chrome, Edge, Firefox or Safari on a computer. Allow fullscreen and sound for the site."
+      },
+      {
+        "q": "Do I need headphones?",
+        "a": "For IELTS Listening, yes. The audio plays once, as in the real exam."
+      },
+      {
+        "q": "What happens if my internet drops?",
+        "a": "Your answers are saved automatically. A banner shows that we are reconnecting; when the connection is back, you continue where you stopped."
+      }
+    ]
+  },
+  "stillNeed": "Still need help?",
+  "contactCta": "Contact support",
+  "contact": {
+    "h1": "Contact support",
+    "sub": "Write to us by email or Telegram. We answer in English, Uzbek and Russian.",
+    "subEmailOnly": "Write to us by email. We answer in English, Uzbek and Russian.",
+    "emailTitle": "Email",
+    "emailText": "Best for payments, refunds and account questions.",
+    "emailCta": "Write an email",
+    "telegramTitle": "Telegram",
+    "telegramText": "Quick questions about tests and the site.",
+    "telegramCta": "Open Telegram",
+    "includeTitle": "To help us answer faster, include:",
+    "include": [
+      "the email address on your Eduvo Mock account;",
+      "the test ID (for example IA-0142), if your question is about a test;",
+      "the receipt number (starts with EM-), if your question is about a payment;",
+      "a screenshot, if you see an error."
+    ],
+    "paddle": "Orders paid by card are handled by Paddle.com, our Merchant of Record. For payment questions you can also contact Paddle's buyer support at paddle.net.",
+    "copy": "Copy address",
+    "copied": "Email address copied"
+  }
+}

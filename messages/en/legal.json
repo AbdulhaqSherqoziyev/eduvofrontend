@@ -1,0 +1,412 @@
+{
+  "meta": {
+    "terms": {
+      "title": "Terms of service",
+      "description": "The terms for using Eduvo Mock practice tests at mock.eduvo.uz."
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "description": "What personal data Eduvo Mock collects, why, how long we keep it and your rights."
+    },
+    "refunds": {
+      "title": "Refund policy",
+      "description": "How refunds work for Eduvo Mock credits: unused credits within 14 days, automatic credit returns."
+    },
+    "cookies": {
+      "title": "Cookie policy",
+      "description": "Eduvo Mock uses only necessary cookies: your sign-in session and your language."
+    }
+  },
+  "updated": "Last updated: {date}",
+  "toc": "On this page",
+  "other": "Other policies",
+  "questions": "Questions about this page? Write to support@eduvo.uz.",
+  "terms": {
+    "title": "Terms of service",
+    "intro": "These terms apply when you use Eduvo Mock at mock.eduvo.uz. Please read them before you create an account or buy credits.",
+    "sections": [
+      {
+        "id": "about",
+        "h": "1. About these terms",
+        "body": [
+          "Eduvo Mock (\"the service\", \"we\", \"us\") is a product of Eduvo (eduvo.uz). The service lets you take practice mock exams in the format of computer-delivered IELTS Academic and Digital SAT, and see your results.",
+          "By creating an account, taking a test or buying credits, you agree to these terms and to our [Privacy policy](/privacy). If you do not agree, please do not use the service."
+        ]
+      },
+      {
+        "id": "seller",
+        "h": "2. Who sells to you",
+        "body": [
+          "Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns.",
+          "When you pay through Paddle, Paddle's buyer terms also apply to the payment. Paddle's name appears on your receipt and on your bank statement.",
+          "Some learners in Uzbekistan may be offered a local payment method in UZS. Those orders are sold and supported by Eduvo directly, and the checkout page says so before you pay."
+        ]
+      },
+      {
+        "id": "practice",
+        "h": "3. Practice tests, not official exams",
+        "body": [
+          "Eduvo Mock provides practice tests. A result on Eduvo Mock is a practice score. It is not an official exam result, and we do not issue certificates.",
+          "Eduvo Mock is not affiliated with, endorsed by or connected to IELTS, the British Council, IDP, Cambridge University Press & Assessment or College Board. IELTS is a trademark of its owners. SAT is a trademark of College Board. We use these names only to describe the format of the tests."
+        ]
+      },
+      {
+        "id": "account",
+        "h": "4. Your account",
+        "body": [
+          "You must be at least 16 years old to create an account. If you are younger than 16, a parent or legal guardian must agree to these terms for you and supervise your use of the service.",
+          [
+            "Give correct information when you sign up, and keep your email address up to date.",
+            "Keep your password private. Each account is for one person only.",
+            "Tell us at support@eduvo.uz if you think someone else has used your account."
+          ]
+        ]
+      },
+      {
+        "id": "credits",
+        "h": "5. Credits and prices",
+        "body": [
+          "You buy credits for a full mock or for a single section. Prices are shown on the [Pricing](/pricing) page and again at checkout before you pay. Taxes are included where they apply.",
+          "Credits are valid for 12 months from the date of purchase. Credits that are not used within 12 months expire.",
+          "Credits are personal. They cannot be transferred to another account or exchanged for cash.",
+          "If the AI cannot grade your Writing, or a technical fault on our side stops your mock, the credit returns to your account automatically."
+        ]
+      },
+      {
+        "id": "refunds",
+        "h": "6. Refunds",
+        "body": [
+          "Refunds follow our [Refund policy](/refunds). In short: you can get a full refund for unused credits within 14 days of purchase. A mock you have started is not refunded, except after a technical fault on our side."
+        ]
+      },
+      {
+        "id": "use",
+        "h": "7. Fair use",
+        "body": [
+          "When you use the service, you agree not to:",
+          [
+            "copy, record, screenshot, publish or share test questions, passages, audio or answers;",
+            "share your account or let another person take a test for you;",
+            "use bots, scripts or other automated tools to access the service;",
+            "try to get around time limits, security checks or payment;",
+            "interfere with the service or with other learners."
+          ],
+          "We may suspend or close an account that breaks these rules. If we do, we will tell you why by email."
+        ]
+      },
+      {
+        "id": "content",
+        "h": "8. Test content and your work",
+        "body": [
+          "Tests, questions, audio, explanations and the design of the service belong to Eduvo or to our licensors. We give you a personal, non-transferable right to use them for your own practice.",
+          "Your answers and essays stay yours. You allow us to store and process them to score your test, show your results and keep your progress."
+        ]
+      },
+      {
+        "id": "ai",
+        "h": "9. AI grading",
+        "body": [
+          "Listening, Reading and SAT answers are scored when you submit. Writing is graded by AI models against the official public criteria, with feedback on each criterion. AI feedback is practice feedback and is not an official examiner's assessment.",
+          "To grade Writing, we send the essay text to an AI provider without your name or email. See our [Privacy policy](/privacy) for details."
+        ]
+      },
+      {
+        "id": "availability",
+        "h": "10. Changes to the service",
+        "body": [
+          "We work to keep the service available, but it may be paused for maintenance or because of faults. If a fault on our side stops a mock you started, the credit is returned automatically.",
+          "We may add, change or remove features. We will not take away credits you have already paid for without a refund."
+        ]
+      },
+      {
+        "id": "liability",
+        "h": "11. Liability",
+        "body": [
+          "The service is provided for practice. As far as the law allows, we are not responsible for indirect losses, or for decisions you make based on practice results, for example when or whether to book an official exam.",
+          "As far as the law allows, our total liability for any claim is limited to the amount you paid for the credits the claim is about.",
+          "Nothing in these terms limits rights that you have under consumer law and that cannot be limited by contract."
+        ]
+      },
+      {
+        "id": "ending",
+        "h": "12. Closing your account",
+        "body": [
+          "You can delete your account at any time from your account settings or by writing to support@eduvo.uz. Deletion is final after 14 days, as described in the [Privacy policy](/privacy).",
+          "Unused credits are lost when an account is deleted, unless they can still be refunded under the [Refund policy](/refunds). Ask for the refund before you delete the account."
+        ]
+      },
+      {
+        "id": "changes",
+        "h": "13. Changes to these terms",
+        "body": [
+          "We may update these terms. The date at the top of this page shows the latest version. If a change matters to you, we will email you before it takes effect. If you keep using the service after that, the new terms apply."
+        ]
+      },
+      {
+        "id": "contact",
+        "h": "14. Contact",
+        "body": [
+          "Questions about these terms: support@eduvo.uz.",
+          "Questions about a payment, a receipt or a refund for an order paid through Paddle: support@eduvo.uz or Paddle's buyer support at paddle.net."
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy policy",
+    "intro": "This policy explains what personal data Eduvo Mock collects, why we use it, who we share it with and what rights you have.",
+    "sections": [
+      {
+        "id": "who",
+        "h": "1. Who we are",
+        "body": [
+          "Eduvo Mock (mock.eduvo.uz) is a product of Eduvo (eduvo.uz). We decide how your personal data is used on Eduvo Mock and are responsible for it. You can reach us at support@eduvo.uz."
+        ]
+      },
+      {
+        "id": "collect",
+        "h": "2. What we collect",
+        "body": [
+          [
+            "Account: your email address, your name, and your password, which we store only in hashed form. If you sign in with Google, we receive your email address and name from Google.",
+            "Profile: your country, interface language, target exam, target score and exam date, if you give them.",
+            "Tests: your answers, essays, flags and timing, and the results we calculate from them.",
+            "Orders: what you bought, the price, currency, country and the order status. We do not receive or store your card number.",
+            "Technical: your IP address, browser and device type, and logs we need to keep the service secure and working."
+          ]
+        ]
+      },
+      {
+        "id": "use",
+        "h": "3. Why we use it",
+        "body": [
+          [
+            "to create and run your account and sign you in;",
+            "to deliver tests, score them and show your results and progress;",
+            "to grade Writing with AI and give you feedback;",
+            "to add the credits you bought and keep your purchase history;",
+            "to send emails you need: email confirmation, password reset, result ready and Writing graded;",
+            "to protect the service from fraud and abuse;",
+            "to improve our tests, using statistics that do not identify you."
+          ],
+          "We use your data because we need it to provide the service you asked for, because of our legitimate interest in keeping the service secure and improving it, and where the law requires us to keep records. We do not sell your data and we do not show advertising."
+        ]
+      },
+      {
+        "id": "ai",
+        "h": "4. AI grading of Writing",
+        "body": [
+          "To grade your Writing, we send the essay text and the task prompt to an AI model provider. We do not send your name, email address or other account details with it. The provider returns a grade and feedback, which we store with your result."
+        ]
+      },
+      {
+        "id": "payments",
+        "h": "5. Payments",
+        "body": [
+          "Payments are processed by Paddle.com, our Merchant of Record. You enter your card or wallet details in Paddle's checkout, not on our site, and we never store them. Paddle uses your payment data under its own privacy policy. We receive from Paddle only what we need to add your credits: the order status, amount, currency and country."
+        ]
+      },
+      {
+        "id": "share",
+        "h": "6. Who we share data with",
+        "body": [
+          "We share personal data only with providers that help us run the service, and only what they need:",
+          [
+            "our hosting provider: our servers are in Germany (EU);",
+            "an email delivery service, to send you account and result emails;",
+            "AI model providers, for Writing grading (essay text only, see section 4);",
+            "Paddle, for payments and refunds;",
+            "Google, if you choose to sign in with Google;",
+            "Cloudflare, for the security check on sign-up and password forms."
+          ],
+          "We also share data when the law requires it."
+        ]
+      },
+      {
+        "id": "transfers",
+        "h": "7. International transfers",
+        "body": [
+          "Our servers are in the EU. Some providers, such as AI model and email providers, may process data in other countries, including the United States."
+        ]
+      },
+      {
+        "id": "retention",
+        "h": "8. How long we keep data",
+        "body": [
+          [
+            "Account, profile and test data: while your account is open.",
+            "After you delete your account: your personal data and your essays are removed 14 days later. Test results may be kept only in a form that no longer identifies you, for statistics.",
+            "Order records: as long as tax and accounting law requires.",
+            "Security logs: for a limited time, then deleted."
+          ]
+        ]
+      },
+      {
+        "id": "rights",
+        "h": "9. Your rights",
+        "body": [
+          "You can ask to see, copy, correct or delete your personal data, and you can object to or ask us to limit some uses of it. You can update most profile details yourself in your account settings.",
+          "Deleting your account: use Delete account in your account settings, or write to support@eduvo.uz from the email on your account. The account is removed for good after 14 days. Until then you can ask us to cancel the deletion.",
+          "If you are in the EU or UK and you think we have not handled your data correctly, you can also complain to your local data protection authority."
+        ]
+      },
+      {
+        "id": "cookies",
+        "h": "10. Cookies",
+        "body": [
+          "We use only necessary cookies: one keeps you signed in and one remembers your language. Your theme choice is saved in your browser. We do not use analytics or advertising cookies. See the [Cookie policy](/cookies)."
+        ]
+      },
+      {
+        "id": "children",
+        "h": "11. Children",
+        "body": [
+          "Eduvo Mock is for people aged 16 and over. Younger learners may use it only with the consent of a parent or legal guardian. If you think a child under 16 has given us data without that consent, write to us and we will delete it."
+        ]
+      },
+      {
+        "id": "security",
+        "h": "12. Security",
+        "body": [
+          "We use HTTPS for every connection, store passwords only in hashed form and limit who on our team can access personal data."
+        ]
+      },
+      {
+        "id": "changes",
+        "h": "13. Changes and contact",
+        "body": [
+          "We may update this policy. The date at the top shows the latest version, and we will email you about important changes.",
+          "Questions or requests about your data: support@eduvo.uz."
+        ]
+      }
+    ]
+  },
+  "refunds": {
+    "title": "Refund policy",
+    "intro": "This policy explains when you can get your money back for Eduvo Mock credits and how to ask for it.",
+    "sections": [
+      {
+        "id": "seller",
+        "h": "1. Who handles refunds",
+        "body": [
+          "Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns.",
+          "Refunds for orders paid through Paddle are made by Paddle to the payment method you used."
+        ]
+      },
+      {
+        "id": "unused",
+        "h": "2. Unused credits: full refund within 14 days",
+        "body": [
+          "If you have not used your credits, you can get a full refund within 14 days of the purchase date."
+        ]
+      },
+      {
+        "id": "started",
+        "h": "3. Started mocks",
+        "body": [
+          "A credit that has been used to start a mock or a section is not refundable, because the test content has already been shown to you.",
+          "The exception is a technical fault on our side. If a fault stops your mock, the credit is returned to your account automatically. If that did not happen, write to us and we will fix it."
+        ]
+      },
+      {
+        "id": "automatic",
+        "h": "4. Automatic credit returns",
+        "body": [
+          "You do not need to ask in these cases. The credit returns to your account automatically:",
+          [
+            "the AI could not grade your Writing;",
+            "a technical fault on our side stopped your mock."
+          ]
+        ]
+      },
+      {
+        "id": "expiry",
+        "h": "5. Expired credits",
+        "body": [
+          "Credits are valid for 12 months from the purchase date. Expired credits cannot be refunded."
+        ]
+      },
+      {
+        "id": "how",
+        "h": "6. How to ask for a refund",
+        "body": [
+          "Write to support@eduvo.uz from the email address on your account. Include your receipt number, which starts with EM-, or the date of the purchase.",
+          "You can also contact Paddle's buyer support at paddle.net, using the details in your receipt email.",
+          "After the refund is approved, Paddle returns the money to your original payment method. Your bank may take several business days to show it."
+        ]
+      },
+      {
+        "id": "rights",
+        "h": "7. Your legal rights",
+        "body": [
+          "If you are in the EU or UK, you have the right to withdraw from a purchase within 14 days. When you start a mock, you ask us to provide the test content immediately, and you lose the right to withdraw for the credit used for that mock.",
+          "This policy does not limit any rights you have under the consumer law of your country."
+        ]
+      }
+    ]
+  },
+  "cookies": {
+    "title": "Cookie policy",
+    "intro": "Cookies are small files a website saves in your browser. This page lists the ones Eduvo Mock uses.",
+    "sections": [
+      {
+        "id": "necessary",
+        "h": "1. Cookies we use",
+        "body": [
+          "We use only cookies that the site needs to work:",
+          [
+            "mock_rt: keeps you signed in. It is set when you log in and expires after 30 days, or when you log out.",
+            "NEXT_LOCALE: remembers the language you chose. It expires after 12 months."
+          ],
+          "Because these cookies are necessary, they do not need your consent. We show a short notice so you know they are there."
+        ]
+      },
+      {
+        "id": "storage",
+        "h": "2. Browser storage",
+        "body": [
+          "We also save a few settings in your browser's local storage. They never leave your device:",
+          [
+            "your light or dark theme;",
+            "that you have seen the cookie notice;",
+            "a sign-in hint, so the site knows whether to check for a session."
+          ]
+        ]
+      },
+      {
+        "id": "none",
+        "h": "3. What we do not use",
+        "body": [
+          "We do not use analytics, advertising or tracking cookies, and we do not let advertisers place cookies on our site."
+        ]
+      },
+      {
+        "id": "third",
+        "h": "4. Other services",
+        "body": [
+          "Some services set their own cookies, only when you use them:",
+          [
+            "Google, if you sign in with Google;",
+            "Cloudflare, for the security check on sign-up and password forms;",
+            "Paddle, when you open the payment checkout."
+          ],
+          "Their own cookie and privacy policies apply."
+        ]
+      },
+      {
+        "id": "control",
+        "h": "5. Managing cookies",
+        "body": [
+          "You can delete or block cookies in your browser settings. If you block the necessary cookies, you will not be able to stay signed in."
+        ]
+      },
+      {
+        "id": "contact",
+        "h": "6. Contact",
+        "body": [
+          "Questions about cookies: support@eduvo.uz. More about how we use data: [Privacy policy](/privacy)."
+        ]
+      }
+    ]
+  }
+}
