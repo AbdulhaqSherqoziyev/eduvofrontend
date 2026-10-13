@@ -20,6 +20,7 @@ import { TryInterface } from './tryout/TryInterface';
 // SAT module screen (KaTeX, Desmos loader, tools) ships in its own chunk — IELTS/CEFR never download it.
 const SatStage = dynamic(() => import('../sat/SatSection').then((m) => m.SatStage), { loading: () => <Centered><Spinner size={22} /></Centered> });
 import { WelcomeBack } from './WelcomeBack';
+import { useExamHost } from '../host';
 
 function Message({ locale, k, action }: { locale: Locale; k: Parameters<typeof bi>[0]; action?: { label: string; on: () => void } }) {
   return (
@@ -34,6 +35,7 @@ function Message({ locale, k, action }: { locale: Locale; k: Parameters<typeof b
 
 function Player({ attemptId, onComplete }: { attemptId: string; onComplete: () => void }) {
   const ctl = useExamController(attemptId);
+  const host = useExamHost();
   const { s } = ctl;
   const l = s.ui.locale;
   // Digital SAT: own module screen, break, and intro-less module handoff (sat.md §4)
@@ -48,7 +50,9 @@ function Player({ attemptId, onComplete }: { attemptId: string; onComplete: () =
   let body: React.ReactNode;
   switch (s.phase) {
     case 'boot': case 'complete': body = <Centered><Spinner size={22} /></Centered>; break;
-    case 'auth': body = <Message locale={l} k="errors.session_expired" action={{ label: t('x.open_portal', l), on: () => { window.location.href = '/portal'; } }} />; break;
+    case 'auth': body = host.renderAuthExpired
+      ? host.renderAuthExpired({ retry: () => void ctl.boot(), locale: l })
+      : <Message locale={l} k="errors.session_expired" action={{ label: t('x.open_portal', l), on: () => { window.location.href = '/portal'; } }} />; break;
     case 'error': body = <Message locale={l} k={s.error?.code === 'ATTEMPT_NOT_FOUND' ? 'errors.attempt_locked' : s.error?.kind === 'network' ? 'banner.offline' : 'errors.server'} action={{ label: t('chrome.retry', l), on: () => void ctl.boot() }} />; break;
     case 'precheck': body = <PreCheck />; break;
     case 'tryout': body = <TryInterface />; break;
@@ -67,11 +71,15 @@ function Player({ attemptId, onComplete }: { attemptId: string; onComplete: () =
 }
 
 export function ExamRoot({ attemptId, hasToken, onComplete }: { attemptId: string; hasToken: boolean; onComplete: () => void }) {
+  const host = useExamHost();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) return <div className="exam-root" data-exam-theme="standard" data-exam-font="m" />;
   if (!hasToken) {
     const l = store.locale() ?? 'en';
+    if (host.renderAuthExpired) {
+      return <div className="exam-root" data-exam-theme="standard" data-exam-font="m" lang="en">{host.renderAuthExpired({ retry: () => window.location.reload(), locale: l })}</div>;
+    }
     return (
       <div className="exam-root" data-exam-theme="standard" data-exam-font="m" lang="en">
         <Message locale={l} k="errors.session_expired" action={{ label: t('x.open_portal', l), on: () => { window.location.href = '/portal'; } }} />

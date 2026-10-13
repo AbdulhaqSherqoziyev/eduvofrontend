@@ -56,13 +56,19 @@ const HINT_KEY = 'eduvo_mock_li';
 export function hasSessionHint() { try { return localStorage.getItem(HINT_KEY) === '1'; } catch { return true; } }
 function setHint(on: boolean) { try { if (on) localStorage.setItem(HINT_KEY, '1'); else localStorage.removeItem(HINT_KEY); } catch { /* ignore */ } }
 
+/** Email of the last learner on this page — survives clearSession for the in-player "Log in again" modal. */
+let lastEmail: string | null = null;
+export const lastLearnerEmail = () => lastEmail;
+
 export function setAuthSession(s: AuthSession) {
   setHint(true);
+  lastEmail = s.learner.email;
   accessToken = s.accessToken;
   state = { status: 'learner', learner: s.learner };
   emit();
 }
 export function setLearner(learner: Learner) {
+  lastEmail = learner.email;
   state = { status: 'learner', learner };
   emit();
 }

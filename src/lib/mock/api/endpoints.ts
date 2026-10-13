@@ -1,5 +1,5 @@
 /** Contract endpoints (`_api-contract.md` section numbers in brackets). */
-import { api, clearSession, setAuthSession, setLearner } from './client';
+import { api, clearSession, currentAccessToken, setAuthSession, setLearner } from './client';
 import type {
   AttemptListItem, AttemptMode, AuthSession, Catalog, CheckoutMethods, CreatedAttempt, Currency, Dashboard, ExamCredits,
   Learner, MePatch, MockResultExt, OpenExamSlug, Order, PaymentMethodGroup, Quote, SectionKey, ShareCard, StartInfo, WaitlistTopic,
@@ -86,5 +86,14 @@ export const createOrder = (body: { sku: string; currency: Currency; promoCode?:
 export const getOrder = (id: string, signal?: AbortSignal) =>
   api<{ order: Order; credits: ExamCredits; serverNow: string }>(`/mock/orders/${encodeURIComponent(id)}`, { signal });
 export const cancelOrder = (id: string) => api<{ order: Order }>(`/mock/orders/${encodeURIComponent(id)}/cancel`, { method: 'POST' });
-/** O6 receipt is an attachment; the page opens it as a same-origin link. */
-export const receiptUrl = (id: string) => `${process.env.NEXT_PUBLIC_MOCK_API_BASE || '/api'}/mock/orders/${encodeURIComponent(id)}/receipt`;
+/** O6 receipt (text/html attachment, Bearer-protected) → saved via a blob link. */
+export async function downloadReceipt(id: string, filename: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API_BASE || '/api'}/mock/orders/${encodeURIComponent(id)}/receipt`, {
+    headers: currentAccessToken() ? { Authorization: `Bearer ${currentAccessToken()}` } : {},
+  });
+  if (!res.ok) throw new Error(`receipt ${res.status}`);
+  const url = URL.createObjectURL(await res.blob());
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 5000);
+}

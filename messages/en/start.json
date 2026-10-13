@@ -1,0 +1,112 @@
+{
+  "meta": {
+    "title": "Get ready to start",
+    "player": "Mock exam"
+  },
+  "h1": "Get ready to start",
+  "test": "Test <code></code>",
+  "newToYou": "New to you — you have not taken this test before",
+  "freeSection": "Free section",
+  "barTitle": "Free section",
+  "barTitleFull": "Full mock",
+  "barTitleSection": "One section",
+  "what": "1 · What do you want to take?",
+  "kind": {
+    "full": "Full mock",
+    "section": "One section"
+  },
+  "tag": {
+    "included": "Included",
+    "free": "Free",
+    "credit": "1 credit",
+    "unavailable": "Not available"
+  },
+  "sec": {
+    "listening": "Listening",
+    "reading": "Reading",
+    "writing": "Writing",
+    "reading_writing": "Reading and Writing",
+    "math": "Math"
+  },
+  "meta2": {
+    "listening": "4 parts · 40 questions · audio plays once",
+    "reading": "3 passages · 40 questions",
+    "writing": "Task 1 report + Task 2 essay · AI-graded",
+    "reading_writing": "2 adaptive modules · 54 questions",
+    "math": "2 adaptive modules · 44 questions · Desmos"
+  },
+  "metaPhone": {
+    "listening": "4 parts · audio plays once",
+    "reading": "3 passages · 40 questions",
+    "writing": "2 tasks · AI-graded",
+    "reading_writing": "2 modules · 54 questions",
+    "math": "2 modules · 44 questions"
+  },
+  "time": {
+    "min": "{n} min",
+    "minCheck": "{n} min + {extra} min check",
+    "hm": "{h}h {m}m"
+  },
+  "rules": "Rules",
+  "ruleIelts1": "The Listening audio plays once. You can’t pause or replay it.",
+  "ruleIelts2": "Sections run in order: Listening, Reading, Writing.",
+  "ruleSat1": "Module 2 adapts to how you did in Module 1.",
+  "ruleSat2": "You get a 10-minute break between Reading and Writing and Math.",
+  "rule3": "The timer keeps running if you leave fullscreen. Leaving more than 3 times ends the section.",
+  "rule4": "Answers save automatically. If you lose connection, keep going — the timer keeps running, as in the real exam, and your answers are sent when you are back online.",
+  "rule5": "Once you submit a section you can’t return to it.",
+  "check": "2 · System check",
+  "audio": "Audio",
+  "audioOk": "You heard the test tone",
+  "audioTodo": "Play a short tone to check volume",
+  "audioAct": "Play tone",
+  "head": "Headphones",
+  "headOk": "Connected",
+  "headTodo": "Recommended for Listening",
+  "headAct": "I’m wearing them",
+  "fs": "Fullscreen",
+  "fsOk": "Allowed",
+  "fsTodo": "The test runs in fullscreen",
+  "fsAct": "Allow",
+  "fsDenied": "Your browser blocked fullscreen. Allow it and try again.",
+  "net": "Internet",
+  "netOk": "Stable · answers save every few seconds",
+  "netChecking": "Checking the connection…",
+  "netBad": "Can't reach the server. Check your connection.",
+  "netAct": "Check again",
+  "summaryFull": "Full mock · {n} sections",
+  "summarySection": "One section · {name}",
+  "start": "Start {kind, select, full {mock} other {section}}",
+  "finishCheck": "Finish the system check",
+  "starting": "Starting…",
+  "note": {
+    "free": "Uses your free {exam} section",
+    "full_credit": "Uses 1 full-mock credit · you have {n}",
+    "section_credit": "Uses 1 section credit · you have {n}",
+    "unlimited": "Included in your unlimited pass"
+  },
+  "blocked": {
+    "EMAIL_NOT_VERIFIED": "Confirm your email to start a mock.",
+    "NO_CREDIT": "You don't have a credit for this yet.",
+    "NO_FRESH_TEST": "You have taken every {exam} test we have right now. New tests are added regularly — we will email you.",
+    "ACTIVE_ATTEMPT_EXISTS": "You already have a mock in progress. Finish it first.",
+    "COMING_SOON": "This exam opens soon.",
+    "SECTION_NOT_AVAILABLE": "This section isn't available in the current test."
+  },
+  "blockedAct": {
+    "EMAIL_NOT_VERIFIED": "Resend email",
+    "NO_CREDIT": "See prices",
+    "ACTIVE_ATTEMPT_EXISTS": "Resume"
+  },
+  "resent": "Sent again. Check spam too.",
+  "computer": "Open on a computer to take the test",
+  "computerBody": "The exam runs on a laptop or desktop, like the real computer-based test. Your section choice is saved.",
+  "computerBodyPhone": "The exam runs on a laptop or desktop, like the real computer-based test. Your choice is saved for 7 days.",
+  "emailLink": "Email me the link",
+  "emailed": "Link sent to your email",
+  "copyLink": "Copy link",
+  "copied": "Link copied",
+  "loadError": "We couldn't load this test. Check your connection and try again.",
+  "retry": "Try again",
+  "chooseExam": "Choose an exam"
+}

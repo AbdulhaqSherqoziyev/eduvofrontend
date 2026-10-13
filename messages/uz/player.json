@@ -1,0 +1,24 @@
+{
+  "session": {
+    "chip": "Sessiya tugadi",
+    "title": "Davom etish uchun kiring",
+    "body": "Hozirgacha javoblaringiz shu kompyuterda saqlangan. Ularni yuborish va davom etish uchun qayta kiring.",
+    "timeLeft": "Qolgan vaqt",
+    "timeUp": "Vaqt tugadi. Saqlangan javoblarni yuborish uchun kiring.",
+    "login": "Kirish",
+    "loggingIn": "Kirilmoqda…",
+    "google": "Google orqali davom etish",
+    "forgot": "Parolni unutdingizmi?",
+    "wrong": "Email yoki parol noto‘g‘ri.",
+    "emptyPw": "Parolni kiriting.",
+    "otherAccount": "Bu test {email} akkauntiga tegishli. O‘sha akkaunt bilan kiring.",
+    "locked": "Akkaunt bloklangan. Yordamga murojaat qiling.",
+    "contact": "Yordamga yozish",
+    "rate": "Juda ko‘p urinish. {sec} soniyadan keyin qayta urining.",
+    "offline": "Serverga ulanib bo‘lmadi. Javoblaringiz hamon shu kompyuterda saqlangan.",
+    "retry": "Qayta urinish",
+    "back": "Qaytdingiz. Javoblaringiz saqlandi.",
+    "email": "Email",
+    "password": "Parol"
+  }
+}

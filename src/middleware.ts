@@ -4,6 +4,7 @@
  * mock host (mock.eduvo.uz, mock.dev.eduvo.uz, + MOCK_HOSTS env, e.g. `mock.localhost` for dev):
  *   `/`            → 307 `/{lang}` (cookie NEXT_LOCALE, then Accept-Language), `Vary` set
  *   `/{lang}/…`    → rewrite to `/m/{lang}/…`; a path that is not a mock page answers HTTP 404
+ *   `/exam/{id}`   → 307 `/{lang}/exam/{id}` (backend `playerUrl`; the B2C player runs in the mock layout)
  *   anything else  → mock-styled 404 in the visitor's language (ERP pages never open here)
  * any other host (admin.eduvo.uz, dev ERP, localhost):
  *   `/m/*`         → 404 (internal home of the mock site)
@@ -70,6 +71,10 @@ function mockRoute(req: NextRequest, host: { name: string; raw: string }) {
     const known = isMockRoute(rest);
     return NextResponse.rewrite(url, PROD && !known ? { status: 404 } : undefined);
   }
+
+  // backend `playerUrl` is '/exam/{attemptId}' (contract S2); the B2C player lives under the locale
+  const exam = /^\/exam\/([^/]+)\/?$/.exec(pathname);
+  if (exam) return redirect(req, host, `/${pickLocale(req)}/exam/${exam[1]}`);
 
   const url = req.nextUrl.clone();
   url.pathname = `/m/${pickLocale(req)}/__missing`;

@@ -1,0 +1,24 @@
+{
+  "session": {
+    "chip": "Signed out",
+    "title": "Log in to keep going",
+    "body": "Your answers so far are kept on this computer. Log in again to send them and continue.",
+    "timeLeft": "Time left",
+    "timeUp": "Time is up. Log in to send your saved answers.",
+    "login": "Log in",
+    "loggingIn": "Logging in…",
+    "google": "Continue with Google",
+    "forgot": "Forgot password?",
+    "wrong": "Wrong email or password.",
+    "emptyPw": "Enter your password.",
+    "otherAccount": "This test belongs to {email}. Log in with that account.",
+    "locked": "This account is locked. Contact support.",
+    "contact": "Contact support",
+    "rate": "Too many attempts. Try again in {sec} seconds.",
+    "offline": "Can't reach the server. Your answers are still kept on this computer.",
+    "retry": "Retry",
+    "back": "You're back. Your answers are saved.",
+    "email": "Email",
+    "password": "Password"
+  }
+}

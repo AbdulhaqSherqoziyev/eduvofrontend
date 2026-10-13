@@ -44,8 +44,11 @@ export function langShort(l: MockLocale): string {
   return l.toUpperCase();
 }
 
-/** Intl locale with Latin digits forced (ar/fa would otherwise print ٦٫٥ / ۶٫۵). */
-export const numLocale = (l: string) => `${htmlLang(isLocale(l) ? l : DEFAULT_LOCALE)}-u-nu-latn`;
+/**
+ * Intl locale with Latin digits forced (ar/fa would otherwise print ٦٫٥ / ۶٫۵). English uses en-GB
+ * so dates read "12 October 2026" as in the design.
+ */
+export const numLocale = (l: string) => `${l === 'en' ? 'en-GB' : htmlLang(isLocale(l) ? l : DEFAULT_LOCALE)}-u-nu-latn`;
 
 /** Accept-Language → best supported locale (exact, then script/region rules, then base language). */
 export function negotiate(header: string | null): MockLocale {

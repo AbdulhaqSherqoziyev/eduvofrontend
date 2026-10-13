@@ -1,0 +1,112 @@
+{
+  "meta": {
+    "title": "Boshlashga tayyorlaning",
+    "player": "Mock imtihon"
+  },
+  "h1": "Boshlashga tayyorlaning",
+  "test": "Test <code></code>",
+  "newToYou": "Siz uchun yangi — bu testni hali topshirmagansiz",
+  "freeSection": "Bepul bo‘lim",
+  "barTitle": "Bepul bo‘lim",
+  "barTitleFull": "To‘liq mock",
+  "barTitleSection": "Bitta bo‘lim",
+  "what": "1 · Nimani topshirasiz?",
+  "kind": {
+    "full": "To‘liq mock",
+    "section": "Bitta bo‘lim"
+  },
+  "tag": {
+    "included": "Kiritilgan",
+    "free": "Bepul",
+    "credit": "1 kredit",
+    "unavailable": "Mavjud emas"
+  },
+  "sec": {
+    "listening": "Listening",
+    "reading": "Reading",
+    "writing": "Writing",
+    "reading_writing": "Reading and Writing",
+    "math": "Math"
+  },
+  "meta2": {
+    "listening": "4 qism · 40 savol · audio bir marta",
+    "reading": "3 matn · 40 savol",
+    "writing": "1-topshiriq hisobot + 2-topshiriq insho · AI baholaydi",
+    "reading_writing": "2 adaptiv modul · 54 savol",
+    "math": "2 adaptiv modul · 44 savol · Desmos"
+  },
+  "metaPhone": {
+    "listening": "4 qism · audio bir marta",
+    "reading": "3 matn · 40 savol",
+    "writing": "2 topshiriq · AI baholaydi",
+    "reading_writing": "2 modul · 54 savol",
+    "math": "2 modul · 44 savol"
+  },
+  "time": {
+    "min": "{n} daq",
+    "minCheck": "{n} daq + {extra} daq tekshirish",
+    "hm": "{h} s {m} daq"
+  },
+  "rules": "Qoidalar",
+  "ruleIelts1": "Listening audiosi bir marta eshittiriladi. Uni to‘xtatib yoki qayta qo‘yib bo‘lmaydi.",
+  "ruleIelts2": "Bo‘limlar tartib bilan: Listening, Reading, Writing.",
+  "ruleSat1": "2-modul 1-moduldagi natijangizga moslashadi.",
+  "ruleSat2": "Reading and Writing va Math orasida 10 daqiqalik tanaffus bor.",
+  "rule3": "To‘liq ekrandan chiqsangiz ham taymer davom etadi. 3 martadan ko‘p chiqilsa, bo‘lim yakunlanadi.",
+  "rule4": "Javoblar avtomatik saqlanadi. Aloqa uzilsa ham davom eting — taymer haqiqiy imtihondagidek to‘xtamaydi, javoblaringiz aloqa tiklanganda yuboriladi.",
+  "rule5": "Bo‘limni topshirgach, unga qaytib bo‘lmaydi.",
+  "check": "2 · Tizim tekshiruvi",
+  "audio": "Audio",
+  "audioOk": "Sinov ovozini eshitdingiz",
+  "audioTodo": "Ovoz balandligini tekshirish uchun qisqa signalni yoqing",
+  "audioAct": "Signalni yoqish",
+  "head": "Quloqchin",
+  "headOk": "Ulangan",
+  "headTodo": "Listening uchun tavsiya etiladi",
+  "headAct": "Taqib oldim",
+  "fs": "To‘liq ekran",
+  "fsOk": "Ruxsat berildi",
+  "fsTodo": "Test to‘liq ekranda o‘tadi",
+  "fsAct": "Ruxsat berish",
+  "fsDenied": "Brauzer to‘liq ekranni blokladi. Ruxsat berib, qayta urining.",
+  "net": "Internet",
+  "netOk": "Barqaror · javoblar har bir necha soniyada saqlanadi",
+  "netChecking": "Aloqa tekshirilmoqda…",
+  "netBad": "Serverga ulanib bo‘lmadi. Internetni tekshiring.",
+  "netAct": "Qayta tekshirish",
+  "summaryFull": "To‘liq mock · {n} ta bo‘lim",
+  "summarySection": "Bitta bo‘lim · {name}",
+  "start": "{kind, select, full {Mockni} other {Bo‘limni}} boshlash",
+  "finishCheck": "Tizim tekshiruvini yakunlang",
+  "starting": "Boshlanmoqda…",
+  "note": {
+    "free": "Bepul {exam} bo‘limingiz ishlatiladi",
+    "full_credit": "1 ta to‘liq mock krediti ishlatiladi · sizda {n} ta",
+    "section_credit": "1 ta bo‘lim krediti ishlatiladi · sizda {n} ta",
+    "unlimited": "Cheksiz tarifingizga kiradi"
+  },
+  "blocked": {
+    "EMAIL_NOT_VERIFIED": "Mock boshlash uchun emailingizni tasdiqlang.",
+    "NO_CREDIT": "Buning uchun hali kreditingiz yo‘q.",
+    "NO_FRESH_TEST": "Hozir bizdagi barcha {exam} testlarini topshirgansiz. Yangi testlar muntazam qo‘shiladi — emailga xabar beramiz.",
+    "ACTIVE_ATTEMPT_EXISTS": "Sizda tugallanmagan mock bor. Avval uni tugating.",
+    "COMING_SOON": "Bu imtihon tez kunda ochiladi.",
+    "SECTION_NOT_AVAILABLE": "Bu bo‘lim joriy testda yo‘q."
+  },
+  "blockedAct": {
+    "EMAIL_NOT_VERIFIED": "Qayta yuborish",
+    "NO_CREDIT": "Narxlarni ko‘rish",
+    "ACTIVE_ATTEMPT_EXISTS": "Davom ettirish"
+  },
+  "resent": "Qayta yuborildi. Spam papkasini ham tekshiring.",
+  "computer": "Testni topshirish uchun kompyuterda oching",
+  "computerBody": "Imtihon haqiqiy kompyuter testi kabi noutbuk yoki kompyuterda o‘tadi. Bo‘lim tanlovingiz saqlandi.",
+  "computerBodyPhone": "Imtihon haqiqiy kompyuter testi kabi noutbuk yoki kompyuterda o‘tadi. Tanlovingiz 7 kun saqlanadi.",
+  "emailLink": "Havolani emailimga yuborish",
+  "emailed": "Havola emailingizga yuborildi",
+  "copyLink": "Havolani nusxalash",
+  "copied": "Havola nusxalandi",
+  "loadError": "Testni yuklab bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.",
+  "retry": "Qayta urinish",
+  "chooseExam": "Imtihonni tanlang"
+}

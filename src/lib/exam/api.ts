@@ -45,15 +45,31 @@ export function reportSample(t0: number, t1: number, body: unknown) {
   if (sn && onSample) onSample(t0, t1, sn);
 }
 
+/**
+ * Transport host settings. ERP/portal never call this, so they keep API + the plain token (no
+ * renewal). mock.eduvo.uz sets a same-origin base and a token renewal (15-min learner tokens,
+ * contract §7.3.2): one 401 → renew → retry once.
+ */
+let transport: { base: string; renewAuth: (() => Promise<boolean>) | null } = { base: API, renewAuth: null };
+export function configureExamTransport(t: Partial<typeof transport>) { transport = { ...transport, ...t }; }
+
 /** Media URLs from the API are relative to the API base ("/portal/exams/media/…"). */
 export function absMedia(url: string): string {
-  return /^(https?:|data:|blob:|mock:)/.test(url) ? url : `${API}${url.startsWith('/') ? '' : '/'}${url}`;
+  return /^(https?:|data:|blob:|mock:)/.test(url) ? url : `${transport.base}${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
 let token: string | null = null;
 export function setExamToken(t: string | null) { token = t; }
 
 async function req<T>(path: string, method = 'GET', body?: unknown): Promise<ExamResult<T>> {
+  const first = await send<T>(path, method, body);
+  if (!first.ok && first.kind === 'auth' && transport.renewAuth && (await transport.renewAuth().catch(() => false))) {
+    return send<T>(path, method, body);
+  }
+  return first;
+}
+
+async function send<T>(path: string, method = 'GET', body?: unknown): Promise<ExamResult<T>> {
   // No navigator.onLine short-circuit: it can read false while the link works (Chrome on Linux /
   // VPN / Wi-Fi hand-over) and would silence autosave, heartbeat and integrity together. A truly
   // offline fetch rejects at once anyway.
@@ -61,7 +77,7 @@ async function req<T>(path: string, method = 'GET', body?: unknown): Promise<Exa
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   const t0 = performance.now();
   try {
-    const r = await fetch(`${API}${path}`, {
+    const r = await fetch(`${transport.base}${path}`, {
       method,
       signal: ctrl.signal,
       headers: {
@@ -99,7 +115,7 @@ const realApi: ExamApi = {
   time: () => req('/portal/exams/time'),
   saveOnExit(id, body) {
     try {
-      void fetch(`${API}${A(id)}/answers`, {
+      void fetch(`${transport.base}${A(id)}/answers`, {
         method: 'PUT',
         keepalive: true,
         headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },

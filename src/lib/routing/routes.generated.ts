@@ -63,6 +63,10 @@ export const ERP_ROUTES: readonly string[] = [
 /** Every mock-site page under /{lang} (src/app/(mock)/m/[lang]); '^/?$' is the locale home. */
 export const MOCK_ROUTES: readonly string[] = [
   "^/?$",
+  "^/checkout/?$",
+  "^/checkout/orders/[^/]+/?$",
+  "^/dashboard/?$",
+  "^/exam/[^/]+/?$",
   "^/forgot/?$",
   "^/how-it-works/?$",
   "^/ielts/?$",
@@ -70,7 +74,11 @@ export const MOCK_ROUTES: readonly string[] = [
   "^/onboarding/?$",
   "^/pricing/?$",
   "^/reset/?$",
+  "^/results/[^/]+/?$",
+  "^/sample-result/?$",
   "^/sat/?$",
   "^/signup/?$",
+  "^/start/?$",
+  "^/start/[^/]+/?$",
   "^/verify/?$"
 ];
