@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Eduvo Mock — Start exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#E8ECF3}body{font-family:Manrope,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:#2E6BE6;text-decoration:none}a:hover{color:#1F55C4}button,input,select,textarea{font-family:inherit}
+:root{--bg:#E8ECF3;--ink:#1E2A3A;--ink2:#5b6b82;--mut:#7A8699;--line:#d5dbe5;--hover:#dde3ec;--raise:8px 8px 20px #c8cfdb,-8px -8px 20px #ffffff;--raise-sm:4px 4px 10px #c8cfdb,-4px -4px 10px #ffffff;--inset:inset 3px 3px 7px #c8cfdb,inset -3px -3px 7px #ffffff;--blue:#2E6BE6;--ok:#1F7A55;--okBg:#E5F5EE;--ai:#5B3FD1;--aiBg:#EEE9FF;--warn:#B7790F;--warnBg:#FFF1D6;--err:#C2362B;--paper:#F4F6FA;--ielts:oklch(0.5 0.15 255);--sat:oklch(0.5 0.13 300)}
+[data-theme=dark]{--bg:#1B2230;--ink:#E7ECF4;--ink2:#A9B5C7;--mut:#8592A6;--line:#2C3648;--hover:#242D3E;--raise:8px 8px 20px #121722,-8px -8px 20px #242d3f;--raise-sm:4px 4px 10px #121722,-4px -4px 10px #242d3f;--inset:inset 3px 3px 7px #121722,inset -3px -3px 7px #252e40;--blue:#6E9BF5;--ok:#5FCB98;--okBg:#173629;--ai:#B3A2FF;--aiBg:#2A2450;--warn:#F0B54A;--warnBg:#3A2D12;--err:#FF8A80;--paper:#202838;--ielts:oklch(0.72 0.13 255);--sat:oklch(0.72 0.12 300)}
+</style>
+</helmet>
+<div data-theme="{{ theme }}" dir="{{ dir }}" lang="{{ lang }}" style="min-height:100vh;background:var(--bg);color:var(--ink)">
+  <dc-import name="SiteHeader" app="{{ true }}" active="mocks" hint-size="100%,64px"></dc-import>
+  <main style="max-width:1120px;margin:0 auto;padding:clamp(24px,4vw,48px) 20px 64px;display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span style="font-size:13px;font-weight:800;letter-spacing:.05em;color:{{ accent }}">{{ examTag }}</span>
+        <sc-if value="{{ free }}" hint-placeholder-val="{{ true }}"><span style="padding:4px 10px;border-radius:999px;background:var(--okBg);color:var(--ok);font-size:12px;font-weight:700">Free section</span></sc-if>
+      </div>
+      <h1 style="margin:0;font-size:clamp(28px,3.4vw,40px);letter-spacing:-0.03em;font-weight:800">Get ready to start</h1>
+      <div style="display:flex;gap:6px 16px;flex-wrap:wrap;font-size:14px;color:var(--ink2);font-weight:600"><span>Test {{ testId }}</span><span>New to you — you have not taken this test before</span></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:24px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:24px;min-width:0">
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:16px">
+          <div style="font-weight:800;font-size:17px">1 · What do you want to take?</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:6px;border-radius:16px;box-shadow:var(--inset)">
+            <sc-for list="{{ kinds }}" as="k" hint-placeholder-count="2">
+              <button onClick="{{ k.pick }}" style="height:44px;border-radius:12px;border:0;cursor:pointer;font-weight:700;font-size:14px;background:var(--bg);color:{{ k.color }};box-shadow:{{ k.shadow }}">{{ k.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ sections }}" as="s" hint-placeholder-count="3">
+              <button onClick="{{ s.pick }}" style="text-align:start;padding:14px 16px;border-radius:16px;border:0;cursor:{{ s.cursor }};background:var(--bg);box-shadow:{{ s.shadow }};outline:{{ s.outline }};outline-offset:-2px;color:var(--ink);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;opacity:{{ s.opacity }}">
+                <span style="font-weight:800;font-size:15px">{{ s.name }}</span>
+                <span style="font-weight:800;font-size:15px">{{ s.time }}</span>
+                <span style="font-size:13px;color:var(--mut);font-weight:600">{{ s.meta }}</span>
+                <span style="font-size:12px;color:var(--mut);font-weight:700;text-align:end">{{ s.tag }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:14px">
+          <div style="font-weight:800;font-size:17px">Rules</div>
+          <sc-for list="{{ rules }}" as="r" hint-placeholder-count="5">
+            <div style="display:flex;gap:12px;font-size:14px;line-height:1.55;color:var(--ink2)"><span style="width:6px;height:6px;border-radius:50%;background:var(--blue);margin-top:8px;flex:none"></span><span>{{ r }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:24px;min-width:0">
+        <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+          <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:14px">
+            <div style="font-weight:800;font-size:17px">2 · System check</div>
+            <sc-for list="{{ checks }}" as="c" hint-placeholder-count="4">
+              <div style="display:flex;gap:14px;align-items:center;padding:14px 16px;border-radius:16px;box-shadow:var(--inset)">
+                <span style="width:10px;height:10px;border-radius:50%;flex:none;background:{{ c.dot }}"></span>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-weight:700;font-size:14px">{{ c.name }}</span><span style="font-size:12px;color:var(--mut);font-weight:600">{{ c.note }}</span></div>
+                <sc-if value="{{ c.hasAction }}" hint-placeholder-val="{{ false }}"><button onClick="{{ c.run }}" style="height:38px;padding:0 14px;border-radius:11px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--blue);font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap">{{ c.action }}</button></sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--ink2);font-weight:600"><span>{{ summary }}</span><span style="color:var(--ink);font-weight:800">{{ totalTime }}</span></div>
+            <a href="{{ startHref }}" onClick="{{ guardStart }}" style="height:56px;border-radius:14px;background:{{ startBg }};color:#fff;font-weight:800;font-size:17px;display:grid;place-items:center;box-shadow:0 10px 22px -10px rgba(46,107,230,.8);pointer-events:{{ startPE }}">{{ startLabel }}</a>
+            <span style="font-size:12px;color:var(--mut);text-align:center">{{ startNote }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+          <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:16px">
+            <div style="width:56px;height:40px;border-radius:8px;border:3px solid var(--ink2);border-bottom-width:8px"></div>
+            <div style="font-weight:800;font-size:20px">Open on a computer to take the test</div>
+            <div style="color:var(--ink2);font-size:14px;line-height:1.6">The exam runs on a laptop or desktop, like the real computer-based test. Your section choice is saved.</div>
+            <button onClick="{{ emailLink }}" style="height:52px;border-radius:14px;border:0;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:700;font-size:16px;cursor:pointer">{{ emailLabel }}</button>
+            <button onClick="{{ copyLink }}" style="height:50px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;font-size:15px;cursor:pointer">{{ copyLabel }}</button>
+            <div style="padding:12px 14px;border-radius:12px;box-shadow:var(--inset);font-size:13px;color:var(--ink2);font-weight:600;word-break:break-all">mock.eduvo.uz/en/start/{{ testId }}</div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RTL=['ar','fa','ur','he'];
+function readPrefs(){const q=new URLSearchParams(location.search);let s={};try{s=JSON.parse(localStorage.getItem('eduvo-mock-prefs')||'{}')}catch(e){}return{theme:q.get('theme')||s.theme||'light',lang:q.get('lang')||s.lang||'en'}}
+const SEC={ielts:[['listening','Listening','4 parts · 40 questions · audio plays once','30 min + 2 min check',32],['reading','Reading','3 passages · 40 questions','60 min',60],['writing','Writing','Task 1 report + Task 2 essay · AI-graded','60 min',60]],
+sat:[['rw','Reading and Writing','2 adaptive modules · 54 questions','64 min',64],['math','Math','2 adaptive modules · 44 questions · Desmos','70 min',70]]};
+class Component extends DCLogic {
+  constructor(p){super(p);const q=new URLSearchParams(location.search);const exam=q.get('exam')||'ielts';const free=q.get('free')==='1';
+    this.state={...readPrefs(),w:window.innerWidth,exam,free,kind:free?'section':'full',sec:exam==='ielts'?'reading':'rw',audio:false,head:false,fs:false,emailed:false,copied:false}}
+  componentDidMount(){if(window.innerWidth<520&&!new URLSearchParams(location.search).has('web')){location.replace('Mobile App.dc.html?bare=1&screen='+'start');return}this.r=()=>this.setState({w:window.innerWidth});this.p=()=>this.setState(readPrefs());window.addEventListener('resize',this.r);window.addEventListener('eduvo-prefs',this.p)}
+  componentWillUnmount(){window.removeEventListener('resize',this.r);window.removeEventListener('eduvo-prefs',this.p)}
+  renderVals(){
+    const s=this.state,ielts=s.exam==='ielts',full=s.kind==='full';const list=SEC[s.exam];
+    const ready=s.audio&&s.head&&s.fs;
+    const mins=full?(ielts?162:144):list.find(x=>x[0]===s.sec)[4];
+    const ok='var(--ok)',pend='var(--warn)';
+    const checks=[
+      ...(ielts?[{name:'Audio',note:s.audio?'You heard the test tone':'Play a short tone to check volume',dot:s.audio?ok:pend,hasAction:!s.audio,action:'Play tone',run:()=>this.setState({audio:true})},
+      {name:'Headphones',note:s.head?'Connected':'Recommended for Listening',dot:s.head?ok:pend,hasAction:!s.head,action:'I’m wearing them',run:()=>this.setState({head:true})}]:[]),
+      {name:'Fullscreen',note:s.fs?'Allowed':'The test runs in fullscreen',dot:s.fs?ok:pend,hasAction:!s.fs,action:'Allow',run:()=>this.setState({fs:true})},
+      {name:'Internet',note:'Stable · answers save every few seconds',dot:ok,hasAction:false}];
+    const allReady=ielts?ready:s.fs;
+    return {theme:s.theme,lang:s.lang,dir:RTL.includes(s.lang)?'rtl':'ltr',desktop:s.w>=1024,mobile:s.w<1024,free:s.free,
+      accent:ielts?'var(--ielts)':'var(--sat)',examTag:ielts?'IELTS ACADEMIC':'DIGITAL SAT',testId:ielts?'IA-0142':'SAT-0087',
+      kinds:[['full','Full mock'],['section','One section']].map(([k,l])=>({label:l,color:s.kind===k?'var(--ink)':'var(--ink2)',shadow:s.kind===k?'var(--raise-sm)':'none',pick:()=>this.setState({kind:k})})),
+      sections:list.map(([k,n,m,t])=>{const on=full||s.sec===k;return{name:n,meta:m,time:t,tag:full?'Included':s.free?'Free':'1 credit',shadow:on?'var(--inset)':'var(--raise-sm)',outline:(!full&&s.sec===k)?'2px solid var(--blue)':'0',opacity:1,cursor:full?'default':'pointer',pick:()=>{if(!full)this.setState({sec:k})}}}),
+      rules:[ielts?'The Listening audio plays once. You can’t pause or replay it.':'Module 2 adapts to how you did in Module 1.',ielts?'Sections run in order: Listening, Reading, Writing.':'You get a 10-minute break between Reading and Writing and Math.','The timer keeps running if you leave fullscreen. Leaving more than 3 times ends the section.','Answers save automatically. If you lose connection, the timer pauses until you’re back.','Once you submit a section you can’t return to it.'],
+      checks,summary:full?'Full mock · '+list.length+' sections':'One section · '+list.find(x=>x[0]===s.sec)[1],totalTime:Math.floor(mins/60)?Math.floor(mins/60)+'h '+(mins%60)+'m':mins+' min',
+      startHref:'Player.dc.html?exam='+s.exam+'&section='+(full?list[0][0]+'&full=1':s.sec),startBg:allReady?'linear-gradient(135deg,#5B8DEF,#2E6BE6)':'var(--mut)',startPE:allReady?'auto':'none',
+      startLabel:allReady?'Start '+(full?'mock':'section'):'Finish the system check',startNote:s.free&&!full?'Uses your free '+(ielts?'IELTS':'SAT')+' section':full?'Uses 1 full-mock credit · you have 2':'Uses 1 section credit',
+      guardStart:e=>{if(!allReady)e.preventDefault()},
+      emailLabel:s.emailed?'Link sent to your email':'Email me the link',emailLink:()=>this.setState({emailed:true}),
+      copyLabel:s.copied?'Link copied':'Copy link',copyLink:()=>{try{navigator.clipboard.writeText('https://mock.eduvo.uz/en/start/IA-0142')}catch(e){}this.setState({copied:true})}};
+  }
+}
+</script>
+</body>
+</html>

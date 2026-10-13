@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Eduvo Mock — Sign up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#E8ECF3}body{font-family:Manrope,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:#2E6BE6;text-decoration:none}a:hover{color:#1F55C4}button,input,select,textarea{font-family:inherit}
+:root{--bg:#E8ECF3;--ink:#1E2A3A;--ink2:#5b6b82;--mut:#7A8699;--line:#d5dbe5;--hover:#dde3ec;--raise:8px 8px 20px #c8cfdb,-8px -8px 20px #ffffff;--raise-sm:4px 4px 10px #c8cfdb,-4px -4px 10px #ffffff;--inset:inset 3px 3px 7px #c8cfdb,inset -3px -3px 7px #ffffff;--blue:#2E6BE6;--ok:#1F7A55;--okBg:#E5F5EE;--ai:#5B3FD1;--aiBg:#EEE9FF;--warn:#B7790F;--warnBg:#FFF1D6;--err:#C2362B;--errBg:#FDE8E6;--paper:#F4F6FA;--ielts:oklch(0.5 0.15 255);--sat:oklch(0.5 0.13 300)}
+[data-theme=dark]{--bg:#1B2230;--ink:#E7ECF4;--ink2:#A9B5C7;--mut:#8592A6;--line:#2C3648;--hover:#242D3E;--raise:8px 8px 20px #121722,-8px -8px 20px #242d3f;--raise-sm:4px 4px 10px #121722,-4px -4px 10px #242d3f;--inset:inset 3px 3px 7px #121722,inset -3px -3px 7px #252e40;--blue:#6E9BF5;--ok:#5FCB98;--okBg:#173629;--ai:#B3A2FF;--aiBg:#2A2450;--warn:#F0B54A;--warnBg:#3A2D12;--err:#FF8A80;--errBg:#3D1E1C;--paper:#202838;--ielts:oklch(0.72 0.13 255);--sat:oklch(0.72 0.12 300)}
+</style>
+</helmet>
+<div data-theme="{{ theme }}" dir="{{ dir }}" lang="{{ lang }}" style="min-height:100vh;background:var(--bg);color:var(--ink);display:flex;flex-direction:column">
+  <div style="max-width:1200px;width:100%;margin:0 auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <a href="Landing.dc.html" style="display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:800;font-size:18px">
+      <span style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);display:grid;place-items:center;color:#fff;font-size:17px">e</span>
+      <span style="display:flex;gap:5px">Eduvo<span style="color:var(--blue)">Mock</span></span>
+    </a>
+    <sc-if value="{{ isOnb }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ skipOnb }}" style="border:0;background:transparent;color:var(--ink2);font-weight:700;font-size:14px;cursor:pointer;padding:10px">Skip for now</button>
+    </sc-if>
+  </div>
+
+  <main style="flex:1;max-width:1200px;width:100%;margin:0 auto;padding:clamp(12px,4vw,48px) 20px 48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:48px;align-items:center">
+    <sc-if value="{{ showAside }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:22px;min-width:0">
+        <h1 style="margin:0;font-size:clamp(28px,3.4vw,44px);line-height:1.1;letter-spacing:-0.03em;font-weight:800;text-wrap:balance">One free section per exam. Your score in minutes.</h1>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;gap:12px;align-items:center;font-size:15px;color:var(--ink2);font-weight:600"><span style="width:28px;height:28px;border-radius:9px;box-shadow:var(--inset);display:grid;place-items:center;color:var(--blue);font-weight:800;font-size:13px;flex:none">1</span>Computer-delivered IELTS and Bluebook-style SAT</div>
+          <div style="display:flex;gap:12px;align-items:center;font-size:15px;color:var(--ink2);font-weight:600"><span style="width:28px;height:28px;border-radius:9px;box-shadow:var(--inset);display:grid;place-items:center;color:var(--blue);font-weight:800;font-size:13px;flex:none">2</span>Per-question review with explanations</div>
+          <div style="display:flex;gap:12px;align-items:center;font-size:15px;color:var(--ink2);font-weight:600"><span style="width:28px;height:28px;border-radius:9px;box-shadow:var(--inset);display:grid;place-items:center;color:var(--blue);font-weight:800;font-size:13px;flex:none">3</span>Writing scored per criterion by AI</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <div style="width:100%;max-width:480px;justify-self:center;border-radius:24px;box-shadow:var(--raise);padding:clamp(24px,4vw,40px);display:flex;flex-direction:column;gap:20px">
+      <sc-if value="{{ isSignup }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:6px"><h2 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em">{{ title }}</h2><span style="color:var(--ink2);font-size:14px">{{ subtitle }}</span></div>
+        <button onClick="{{ google }}" style="height:50px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px" style-hover="color:var(--blue)">
+          <span style="width:20px;height:20px;border-radius:50%;box-shadow:var(--inset);display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--blue)">G</span>Continue with Google
+        </button>
+        <div style="display:flex;align-items:center;gap:12px;color:var(--mut);font-size:12px;font-weight:700"><span style="flex:1;height:1px;background:var(--line)"></span>or with email<span style="flex:1;height:1px;background:var(--line)"></span></div>
+        <form onSubmit="{{ submitAuth }}" noValidate="{{ true }}" style="display:flex;flex-direction:column;gap:16px">
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;font-weight:700;color:var(--ink2)">Email
+            <input value="{{ email }}" onChange="{{ setEmail }}" type="email" placeholder="you@example.com" style="height:50px;border-radius:14px;border:0;background:var(--bg);box-shadow:{{ emailShadow }};padding:0 16px;color:var(--ink);font-size:15px;font-weight:500;outline:none" />
+            <sc-if value="{{ emailErr }}" hint-placeholder-val="{{ false }}"><span style="color:var(--err);font-weight:600;font-size:12px">Enter a valid email, like name@example.com</span></sc-if>
+          </label>
+          <sc-if value="{{ needsPw }}" hint-placeholder-val="{{ true }}">
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;font-weight:700;color:var(--ink2)">
+              <span style="display:flex;justify-content:space-between">Password<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}"><a href="Auth.dc.html?mode=forgot" style="font-size:13px">Forgot password?</a></sc-if></span>
+              <input value="{{ pw }}" onChange="{{ setPw }}" type="password" placeholder="At least 8 characters" style="height:50px;border-radius:14px;border:0;background:var(--bg);box-shadow:{{ pwShadow }};padding:0 16px;color:var(--ink);font-size:15px;outline:none" />
+              <sc-if value="{{ pwErr }}" hint-placeholder-val="{{ false }}"><span style="color:var(--err);font-weight:600;font-size:12px">Use at least 8 characters.</span></sc-if>
+            </label>
+          </sc-if>
+          <button style="height:52px;border-radius:14px;border:0;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 10px 22px -10px rgba(46,107,230,.8)" style-hover="background:#1F55C4">{{ cta }}</button>
+        </form>
+        <div style="font-size:14px;color:var(--ink2);text-align:center">{{ switchText }} <a href="{{ switchHref }}" style="font-weight:700">{{ switchLink }}</a></div>
+        <sc-if value="{{ isSignupOnly }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;color:var(--mut);text-align:center;line-height:1.5">By signing up you agree to the <a href="Help.dc.html?tab=terms">Terms</a> and <a href="Help.dc.html?tab=privacy">Privacy policy</a>.</div></sc-if>
+      </sc-if>
+
+      <sc-if value="{{ isVerify }}" hint-placeholder-val="{{ false }}">
+        <div style="width:64px;height:64px;border-radius:20px;box-shadow:var(--inset);display:grid;place-items:center;color:var(--blue);font-weight:800;font-size:22px">@</div>
+        <div style="display:flex;flex-direction:column;gap:8px"><h2 style="margin:0;font-size:26px;font-weight:800">{{ verifyTitle }}</h2><span style="color:var(--ink2);font-size:15px;line-height:1.6">{{ verifyBody }}</span></div>
+        <button onClick="{{ verified }}" style="height:52px;border-radius:14px;border:0;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:700;font-size:16px;cursor:pointer">{{ verifyCta }}</button>
+        <button onClick="{{ resend }}" style="height:46px;border-radius:13px;border:0;background:transparent;color:var(--blue);font-weight:700;font-size:14px;cursor:pointer">{{ resendLabel }}</button>
+      </sc-if>
+
+      <sc-if value="{{ isReset }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:6px"><h2 style="margin:0;font-size:26px;font-weight:800">Set a new password</h2><span style="color:var(--ink2);font-size:14px">For {{ emailShown }}</span></div>
+        <input type="password" placeholder="New password" style="height:50px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 16px;color:var(--ink);font-size:15px;outline:none" />
+        <input type="password" placeholder="Repeat new password" style="height:50px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 16px;color:var(--ink);font-size:15px;outline:none" />
+        <a href="Auth.dc.html?mode=login" style="height:52px;border-radius:14px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:700;font-size:16px;display:grid;place-items:center">Save and log in</a>
+      </sc-if>
+
+      <sc-if value="{{ isOnb }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:6px">
+          <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:6px;border-radius:99px;background:{{ s.bar }};box-shadow:var(--inset)"></div><span style="font-size:11px;font-weight:700;color:{{ s.color }}">{{ s.label }}</span></div>
+          </sc-for>
+        </div>
+        <h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.02em">{{ onbTitle }}</h2>
+        <sc-if value="{{ step0 }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <sc-for list="{{ examOpts }}" as="o" hint-placeholder-count="2">
+              <button onClick="{{ o.pick }}" style="text-align:start;padding:18px;border-radius:16px;border:0;cursor:pointer;background:var(--bg);box-shadow:{{ o.shadow }};outline:{{ o.outline }};outline-offset:-2px;color:var(--ink);display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:12px;font-weight:800;letter-spacing:.05em;color:{{ o.color }}">{{ o.tag }}</span><span style="font-weight:800;font-size:17px">{{ o.name }}</span><span style="font-size:12px;color:var(--mut);font-weight:600">{{ o.meta }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="font-size:13px;color:var(--mut)">CEFR, TOEFL iBT and HSK are coming soon.</div>
+        </sc-if>
+        <sc-if value="{{ step1 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+            <sc-for list="{{ targets }}" as="o" hint-placeholder-count="8">
+              <button onClick="{{ o.pick }}" style="height:52px;border-radius:14px;border:0;cursor:pointer;font-weight:800;font-size:16px;background:{{ o.bg }};color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.v }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
+          <input type="date" value="{{ date }}" onChange="{{ setDate }}" style="height:52px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 16px;color:var(--ink);font-size:15px;outline:none" />
+          <label style="display:flex;gap:10px;align-items:center;font-size:14px;font-weight:600;color:var(--ink2);cursor:pointer"><input type="checkbox" checked="{{ noDate }}" onChange="{{ toggleNoDate }}" style="width:18px;height:18px;accent-color:#2E6BE6" />I have not booked a date yet</label>
+        </sc-if>
+        <sc-if value="{{ step3 }}" hint-placeholder-val="{{ false }}">
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;font-weight:700;color:var(--ink2)">Country
+            <select style="height:52px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 14px;color:var(--ink);font-size:15px;outline:none"><option>Uzbekistan</option><option>Kazakhstan</option><option>Kyrgyzstan</option><option>Tajikistan</option><option>Turkmenistan</option><option>Türkiye</option><option>Other</option></select>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;font-weight:700;color:var(--ink2)">Interface language
+            <select style="height:52px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 14px;color:var(--ink);font-size:15px;outline:none"><option>English</option><option>O‘zbekcha</option><option>Ўзбекча</option><option>Русский</option><option>Қазақша</option><option>العربية</option></select>
+          </label>
+          <div style="font-size:13px;color:var(--mut)">Exam content stays in English.</div>
+        </sc-if>
+        <div style="display:flex;gap:12px;margin-top:4px">
+          <sc-if value="{{ canBack }}" hint-placeholder-val="{{ false }}"><button onClick="{{ back }}" style="height:52px;padding:0 20px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;font-size:15px;cursor:pointer">Back</button></sc-if>
+          <button onClick="{{ next }}" style="flex:1;height:52px;border-radius:14px;border:0;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:700;font-size:16px;cursor:pointer" style-hover="background:#1F55C4">{{ nextLabel }}</button>
+        </div>
+      </sc-if>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;signup&quot;,&quot;login&quot;,&quot;forgot&quot;,&quot;verify&quot;,&quot;reset&quot;,&quot;onboarding&quot;],&quot;default&quot;:&quot;signup&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const RTL=['ar','fa','ur','he'];
+function readPrefs(){const q=new URLSearchParams(location.search);let s={};try{s=JSON.parse(localStorage.getItem('eduvo-mock-prefs')||'{}')}catch(e){}return{theme:q.get('theme')||s.theme||'light',lang:q.get('lang')||s.lang||'en'}}
+class Component extends DCLogic {
+  state={...readPrefs(),mode:new URLSearchParams(location.search).get('mode')||this.props.mode||'signup',email:'',pw:'',tried:false,step:0,exam:'ielts',target:'7.0',date:'2026-12-12',noDate:false,resent:false};
+  componentDidMount(){if(window.innerWidth<520&&!new URLSearchParams(location.search).has('web')){location.replace('Mobile App.dc.html?bare=1&screen='+(new URLSearchParams(location.search).get('mode')==='onboarding'?'onb':'auth'));return}this.p=()=>this.setState(readPrefs());window.addEventListener('eduvo-prefs',this.p)}
+  componentWillUnmount(){window.removeEventListener('eduvo-prefs',this.p)}
+  finish(){const next=new URLSearchParams(location.search).get('next');location.href=next==='free'||!next?'Exam Start.dc.html?exam='+this.state.exam+'&free=1':'Dashboard.dc.html'}
+  renderVals(){
+    const s=this.state,m=s.mode;const isLogin=m==='login',isForgot=m==='forgot',isSignupOnly=m==='signup';
+    const emailBad=!/^\S+@\S+\.\S+$/.test(s.email),pwBad=s.pw.length<8;
+    const emailErr=s.tried&&emailBad,pwErr=s.tried&&pwBad&&!isForgot;
+    const ielts=s.exam==='ielts';
+    const tv=ielts?['5.5','6.0','6.5','7.0','7.5','8.0','8.5','9.0']:['1200','1300','1350','1400','1450','1500','1550','1600'];
+    const titles=['Which exam are you preparing for?',ielts?'What band are you aiming for?':'What total score are you aiming for?','When is your exam?','Where are you studying from?'];
+    return {theme:s.theme,lang:s.lang,dir:RTL.includes(s.lang)?'rtl':'ltr',
+      isSignup:['signup','login','forgot'].includes(m),isLogin,isSignupOnly,needsPw:!isForgot,isVerify:m==='verify'||m==='sent',isReset:m==='reset',isOnb:m==='onboarding',showAside:m!=='onboarding',
+      title:isLogin?'Welcome back':isForgot?'Reset your password':'Create your account',
+      subtitle:isLogin?'Log in to continue your mocks.':isForgot?'We will email you a link to set a new one.':'Free to sign up. No card needed.',
+      cta:isLogin?'Log in':isForgot?'Send reset link':'Create account',
+      switchText:isLogin?'New to Eduvo Mock?':isForgot?'Remembered it?':'Already have an account?',switchLink:isLogin?'Create an account':'Log in',switchHref:isLogin?'Auth.dc.html':'Auth.dc.html?mode=login',
+      email:s.email,pw:s.pw,emailErr,pwErr,emailShown:s.email||'you@example.com',
+      emailShadow:emailErr?'var(--inset), 0 0 0 2px var(--err)':'var(--inset)',pwShadow:pwErr?'var(--inset), 0 0 0 2px var(--err)':'var(--inset)',
+      setEmail:e=>this.setState({email:e.target.value}),setPw:e=>this.setState({pw:e.target.value}),
+      submitAuth:e=>{e.preventDefault();if(emailBad||(pwBad&&!isForgot)){this.setState({tried:true});return}
+        if(isLogin)location.href='Dashboard.dc.html';else this.setState({mode:isForgot?'sent':'verify',tried:false})},
+      google:()=>this.setState({mode:'onboarding'}),
+      verifyTitle:m==='sent'?'Check your inbox':'Verify your email',
+      verifyBody:m==='sent'?'We sent a reset link to '+(s.email||'your email')+'. It expires in 30 minutes.':'We sent a 6-digit link to '+(s.email||'your email')+'. Open it to activate your account.',
+      verifyCta:m==='sent'?'Open reset link (demo)':'I have verified my email',
+      verified:()=>this.setState({mode:m==='sent'?'reset':'onboarding'}),
+      resendLabel:s.resent?'Sent again. Check spam too.':'Resend email',resend:()=>this.setState({resent:true}),
+      steps:['Exam','Target','Date','Country'].map((l,i)=>({label:l,bar:i<=s.step?'linear-gradient(135deg,#5B8DEF,#2E6BE6)':'transparent',color:i<=s.step?'var(--ink)':'var(--mut)'})),
+      onbTitle:titles[s.step],step0:s.step===0,step1:s.step===1,step2:s.step===2,step3:s.step===3,canBack:s.step>0,
+      examOpts:[['ielts','IELTS ACADEMIC','IELTS','Band 0–9','var(--ielts)'],['sat','DIGITAL SAT','SAT','Score 400–1600','var(--sat)']].map(([k,tag,n,meta,c])=>({tag,name:n,meta,color:c,shadow:s.exam===k?'var(--inset)':'var(--raise-sm)',outline:s.exam===k?'2px solid var(--blue)':'0',pick:()=>this.setState({exam:k,target:k==='ielts'?'7.0':'1450'})})),
+      targets:tv.map(v=>({v,bg:s.target===v?'linear-gradient(135deg,#5B8DEF,#2E6BE6)':'var(--bg)',color:s.target===v?'#fff':'var(--ink)',shadow:s.target===v?'none':'var(--raise-sm)',pick:()=>this.setState({target:v})})),
+      date:s.date,noDate:s.noDate,setDate:e=>this.setState({date:e.target.value,noDate:false}),toggleNoDate:()=>this.setState({noDate:!s.noDate}),
+      back:()=>this.setState({step:s.step-1}),nextLabel:s.step===3?'Start my free section':'Continue',
+      next:()=>{if(s.step<3)this.setState({step:s.step+1});else this.finish()},
+      skipOnb:()=>{location.href='Dashboard.dc.html?empty=1'}};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Eduvo Mock — All screens</title>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box}html,body{margin:0;background:#DDE2EA}body{font-family:Manrope,system-ui,sans-serif}a{color:#2E6BE6;text-decoration:none}a:hover{color:#1F55C4}</style>
+</helmet>
+<div style="padding:48px;color:#1E2A3A;display:flex;flex-direction:column;gap:48px;width:max-content">
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em">Eduvo Mock · screens</h1>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px;font-weight:700">
+      <span style="color:#7A8699">Clickable flow:</span>
+      <sc-for list="{{ flow }}" as="f" hint-placeholder-count="9"><a href="{{ f.href }}" target="_top" style="padding:8px 12px;border-radius:10px;background:#E8ECF3;box-shadow:3px 3px 8px #c3cad6,-3px -3px 8px #fff">{{ f.n }} · {{ f.label }}</a></sc-for>
+      <a href="Mobile App.dc.html" target="_top" style="padding:8px 12px;border-radius:10px;background:#2E6BE6;color:#fff">Mobile app</a>
+      <a href="Design System.dc.html" target="_top" style="padding:8px 12px;border-radius:10px;background:#1E2A3A;color:#fff">Design system</a>
+    </div>
+  </div>
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+    <section style="display:flex;flex-direction:column;gap:20px">
+      <h2 style="margin:0;font-size:22px;font-weight:800;padding-bottom:10px;border-bottom:1px solid #c9d0db">{{ g.title }}</h2>
+      <div style="display:flex;flex-direction:column;gap:36px">
+        <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="3">
+          <div style="display:flex;gap:28px;align-items:flex-start">
+            <div style="width:180px;flex:none;display:flex;flex-direction:column;gap:6px;padding-top:4px"><span style="font-weight:800;font-size:16px">{{ r.label }}</span><a href="{{ r.src }}" target="_top" style="font-size:12px;font-weight:700">Open</a></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;font-weight:800;color:#7A8699">1440</span><div style="width:576px;height:360px;overflow:hidden;border-radius:14px;box-shadow:0 10px 30px -14px rgba(30,42,58,.4);background:#E8ECF3"><iframe src="{{ r.src }}" loading="lazy" style="width:1440px;height:900px;border:0;transform:scale(.4);transform-origin:0 0"></iframe></div></div>
+            <sc-if value="{{ r.mobile }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;font-weight:800;color:#7A8699">Phone · 390</span><div style="padding:6px;border-radius:30px;background:#0E1218;box-shadow:0 16px 36px -16px rgba(14,18,24,.6)"><div style="width:195px;height:422px;overflow:hidden;border-radius:24px;background:#E8ECF3"><iframe src="{{ r.msrc }}" loading="lazy" style="width:390px;height:844px;border:0;transform:scale(.5);transform-origin:0 0"></iframe></div></div></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;font-weight:800;color:#7A8699">Phone · 360</span><div style="padding:6px;border-radius:28px;background:#0E1218;box-shadow:0 16px 36px -16px rgba(14,18,24,.6)"><div style="width:180px;height:400px;overflow:hidden;border-radius:22px;background:#E8ECF3"><iframe src="{{ r.msrc }}" loading="lazy" style="width:360px;height:800px;border:0;transform:scale(.5);transform-origin:0 0"></iframe></div></div></div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals(){
+    const MS={'Landing.dc.html':'landing','Pricing.dc.html':'pricing','Auth.dc.html':'auth','Auth.dc.html?mode=login':'auth','Auth.dc.html?mode=verify':'verify','Auth.dc.html?mode=forgot':'auth','Auth.dc.html?mode=reset':'auth','Auth.dc.html?mode=onboarding':'onb','Dashboard.dc.html':'home','Dashboard.dc.html?empty=1':'home&empty=1','Exam Start.dc.html':'start','Results.dc.html':'results','Checkout.dc.html':'checkout','Progress.dc.html':'progress'};
+    const r=(label,src,mobile=true)=>{const [path,qs]=src.split('?');const p=new URLSearchParams(qs||'');const extra=['lang','theme'].filter(k=>p.has(k)).map(k=>'&'+k+'='+p.get(k)).join('');p.delete('lang');p.delete('theme');const key=path+(p.toString()?'?'+p.toString():'');let scr=MS[key]||MS[path]||'landing';if(path==='Results.dc.html'&&p.get('pending'))scr='results&tab=writing';if(path==='Checkout.dc.html'&&p.get('state'))scr='payresult&pay='+p.get('state');return{label,src,mobile,msrc:'Mobile App.dc.html?bare=1&screen='+scr+extra}};
+    return {
+      flow:[['Landing','Landing.dc.html'],['Sign up','Auth.dc.html?next=free'],['Onboarding','Auth.dc.html?mode=onboarding'],['Free section start','Exam Start.dc.html?exam=ielts&free=1'],['Player','Player.dc.html?section=reading'],['Results','Results.dc.html'],['Pricing','Pricing.dc.html'],['Checkout','Checkout.dc.html?plan=b5'],['Dashboard','Dashboard.dc.html']].map(([label,href],i)=>({n:i+1,label,href})),
+      groups:[
+        {title:'Marketing & auth',rows:[r('Landing','Landing.dc.html'),r('Pricing','Pricing.dc.html'),r('Sign up','Auth.dc.html'),r('Log in','Auth.dc.html?mode=login'),r('Verify email','Auth.dc.html?mode=verify'),r('Forgot password','Auth.dc.html?mode=forgot'),r('Reset password','Auth.dc.html?mode=reset'),r('Onboarding','Auth.dc.html?mode=onboarding')]},
+        {title:'Learner',rows:[r('Dashboard','Dashboard.dc.html'),r('Dashboard · first time','Dashboard.dc.html?empty=1'),r('Exam start','Exam Start.dc.html?exam=ielts&free=1'),r('Exam start · SAT','Exam Start.dc.html?exam=sat'),r('Results · IELTS','Results.dc.html'),r('Results · Writing pending','Results.dc.html?pending=1'),r('Results · SAT','Results.dc.html?exam=sat')]},
+        {title:'Checkout',rows:[r('Checkout','Checkout.dc.html?plan=b5'),r('Payment success','Checkout.dc.html?plan=b5&state=success'),r('Payment failed','Checkout.dc.html?plan=b5&state=failed'),r('Payment pending','Checkout.dc.html?plan=b5&state=pending')]},
+        {title:'Exam player (desktop only)',rows:[r('IELTS Reading','Player.dc.html?section=reading&phase=test',false),r('IELTS Listening','Player.dc.html?section=listening&phase=test',false),r('IELTS Writing','Player.dc.html?section=writing&phase=test',false),r('SAT Reading & Writing','Player.dc.html?section=rw&phase=test',false),r('SAT Math','Player.dc.html?section=math&phase=test',false),r('Player on mobile','Exam Start.dc.html?exam=ielts&free=1')]},
+        {title:'RTL · Arabic',rows:[r('Landing','Landing.dc.html?lang=ar'),r('Dashboard','Dashboard.dc.html?lang=ar'),r('Results','Results.dc.html?lang=ar')]},
+        {title:'Dark theme',rows:[r('Dashboard','Dashboard.dc.html?theme=dark'),r('Results','Results.dc.html?theme=dark')]},
+        {title:'Long strings · German',rows:[r('Landing','Landing.dc.html?lang=de'),r('Dashboard','Dashboard.dc.html?lang=de')]}
+      ]};
+  }
+}
+</script>
+</body>
+</html>

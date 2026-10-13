@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Eduvo Mock — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#E8ECF3}body{font-family:Manrope,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:#2E6BE6;text-decoration:none}a:hover{color:#1F55C4}button,input,select,textarea{font-family:inherit}
+:root{--bg:#E8ECF3;--ink:#1E2A3A;--ink2:#5b6b82;--mut:#7A8699;--line:#d5dbe5;--hover:#dde3ec;--raise:8px 8px 20px #c8cfdb,-8px -8px 20px #ffffff;--raise-sm:4px 4px 10px #c8cfdb,-4px -4px 10px #ffffff;--inset:inset 3px 3px 7px #c8cfdb,inset -3px -3px 7px #ffffff;--blue:#2E6BE6;--ok:#1F7A55;--okBg:#E5F5EE;--ai:#5B3FD1;--aiBg:#EEE9FF;--warn:#B7790F;--warnBg:#FFF1D6;--ielts:oklch(0.5 0.15 255);--sat:oklch(0.5 0.13 300)}
+[data-theme=dark]{--bg:#1B2230;--ink:#E7ECF4;--ink2:#A9B5C7;--mut:#8592A6;--line:#2C3648;--hover:#242D3E;--raise:8px 8px 20px #121722,-8px -8px 20px #242d3f;--raise-sm:4px 4px 10px #121722,-4px -4px 10px #242d3f;--inset:inset 3px 3px 7px #121722,inset -3px -3px 7px #252e40;--blue:#6E9BF5;--ok:#5FCB98;--okBg:#173629;--ai:#B3A2FF;--aiBg:#2A2450;--warn:#F0B54A;--warnBg:#3A2D12;--ielts:oklch(0.72 0.13 255);--sat:oklch(0.72 0.12 300)}
+@keyframes shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}
+</style>
+</helmet>
+<div data-theme="{{ theme }}" dir="{{ dir }}" lang="{{ lang }}" style="min-height:100vh;background:var(--bg);color:var(--ink)">
+  <dc-import name="SiteHeader" app="{{ true }}" active="dash" hint-size="100%,64px"></dc-import>
+  <main style="max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,40px) 20px 56px;display:flex;flex-direction:column;gap:24px">
+
+    <sc-if value="{{ skeleton }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div style="height:40px;width:min(360px,80%);border-radius:12px;background:linear-gradient(90deg,var(--hover) 0,var(--bg) 50%,var(--hover) 100%);background-size:1200px 100%;animation:shimmer 1.4s infinite linear"></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px">
+          <div style="height:180px;border-radius:24px;box-shadow:var(--raise)"></div><div style="height:180px;border-radius:24px;box-shadow:var(--raise)"></div><div style="height:180px;border-radius:24px;box-shadow:var(--raise)"></div>
+        </div>
+        <div style="height:280px;border-radius:24px;box-shadow:var(--raise)"></div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:6px"><h1 style="margin:0;font-size:clamp(26px,3.2vw,36px);font-weight:800;letter-spacing:-0.03em">{{ t.hi }}</h1><span style="color:var(--ink2);font-size:15px">{{ subline }}</span></div>
+      </div>
+
+      <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:clamp(24px,4vw,40px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:28px;align-items:center">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <span style="align-self:flex-start;padding:5px 12px;border-radius:999px;background:var(--okBg);color:var(--ok);font-size:12px;font-weight:800">Free</span>
+            <span style="font-size:clamp(22px,2.6vw,30px);font-weight:800;letter-spacing:-0.02em">{{ t.emptyTitle }}</span>
+            <span style="color:var(--ink2);font-size:15px;line-height:1.6">Take one IELTS or SAT section for free. You get a score, a review of every question and your first data point on the progress chart.</span>
+            <div style="display:flex;gap:10px;flex-wrap:wrap"><a href="Exam Start.dc.html?exam=ielts&free=1" style="height:52px;padding:0 22px;border-radius:14px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:800;display:flex;align-items:center">Free IELTS section</a><a href="Exam Start.dc.html?exam=sat&free=1" style="height:52px;padding:0 20px;border-radius:14px;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;display:flex;align-items:center">Free SAT section</a></div>
+          </div>
+          <div style="border-radius:20px;box-shadow:var(--inset);padding:24px;display:flex;flex-direction:column;gap:12px">
+            <span style="font-size:13px;font-weight:800;color:var(--mut)">Your progress will appear here</span>
+            <div style="height:120px;border-radius:12px;background:repeating-linear-gradient(0deg,var(--line) 0 1px,transparent 1px 30px)"></div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ hasData }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px">
+          <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:12px;grid-column:span {{ nextSpan }}">
+            <span style="font-size:12px;font-weight:800;color:var(--blue);letter-spacing:.06em">{{ t.nextAction }}</span>
+            <span style="font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.25">Resume your Reading section — 41 minutes left</span>
+            <span style="color:var(--ink2);font-size:14px;line-height:1.55">IELTS full mock IA-0151 · Listening done (7.0). Your answers are saved.</span>
+            <a href="Player.dc.html?section=reading" style="margin-top:auto;align-self:flex-start;height:50px;padding:0 22px;border-radius:14px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:800;display:flex;align-items:center;box-shadow:0 10px 22px -10px rgba(46,107,230,.8)">Resume mock</a>
+          </div>
+          <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:14px">
+            <span style="font-size:13px;font-weight:700;color:var(--ink2)">{{ t.target }}</span>
+            <div style="display:flex;align-items:baseline;gap:12px"><span style="font-size:48px;font-weight:800;letter-spacing:-0.04em;line-height:1">6.5</span><span style="font-size:18px;color:var(--mut);font-weight:800">→ 7.0</span></div>
+            <div style="height:10px;border-radius:99px;box-shadow:var(--inset);position:relative"><div style="position:absolute;inset-block:0;inset-inline-start:0;width:72%;border-radius:99px;background:linear-gradient(90deg,#5B8DEF,#2E6BE6)"></div><div style="position:absolute;top:-4px;bottom:-4px;inset-inline-start:78%;width:3px;border-radius:2px;background:var(--ink)"></div></div>
+            <span style="font-size:13px;color:var(--mut);font-weight:600">0.5 to go · Reading and Writing are below target</span>
+          </div>
+          <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:13px;font-weight:700;color:var(--ink2)">{{ t.countdown }}</span>
+            <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:48px;font-weight:800;letter-spacing:-0.04em;line-height:1">{{ days }}</span><span style="font-size:16px;color:var(--mut);font-weight:800">days</span></div>
+            <span style="font-size:13px;color:var(--mut);font-weight:600">IELTS Academic · 12 December 2026</span>
+            <a href="Settings.dc.html" style="font-size:13px;font-weight:700;margin-top:auto">Change date</a>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px">
+          <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:16px;min-width:0">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+              <span style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span style="font-weight:800;font-size:18px">{{ t.progress }}</span><span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--ok)"><span style="width:16px;border-top:2px dashed var(--ok)"></span>Target 7.0</span></span>
+              <div style="display:flex;gap:4px;padding:4px;border-radius:12px;box-shadow:var(--inset)">
+                <sc-for list="{{ secTabs }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="height:34px;padding:0 12px;border-radius:9px;border:0;cursor:pointer;font-weight:700;font-size:12px;background:var(--bg);color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for>
+              </div>
+            </div>
+            <div dir="ltr" style="position:relative;width:100%;aspect-ratio:400 / 180">
+              <svg viewBox="0 0 400 180" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                <sc-for list="{{ grid }}" as="g" hint-placeholder-count="4"><line x1="28" x2="392" y1="{{ g.y }}" y2="{{ g.y }}" stroke="var(--line)" stroke-width="1" vector-effect="non-scaling-stroke"></line></sc-for>
+                <line x1="28" x2="392" y1="{{ targetY }}" y2="{{ targetY }}" stroke="var(--ok)" stroke-width="1.5" stroke-dasharray="4 4" vector-effect="non-scaling-stroke"></line>
+                <polyline points="{{ line }}" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></polyline>
+              </svg>
+              <sc-for list="{{ grid }}" as="g" hint-placeholder-count="4"><span style="position:absolute;left:0;top:{{ g.top }};transform:translateY(-50%);font-size:11px;font-weight:700;color:var(--mut)">{{ g.label }}</span></sc-for>
+              
+              <sc-for list="{{ pts }}" as="p" hint-placeholder-count="5">
+                <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};width:11px;height:11px;border-radius:50%;background:var(--bg);border:2.5px solid var(--blue);transform:translate(-50%,-50%)"></span>
+                <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};transform:translate(-50%,-160%);font-size:12px;font-weight:800;color:var(--ink)">{{ p.v }}</span>
+                <span style="position:absolute;left:{{ p.left }};bottom:-4px;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--mut);white-space:nowrap">{{ p.d }}</span>
+              </sc-for>
+            </div>
+            <a href="Progress.dc.html" style="font-size:14px;font-weight:700">Open full progress</a>
+          </div>
+          <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:14px">
+            <span style="font-weight:800;font-size:18px">{{ t.weak }}</span>
+            <sc-for list="{{ weak }}" as="a" hint-placeholder-count="4">
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;align-items:center">
+                <span style="font-size:14px;font-weight:600;color:var(--ink2)">{{ a.name }}</span><span style="font-size:13px;font-weight:800">{{ a.pct }}%</span>
+                <div style="grid-column:1 / -1;height:8px;border-radius:99px;box-shadow:var(--inset);overflow:hidden"><div style="height:100%;width:{{ a.w }};border-radius:99px;background:var(--warn)"></div></div>
+              </div>
+            </sc-for>
+            <span style="font-size:13px;color:var(--mut);line-height:1.5">Across your last 3 IELTS mocks.</span>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px;align-items:start">
+          <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:12px;grid-column:span {{ mocksSpan }};min-width:0">
+            <span style="font-weight:800;font-size:18px;margin-bottom:4px">{{ t.mocks }}</span>
+            <sc-for list="{{ mocks }}" as="m" hint-placeholder-count="4">
+              <a href="{{ m.href }}" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:14px 16px;border-radius:16px;box-shadow:var(--inset);color:var(--ink)" style-hover="color:var(--ink)">
+                <span style="display:flex;gap:8px;align-items:center;min-width:0;flex-wrap:wrap"><span style="font-size:11px;font-weight:800;letter-spacing:.05em;color:{{ m.color }}">{{ m.exam }}</span><span style="font-weight:700;font-size:15px">{{ m.name }}</span></span>
+                <span style="font-weight:800;font-size:18px;text-align:end">{{ m.score }}</span>
+                <span style="font-size:13px;color:var(--mut);font-weight:600">{{ m.meta }}</span>
+                <span style="font-size:13px;font-weight:800;color:{{ m.actColor }};text-align:end">{{ m.action }}</span>
+              </a>
+            </sc-for>
+          </div>
+          <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:14px">
+            <span style="font-weight:800;font-size:18px">{{ t.credits }}</span>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="padding:16px;border-radius:16px;box-shadow:var(--inset);display:flex;flex-direction:column;gap:4px"><span style="font-size:32px;font-weight:800">2</span><span style="font-size:12px;color:var(--mut);font-weight:700">IELTS full mocks</span></div>
+              <div style="padding:16px;border-radius:16px;box-shadow:var(--inset);display:flex;flex-direction:column;gap:4px"><span style="font-size:32px;font-weight:800">1</span><span style="font-size:12px;color:var(--mut);font-weight:700">Free SAT section</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+              <div style="display:flex;justify-content:space-between;color:var(--ink2)"><span>Bundle · 5 mocks</span><span>4 Oct 2026</span></div>
+              <div style="display:flex;justify-content:space-between;color:var(--ink2)"><span>Full mock</span><span>18 Sep 2026</span></div>
+            </div>
+            <a href="Pricing.dc.html" style="height:48px;border-radius:14px;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;display:grid;place-items:center" style-hover="color:var(--blue)">Buy more</a>
+          </div>
+        </div>
+      </sc-if>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;empty&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;slow&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const RTL=['ar','fa','ur','he'];
+function readPrefs(){const q=new URLSearchParams(location.search);let s={};try{s=JSON.parse(localStorage.getItem('eduvo-mock-prefs')||'{}')}catch(e){}return{theme:q.get('theme')||s.theme||'light',lang:q.get('lang')||s.lang||'en'}}
+const T={en:{hi:'Good afternoon, Dilnoza',nextAction:'NEXT STEP',target:'Current vs target band',countdown:'Until your exam',progress:'Band by mock',weak:'Weakest question types',mocks:'My mocks',credits:'Credits',emptyTitle:'Start with a free section'},
+uz:{hi:'Xayrli kun, Dilnoza',nextAction:'KEYINGI QADAM',target:'Hozirgi va maqsad ball',countdown:'Imtihongacha',progress:'Mocklar bo‘yicha ball',weak:'Eng zaif savol turlari',mocks:'Mocklarim',credits:'Kreditlar',emptyTitle:'Bepul bo‘limdan boshlang'},
+ru:{hi:'Добрый день, Дильноза',nextAction:'СЛЕДУЮЩИЙ ШАГ',target:'Текущий и целевой балл',countdown:'До экзамена',progress:'Балл по мокам',weak:'Самые слабые типы вопросов',mocks:'Мои моки',credits:'Кредиты',emptyTitle:'Начните с бесплатного раздела'},
+de:{hi:'Guten Tag, Dilnoza',nextAction:'NÄCHSTER SCHRITT',target:'Aktuelles Band und Zielband',countdown:'Bis zu Ihrer Prüfung',progress:'Band pro Probetest',weak:'Schwächste Fragetypen',mocks:'Meine Probetests',credits:'Guthaben',emptyTitle:'Beginnen Sie mit einem kostenlosen Testteil'},
+ar:{hi:'مساء الخير يا دلنوزا',nextAction:'الخطوة التالية',target:'الدرجة الحالية والمستهدفة',countdown:'حتى موعد اختبارك',progress:'الدرجة في كل اختبار',weak:'أضعف أنواع الأسئلة',mocks:'اختباراتي',credits:'الأرصدة',emptyTitle:'ابدأ بقسم مجاني'}};
+const DATA={overall:[5.5,6.0,6.0,6.5,6.5],listening:[6.0,6.5,6.5,7.0,7.0],reading:[5.5,6.0,6.0,6.0,6.5],writing:[5.0,5.5,5.5,6.0,6.0]};
+const DATES=['12 Jul','9 Aug','30 Aug','21 Sep','12 Oct'];
+class Component extends DCLogic {
+  constructor(p){super(p);const q=new URLSearchParams(location.search);this.state={...readPrefs(),w:window.innerWidth,phase:'loading',empty:q.get('empty')==='1'||!!this.props.empty,sec:'overall'}}
+  componentDidMount(){if(window.innerWidth<520&&!new URLSearchParams(location.search).has('web')){location.replace('Mobile App.dc.html?bare=1&screen='+'home');return}this.p=()=>this.setState(readPrefs());this.r=()=>this.setState({w:window.innerWidth});window.addEventListener('eduvo-prefs',this.p);window.addEventListener('resize',this.r);
+    this.a=setTimeout(()=>{if(this.state.phase==='loading')this.setState({phase:'skeleton'})},300);this.b=setTimeout(()=>this.setState({phase:'ready'}),this.props.slow?2500:900)}
+  componentWillUnmount(){window.removeEventListener('eduvo-prefs',this.p);window.removeEventListener('resize',this.r);clearTimeout(this.a);clearTimeout(this.b)}
+  renderVals(){
+    const s=this.state,t=T[s.lang]||T.en,vals=DATA[s.sec];
+    const y=v=>150-(v-4.5)/(8-4.5)*130,x=i=>48+i*84;
+    const pts=vals.map((v,i)=>({x:x(i),y:y(v),left:(x(i)/400*100)+'%',top:(y(v)/180*100)+'%',v:v.toFixed(1),d:DATES[i]}));
+    const days=Math.max(0,Math.round((new Date('2026-12-12')-new Date('2026-10-12'))/864e5));
+    const wide=s.w>=1100;
+    return {theme:s.theme,lang:s.lang,dir:RTL.includes(s.lang)?'rtl':'ltr',t,skeleton:s.phase==='skeleton',ready:s.phase==='ready',empty:s.empty,hasData:!s.empty,
+      subline:s.empty?'Welcome to Eduvo Mock. Your target: IELTS 7.0 by 12 December.':'5 mocks taken · last one 12 October',
+      nextSpan:wide?1:1,mocksSpan:1,days,
+      secTabs:[['overall','Overall'],['listening','Listening'],['reading','Reading'],['writing','Writing']].map(([k,l])=>({label:l,color:s.sec===k?'var(--ink)':'var(--ink2)',shadow:s.sec===k?'var(--raise-sm)':'none',pick:()=>this.setState({sec:k})})),
+      grid:[5,6,7,8].map(v=>({y:y(v),top:(y(v)/180*100)+'%',label:v.toFixed(1)})),targetY:y(7),targetTop:(y(7)/180*100)+'%',
+      line:pts.map(p=>p.x+','+p.y).join(' '),pts,
+      weak:[['Matching headings',57],['True / False / Not Given',62],['Map / plan labelling',68],['Summary completion',71]].map(([name,p])=>({name,pct:p,w:p+'%'})),
+      mocks:[['IELTS','Full mock · IA-0151','—','Started today · Listening 7.0 done','Resume','var(--blue)','Player.dc.html?section=reading','var(--ielts)'],['IELTS','Full mock · IA-0142','6.5','12 Oct 2026 · CEFR B2','Open result','var(--ink2)','Results.dc.html','var(--ielts)'],['IELTS','Reading section · IA-0131','6.5','21 Sep 2026 · 28 of 40 correct','Open result','var(--ink2)','Results.dc.html','var(--ielts)'],['SAT','Math section · SAT-0044','660','30 Aug 2026 · 33 of 44 correct','Open result','var(--ink2)','Results.dc.html?exam=sat','var(--sat)']].map(([exam,name,score,meta,action,actColor,href,color])=>({exam,name,score,meta,action,actColor,href,color}))};
+  }
+}
+</script>
+</body>
+</html>

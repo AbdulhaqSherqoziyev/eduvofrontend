@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Eduvo Mock — Result</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#E8ECF3}body{font-family:Manrope,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:#2E6BE6;text-decoration:none}a:hover{color:#1F55C4}button,input,select,textarea{font-family:inherit}
+:root{--bg:#E8ECF3;--ink:#1E2A3A;--ink2:#5b6b82;--mut:#7A8699;--line:#d5dbe5;--hover:#dde3ec;--raise:8px 8px 20px #c8cfdb,-8px -8px 20px #ffffff;--raise-sm:4px 4px 10px #c8cfdb,-4px -4px 10px #ffffff;--inset:inset 3px 3px 7px #c8cfdb,inset -3px -3px 7px #ffffff;--blue:#2E6BE6;--ok:#1F7A55;--okBg:#E5F5EE;--ai:#5B3FD1;--aiBg:#EEE9FF;--warn:#B7790F;--warnBg:#FFF1D6;--err:#C2362B;--paper:#F4F6FA;--ielts:oklch(0.5 0.15 255);--sat:oklch(0.5 0.13 300)}
+[data-theme=dark]{--bg:#1B2230;--ink:#E7ECF4;--ink2:#A9B5C7;--mut:#8592A6;--line:#2C3648;--hover:#242D3E;--raise:8px 8px 20px #121722,-8px -8px 20px #242d3f;--raise-sm:4px 4px 10px #121722,-4px -4px 10px #242d3f;--inset:inset 3px 3px 7px #121722,inset -3px -3px 7px #252e40;--blue:#6E9BF5;--ok:#5FCB98;--okBg:#173629;--ai:#B3A2FF;--aiBg:#2A2450;--warn:#F0B54A;--warnBg:#3A2D12;--err:#FF8A80;--paper:#202838;--ielts:oklch(0.72 0.13 255);--sat:oklch(0.72 0.12 300)}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+</style>
+</helmet>
+<div data-theme="{{ theme }}" dir="{{ dir }}" lang="{{ lang }}" style="min-height:100vh;background:var(--bg);color:var(--ink)">
+  <dc-import name="SiteHeader" app="{{ true }}" active="progress" hint-size="100%,64px"></dc-import>
+  <main style="max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,40px) 20px 40px;display:flex;flex-direction:column;gap:28px">
+
+    <div style="display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:13px;font-weight:800;letter-spacing:.05em;color:{{ accent }}">{{ examTag }}</span>
+        <h1 style="margin:0;font-size:clamp(26px,3.2vw,38px);font-weight:800;letter-spacing:-0.03em">{{ t.title }}</h1>
+        <span style="font-size:14px;color:var(--ink2);font-weight:600">{{ meta }}</span>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button onClick="{{ openShare }}" style="height:46px;padding:0 16px;border-radius:13px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;font-size:14px;cursor:pointer">{{ t.share }}</button>
+        <button onClick="{{ pdf }}" style="height:46px;padding:0 16px;border-radius:13px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;font-size:14px;cursor:pointer">{{ t.pdf }}</button>
+        <a href="Pricing.dc.html" style="height:46px;padding:0 18px;border-radius:13px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;box-shadow:0 8px 18px -8px rgba(46,107,230,.7)">{{ t.another }}</a>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px">
+      <div style="border-radius:24px;box-shadow:var(--raise);padding:28px;display:flex;flex-direction:column;gap:16px;grid-column:span {{ overallSpan }}">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><span style="font-size:14px;font-weight:700;color:var(--ink2)">{{ overallLabel }}</span><sc-if value="{{ isIelts }}" hint-placeholder-val="{{ true }}"><span style="padding:6px 12px;border-radius:999px;background:var(--okBg);color:var(--ok);font-size:13px;font-weight:800">CEFR B2</span></sc-if></div>
+        <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><span style="font-size:clamp(72px,9vw,104px);font-weight:800;letter-spacing:-0.05em;line-height:.9">{{ overall }}</span><span style="font-size:15px;color:var(--mut);font-weight:700">{{ overallScale }}</span></div>
+        <div style="padding:12px 14px;border-radius:14px;box-shadow:var(--inset);font-size:14px;font-weight:600;color:var(--ink2)">{{ targetLine }}</div>
+      </div>
+      <sc-for list="{{ sections }}" as="s" hint-placeholder-count="3">
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:14px;font-weight:700;color:var(--ink2);display:flex;gap:6px;align-items:center">{{ s.name }}<sc-if value="{{ s.ai }}" hint-placeholder-val="{{ false }}"><span style="padding:2px 7px;border-radius:6px;background:var(--aiBg);color:var(--ai);font-size:11px;font-weight:800">AI</span></sc-if></span>
+          <sc-if value="{{ s.ready }}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:48px;font-weight:800;letter-spacing:-0.04em;line-height:1">{{ s.score }}</span>
+            <span style="font-size:14px;color:var(--mut);font-weight:600">{{ s.detail }}</span>
+            <div style="height:8px;border-radius:99px;box-shadow:var(--inset);overflow:hidden;margin-top:auto"><div style="height:100%;width:{{ s.w }};background:linear-gradient(90deg,#5B8DEF,#2E6BE6);border-radius:99px"></div></div>
+          </sc-if>
+          <sc-if value="{{ s.pending }}" hint-placeholder-val="{{ false }}">
+            <div style="height:48px;width:90px;border-radius:12px;background:linear-gradient(90deg,var(--hover) 0,var(--bg) 50%,var(--hover) 100%);background-size:800px 100%;animation:shimmer 1.4s infinite linear"></div>
+            <span style="font-size:14px;color:var(--ai);font-weight:700">Writing is being graded…</span>
+            <span style="font-size:12px;color:var(--mut)">This page refreshes on its own. Usually 2–4 minutes.</span>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px">
+      <div style="border-radius:24px;box-shadow:var(--raise);padding:28px;display:flex;flex-direction:column;gap:14px">
+        <div style="font-weight:800;font-size:18px">{{ t.byType }}</div>
+        <sc-for list="{{ acc }}" as="a" hint-placeholder-count="6">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;align-items:center">
+            <span style="font-size:14px;font-weight:600;color:var(--ink2)">{{ a.name }}</span>
+            <span style="font-size:13px;font-weight:800">{{ a.frac }} · {{ a.pct }}%</span>
+            <div style="grid-column:1 / -1;height:8px;border-radius:99px;box-shadow:var(--inset);overflow:hidden"><div style="height:100%;width:{{ a.w }};border-radius:99px;background:{{ a.color }}"></div></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="border-radius:24px;box-shadow:var(--raise);padding:28px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="padding:16px;border-radius:16px;background:var(--okBg);display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;font-weight:800;color:var(--ok)">{{ t.strong }}</span><span style="font-weight:800;font-size:15px;color:var(--ink)">{{ strongest }}</span></div>
+          <div style="padding:16px;border-radius:16px;background:var(--warnBg);display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;font-weight:800;color:var(--warn)">{{ t.weak }}</span><span style="font-weight:800;font-size:15px;color:var(--ink)">{{ weakest }}</span></div>
+        </div>
+        <div style="font-weight:800;font-size:18px">{{ t.next }}</div>
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+          <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;border-radius:9px;box-shadow:var(--inset);display:grid;place-items:center;color:var(--blue);font-weight:800;font-size:13px;flex:none">{{ s.n }}</span><span style="font-size:15px;line-height:1.55;padding-top:3px">{{ s.text }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{ showWriting }}" hint-placeholder-val="{{ true }}">
+      <section style="border-radius:24px;box-shadow:var(--raise);padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:22px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div style="display:flex;gap:10px;align-items:center"><span style="font-weight:800;font-size:20px">Writing</span><span style="padding:3px 8px;border-radius:7px;background:var(--aiBg);color:var(--ai);font-size:12px;font-weight:800">AI</span></div>
+          <div style="display:flex;gap:4px;padding:5px;border-radius:14px;box-shadow:var(--inset)">
+            <sc-for list="{{ wTabs }}" as="w" hint-placeholder-count="2"><button onClick="{{ w.pick }}" style="height:38px;padding:0 16px;border-radius:10px;border:0;cursor:pointer;font-weight:700;font-size:13px;background:var(--bg);color:{{ w.color }};box-shadow:{{ w.shadow }}">{{ w.label }}</button></sc-for>
+          </div>
+        </div>
+        <sc-if value="{{ writingPending }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:28px;border-radius:16px;box-shadow:var(--inset);display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+            <span style="font-weight:800;color:var(--ai)">Writing is being graded…</span>
+            <span style="color:var(--ink2);font-size:14px;line-height:1.6">Your Listening and Reading scores are final. Writing feedback appears here when it is ready; you will also get an email.</span>
+            <div style="width:100%;max-width:420px;height:8px;border-radius:99px;box-shadow:var(--inset);overflow:hidden"><div style="height:100%;width:{{ gradeW }};background:var(--ai);border-radius:99px;transition:width .8s"></div></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ writingReady }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:24px">
+            <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+              <div style="font-size:13px;font-weight:700;color:var(--mut)">{{ essay.prompt }}</div>
+              <div style="padding:22px 24px;border-radius:16px;background:var(--paper);font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.75;white-space:pre-line;max-height:440px;overflow:auto" dir="ltr" lang="en">{{ essay.text }}</div>
+              <span style="font-size:12px;color:var(--mut);font-weight:700">{{ essay.words }} words</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+              <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-weight:800">Task band</span><span style="font-size:32px;font-weight:800">{{ essay.band }}</span></div>
+              <sc-for list="{{ essay.crit }}" as="c" hint-placeholder-count="4">
+                <div style="padding:14px 16px;border-radius:16px;box-shadow:var(--inset);display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;justify-content:space-between;gap:8px"><span style="font-weight:800;font-size:14px">{{ c.name }}</span><span style="font-weight:800;font-size:18px">{{ c.score }}</span></div>
+                  <span style="font-size:14px;color:var(--ink2);line-height:1.55">{{ c.fb }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px">
+            <div style="padding:18px;border-radius:16px;background:var(--okBg);display:flex;flex-direction:column;gap:8px"><span style="font-weight:800;color:var(--ok);font-size:13px">Strengths</span><sc-for list="{{ essay.good }}" as="g" hint-placeholder-count="2"><span style="font-size:14px;line-height:1.5;color:var(--ink)">{{ g }}</span></sc-for></div>
+            <div style="padding:18px;border-radius:16px;background:var(--aiBg);display:flex;flex-direction:column;gap:8px"><span style="font-weight:800;color:var(--ai);font-size:13px">Next steps</span><sc-for list="{{ essay.todo }}" as="g" hint-placeholder-count="2"><span style="font-size:14px;line-height:1.5;color:var(--ink)">{{ g }}</span></sc-for></div>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <section style="border-radius:24px;box-shadow:var(--raise);padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-weight:800;font-size:20px">{{ t.review }}</span>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <div style="display:flex;gap:4px;padding:5px;border-radius:14px;box-shadow:var(--inset)">
+            <sc-for list="{{ revTabs }}" as="w" hint-placeholder-count="2"><button onClick="{{ w.pick }}" style="height:36px;padding:0 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700;font-size:13px;background:var(--bg);color:{{ w.color }};box-shadow:{{ w.shadow }}">{{ w.label }}</button></sc-for>
+          </div>
+          <div style="display:flex;gap:4px;padding:5px;border-radius:14px;box-shadow:var(--inset)">
+            <sc-for list="{{ filters }}" as="w" hint-placeholder-count="2"><button onClick="{{ w.pick }}" style="height:36px;padding:0 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700;font-size:13px;background:var(--bg);color:{{ w.color }};box-shadow:{{ w.shadow }}">{{ w.label }}</button></sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--mut);font-weight:600">{{ revNote }}</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+          <div style="border-radius:16px;box-shadow:{{ r.shadow }};overflow:hidden">
+            <button onClick="{{ r.toggle }}" style="width:100%;border:0;background:transparent;color:var(--ink);cursor:pointer;text-align:start;padding:14px 16px;display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:6px 14px;align-items:center">
+              <span style="width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:13px;background:{{ r.badgeBg }};color:{{ r.badgeColor }}">{{ r.n }}</span>
+              <span style="display:flex;flex-direction:column;gap:3px;min-width:0"><span style="font-size:14px;font-weight:700;line-height:1.4">{{ r.q }}</span><span style="font-size:12px;color:var(--mut);font-weight:700">{{ r.type }}</span></span>
+              <span style="font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px;background:{{ r.badgeSoft }};color:{{ r.badgeColor2 }};white-space:nowrap">{{ r.status }}</span>
+            </button>
+            <sc-if value="{{ r.open }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 16px 16px;display:flex;flex-direction:column;gap:12px;padding-inline-start:66px">
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                  <span style="padding:8px 12px;border-radius:10px;box-shadow:var(--inset);font-size:13px;font-weight:700">Your answer: <span style="color:{{ r.yourColor }}">{{ r.yours }}</span></span>
+                  <span style="padding:8px 12px;border-radius:10px;box-shadow:var(--inset);font-size:13px;font-weight:700">Correct: <span style="color:var(--ok)">{{ r.correct }}</span></span>
+                </div>
+                <div style="font-size:14px;line-height:1.6;color:var(--ink2)">{{ r.why }}</div>
+                <sc-if value="{{ r.hasEv }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ r.toggleEv }}" style="align-self:flex-start;border:0;background:transparent;color:var(--blue);font-weight:800;font-size:13px;cursor:pointer;padding:0">{{ r.evLabel }}</button>
+                  <sc-if value="{{ r.evOpen }}" hint-placeholder-val="{{ false }}">
+                    <div dir="ltr" lang="en" style="padding:14px 16px;border-radius:12px;background:var(--paper);font-family:'Source Serif 4',serif;font-size:15px;line-height:1.7"><span style="color:var(--mut);font-family:Manrope,sans-serif;font-size:12px;font-weight:800;margin-inline-end:8px">{{ r.para }}</span><span style="background:#FFE9A8;color:#1E2A3A;border-radius:3px;padding:0 2px">{{ r.ev }}</span></div>
+                  </sc-if>
+                </sc-if>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <div style="font-size:12px;color:var(--mut);line-height:1.5;text-align:center">Practice test — not an official certificate. Not affiliated with IELTS, British Council, IDP, Cambridge or College Board.</div>
+  </main>
+
+  <sc-if value="{{ shareOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(15,20,30,.45);display:grid;place-items:center;z-index:80;padding:16px">
+      <div style="width:min(440px,100%);border-radius:24px;background:var(--bg);box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;justify-content:space-between;font-weight:800;font-size:18px">Share your result<button onClick="{{ closeShare }}" style="border:0;background:transparent;color:var(--ink2);font-weight:700;cursor:pointer">Close</button></div>
+        <div style="aspect-ratio:1/1;border-radius:20px;background:linear-gradient(160deg,#5B8DEF,#2E6BE6);color:#fff;padding:28px;display:flex;flex-direction:column;justify-content:space-between">
+          <span style="font-weight:800;font-size:15px;display:flex;gap:8px;align-items:center"><span style="width:26px;height:26px;border-radius:8px;background:#fff;color:#2E6BE6;display:grid;place-items:center;font-size:13px">e</span>Eduvo Mock</span>
+          <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:14px;font-weight:700;opacity:.9">{{ overallLabel }}</span><span style="font-size:96px;font-weight:800;letter-spacing:-0.05em;line-height:1">{{ overall }}</span><span style="font-size:14px;font-weight:700">{{ shareSub }}</span></div>
+          <span style="font-size:12px;opacity:.85">mock.eduvo.uz · Practice test</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <button onClick="{{ closeShare }}" style="height:48px;border-radius:13px;border:0;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:700;cursor:pointer">Save image</button>
+          <button onClick="{{ copyShare }}" style="height:48px;border-radius:13px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;cursor:pointer">{{ copyLabel }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:14px 18px;border-radius:14px;background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;z-index:90;box-shadow:0 12px 30px -10px rgba(0,0,0,.4)">{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;exam&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ielts&quot;,&quot;sat&quot;],&quot;default&quot;:&quot;ielts&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;pending&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const RTL=['ar','fa','ur','he'];
+function readPrefs(){const q=new URLSearchParams(location.search);let s={};try{s=JSON.parse(localStorage.getItem('eduvo-mock-prefs')||'{}')}catch(e){}return{theme:q.get('theme')||s.theme||'light',lang:q.get('lang')||s.lang||'en'}}
+const T={en:{title:'Your result',share:'Share result card',pdf:'Download PDF',another:'Take another mock',byType:'Accuracy by question type',strong:'Strongest',weak:'Needs practice',next:'Next steps',review:'Question review'},
+uz:{title:'Natijangiz',share:'Natijani ulashish',pdf:'PDF yuklab olish',another:'Yana mock topshirish',byType:'Savol turlari bo‘yicha aniqlik',strong:'Eng kuchli',weak:'Mashq kerak',next:'Keyingi qadamlar',review:'Savollar tahlili'},
+ru:{title:'Ваш результат',share:'Поделиться',pdf:'Скачать PDF',another:'Пройти ещё мок',byType:'Точность по типам вопросов',strong:'Сильнее всего',weak:'Нужна практика',next:'Что делать дальше',review:'Разбор вопросов'},
+de:{title:'Ihr Ergebnis',share:'Ergebniskarte teilen',pdf:'PDF herunterladen',another:'Weiteren Probetest starten',byType:'Genauigkeit nach Fragetyp',strong:'Am stärksten',weak:'Übungsbedarf',next:'Nächste Schritte',review:'Fragenauswertung'},
+ar:{title:'نتيجتك',share:'مشاركة بطاقة النتيجة',pdf:'تنزيل PDF',another:'اختبار تجريبي آخر',byType:'الدقة حسب نوع السؤال',strong:'الأقوى',weak:'يحتاج إلى تدريب',next:'الخطوات التالية',review:'مراجعة الأسئلة'}};
+const RD=[[1,'Urban orchards were common in European cities before the 1960s.','True / False / Not Given','TRUE','TRUE','A','a practice largely abandoned in the 1960s','“Abandoned in the 1960s” means the practice existed before then.'],
+[2,'Malmö has published the full cost of its orchard programme.','True / False / Not Given','NOT GIVEN','FALSE','A','although no full budget has been published','The passage says directly that no full budget has been published, so the statement contradicts it.'],
+[3,'Fruit could be picked freely at any time in fifteenth-century Ghent.','True / False / Not Given','FALSE','FALSE','B','fines for picking fruit before the official harvest day','Fines for early picking show it was not free at any time.'],
+[4,'Most volunteers surveyed had previously belonged to a community group.','True / False / Not Given','FALSE','FALSE','C','just under half had never joined a community group before','Just under half had never joined, so just over half had: this is “most”. Watch the direction of the statement.'],
+[5,'Volunteers in Malmö are paid for pruning work.','True / False / Not Given','FALSE','NOT GIVEN','C','Most said they were drawn by the chance to learn pruning and grafting.','Pay is never mentioned. If the text says nothing either way, the answer is NOT GIVEN.'],
+[6,'Vandalism has caused less damage than planners expected.','True / False / Not Given','TRUE','TRUE','D','losses have been lower than predicted','Lower than predicted matches “less than expected”.'],
+[7,'Twentieth-century parks were designed mainly to be…','Multiple choice','B','B','B','places to look at rather than to use','Paragraph B contrasts looking with using.'],
+[8,'What attracted most volunteers?','Multiple choice','C','C','C','the chance to learn pruning and grafting','Pruning and grafting are practical skills.'],
+[9,'Researchers link the low level of vandalism to…','Multiple choice','C','B','D','residents help plant the trees themselves','The cause is shared ownership from planting. Fines appear in paragraph B and are about Ghent.'],
+[10,'Some ecologists are concerned that fruit trees…','Multiple choice','C','C','E','offer less to local insects than native hedgerow species','Fewer benefits for local insects.'],
+[11,'Records from Ghent mention ______ for picking fruit early.','Sentence completion','fines','fines','B','fines for picking fruit','Word taken directly from the passage.'],
+[12,'Volunteers wanted to learn pruning and ______.','Sentence completion','grafting trees','grafting','C','learn pruning and grafting','Only “grafting” fits; “trees” is not in that phrase, so the answer changes the meaning and is marked wrong.'],
+[13,'Uncollected fruit can attract wasps and ______.','Sentence completion','rats','rats','E','attract wasps and rats','Exact word from paragraph E.']];
+const LS=[[1,'Name: Sarah ______','Form completion','Thornton','Thornton'],[2,'Membership type','Form completion','family','family'],[3,'Preferred start date','Form completion','3 March','3 March'],[4,'Visits per week','Form completion','4','three'],[5,'Main activity','Form completion','swimming','swimming'],[6,'Current fitness level','Form completion','average','average'],[7,'Postcode','Form completion','BR7 4LN','BR7 4LN'],[8,'Heard about the centre from','Form completion','a newspaper','a leaflet'],[9,'Monthly fee','Form completion','£42','£42'],[10,'Free extra','Form completion','one yoga session','one yoga session']];
+const SATR=[[1,'Main idea of the Mexía text','Information and Ideas','B','B'],[2,'Effect of the Medellín escalators','Information and Ideas','B','B'],[3,'Most logical word: octopuses ______ skills','Craft and Structure','C','B'],[4,'Transition between two findings','Expression of Ideas','A','A'],[5,'Subject–verb agreement','Standard English Conventions','D','C'],[6,'Punctuation between clauses','Standard English Conventions','B','B']];
+class Component extends DCLogic {
+  constructor(p){super(p);const q=new URLSearchParams(location.search);this.state={...readPrefs(),exam:q.get('exam')||this.props.exam||'ielts',pending:q.get('pending')==='1'||!!this.props.pending,grade:15,wtab:1,rtab:'reading',filter:'all',open:{2:true},ev:{2:true},share:false,copied:false,toast:''}}
+  componentDidMount(){if(window.innerWidth<520&&!new URLSearchParams(location.search).has('web')){location.replace('Mobile App.dc.html?bare=1&screen='+'results');return}this.p=()=>this.setState(readPrefs());window.addEventListener('eduvo-prefs',this.p);
+    if(this.state.pending){this.g=setInterval(()=>{const g=this.state.grade+17;if(g>=100){clearInterval(this.g);this.setState({pending:false,toast:'Writing graded. Your overall band is ready.'});setTimeout(()=>this.setState({toast:''}),3000)}else this.setState({grade:g})},1200)}}
+  componentWillUnmount(){window.removeEventListener('eduvo-prefs',this.p);clearInterval(this.g)}
+  renderVals(){
+    const s=this.state,t=T[s.lang]||T.en,ielts=s.exam==='ielts';
+    const acc=(ielts?[['Sentence completion',15,17],['Form completion',9,10],['Multiple choice',11,14],['Map / plan labelling',7,10],['Matching headings',4,7],['True / False / Not Given',8,13]]:[['Algebra',11,12],['Information and Ideas',11,13],['Expression of Ideas',10,12],['Advanced Math',9,13],['Problem-Solving and Data',7,10],['Craft and Structure',8,13]]).map(([n,a,b])=>{const p=Math.round(a/b*100);return{name:n,frac:a+' of '+b,pct:p,w:p+'%',color:p<65?'var(--warn)':'var(--blue)'}});
+    const sections=ielts?[{name:'Listening',score:'7.0',detail:'32 of 40 correct',w:'80%',ready:true,pending:false,ai:false},{name:'Reading',score:'6.5',detail:'28 of 40 correct',w:'70%',ready:true,pending:false,ai:false},{name:'Writing',score:'6.0',detail:'Task 1: 6.0 · Task 2: 6.0',w:'67%',ready:!s.pending,pending:s.pending,ai:true}]
+      :[{name:'Reading and Writing',score:'680',detail:'44 of 54 correct',w:'81%',ready:true,pending:false,ai:false},{name:'Math',score:'660',detail:'33 of 44 correct',w:'75%',ready:true,pending:false,ai:false}];
+    const E=[{prompt:'Task 1 · Car ownership in three countries, 1990–2020',words:176,band:'6.0',text:'The line graph compares the proportion of households that owned at least one car in Germany, Poland and Turkey over a thirty-year period from 1990.\n\nOverall, car ownership rose in all three countries, although Germany remained far ahead throughout.\n\nIn 1990 around 70% of German households had a car, compared with roughly 35% in Poland and only 15% in Turkey. Germany increased slowly to about 80% by 2020. Poland grew the fastest, more than doubling to 72%, so the gap with Germany became very small.\n\nTurkey also increased, but it stayed the lowest, reaching about 40% at the end of the period.',
+  crit:[['Task Achievement','6.0','Clear overview and key figures. Some data is listed rather than compared; group Poland and Turkey as the fast risers.'],['Coherence and Cohesion','6.5','Logical paragraphing. Linking is accurate but repetitive (“also”, “but”).'],['Lexical Resource','6.0','Adequate range for trends. Try “a steady climb”, “narrowed the gap”, “trailed behind”.'],['Grammatical Range and Accuracy','6.0','Mostly accurate simple and compound sentences; few complex structures.']],
+  good:['A clear overview sentence in the second paragraph.','Figures are accurate and taken from the chart.'],todo:['Compare countries in the same sentence instead of describing each one in turn.','Use one relative clause per paragraph to show range.']},
+ {prompt:'Task 2 · Parks or roads?',words:268,band:'6.0',text:'Many cities face a choice between building new roads and creating more public parks. In my opinion, parks should usually come first, although some road investment is still necessary.\n\nThe main reason is health. When people have green space near their homes, they walk more and feel less stressed. In Tashkent, for example, the new parks along the canals are full of families every evening.\n\nOn the other hand, roads are important for the economy. Goods must be delivered and people must get to work. If traffic is very bad, businesses lose money.\n\nHowever, building more roads often creates more traffic, not less. A better solution is to improve public transport and keep the money for parks.\n\nIn conclusion, I believe parks bring more long-term benefits than new roads, so cities should invest in them first.',
+  crit:[['Task Response','6.0','Position is clear and kept throughout. The roads argument needs a concrete example to be fully developed.'],['Coherence and Cohesion','6.0','Each paragraph has one idea. Paragraph 4 starts with “However” but continues the same side as paragraph 2; signal the turn more clearly.'],['Lexical Resource','6.0','Topic words are used correctly. Several words repeat (“roads” ×9); vary with “infrastructure”, “motorways”.'],['Grammatical Range and Accuracy','6.5','Good control of conditionals. A few longer sentences would show more range.']],
+  good:['A clear opinion in the introduction, repeated in the conclusion.','A specific local example from Tashkent.'],todo:['Add one example to the roads paragraph so both sides are developed.','Plan the essay in two minutes: opinion, two reasons, one counter-argument.']}];
+    const essay={...E[s.wtab],crit:E[s.wtab].crit.map(([name,score,fb])=>({name,score,fb}))};
+    let base=ielts?(s.rtab==='reading'?RD.map(r=>({n:r[0],q:r[1],type:r[2],yours:r[3],correct:r[4],para:r[5],ev:r[6],why:r[7]})):LS.map(r=>({n:r[0],q:r[1],type:r[2],yours:r[3],correct:r[4],why:r[3]===r[4]?'Matches the recording.':'The speaker first says “'+r[3]+'” and then corrects it to “'+r[4]+'”. In form completion, the last version given is the answer.'})))
+      :SATR.map(r=>({n:r[0],q:r[1],type:r[2],yours:r[3],correct:r[4],why:r[3]===r[4]?'Correct.':'Choice '+r[4]+' fits the logic of the text; choice '+r[3]+' changes the meaning.'}));
+    const wrongCount=base.filter(r=>r.yours!==r.correct).length;
+    if(s.filter==='wrong')base=base.filter(r=>r.yours!==r.correct);
+    const rows=base.map(r=>{const ok=r.yours===r.correct,open=!!s.open[r.n],evOpen=!!s.ev[r.n];return{...r,status:ok?'Correct':'Wrong',open,evOpen,hasEv:!!r.ev,evLabel:evOpen?'Hide in text':'Show in text',
+      badgeBg:ok?'var(--okBg)':'var(--warnBg)',badgeColor:ok?'var(--ok)':'var(--warn)',badgeSoft:ok?'var(--okBg)':'var(--warnBg)',badgeColor2:ok?'var(--ok)':'var(--warn)',yourColor:ok?'var(--ok)':'var(--warn)',shadow:open?'var(--inset)':'var(--raise-sm)',
+      toggle:()=>this.setState(st=>({open:{...st.open,[r.n]:!st.open[r.n]}})),toggleEv:()=>this.setState(st=>({ev:{...st.ev,[r.n]:!st.ev[r.n]}}))}});
+    const seg=(arr,cur,key)=>arr.map(([k,l])=>({label:l,color:cur===k?'var(--ink)':'var(--ink2)',shadow:cur===k?'var(--raise-sm)':'none',pick:()=>this.setState({[key]:k})}));
+    return {theme:s.theme,lang:s.lang,dir:RTL.includes(s.lang)?'rtl':'ltr',t,isIelts:ielts,
+      accent:ielts?'var(--ielts)':'var(--sat)',examTag:ielts?'IELTS ACADEMIC':'DIGITAL SAT',meta:(ielts?'Full mock · Test IA-0142':'Full mock · Test SAT-0087')+' · 12 October 2026',
+      overallLabel:ielts?'Overall band':'Total score',overall:ielts?(s.pending?'—':'6.5'):'1340',overallScale:ielts?'of 9.0':'of 1600',overallSpan:1,
+      targetLine:ielts?(s.pending?'Overall band appears when Writing is graded.':'Your target is 7.0 — Reading and Writing are 0.5 below it.'):'Your target is 1450 — 110 points to go, mostly in Math.',
+      shareSub:ielts?'IELTS Academic · CEFR B2':'Digital SAT · R&W 680 · Math 660',
+      sections,acc,strongest:acc[0].name,weakest:acc[acc.length-1].name,
+      steps:(ielts?['Do 3 True / False / Not Given sets this week. For each, underline the exact words that decide the answer.','Re-read your Task 2 and add one example to every body paragraph.','Practise matching headings with a 90-second skim of each paragraph before reading the options.','Take a Reading-only mock in 7 days to check the change.']:['Practise 10 Advanced Math questions on quadratics and exponential functions.','For Craft and Structure, cover the options and predict the word before reading them.','Take a Math-only mock in 7 days.']).map((text,i)=>({n:i+1,text})),
+      showWriting:ielts,writingPending:s.pending,writingReady:!s.pending,gradeW:s.grade+'%',
+      wTabs:seg([[0,'Task 1'],[1,'Task 2']],s.wtab,'wtab'),essay,
+      revTabs:ielts?seg([['listening','Listening'],['reading','Reading']],s.rtab,'rtab'):seg([['rw','Reading and Writing'],['math','Math']],s.rtab==='reading'?'rw':s.rtab,'rtab'),
+      filters:seg([['all','All'],['wrong','Wrong only · '+wrongCount]],s.filter,'filter'),
+      revNote:ielts?(s.rtab==='reading'?'Passage 1 · questions 1–13 of 40':'Part 1 · questions 1–10 of 40'):'Module 1 · questions 1–6 of 27',rows,
+      shareOpen:s.share,openShare:()=>this.setState({share:true}),closeShare:()=>this.setState({share:false}),copyLabel:s.copied?'Link copied':'Copy link',copyShare:()=>this.setState({copied:true}),
+      pdf:()=>{this.setState({toast:'Preparing your PDF…'});setTimeout(()=>this.setState({toast:''}),2200)},toast:s.toast};
+  }
+}
+</script>
+</body>
+</html>

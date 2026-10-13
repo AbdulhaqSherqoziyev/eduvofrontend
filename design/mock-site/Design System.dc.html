@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Eduvo Mock — Design system</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#E8ECF3}body{font-family:Manrope,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:#2E6BE6;text-decoration:none}a:hover{color:#1F55C4}button,input,select,textarea{font-family:inherit}
+:root{--bg:#E8ECF3;--ink:#1E2A3A;--ink2:#5b6b82;--mut:#7A8699;--line:#d5dbe5;--hover:#dde3ec;--raise:8px 8px 20px #c8cfdb,-8px -8px 20px #ffffff;--raise-sm:4px 4px 10px #c8cfdb,-4px -4px 10px #ffffff;--inset:inset 3px 3px 7px #c8cfdb,inset -3px -3px 7px #ffffff;--blue:#2E6BE6;--ok:#1F7A55;--okBg:#E5F5EE;--ai:#5B3FD1;--aiBg:#EEE9FF;--warn:#B7790F;--warnBg:#FFF1D6;--err:#C2362B;--errBg:#FDE8E6;--paper:#F4F6FA;--ielts:oklch(0.5 0.15 255);--sat:oklch(0.5 0.13 300);--cefr:oklch(0.5 0.11 160);--toefl:oklch(0.5 0.11 60);--hsk:oklch(0.52 0.14 20)}
+[data-theme=dark]{--bg:#1B2230;--ink:#E7ECF4;--ink2:#A9B5C7;--mut:#8592A6;--line:#2C3648;--hover:#242D3E;--raise:8px 8px 20px #121722,-8px -8px 20px #242d3f;--raise-sm:4px 4px 10px #121722,-4px -4px 10px #242d3f;--inset:inset 3px 3px 7px #121722,inset -3px -3px 7px #252e40;--blue:#6E9BF5;--ok:#5FCB98;--okBg:#173629;--ai:#B3A2FF;--aiBg:#2A2450;--warn:#F0B54A;--warnBg:#3A2D12;--err:#FF8A80;--errBg:#3D1E1C;--paper:#202838;--ielts:oklch(0.72 0.13 255);--sat:oklch(0.72 0.12 300);--cefr:oklch(0.72 0.1 160);--toefl:oklch(0.74 0.1 60);--hsk:oklch(0.72 0.12 20)}
+@keyframes shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}
+</style>
+</helmet>
+<div data-theme="{{ theme }}" dir="{{ dir }}" style="min-height:100vh;background:var(--bg);color:var(--ink)">
+  <main style="max-width:1200px;margin:0 auto;padding:40px 20px 80px;display:flex;flex-direction:column;gap:56px">
+    <div style="display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:13px;font-weight:800;color:var(--blue);letter-spacing:.06em">EDUVO MOCK</span><h1 style="margin:0;font-size:44px;font-weight:800;letter-spacing:-0.035em">Design system</h1></div>
+      <div style="display:flex;gap:4px;padding:5px;border-radius:14px;box-shadow:var(--inset)">
+        <sc-for list="{{ modes }}" as="m" hint-placeholder-count="3"><button onClick="{{ m.pick }}" style="height:38px;padding:0 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700;font-size:13px;background:var(--bg);color:{{ m.color }};box-shadow:{{ m.shadow }}">{{ m.label }}</button></sc-for>
+      </div>
+    </div>
+
+    <section style="display:flex;flex-direction:column;gap:20px">
+      <h2 style="margin:0;font-size:24px;font-weight:800">Color</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px">
+        <sc-for list="{{ colors }}" as="c" hint-placeholder-count="14">
+          <div style="border-radius:16px;box-shadow:var(--raise-sm);overflow:hidden">
+            <div style="height:64px;background:{{ c.v }}"></div>
+            <div style="padding:10px 12px;display:flex;flex-direction:column;gap:2px"><span style="font-weight:800;font-size:13px">{{ c.name }}</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--mut)">{{ c.hex }}</span></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="font-size:13px;color:var(--ink2);line-height:1.6">Red is for system errors only (payment failed, server, validation). Wrong answers, low scores and balances use amber.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <span style="padding:8px 14px;border-radius:999px;box-shadow:var(--inset);font-weight:800;font-size:13px;color:var(--ielts)">IELTS</span>
+        <span style="padding:8px 14px;border-radius:999px;box-shadow:var(--inset);font-weight:800;font-size:13px;color:var(--sat)">SAT</span>
+        <span style="padding:8px 14px;border-radius:999px;box-shadow:var(--inset);font-weight:800;font-size:13px;color:var(--cefr)">CEFR</span>
+        <span style="padding:8px 14px;border-radius:999px;box-shadow:var(--inset);font-weight:800;font-size:13px;color:var(--toefl)">TOEFL iBT</span>
+        <span style="padding:8px 14px;border-radius:999px;box-shadow:var(--inset);font-weight:800;font-size:13px;color:var(--hsk)">HSK</span>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:32px">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <h2 style="margin:0;font-size:24px;font-weight:800">Type · Manrope</h2>
+        <div style="font-size:56px;font-weight:800;letter-spacing:-0.035em;line-height:1">Display 56</div>
+        <div style="font-size:40px;font-weight:800;letter-spacing:-0.03em">Heading 40</div>
+        <div style="font-size:24px;font-weight:800">Title 24</div>
+        <div style="font-size:18px;font-weight:800">Subtitle 18</div>
+        <div style="font-size:16px;color:var(--ink2);line-height:1.6">Body 16 · line height 1.6</div>
+        <div style="font-size:13px;font-weight:700;color:var(--mut)">Label 13 · 700</div>
+        <div style="font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--blue)">EYEBROW 12 · 800</div>
+        <div style="font-size:48px;font-weight:800;letter-spacing:-0.04em">6.5 · 1340 · 32/40</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <h2 style="margin:0;font-size:24px;font-weight:800">Reading · Source Serif 4</h2>
+        <div style="padding:24px;border-radius:16px;background:var(--paper);font-family:'Source Serif 4',Georgia,serif;font-size:17px;line-height:1.75">Medieval towns often kept common orchards inside their walls, and records from fifteenth-century Ghent describe <span style="background:#FFE9A8;color:#1E2A3A;border-radius:3px;padding:0 2px">fines for picking fruit</span> before the official harvest day.</div>
+        <div style="font-size:13px;color:var(--ink2);line-height:1.6">Passages, essays and evidence quotes only. Always LTR English, 17 px / 1.75.</div>
+        <h2 style="margin:16px 0 0;font-size:24px;font-weight:800">Spacing · radius · shadow</h2>
+        <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap"><sc-for list="{{ space }}" as="s" hint-placeholder-count="8"><div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:{{ s.px }};height:{{ s.px }};border-radius:4px;background:var(--blue)"></div><span style="font-size:11px;font-weight:700;color:var(--mut)">{{ s.v }}</span></div></sc-for></div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap">
+          <div style="width:120px;height:80px;border-radius:24px;box-shadow:var(--raise);display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--ink2)">card 24 · raise</div>
+          <div style="width:120px;height:80px;border-radius:16px;box-shadow:var(--inset);display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--ink2)">panel 16 · inset</div>
+          <div style="width:120px;height:80px;border-radius:14px;box-shadow:var(--raise-sm);display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--ink2)">button 14 · sm</div>
+        </div>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:20px">
+      <h2 style="margin:0;font-size:24px;font-weight:800">Buttons</h2>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+        <button style="height:52px;padding:0 24px;border-radius:14px;border:0;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 10px 22px -10px rgba(46,107,230,.8)" style-hover="background:#1F55C4">Primary</button>
+        <button style="height:52px;padding:0 24px;border-radius:14px;border:0;background:#1F55C4;color:#fff;font-weight:800;font-size:15px">Primary · hover</button>
+        <button style="height:52px;padding:0 22px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;font-size:15px;cursor:pointer" style-hover="color:var(--blue)">Soft</button>
+        <button style="height:52px;padding:0 22px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--inset);color:var(--ink);font-weight:700;font-size:15px">Soft · pressed</button>
+        <button style="height:52px;padding:0 18px;border-radius:14px;border:0;background:transparent;color:var(--blue);font-weight:800;font-size:15px;cursor:pointer">Ghost</button>
+        <button disabled="{{ true }}" style="height:52px;padding:0 22px;border-radius:14px;border:0;background:var(--mut);color:#fff;font-weight:800;font-size:15px;opacity:.7">Disabled</button>
+        <button style="height:40px;padding:0 14px;border-radius:12px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;font-size:13px">Small 40</button>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:28px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <h2 style="margin:0;font-size:24px;font-weight:800">Inputs</h2>
+        <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;font-weight:700;color:var(--ink2)">Email<input placeholder="you@example.com" style="height:50px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 16px;color:var(--ink);font-size:15px;outline:none" /></label>
+        <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;font-weight:700;color:var(--ink2)">Email · error<input value="dilnoza@" style="height:50px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--inset), 0 0 0 2px var(--err);padding:0 16px;color:var(--ink);font-size:15px;outline:none" /><span style="color:var(--err);font-size:12px;font-weight:600">Enter a valid email, like name@example.com</span></label>
+        <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;font-weight:700;color:var(--ink2)">Select<select style="height:50px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 14px;color:var(--ink);font-size:15px"><option>Uzbekistan</option><option>Kazakhstan</option></select></label>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <h2 style="margin:0;font-size:24px;font-weight:800">Segmented · tabs · stepper</h2>
+        <div style="display:flex;gap:4px;padding:5px;border-radius:14px;box-shadow:var(--inset);align-self:flex-start">
+          <sc-for list="{{ segs }}" as="m" hint-placeholder-count="3"><button onClick="{{ m.pick }}" style="height:38px;padding:0 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700;font-size:13px;background:var(--bg);color:{{ m.color }};box-shadow:{{ m.shadow }}">{{ m.label }}</button></sc-for>
+        </div>
+        <div style="display:flex;gap:24px;border-bottom:1px solid var(--line)">
+          <span style="padding:10px 0;font-weight:800;font-size:14px;border-bottom:2px solid var(--blue);margin-bottom:-1px">Overview</span><span style="padding:10px 0;font-weight:700;font-size:14px;color:var(--ink2)">Writing</span><span style="padding:10px 0;font-weight:700;font-size:14px;color:var(--ink2)">Review</span>
+        </div>
+        <div style="display:flex;gap:6px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:6px;border-radius:99px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6)"></div><span style="font-size:11px;font-weight:700">Exam</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:6px;border-radius:99px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6)"></div><span style="font-size:11px;font-weight:700">Target</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:6px;border-radius:99px;box-shadow:var(--inset)"></div><span style="font-size:11px;font-weight:700;color:var(--mut)">Date</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:6px;border-radius:99px;box-shadow:var(--inset)"></div><span style="font-size:11px;font-weight:700;color:var(--mut)">Country</span></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center"><span style="width:44px;height:44px;border-radius:50%;box-shadow:var(--raise-sm);display:grid;place-items:center;font-weight:800;color:var(--blue)">D</span><span style="width:36px;height:36px;border-radius:50%;box-shadow:var(--inset);display:grid;place-items:center;font-weight:800;font-size:13px;color:var(--ink2)">AK</span><span style="font-size:13px;color:var(--mut);font-weight:600">Avatar 44 / 36</span></div>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:20px">
+      <h2 style="margin:0;font-size:24px;font-weight:800">Chips · progress</h2>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <span style="padding:3px 8px;border-radius:7px;background:var(--aiBg);color:var(--ai);font-size:12px;font-weight:800">AI</span>
+        <span style="padding:5px 12px;border-radius:999px;background:var(--warnBg);color:var(--warn);font-size:12px;font-weight:800">Coming soon</span>
+        <span style="padding:5px 12px;border-radius:999px;background:var(--okBg);color:var(--ok);font-size:12px;font-weight:800">Free</span>
+        <span style="padding:5px 12px;border-radius:999px;background:var(--okBg);color:var(--ok);font-size:12px;font-weight:800">CEFR B2</span>
+        <span style="padding:5px 12px;border-radius:999px;background:var(--blue);color:#fff;font-size:12px;font-weight:800">Most chosen</span>
+        <span style="padding:5px 12px;border-radius:999px;background:var(--warnBg);color:var(--warn);font-size:12px;font-weight:800">Wrong</span>
+        <span style="padding:5px 12px;border-radius:999px;background:var(--okBg);color:var(--ok);font-size:12px;font-weight:800">Correct</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px">
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--ink2)">Progress · 80%</span><div style="height:8px;border-radius:99px;box-shadow:var(--inset);overflow:hidden"><div style="height:100%;width:80%;background:linear-gradient(90deg,#5B8DEF,#2E6BE6);border-radius:99px"></div></div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--ink2)">Below 65% · amber</span><div style="height:8px;border-radius:99px;box-shadow:var(--inset);overflow:hidden"><div style="height:100%;width:57%;background:var(--warn);border-radius:99px"></div></div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--ink2)">AI grading</span><div style="height:8px;border-radius:99px;box-shadow:var(--inset);overflow:hidden"><div style="height:100%;width:45%;background:var(--ai);border-radius:99px"></div></div></div>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:20px">
+      <h2 style="margin:0;font-size:24px;font-weight:800">Cards</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px">
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;justify-content:space-between"><span style="font-size:12px;font-weight:800;color:var(--ielts);letter-spacing:.05em">IELTS ACADEMIC</span><span style="padding:3px 9px;border-radius:999px;background:var(--okBg);color:var(--ok);font-size:11px;font-weight:800">Free section</span></div>
+          <span style="font-size:20px;font-weight:800">Listening, Reading, Writing</span>
+          <span style="font-size:13px;color:var(--ink2)">Exam card</span>
+        </div>
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:10px;outline:2px solid var(--blue);outline-offset:-2px">
+          <span style="font-weight:800">Full mock</span><span style="font-size:32px;font-weight:800;letter-spacing:-0.03em">79 000 UZS</span><span style="font-size:13px;color:var(--ink2)">Price card · selected</span>
+        </div>
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:13px;font-weight:700;color:var(--ink2)">Reading</span><span style="font-size:48px;font-weight:800;letter-spacing:-0.04em;line-height:1">6.5</span><span style="font-size:13px;color:var(--mut)">28 of 40 correct</span><span style="font-size:13px;color:var(--ink2)">Score card</span>
+        </div>
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:12px">
+          <div style="height:22px;width:60%;border-radius:8px;background:linear-gradient(90deg,var(--hover) 0,var(--bg) 50%,var(--hover) 100%);background-size:1200px 100%;animation:shimmer 1.4s infinite linear"></div>
+          <div style="height:48px;width:40%;border-radius:10px;background:linear-gradient(90deg,var(--hover) 0,var(--bg) 50%,var(--hover) 100%);background-size:1200px 100%;animation:shimmer 1.4s infinite linear"></div>
+          <div style="height:14px;width:80%;border-radius:6px;background:linear-gradient(90deg,var(--hover) 0,var(--bg) 50%,var(--hover) 100%);background-size:1200px 100%;animation:shimmer 1.4s infinite linear"></div>
+          <span style="font-size:13px;color:var(--ink2)">Skeleton · shown after 300 ms</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:28px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <h2 style="margin:0;font-size:24px;font-weight:800">Banners · toast</h2>
+        <div style="padding:14px 18px;border-radius:16px;background:var(--hover);font-size:14px;font-weight:600;display:flex;gap:10px"><span style="width:8px;height:8px;border-radius:50%;background:var(--blue);margin-top:6px;flex:none"></span>Info · Writing results arrive by email too.</div>
+        <div style="padding:14px 18px;border-radius:16px;background:var(--warnBg);color:var(--warn);font-size:14px;font-weight:700;display:flex;gap:10px"><span style="width:8px;height:8px;border-radius:50%;background:currentColor;margin-top:6px;flex:none"></span>Warning · 5 minutes left in this section.</div>
+        <div style="padding:14px 18px;border-radius:16px;background:var(--warnBg);color:var(--warn);font-size:14px;font-weight:700;display:flex;gap:10px"><span style="width:8px;height:8px;border-radius:50%;background:currentColor;margin-top:6px;flex:none"></span>Reconnecting… Your answers are saved and the timer is paused.</div>
+        <div style="padding:14px 18px;border-radius:16px;background:var(--errBg);color:var(--err);font-size:14px;font-weight:700;display:flex;gap:10px"><span style="width:8px;height:8px;border-radius:50%;background:currentColor;margin-top:6px;flex:none"></span>Error · Payment failed. No money was taken.</div>
+        <div style="align-self:flex-start;padding:14px 18px;border-radius:14px;background:var(--ink);color:var(--bg);font-weight:700;font-size:14px">Toast · Settings saved</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <h2 style="margin:0;font-size:24px;font-weight:800">Modal · table</h2>
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:24px;display:flex;flex-direction:column;gap:12px">
+          <span style="font-size:20px;font-weight:800">Submit this section?</span>
+          <span style="color:var(--ink2);font-size:14px;line-height:1.6">You have answered 38 of 40. You can’t come back after submitting.</span>
+          <div style="display:flex;gap:10px;justify-content:flex-end"><button style="height:44px;padding:0 16px;border-radius:13px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700">Keep working</button><button style="height:44px;padding:0 18px;border-radius:13px;border:0;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:800">Submit</button></div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <tr style="color:var(--mut);font-size:12px"><th style="text-align:start;padding:8px;font-weight:800">DATE</th><th style="text-align:start;padding:8px;font-weight:800">MOCK</th><th style="text-align:end;padding:8px;font-weight:800">BAND</th></tr>
+          <tr style="border-top:1px solid var(--line)"><td style="padding:10px 8px">12 Oct</td><td style="padding:10px 8px">Full · IA-0142</td><td style="padding:10px 8px;text-align:end;font-weight:800">6.5</td></tr>
+          <tr style="border-top:1px solid var(--line)"><td style="padding:10px 8px">21 Sep</td><td style="padding:10px 8px">Reading · IA-0131</td><td style="padding:10px 8px;text-align:end;font-weight:800">6.5</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:16px">
+      <h2 style="margin:0;font-size:24px;font-weight:800">Language switcher · RTL</h2>
+      <div style="font-size:14px;color:var(--ink2);line-height:1.6;max-width:720px">Names in their own script, no flags. Layouts use logical properties (inline-start / inline-end) so they mirror under dir="rtl". Exam content stays LTR English.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:24px">
+        <div dir="ltr" style="border-radius:20px;box-shadow:var(--raise);padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <span style="padding:10px 12px;border-radius:10px;background:var(--hover);color:var(--blue);font-weight:700;font-size:14px">English</span><span style="padding:10px 12px;font-weight:700;font-size:14px">O‘zbekcha</span><span style="padding:10px 12px;font-weight:700;font-size:14px">Русский</span><span style="padding:10px 12px;font-weight:700;font-size:14px">Қазақша</span><span style="padding:10px 12px;font-weight:700;font-size:14px;display:flex;justify-content:space-between" dir="rtl">العربية<span style="font-size:11px;color:var(--mut)">RTL</span></span><span style="padding:10px 12px;font-weight:700;font-size:14px;display:flex;justify-content:space-between" dir="rtl">فارسی<span style="font-size:11px;color:var(--mut)">RTL</span></span>
+        </div>
+        <div dir="rtl" lang="ar" style="border-radius:20px;box-shadow:var(--raise);padding:20px;display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:12px;font-weight:800;color:var(--blue)">الخطوة التالية</span>
+          <span style="font-size:20px;font-weight:800">تابع قسم القراءة</span>
+          <div style="height:8px;border-radius:99px;box-shadow:var(--inset);position:relative"><div style="position:absolute;inset-block:0;inset-inline-start:0;width:70%;border-radius:99px;background:linear-gradient(90deg,#5B8DEF,#2E6BE6)"></div></div>
+          <button style="align-self:flex-start;height:44px;padding:0 18px;border-radius:13px;border:0;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:800">متابعة</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state={mode:'light',seg:'UZS'};
+  renderVals(){const s=this.state;
+    const seg=(arr,cur,key)=>arr.map(([k,l])=>({label:l,color:cur===k?'var(--ink)':'var(--ink2)',shadow:cur===k?'var(--raise-sm)':'none',pick:()=>this.setState({[key]:k})}));
+    const L=[['Background','var(--bg)','#E8ECF3 / #1B2230'],['Ink','var(--ink)','#1E2A3A / #E7ECF4'],['Secondary','var(--ink2)','#5B6B82 / #A9B5C7'],['Muted','var(--mut)','#7A8699 / #8592A6'],['Paper','var(--paper)','#F4F6FA / #202838'],['Primary','var(--blue)','#2E6BE6 · hover #1F55C4'],['Gradient','linear-gradient(135deg,#5B8DEF,#2E6BE6)','#5B8DEF → #2E6BE6'],['Success','var(--ok)','#1F7A55'],['Success bg','var(--okBg)','#E5F5EE'],['AI','var(--ai)','#5B3FD1'],['AI bg','var(--aiBg)','#EEE9FF'],['Warning','var(--warn)','#B7790F'],['Warning bg','var(--warnBg)','#FFF1D6'],['Error · system only','var(--err)','#C2362B']];
+    return {theme:s.mode==='dark'?'dark':'light',dir:s.mode==='rtl'?'rtl':'ltr',modes:seg([['light','Light'],['dark','Dark'],['rtl','RTL']],s.mode,'mode'),segs:seg([['UZS','UZS'],['USD','USD'],['EUR','EUR']],s.seg,'seg'),
+      colors:L.map(([name,v,hex])=>({name,v,hex})),space:[4,8,12,16,20,24,32,40].map(v=>({v,px:v+'px'}))};}
+}
+</script>
+</body>
+</html>

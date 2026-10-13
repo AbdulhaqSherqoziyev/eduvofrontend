@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<header style="position:sticky;top:0;z-index:60;background:var(--bg);border-bottom:1px solid var(--line)">
+  <div style="max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:24px;min-height:64px">
+    <a href="Landing.dc.html" style="display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:800;font-size:18px;letter-spacing:-0.02em;flex:none">
+      <span style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);display:grid;place-items:center;color:#fff;font-size:17px;font-weight:800;box-shadow:0 6px 14px -6px rgba(46,107,230,.7)">e</span>
+      <span style="display:flex;gap:5px">Eduvo<span style="color:var(--blue)">Mock</span></span>
+    </a>
+    <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+      <nav style="display:flex;gap:4px;align-items:center">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+          <a href="{{ n.href }}" style="padding:8px 12px;border-radius:12px;font-weight:600;font-size:14px;color:{{ n.color }};background:{{ n.bg }};box-shadow:{{ n.shadow }};white-space:nowrap" style-hover="color:var(--ink)">{{ n.label }}</a>
+        </sc-for>
+      </nav>
+    </sc-if>
+    <div style="margin-inline-start:auto;display:flex;align-items:center;gap:10px;position:relative">
+      <button onClick="{{ toggleLang }}" aria-label="Language" style="height:40px;padding:0 12px;border-radius:12px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font:600 13px Manrope,sans-serif;cursor:pointer;display:flex;align-items:center;gap:8px">
+        <span style="width:16px;height:16px;border-radius:50%;border:1.6px solid var(--ink2);flex:none"></span>
+        <span>{{ langLabel }}</span>
+      </button>
+      <button onClick="{{ toggleTheme }}" aria-label="Theme" style="width:40px;height:40px;border-radius:12px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);cursor:pointer;display:grid;place-items:center">
+        <span style="width:14px;height:14px;border-radius:50%;background:var(--ink);box-shadow:inset -5px -2px 0 var(--bg)"></span>
+      </button>
+      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+        <sc-if value="{{ app }}" hint-placeholder-val="{{ false }}">
+          <a href="Settings.dc.html" style="display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:600;font-size:14px">
+            <span style="width:40px;height:40px;border-radius:50%;background:var(--bg);box-shadow:var(--raise-sm);display:grid;place-items:center;font-weight:800;color:var(--blue)">D</span>
+          </a>
+        </sc-if>
+        <sc-if value="{{ guest }}" hint-placeholder-val="{{ true }}">
+          <a href="Auth.dc.html?mode=login" style="padding:10px 14px;font-weight:700;font-size:14px;color:var(--ink);white-space:nowrap">{{ t.login }}</a>
+          <a href="Auth.dc.html" style="height:42px;padding:0 18px;border-radius:13px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;white-space:nowrap;box-shadow:0 8px 18px -8px rgba(46,107,230,.7)" style-hover="background:#1F55C4;color:#fff">{{ t.start }}</a>
+        </sc-if>
+      </sc-if>
+      <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width:44px;height:44px;border-radius:12px;border:0;background:var(--bg);box-shadow:var(--raise-sm);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+          <span style="width:18px;height:2px;border-radius:2px;background:var(--ink)"></span>
+          <span style="width:18px;height:2px;border-radius:2px;background:var(--ink)"></span>
+          <span style="width:12px;height:2px;border-radius:2px;background:var(--ink);align-self:center"></span>
+        </button>
+      </sc-if>
+      <sc-if value="{{ langOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;top:52px;inset-inline-end:0;width:min(560px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:var(--bg);border-radius:20px;box-shadow:var(--raise);padding:16px;z-index:70">
+          <input value="{{ q }}" onChange="{{ setQ }}" placeholder="Search language" style="width:100%;height:44px;border-radius:12px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 14px;color:var(--ink);font:500 14px Manrope,sans-serif;outline:none;margin-bottom:12px" />
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px">
+            <sc-for list="{{ langs }}" as="l" hint-placeholder-count="12">
+              <button onClick="{{ l.pick }}" lang="{{ l.code }}" dir="{{ l.dir }}" style="text-align:start;padding:10px 12px;border-radius:10px;border:0;cursor:pointer;font:600 14px Manrope,sans-serif;color:{{ l.color }};background:{{ l.bg }};display:flex;justify-content:space-between;gap:8px" style-hover="background:var(--hover)">
+                <span>{{ l.name }}</span><span style="font-size:11px;color:var(--mut);font-weight:700">{{ l.tag }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:var(--mut)">Exam content stays in English. Interface and AI feedback follow your language.</div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:8px 20px 20px;display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line)">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+        <a href="{{ n.href }}" style="padding:14px 4px;font-weight:700;font-size:16px;color:var(--ink);border-bottom:1px solid var(--line)">{{ n.label }}</a>
+      </sc-for>
+      <sc-if value="{{ guest }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+          <a href="Auth.dc.html?mode=login" style="height:48px;border-radius:14px;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;display:grid;place-items:center">{{ t.login }}</a>
+          <a href="Auth.dc.html" style="height:48px;border-radius:14px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:700;display:grid;place-items:center">{{ t.start }}</a>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;ielts&quot;,&quot;sat&quot;,&quot;pricing&quot;,&quot;how&quot;,&quot;centers&quot;,&quot;dash&quot;,&quot;mocks&quot;,&quot;progress&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;app&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const LANGS=[['en','English'],['uz','O‘zbekcha'],['uz-Cyrl','Ўзбекча'],['ru','Русский'],['kk','Қазақша'],['ky','Кыргызча'],['tg','Тоҷикӣ'],['tk','Türkmençe'],['tr','Türkçe'],['az','Azərbaycanca'],['ar','العربية'],['fa','فارسی'],['ur','اردو'],['he','עברית'],['hi','हिन्दी'],['bn','বাংলা'],['zh','简体中文'],['zh-Hant','繁體中文'],['ja','日本語'],['ko','한국어'],['id','Bahasa Indonesia'],['ms','Bahasa Melayu'],['vi','Tiếng Việt'],['th','ไทย'],['fil','Filipino'],['de','Deutsch'],['fr','Français'],['es','Español'],['pt','Português'],['it','Italiano'],['nl','Nederlands'],['pl','Polski'],['uk','Українська'],['ro','Română'],['cs','Čeština'],['hu','Magyar'],['el','Ελληνικά'],['sv','Svenska'],['sw','Kiswahili'],['mn','Монгол']];
+const RTL=['ar','fa','ur','he'];
+const T={
+ en:{ielts:'IELTS',sat:'SAT',pricing:'Pricing',how:'How it works',centers:'For centers',login:'Log in',start:'Start free',dash:'Dashboard',progress:'Progress',mocks:'Take a mock'},
+ uz:{ielts:'IELTS',sat:'SAT',pricing:'Narxlar',how:'Qanday ishlaydi',centers:'Markazlar uchun',login:'Kirish',start:'Bepul boshlash',dash:'Bosh sahifa',progress:'Natijalar',mocks:'Mock topshirish'},
+ ru:{ielts:'IELTS',sat:'SAT',pricing:'Цены',how:'Как это работает',centers:'Для центров',login:'Войти',start:'Начать бесплатно',dash:'Главная',progress:'Прогресс',mocks:'Пройти мок'},
+ de:{ielts:'IELTS',sat:'SAT',pricing:'Preise',how:'So funktioniert’s',centers:'Für Sprachschulen',login:'Anmelden',start:'Kostenlos starten',dash:'Übersicht',progress:'Fortschritt',mocks:'Probetest starten'},
+ ar:{ielts:'IELTS',sat:'SAT',pricing:'الأسعار',how:'كيف يعمل',centers:'للمراكز',login:'تسجيل الدخول',start:'ابدأ مجانًا',dash:'لوحة التحكم',progress:'التقدم',mocks:'اختبار تجريبي'}
+};
+function readPrefs(){const q=new URLSearchParams(location.search);let s={};try{s=JSON.parse(localStorage.getItem('eduvo-mock-prefs')||'{}')}catch(e){}return{theme:q.get('theme')||s.theme||'light',lang:q.get('lang')||s.lang||'en'}}
+function savePrefs(p){let s={};try{s=JSON.parse(localStorage.getItem('eduvo-mock-prefs')||'{}')}catch(e){}localStorage.setItem('eduvo-mock-prefs',JSON.stringify({...s,...p}));window.dispatchEvent(new Event('eduvo-prefs'))}
+class Component extends DCLogic {
+  state={w:window.innerWidth,langOpen:false,menuOpen:false,q:'',...readPrefs()};
+  componentDidMount(){this.r=()=>this.setState({w:window.innerWidth});this.p=()=>this.setState(readPrefs());window.addEventListener('resize',this.r);window.addEventListener('eduvo-prefs',this.p)}
+  componentWillUnmount(){window.removeEventListener('resize',this.r);window.removeEventListener('eduvo-prefs',this.p)}
+  renderVals(){
+    const {w,lang,theme,q}=this.state; const t=T[lang]||T.en; const desktop=w>=1024; const app=!!this.props.app; const active=this.props.active||'';
+    const items=app?[['dash','Dashboard.dc.html'],['mocks','Exam Start.dc.html'],['progress','Progress.dc.html'],['pricing','Pricing.dc.html']]:[['ielts','Exam Page.dc.html?exam=ielts'],['sat','Exam Page.dc.html?exam=sat'],['pricing','Pricing.dc.html'],['how','Landing.dc.html#how'],['centers','Landing.dc.html#centers']];
+    const nav=items.map(([k,h])=>({label:t[k],href:h,color:active===k?'var(--ink)':'var(--ink2)',bg:'var(--bg)',shadow:active===k?'var(--inset)':'none'}));
+    const langs=LANGS.filter(([c,n])=>!q||n.toLowerCase().includes(q.toLowerCase())||c.includes(q.toLowerCase())).map(([c,n])=>({code:c,name:n,tag:RTL.includes(c)?'RTL':'',dir:RTL.includes(c)?'rtl':'ltr',color:c===lang?'var(--blue)':'var(--ink)',bg:c===lang?'var(--hover)':'transparent',pick:()=>{savePrefs({lang:c});this.setState({langOpen:false})}}));
+    const cur=LANGS.find(l=>l[0]===lang);
+    return {t,nav,langs,q,desktop,mobile:!desktop,app,guest:!app,langOpen:this.state.langOpen,menuOpen:this.state.menuOpen&&!desktop,
+      langLabel:cur?cur[1]:'English',
+      setQ:e=>this.setState({q:e.target.value}),
+      toggleLang:()=>this.setState(s=>({langOpen:!s.langOpen,menuOpen:false})),
+      toggleMenu:()=>this.setState(s=>({menuOpen:!s.menuOpen,langOpen:false})),
+      toggleTheme:()=>savePrefs({theme:theme==='dark'?'light':'dark'})};
+  }
+}
+</script>
+</body>
+</html>

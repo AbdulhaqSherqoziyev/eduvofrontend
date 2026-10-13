@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Eduvo Mock — Mobile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:#DDE2EA}body{font-family:Manrope,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:#2E6BE6;text-decoration:none}a:hover{color:#1F55C4}button,input,select,textarea{font-family:inherit}
+::-webkit-scrollbar{width:0;height:0}
+:root{--bg:#E8ECF3;--ink:#1E2A3A;--ink2:#5b6b82;--mut:#7A8699;--line:#d5dbe5;--hover:#dde3ec;--raise:8px 8px 20px #c8cfdb,-8px -8px 20px #ffffff;--raise-sm:4px 4px 10px #c8cfdb,-4px -4px 10px #ffffff;--inset:inset 3px 3px 7px #c8cfdb,inset -3px -3px 7px #ffffff;--blue:#2E6BE6;--ok:#1F7A55;--okBg:#E5F5EE;--ai:#5B3FD1;--aiBg:#EEE9FF;--warn:#B7790F;--warnBg:#FFF1D6;--err:#C2362B;--errBg:#FDE8E6;--paper:#F4F6FA;--bar:rgba(232,236,243,.92);--ielts:oklch(0.5 0.15 255);--sat:oklch(0.5 0.13 300);--cefr:oklch(0.5 0.11 160);--toefl:oklch(0.5 0.11 60);--hsk:oklch(0.52 0.14 20)}
+[data-theme=dark]{--bg:#1B2230;--ink:#E7ECF4;--ink2:#A9B5C7;--mut:#8592A6;--line:#2C3648;--hover:#242D3E;--raise:8px 8px 20px #121722,-8px -8px 20px #242d3f;--raise-sm:4px 4px 10px #121722,-4px -4px 10px #242d3f;--inset:inset 3px 3px 7px #121722,inset -3px -3px 7px #252e40;--blue:#6E9BF5;--ok:#5FCB98;--okBg:#173629;--ai:#B3A2FF;--aiBg:#2A2450;--warn:#F0B54A;--warnBg:#3A2D12;--err:#FF8A80;--errBg:#3D1E1C;--paper:#202838;--bar:rgba(27,34,48,.92);--ielts:oklch(0.72 0.13 255);--sat:oklch(0.72 0.12 300);--cefr:oklch(0.72 0.1 160);--toefl:oklch(0.74 0.1 60);--hsk:oklch(0.72 0.12 20)}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+</style>
+</helmet>
+<div data-theme="{{ theme }}" dir="{{ dir }}" lang="{{ lang }}" style="min-height:100vh;display:flex;justify-content:center;align-items:center;gap:56px;padding:{{ rootPad }};background:{{ rootBg }}">
+
+  <sc-if value="{{ framed }}" hint-placeholder-val="{{ true }}">
+    <aside dir="ltr" style="width:260px;flex:none;display:flex;flex-direction:column;gap:18px;color:#1E2A3A;align-self:center">
+      <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;font-weight:800;color:#2E6BE6;letter-spacing:.06em">EDUVO MOCK · MOBILE</span><span style="font-size:24px;font-weight:800;letter-spacing:-0.02em">Phone experience</span><span style="font-size:13px;color:#5b6b82;line-height:1.5">Tap through it like an app. Phones open this layout automatically.</span></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button onClick="{{ toggleTheme }}" style="height:34px;padding:0 12px;border-radius:10px;border:0;background:#E8ECF3;box-shadow:3px 3px 8px #c3cad6,-3px -3px 8px #fff;font-weight:700;font-size:12px;cursor:pointer;color:#1E2A3A">{{ themeLabel }}</button>
+        <button onClick="{{ toggleRtl }}" style="height:34px;padding:0 12px;border-radius:10px;border:0;background:#E8ECF3;box-shadow:3px 3px 8px #c3cad6,-3px -3px 8px #fff;font-weight:700;font-size:12px;cursor:pointer;color:#1E2A3A">{{ rtlLabel }}</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;max-height:560px;overflow:auto">
+        <sc-for list="{{ jump }}" as="j" hint-placeholder-count="14">
+          <button onClick="{{ j.go }}" style="text-align:start;height:34px;padding:0 12px;border-radius:9px;border:0;cursor:pointer;font-weight:700;font-size:13px;background:{{ j.bg }};color:{{ j.color }}">{{ j.label }}</button>
+        </sc-for>
+      </div>
+    </aside>
+  </sc-if>
+
+  <div style="padding:{{ bezelPad }};border-radius:{{ bezelR }};background:{{ bezelBg }};box-shadow:{{ bezelShadow }};flex:none;zoom:{{ zoom }}">
+    <div style="width:{{ appW }};height:{{ appH }};border-radius:{{ appR }};overflow:hidden;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;position:relative">
+
+      <sc-if value="{{ framed }}" hint-placeholder-val="{{ true }}">
+        <div dir="ltr" style="height:50px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 30px 0 36px;font-weight:800;font-size:15px;position:relative;z-index:5">
+          <span>9:41</span>
+          <span style="position:absolute;left:50%;top:11px;transform:translateX(-50%);width:122px;height:34px;border-radius:20px;background:#000"></span>
+          <span style="display:flex;gap:6px;align-items:center"><span style="display:flex;gap:2px;align-items:flex-end"><span style="width:3px;height:5px;border-radius:1px;background:var(--ink)"></span><span style="width:3px;height:7px;border-radius:1px;background:var(--ink)"></span><span style="width:3px;height:9px;border-radius:1px;background:var(--ink)"></span><span style="width:3px;height:11px;border-radius:1px;background:var(--ink)"></span></span><span style="width:24px;height:12px;border-radius:4px;border:1.5px solid var(--ink);padding:1.5px;display:flex"><span style="flex:1;border-radius:2px;background:var(--ink)"></span></span></span>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showBar }}" hint-placeholder-val="{{ true }}">
+        <div style="height:52px;flex:none;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:0 12px;background:var(--bg);position:relative;z-index:4;border-bottom:1px solid {{ barLine }}">
+          <div style="display:flex;align-items:center;min-width:44px">
+            <sc-if value="{{ showBack }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ back }}" aria-label="Back" style="width:44px;height:44px;border-radius:14px;border:0;background:transparent;cursor:pointer;display:grid;place-items:center"><span style="width:11px;height:11px;border-inline-start:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate({{ chev }});margin-inline-start:4px"></span></button>
+            </sc-if>
+            <sc-if value="{{ showLogo }}" hint-placeholder-val="{{ true }}">
+              <span style="display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px;padding-inline-start:4px"><span style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);display:grid;place-items:center;color:#fff;font-size:15px">e</span><span style="display:flex;gap:4px">Eduvo<span style="color:var(--blue)">Mock</span></span></span>
+            </sc-if>
+          </div>
+          <span style="text-align:center;font-weight:800;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ barTitle }}</span>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end;min-width:44px">
+            <sc-if value="{{ barLang }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ openLang }}" style="height:36px;padding:0 12px;border-radius:12px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;font-size:12px;cursor:pointer">{{ langShort }}</button>
+            </sc-if>
+            <sc-if value="{{ barLogin }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ goLogin }}" style="height:36px;padding:0 12px;border-radius:12px;border:0;background:transparent;color:var(--blue);font-weight:800;font-size:14px;cursor:pointer">{{ t.login }}</button>
+            </sc-if>
+            <sc-if value="{{ barSkip }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ skipOnb }}" style="height:36px;padding:0 10px;border-radius:12px;border:0;background:transparent;color:var(--ink2);font-weight:700;font-size:14px;cursor:pointer">Skip</button>
+            </sc-if>
+            <sc-if value="{{ barShare }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ openShare }}" style="height:36px;padding:0 12px;border-radius:12px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;font-size:13px;cursor:pointer">Share</button>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <div ref="{{ sRef }}" style="flex:1;overflow-y:auto;overflow-x:hidden;position:relative;scrollbar-width:none">
+
+        <sc-if value="{{ s_landing }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:12px 16px 28px;display:flex;flex-direction:column;gap:28px">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;gap:6px"><span style="padding:5px 10px;border-radius:999px;box-shadow:var(--inset);font-size:12px;font-weight:800;color:var(--ielts)">IELTS Academic</span><span style="padding:5px 10px;border-radius:999px;box-shadow:var(--inset);font-size:12px;font-weight:800;color:var(--sat)">Digital SAT</span></div>
+              <h1 style="margin:0;font-size:30px;line-height:1.12;letter-spacing:-0.03em;font-weight:800;text-wrap:balance">{{ t.h1 }}</h1>
+              <p style="margin:0;font-size:15px;line-height:1.55;color:var(--ink2);text-wrap:pretty">{{ t.sub }}</p>
+            </div>
+            <button onClick="{{ goSample }}" style="border:0;cursor:pointer;text-align:start;border-radius:24px;box-shadow:var(--raise);background:var(--bg);color:var(--ink);padding:18px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;justify-content:space-between;align-items:center;width:100%"><span style="font-size:12px;font-weight:800;color:var(--mut)">SAMPLE RESULT</span><span style="padding:4px 10px;border-radius:999px;background:var(--okBg);color:var(--ok);font-size:12px;font-weight:800">CEFR B2</span></div>
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;width:100%;gap:12px">
+                <div style="display:flex;flex-direction:column"><span style="font-size:12px;color:var(--ink2);font-weight:700">Overall band</span><span style="font-size:56px;font-weight:800;letter-spacing:-0.05em;line-height:1">6.5</span></div>
+                <div style="display:grid;grid-template-columns:repeat(3,auto);gap:14px;font-size:11px;font-weight:700;color:var(--ink2)">
+                  <span style="display:flex;flex-direction:column;gap:2px">Listen<b style="font-size:17px;color:var(--ink)">7.0</b></span><span style="display:flex;flex-direction:column;gap:2px">Read<b style="font-size:17px;color:var(--ink)">6.5</b></span><span style="display:flex;flex-direction:column;gap:2px">Write<b style="font-size:17px;color:var(--ink)">6.0</b></span>
+                </div>
+              </div>
+              <span style="font-size:13px;font-weight:800;color:var(--blue)">See the full sample result</span>
+            </button>
+
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="font-size:20px;font-weight:800;letter-spacing:-0.02em">{{ t.exams }}</div>
+              <div style="display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x mandatory;margin:0 -16px;padding:6px 16px 16px;scroll-padding:0 16px">
+                <sc-for list="{{ examCards }}" as="e" hint-placeholder-count="2">
+                  <button onClick="{{ e.go }}" style="flex:none;width:78%;scroll-snap-align:start;border:0;cursor:pointer;text-align:start;border-radius:24px;box-shadow:var(--raise);background:var(--bg);color:var(--ink);padding:18px;display:flex;flex-direction:column;gap:12px">
+                    <div style="display:flex;justify-content:space-between;width:100%"><span style="font-size:12px;font-weight:800;letter-spacing:.05em;color:{{ e.color }}">{{ e.tag }}</span><span style="padding:3px 9px;border-radius:999px;background:var(--okBg);color:var(--ok);font-size:11px;font-weight:800">Free section</span></div>
+                    <span style="font-size:19px;font-weight:800;line-height:1.25">{{ e.name }}</span>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:12px;border-radius:16px;box-shadow:var(--inset);width:100%">
+                      <sc-for list="{{ e.facts }}" as="f" hint-placeholder-count="3"><span style="display:flex;flex-direction:column;gap:1px;font-size:11px;font-weight:700;color:var(--mut)"><b style="font-size:15px;color:var(--ink)">{{ f.v }}</b>{{ f.k }}</span></sc-for>
+                    </div>
+                    <span style="font-size:13px;color:var(--ink2);font-weight:600">Full mock from <b style="color:var(--ink)">{{ e.price }}</b></span>
+                  </button>
+                </sc-for>
+              </div>
+              <div style="border-radius:20px;box-shadow:var(--inset);overflow:hidden">
+                <sc-for list="{{ soon }}" as="s" hint-placeholder-count="3">
+                  <div style="padding:14px 16px;display:flex;align-items:center;gap:12px;border-top:{{ s.border }}">
+                    <span style="width:10px;height:10px;border-radius:50%;background:{{ s.color }};flex:none"></span>
+                    <span style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0"><b style="font-size:15px">{{ s.name }}</b><span style="font-size:12px;color:var(--mut);font-weight:600">{{ s.state }}</span></span>
+                    <button onClick="{{ s.notify }}" style="height:36px;padding:0 14px;border-radius:12px;border:0;background:var(--bg);box-shadow:{{ s.btnShadow }};color:{{ s.btnColor }};font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap">{{ s.btn }}</button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div style="font-size:20px;font-weight:800;letter-spacing:-0.02em">{{ t.how }}</div>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ how }}" as="h" hint-placeholder-count="4">
+                  <div style="display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px">
+                    <div style="display:flex;flex-direction:column;align-items:center"><span style="width:36px;height:36px;border-radius:12px;box-shadow:var(--raise-sm);display:grid;place-items:center;font-weight:800;color:var(--blue);flex:none">{{ h.n }}</span><span style="flex:1;width:2px;background:var(--line);margin:4px 0;opacity:{{ h.lineOp }}"></span></div>
+                    <div style="padding:6px 0 20px;display:flex;flex-direction:column;gap:4px"><b style="font-size:16px">{{ h.title }}</b><span style="font-size:14px;color:var(--ink2);line-height:1.5">{{ h.text }}</span></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="font-size:20px;font-weight:800;letter-spacing:-0.02em">{{ t.get }}</div>
+              <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+                <sc-for list="{{ features }}" as="f" hint-placeholder-count="8">
+                  <div style="padding:14px 16px;display:flex;align-items:center;gap:12px;border-top:{{ f.border }}">
+                    <span style="width:44px;flex:none;font-family:ui-monospace,Menlo,monospace;font-size:10px;font-weight:800;color:{{ f.color }}">{{ f.tag }}</span>
+                    <span style="font-size:14px;font-weight:700;line-height:1.4">{{ f.title }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:20px;font-weight:800;letter-spacing:-0.02em">{{ t.pricing }}</span><button onClick="{{ goPricing }}" style="border:0;background:transparent;color:var(--blue);font-weight:800;font-size:14px;cursor:pointer">See all</button></div>
+              <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+                <sc-for list="{{ priceRows }}" as="p" hint-placeholder-count="3">
+                  <button onClick="{{ goPricing }}" style="width:100%;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:16px;display:flex;align-items:center;gap:12px;border-top:{{ p.border }};text-align:start">
+                    <span style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:15px">{{ p.name }}</b><span style="font-size:12px;color:var(--mut);font-weight:600">{{ p.note }}</span></span>
+                    <b style="font-size:15px;white-space:nowrap">{{ p.price }}</b>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="font-size:20px;font-weight:800;letter-spacing:-0.02em">{{ t.faq }}</div>
+              <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+                <sc-for list="{{ faq }}" as="f" hint-placeholder-count="5">
+                  <div style="border-top:{{ f.border }}">
+                    <button onClick="{{ f.toggle }}" style="width:100%;min-height:56px;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:14px 16px;display:flex;align-items:center;gap:12px;text-align:start;font-size:15px;font-weight:700">
+                      <span style="flex:1">{{ f.q }}</span><span style="font-size:20px;color:var(--blue);flex:none">{{ f.sign }}</span>
+                    </button>
+                    <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}"><div style="padding:0 16px 16px;font-size:14px;line-height:1.6;color:var(--ink2)">{{ f.a }}</div></sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="border-radius:20px;box-shadow:var(--inset);padding:18px;display:flex;flex-direction:column;gap:8px">
+              <span style="font-size:11px;font-weight:800;color:var(--blue);letter-spacing:.06em">FOR LEARNING CENTERS</span>
+              <b style="font-size:16px;line-height:1.35">Run these mocks for your students inside Eduvo ERP</b>
+              <a href="https://eduvo.uz" style="font-weight:800;font-size:14px">eduvo.uz</a>
+            </div>
+            <div style="font-size:11px;color:var(--mut);line-height:1.5;text-align:center;padding:0 8px">Practice test — not an official certificate. Not affiliated with IELTS, British Council, IDP, Cambridge or College Board.</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_auth }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:8px 20px 24px;display:flex;flex-direction:column;gap:18px">
+            <div style="display:flex;flex-direction:column;gap:6px"><h1 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.02em">{{ authTitle }}</h1><span style="color:var(--ink2);font-size:15px">{{ authSub }}</span></div>
+            <button onClick="{{ google }}" style="height:54px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px"><span style="width:22px;height:22px;border-radius:50%;box-shadow:var(--inset);display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--blue)">G</span>Continue with Google</button>
+            <div style="display:flex;align-items:center;gap:12px;color:var(--mut);font-size:12px;font-weight:700"><span style="flex:1;height:1px;background:var(--line)"></span>or<span style="flex:1;height:1px;background:var(--line)"></span></div>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;font-weight:700;color:var(--ink2)">Email
+              <input value="{{ email }}" onChange="{{ setEmail }}" type="email" inputMode="email" autoComplete="email" placeholder="you@example.com" style="height:54px;border-radius:16px;border:0;background:var(--bg);box-shadow:{{ emailShadow }};padding:0 16px;color:var(--ink);font-size:16px;font-weight:600;outline:none" />
+              <sc-if value="{{ emailErr }}" hint-placeholder-val="{{ false }}"><span style="color:var(--err);font-weight:600;font-size:12px">Enter a valid email, like name@example.com</span></sc-if>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:13px;font-weight:700;color:var(--ink2)">Password
+              <input value="{{ pw }}" onChange="{{ setPw }}" type="password" placeholder="At least 8 characters" style="height:54px;border-radius:16px;border:0;background:var(--bg);box-shadow:{{ pwShadow }};padding:0 16px;color:var(--ink);font-size:16px;outline:none" />
+              <sc-if value="{{ pwErr }}" hint-placeholder-val="{{ false }}"><span style="color:var(--err);font-weight:600;font-size:12px">Use at least 8 characters.</span></sc-if>
+            </label>
+            <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}"><button onClick="{{ forgot }}" style="align-self:flex-end;border:0;background:transparent;color:var(--blue);font-weight:800;font-size:14px;cursor:pointer;padding:4px 0">Forgot password?</button></sc-if>
+            <button onClick="{{ switchAuth }}" style="border:0;background:transparent;color:var(--ink2);font-size:14px;cursor:pointer;padding:8px 0">{{ switchText }} <b style="color:var(--blue)">{{ switchLink }}</b></button>
+            <sc-if value="{{ isSignupOnly }}" hint-placeholder-val="{{ true }}"><span style="font-size:12px;color:var(--mut);text-align:center;line-height:1.5">By signing up you agree to the Terms and Privacy policy.</span></sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_verify }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:40px 24px;display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center">
+            <span style="width:84px;height:84px;border-radius:28px;box-shadow:var(--raise);display:grid;place-items:center;color:var(--blue);font-weight:800;font-size:30px">@</span>
+            <h1 style="margin:8px 0 0;font-size:26px;font-weight:800">{{ verifyTitle }}</h1>
+            <span style="color:var(--ink2);font-size:15px;line-height:1.6">{{ verifyBody }}</span>
+            <button onClick="{{ resend }}" style="border:0;background:transparent;color:var(--blue);font-weight:800;font-size:14px;cursor:pointer;padding:10px">{{ resendLabel }}</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_onb }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:4px 20px 24px;display:flex;flex-direction:column;gap:20px">
+            <div style="display:flex;gap:6px"><sc-for list="{{ steps }}" as="s" hint-placeholder-count="4"><span style="flex:1;height:6px;border-radius:99px;box-shadow:var(--inset);background:{{ s.bar }}"></span></sc-for></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:800;color:var(--mut)">Step {{ stepNum }} of 4</span><h1 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;line-height:1.2">{{ onbTitle }}</h1></div>
+            <sc-if value="{{ step0 }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <sc-for list="{{ examOpts }}" as="o" hint-placeholder-count="2">
+                  <button onClick="{{ o.pick }}" style="min-height:76px;border-radius:20px;border:0;cursor:pointer;background:var(--bg);box-shadow:{{ o.shadow }};outline:{{ o.outline }};outline-offset:-2px;color:var(--ink);padding:16px 18px;display:flex;align-items:center;gap:14px;text-align:start">
+                    <span style="width:22px;height:22px;border-radius:50%;border:2px solid {{ o.ring }};display:grid;place-items:center;flex:none"><span style="width:10px;height:10px;border-radius:50%;background:{{ o.dot }}"></span></span>
+                    <span style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;font-weight:800;letter-spacing:.05em;color:{{ o.color }}">{{ o.tag }}</span><b style="font-size:17px">{{ o.name }}</b></span>
+                    <span style="font-size:12px;color:var(--mut);font-weight:700">{{ o.meta }}</span>
+                  </button>
+                </sc-for>
+                <span style="font-size:13px;color:var(--mut)">CEFR, TOEFL iBT and HSK are coming soon.</span>
+              </div>
+            </sc-if>
+            <sc-if value="{{ step1 }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+                <sc-for list="{{ targets }}" as="o" hint-placeholder-count="8"><button onClick="{{ o.pick }}" style="height:56px;border-radius:16px;border:0;cursor:pointer;font-weight:800;font-size:16px;background:{{ o.bg }};color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.v }}</button></sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
+              <input type="date" value="{{ date }}" onChange="{{ setDate }}" style="height:56px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 16px;color:var(--ink);font-size:16px;outline:none;width:100%" />
+              <button onClick="{{ toggleNoDate }}" style="min-height:56px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);padding:0 16px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:15px;cursor:pointer;text-align:start">
+                <span style="width:24px;height:24px;border-radius:8px;box-shadow:var(--inset);display:grid;place-items:center;background:{{ noDateBg }};color:#fff;font-size:13px;font-weight:800">{{ noDateMark }}</span>I haven’t booked a date yet
+              </button>
+            </sc-if>
+            <sc-if value="{{ step3 }}" hint-placeholder-val="{{ false }}">
+              <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+                <label style="display:flex;align-items:center;gap:12px;padding:0 16px;min-height:58px"><span style="flex:1;font-weight:700;font-size:15px">Country</span><select style="border:0;background:transparent;color:var(--ink2);font-size:15px;font-weight:700;outline:none;text-align:end"><option>Uzbekistan</option><option>Kazakhstan</option><option>Kyrgyzstan</option><option>Tajikistan</option><option>Other</option></select></label>
+                <button onClick="{{ openLang }}" style="width:100%;border:0;border-top:1px solid var(--line);background:transparent;color:var(--ink);display:flex;align-items:center;gap:12px;padding:0 16px;min-height:58px;cursor:pointer;text-align:start"><span style="flex:1;font-weight:700;font-size:15px">Interface language</span><span style="color:var(--ink2);font-weight:700;font-size:15px">{{ langName }}</span></button>
+              </div>
+              <span style="font-size:13px;color:var(--mut)">Exam content stays in English.</span>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_home }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:4px 16px 24px;display:flex;flex-direction:column;gap:20px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;color:var(--ink2);font-weight:700">{{ t.greet }}</span><span style="font-size:28px;font-weight:800;letter-spacing:-0.03em">Dilnoza</span></div>
+              <button onClick="{{ goProfile }}" style="width:44px;height:44px;border-radius:50%;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--blue);font-weight:800;font-size:16px;cursor:pointer">D</button>
+            </div>
+            <sc-if value="{{ homeEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="border-radius:24px;background:linear-gradient(150deg,#5B8DEF,#2E6BE6);color:#fff;padding:22px;display:flex;flex-direction:column;gap:12px">
+                <span style="align-self:flex-start;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.2);font-size:12px;font-weight:800">Free</span>
+                <b style="font-size:22px;line-height:1.25">{{ t.emptyTitle }}</b>
+                <span style="font-size:14px;line-height:1.5">One IELTS or SAT section is on us. You get a score and a review of every question.</span>
+                <button onClick="{{ goStart }}" style="height:50px;border-radius:14px;border:0;background:#fff;color:#2E6BE6;font-weight:800;font-size:15px;cursor:pointer;margin-top:4px">Choose a free section</button>
+              </div>
+              <div style="border-radius:20px;box-shadow:var(--inset);padding:18px;display:flex;flex-direction:column;gap:8px"><b style="font-size:15px">Your progress shows here</b><span style="font-size:13px;color:var(--ink2);line-height:1.5">After your first section you’ll see your band, weakest question types and next steps.</span></div>
+            </sc-if>
+            <sc-if value="{{ homeData }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ goStart }}" style="border:0;cursor:pointer;text-align:start;border-radius:24px;background:linear-gradient(150deg,#5B8DEF,#2E6BE6);color:#fff;padding:20px;display:flex;flex-direction:column;gap:10px;box-shadow:0 16px 30px -16px rgba(46,107,230,.8)">
+                <span style="font-size:11px;font-weight:800;letter-spacing:.08em">{{ t.nextAction }}</span>
+                <b style="font-size:21px;line-height:1.25">Resume your Reading section</b>
+                <span style="font-size:13px;line-height:1.5">IELTS full mock IA-0151 · 41 minutes left · continue on a computer</span>
+                <div style="height:6px;border-radius:99px;background:rgba(255,255,255,.25);overflow:hidden;margin-top:4px"><div style="height:100%;width:34%;background:#fff;border-radius:99px"></div></div>
+              </button>
+              <div style="display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:6px 16px 12px">
+                <div style="flex:none;width:150px;border-radius:20px;box-shadow:var(--raise);padding:16px;display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;font-weight:700;color:var(--ink2)">Band</span><span style="font-size:30px;font-weight:800;letter-spacing:-0.03em">6.5 <span style="font-size:15px;color:var(--mut)">→ 7.0</span></span><span style="font-size:12px;color:var(--mut);font-weight:600">0.5 to go</span></div>
+                <div style="flex:none;width:130px;border-radius:20px;box-shadow:var(--raise);padding:16px;display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;font-weight:700;color:var(--ink2)">Exam in</span><span style="font-size:30px;font-weight:800;letter-spacing:-0.03em">{{ days }}<span style="font-size:15px;color:var(--mut)"> d</span></span><span style="font-size:12px;color:var(--mut);font-weight:600">12 Dec 2026</span></div>
+                <button onClick="{{ goPricing }}" style="flex:none;width:130px;border:0;cursor:pointer;text-align:start;background:var(--bg);color:var(--ink);border-radius:20px;box-shadow:var(--raise);padding:16px;display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;font-weight:700;color:var(--ink2)">Credits</span><span style="font-size:30px;font-weight:800;letter-spacing:-0.03em">2</span><span style="font-size:12px;color:var(--blue);font-weight:800">Buy more</span></button>
+              </div>
+              <div style="border-radius:24px;box-shadow:var(--raise);padding:18px;display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:16px">{{ t.progress }}</b><button onClick="{{ goProgress }}" style="border:0;background:transparent;color:var(--blue);font-weight:800;font-size:13px;cursor:pointer">Details</button></div>
+                <div dir="ltr" style="height:130px;display:flex;align-items:flex-end;gap:10px;position:relative;padding-top:18px">
+                  <span style="position:absolute;left:0;right:0;bottom:{{ targetBottom }};border-top:2px dashed var(--ok)"></span>
+                  <sc-for list="{{ bars }}" as="b" hint-placeholder-count="5">
+                    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end"><span style="font-size:12px;font-weight:800">{{ b.v }}</span><div style="width:100%;max-width:34px;height:{{ b.h }};border-radius:10px 10px 6px 6px;background:{{ b.bg }}"></div><span style="font-size:10px;color:var(--mut);font-weight:700">{{ b.d }}</span></div>
+                  </sc-for>
+                </div>
+                <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--ok)"><span style="width:16px;border-top:2px dashed var(--ok)"></span>Target 7.0</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <b style="font-size:16px">{{ t.weak }}</b>
+                <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+                  <sc-for list="{{ weak }}" as="w" hint-placeholder-count="3">
+                    <div style="padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;border-top:{{ w.border }}"><span style="font-size:14px;font-weight:700">{{ w.name }}</span><span style="font-size:13px;font-weight:800;color:var(--warn)">{{ w.pct }}%</span><div style="grid-column:1 / -1;height:6px;border-radius:99px;box-shadow:var(--inset);overflow:hidden"><div style="height:100%;width:{{ w.w }};background:var(--warn);border-radius:99px"></div></div></div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:16px">{{ t.recent }}</b><button onClick="{{ goMocks }}" style="border:0;background:transparent;color:var(--blue);font-weight:800;font-size:13px;cursor:pointer">All</button></div>
+                <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+                  <sc-for list="{{ recent }}" as="m" hint-placeholder-count="3">
+                    <button onClick="{{ m.go }}" style="width:100%;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:14px 16px;display:flex;align-items:center;gap:12px;border-top:{{ m.border }};text-align:start">
+                      <span style="width:40px;height:40px;border-radius:12px;box-shadow:var(--inset);display:grid;place-items:center;font-size:10px;font-weight:800;color:{{ m.color }};flex:none">{{ m.exam }}</span>
+                      <span style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0"><b style="font-size:14px">{{ m.name }}</b><span style="font-size:12px;color:var(--mut);font-weight:600">{{ m.meta }}</span></span>
+                      <b style="font-size:17px;color:{{ m.scoreColor }}">{{ m.score }}</b>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_mocks }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:4px 16px 24px;display:flex;flex-direction:column;gap:16px">
+            <h1 style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em">{{ t.mocks }}</h1>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:5px;border-radius:16px;box-shadow:var(--inset)">
+              <sc-for list="{{ mockTabs }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.pick }}" style="height:42px;border-radius:12px;border:0;cursor:pointer;font-weight:800;font-size:14px;background:var(--bg);color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for>
+            </div>
+            <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+              <sc-for list="{{ mockList }}" as="m" hint-placeholder-count="4">
+                <button onClick="{{ m.go }}" style="width:100%;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:16px;display:flex;align-items:center;gap:12px;border-top:{{ m.border }};text-align:start">
+                  <span style="width:40px;height:40px;border-radius:12px;box-shadow:var(--inset);display:grid;place-items:center;font-size:10px;font-weight:800;color:{{ m.color }};flex:none">{{ m.exam }}</span>
+                  <span style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0"><b style="font-size:15px">{{ m.name }}</b><span style="font-size:12px;color:var(--mut);font-weight:600">{{ m.meta }}</span></span>
+                  <span style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><b style="font-size:17px">{{ m.score }}</b><span style="font-size:12px;font-weight:800;color:{{ m.actColor }}">{{ m.action }}</span></span>
+                </button>
+              </sc-for>
+            </div>
+            <button onClick="{{ goStart }}" style="height:52px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--blue);font-weight:800;font-size:15px;cursor:pointer">New mock</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_progress }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:4px 16px 24px;display:flex;flex-direction:column;gap:18px">
+            <h1 style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em">{{ t.progressTab }}</h1>
+            <div style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:4px 16px">
+              <sc-for list="{{ secTabs }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.pick }}" style="flex:none;height:38px;padding:0 16px;border-radius:999px;border:0;cursor:pointer;font-weight:800;font-size:13px;background:{{ o.bg }};color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for>
+            </div>
+            <div style="border-radius:24px;box-shadow:var(--raise);padding:18px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:baseline;gap:10px"><span style="font-size:40px;font-weight:800;letter-spacing:-0.04em">{{ secLatest }}</span><span style="font-size:13px;font-weight:800;color:var(--ok)">{{ secDelta }}</span></div>
+              <div dir="ltr" style="height:150px;display:flex;align-items:flex-end;gap:10px;position:relative;padding-top:18px">
+                <span style="position:absolute;left:0;right:0;bottom:{{ targetBottom }};border-top:2px dashed var(--ok)"></span>
+                <sc-for list="{{ bars }}" as="b" hint-placeholder-count="5"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end"><span style="font-size:12px;font-weight:800">{{ b.v }}</span><div style="width:100%;max-width:34px;height:{{ b.h }};border-radius:10px 10px 6px 6px;background:{{ b.bg }}"></div><span style="font-size:10px;color:var(--mut);font-weight:700">{{ b.d }}</span></div></sc-for>
+              </div>
+            </div>
+            <b style="font-size:16px">History</b>
+            <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+              <sc-for list="{{ history }}" as="h" hint-placeholder-count="5"><div style="padding:14px 16px;display:flex;align-items:center;gap:12px;border-top:{{ h.border }}"><span style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:14px">{{ h.name }}</b><span style="font-size:12px;color:var(--mut);font-weight:600">{{ h.date }}</span></span><b style="font-size:16px">{{ h.v }}</b></div></sc-for>
+            </div>
+            <div style="border-radius:20px;background:var(--aiBg);padding:18px;display:flex;flex-direction:column;gap:8px"><b style="font-size:14px;color:var(--ai)">Recommended this week</b><span style="font-size:14px;line-height:1.55">3 True / False / Not Given sets, then a Reading-only mock on Saturday.</span></div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_profile }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:4px 16px 32px;display:flex;flex-direction:column;gap:20px">
+            <div style="display:flex;align-items:center;gap:14px;padding-top:8px">
+              <span style="width:64px;height:64px;border-radius:50%;box-shadow:var(--raise);display:grid;place-items:center;font-weight:800;font-size:24px;color:var(--blue)">D</span>
+              <span style="display:flex;flex-direction:column;gap:2px"><b style="font-size:20px">Dilnoza Rakhimova</b><span style="font-size:13px;color:var(--mut);font-weight:600">dilnoza@example.com</span></span>
+            </div>
+            <sc-for list="{{ settingGroups }}" as="g" hint-placeholder-count="4">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:12px;font-weight:800;color:var(--mut);letter-spacing:.06em;padding:0 4px">{{ g.title }}</span>
+                <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+                  <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="3">
+                    <button onClick="{{ r.go }}" style="width:100%;min-height:54px;border:0;border-top:{{ r.border }};background:transparent;cursor:pointer;color:{{ r.color }};padding:0 16px;display:flex;align-items:center;gap:12px;text-align:start">
+                      <span style="flex:1;font-weight:700;font-size:15px">{{ r.label }}</span>
+                      <sc-if value="{{ r.hasValue }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;color:var(--mut);font-weight:700">{{ r.value }}</span></sc-if>
+                      <sc-if value="{{ r.isToggle }}" hint-placeholder-val="{{ false }}"><span style="width:50px;height:30px;border-radius:99px;padding:3px;display:flex;justify-content:{{ r.justify }};background:{{ r.track }};box-shadow:var(--inset)"><span style="width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2)"></span></span></sc-if>
+                      <sc-if value="{{ r.hasChev }}" hint-placeholder-val="{{ true }}"><span style="width:8px;height:8px;border-inline-end:2px solid var(--mut);border-top:2px solid var(--mut);transform:rotate({{ chevFwd }})"></span></sc-if>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+            <span style="font-size:11px;color:var(--mut);text-align:center;line-height:1.5">Eduvo Mock · v1.0 · Practice test — not an official certificate.</span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_start }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:8px 16px 24px;display:flex;flex-direction:column;gap:18px">
+            <div style="border-radius:24px;box-shadow:var(--raise);padding:18px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:800;letter-spacing:.05em;color:var(--ielts)">IELTS ACADEMIC</span><span style="padding:3px 9px;border-radius:999px;background:var(--okBg);color:var(--ok);font-size:11px;font-weight:800">Free section</span></div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ startSecs }}" as="s" hint-placeholder-count="3">
+                  <button onClick="{{ s.pick }}" style="min-height:60px;border-radius:16px;border:0;cursor:pointer;background:var(--bg);box-shadow:{{ s.shadow }};outline:{{ s.outline }};outline-offset:-2px;color:var(--ink);padding:12px 14px;display:flex;align-items:center;gap:12px;text-align:start">
+                    <span style="width:20px;height:20px;border-radius:50%;border:2px solid {{ s.ring }};display:grid;place-items:center;flex:none"><span style="width:9px;height:9px;border-radius:50%;background:{{ s.dot }}"></span></span>
+                    <span style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:15px">{{ s.name }}</b><span style="font-size:12px;color:var(--mut);font-weight:600">{{ s.meta }}</span></span>
+                    <b style="font-size:13px">{{ s.time }}</b>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="border-radius:24px;box-shadow:var(--inset);padding:22px 18px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center">
+              <div style="display:flex;flex-direction:column;align-items:center"><span style="width:96px;height:62px;border-radius:8px;border:4px solid var(--ink2)"></span><span style="width:124px;height:8px;border-radius:0 0 8px 8px;background:var(--ink2)"></span></div>
+              <b style="font-size:19px;margin-top:6px">Open on a computer to take the test</b>
+              <span style="font-size:14px;color:var(--ink2);line-height:1.55">The exam runs on a laptop or desktop, like the real computer-based test. Your choice is saved for 7 days.</span>
+              <span style="padding:10px 12px;border-radius:12px;background:var(--bg);box-shadow:var(--raise-sm);font-size:13px;font-weight:700;color:var(--ink2);word-break:break-all" dir="ltr">mock.eduvo.uz/en/start/IA-0142</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_results }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:8px 16px 0;display:flex;flex-direction:column;gap:16px">
+            <div style="border-radius:24px;box-shadow:var(--raise);padding:20px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:800;letter-spacing:.05em;color:var(--ielts)">IELTS ACADEMIC</span><span style="padding:4px 10px;border-radius:999px;background:var(--okBg);color:var(--ok);font-size:12px;font-weight:800">CEFR B2</span></div>
+              <div style="display:flex;align-items:baseline;gap:10px"><span style="font-size:76px;font-weight:800;letter-spacing:-0.05em;line-height:.95">6.5</span><span style="font-size:14px;color:var(--mut);font-weight:700">overall band</span></div>
+              <span style="font-size:13px;color:var(--ink2);font-weight:600">Full mock IA-0142 · 12 Oct 2026 · target 7.0</span>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+                <div style="padding:12px;border-radius:16px;box-shadow:var(--inset);display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;font-weight:700;color:var(--ink2)">Listening</span><b style="font-size:22px">7.0</b><span style="font-size:10px;color:var(--mut);font-weight:700">32 of 40</span></div>
+                <div style="padding:12px;border-radius:16px;box-shadow:var(--inset);display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;font-weight:700;color:var(--ink2)">Reading</span><b style="font-size:22px">6.5</b><span style="font-size:10px;color:var(--mut);font-weight:700">28 of 40</span></div>
+                <div style="padding:12px;border-radius:16px;box-shadow:var(--inset);display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;font-weight:700;color:var(--ink2);display:flex;gap:4px;align-items:center">Writing<span style="padding:1px 5px;border-radius:5px;background:var(--aiBg);color:var(--ai);font-size:9px;font-weight:800">AI</span></span><b style="font-size:22px">6.0</b><span style="font-size:10px;color:var(--mut);font-weight:700">2 tasks</span></div>
+              </div>
+            </div>
+            <div style="position:sticky;top:0;z-index:3;background:var(--bg);padding:8px 0">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:5px;border-radius:16px;box-shadow:var(--inset)">
+                <sc-for list="{{ resTabs }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="height:40px;border-radius:12px;border:0;cursor:pointer;font-weight:800;font-size:13px;background:var(--bg);color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for>
+              </div>
+            </div>
+            <sc-if value="{{ rOverview }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:16px;padding-bottom:24px">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                  <div style="padding:14px;border-radius:16px;background:var(--okBg);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:800;color:var(--ok)">STRONGEST</span><b style="font-size:14px;line-height:1.3">Sentence completion</b></div>
+                  <div style="padding:14px;border-radius:16px;background:var(--warnBg);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:800;color:var(--warn)">NEEDS PRACTICE</span><b style="font-size:14px;line-height:1.3">True / False / Not Given</b></div>
+                </div>
+                <div style="border-radius:20px;box-shadow:var(--raise);padding:16px;display:flex;flex-direction:column;gap:12px">
+                  <b style="font-size:15px">Accuracy by question type</b>
+                  <sc-for list="{{ acc }}" as="a" hint-placeholder-count="6"><div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center"><span style="font-size:13px;font-weight:600;color:var(--ink2)">{{ a.name }}</span><span style="font-size:12px;font-weight:800">{{ a.frac }}</span><div style="grid-column:1 / -1;height:7px;border-radius:99px;box-shadow:var(--inset);overflow:hidden"><div style="height:100%;width:{{ a.w }};border-radius:99px;background:{{ a.color }}"></div></div></div></sc-for>
+                </div>
+                <div style="border-radius:20px;box-shadow:var(--raise);padding:16px;display:flex;flex-direction:column;gap:12px">
+                  <b style="font-size:15px">Next steps</b>
+                  <sc-for list="{{ nextSteps }}" as="n" hint-placeholder-count="3"><div style="display:flex;gap:12px"><span style="width:26px;height:26px;border-radius:8px;box-shadow:var(--inset);display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--blue);flex:none">{{ n.n }}</span><span style="font-size:14px;line-height:1.5">{{ n.text }}</span></div></sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ rWriting }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:14px;padding-bottom:24px">
+                <div style="display:flex;gap:6px"><sc-for list="{{ wTabs }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.pick }}" style="height:38px;padding:0 16px;border-radius:999px;border:0;cursor:pointer;font-weight:800;font-size:13px;background:{{ o.bg }};color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for><span style="margin-inline-start:auto;padding:4px 9px;border-radius:7px;background:var(--aiBg);color:var(--ai);font-size:12px;font-weight:800;align-self:center">AI</span></div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between"><b style="font-size:15px">{{ essay.prompt }}</b><b style="font-size:28px">{{ essay.band }}</b></div>
+                <sc-for list="{{ essay.crit }}" as="c" hint-placeholder-count="4">
+                  <div style="border-radius:16px;box-shadow:var(--raise-sm);padding:14px;display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:14px">{{ c.name }}</b><b style="font-size:17px">{{ c.score }}</b></div><span style="font-size:13px;color:var(--ink2);line-height:1.55">{{ c.fb }}</span></div>
+                </sc-for>
+                <button onClick="{{ toggleEssay }}" style="min-height:52px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--inset);color:var(--ink);font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:0 16px"><span>{{ essayLabel }}</span><span style="color:var(--mut);font-weight:700">{{ essay.words }} words</span></button>
+                <sc-if value="{{ essayOpen }}" hint-placeholder-val="{{ false }}"><div dir="ltr" lang="en" style="padding:18px;border-radius:16px;background:var(--paper);font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.7;white-space:pre-line">{{ essay.text }}</div></sc-if>
+                <div style="padding:16px;border-radius:16px;background:var(--okBg);display:flex;flex-direction:column;gap:6px"><b style="font-size:13px;color:var(--ok)">Strengths</b><sc-for list="{{ essay.good }}" as="g" hint-placeholder-count="2"><span style="font-size:14px;line-height:1.5">{{ g }}</span></sc-for></div>
+                <div style="padding:16px;border-radius:16px;background:var(--aiBg);display:flex;flex-direction:column;gap:6px"><b style="font-size:13px;color:var(--ai)">Next steps</b><sc-for list="{{ essay.todo }}" as="g" hint-placeholder-count="2"><span style="font-size:14px;line-height:1.5">{{ g }}</span></sc-for></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ rReview }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:12px;padding-bottom:24px">
+                <div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ revChips }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.pick }}" style="height:36px;padding:0 14px;border-radius:999px;border:0;cursor:pointer;font-weight:800;font-size:13px;background:{{ o.bg }};color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for></div>
+                <span style="font-size:12px;color:var(--mut);font-weight:700">Reading · Passage 1 · tap a question for the explanation</span>
+                <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+                  <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+                    <button onClick="{{ r.open }}" style="width:100%;border:0;border-top:{{ r.border }};background:transparent;cursor:pointer;color:var(--ink);padding:14px 16px;display:flex;align-items:center;gap:12px;text-align:start">
+                      <span style="width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:13px;background:{{ r.bg }};color:{{ r.fg }};flex:none">{{ r.n }}</span>
+                      <span style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:14px;font-weight:700;line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">{{ r.q }}</span><span style="font-size:12px;color:var(--mut);font-weight:600">{{ r.type }}</span></span>
+                      <span style="font-size:12px;font-weight:800;color:{{ r.fg }}">{{ r.status }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_pricing }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:8px 16px 24px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:5px;border-radius:16px;box-shadow:var(--inset)"><sc-for list="{{ pExams }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.pick }}" style="height:42px;border-radius:12px;border:0;cursor:pointer;font-weight:800;font-size:14px;background:var(--bg);color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for></div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:14px;box-shadow:var(--inset)"><sc-for list="{{ pModels }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.pick }}" style="height:36px;border-radius:10px;border:0;cursor:pointer;font-weight:700;font-size:12px;background:var(--bg);color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for></div>
+              <select value="{{ cur }}" onChange="{{ setCur }}" style="height:44px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;font-size:13px;padding:0 10px"><option>UZS</option><option>USD</option><option>EUR</option></select>
+            </div>
+            <div style="border-radius:16px;padding:14px 16px;background:var(--okBg);display:flex;align-items:center;gap:10px"><span style="flex:1;font-size:13px;font-weight:700;line-height:1.4"><b style="color:var(--ok)">Free</b> · one {{ pExamName }} section on us</span><button onClick="{{ goStart }}" style="border:0;background:transparent;color:var(--ok);font-weight:800;font-size:13px;cursor:pointer">Start</button></div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ plans }}" as="p" hint-placeholder-count="5">
+                <button onClick="{{ p.pick }}" style="min-height:72px;border-radius:20px;border:0;cursor:pointer;background:var(--bg);box-shadow:{{ p.shadow }};outline:{{ p.outline }};outline-offset:-2px;color:var(--ink);padding:14px 16px;display:flex;align-items:center;gap:14px;text-align:start">
+                  <span style="width:22px;height:22px;border-radius:50%;border:2px solid {{ p.ring }};display:grid;place-items:center;flex:none"><span style="width:10px;height:10px;border-radius:50%;background:{{ p.dot }}"></span></span>
+                  <span style="flex:1;display:flex;flex-direction:column;gap:3px;min-width:0"><span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><b style="font-size:15px">{{ p.name }}</b><sc-if value="{{ p.badge }}" hint-placeholder-val="{{ false }}"><span style="padding:2px 8px;border-radius:999px;background:var(--blue);color:#fff;font-size:10px;font-weight:800">{{ p.badge }}</span></sc-if></span><span style="font-size:12px;color:var(--mut);font-weight:600">{{ p.note }}</span></span>
+                  <b style="font-size:15px;white-space:nowrap">{{ p.price }}</b>
+                </button>
+              </sc-for>
+            </div>
+            <div style="border-radius:20px;box-shadow:var(--inset);padding:16px;display:flex;flex-direction:column;gap:10px">
+              <b style="font-size:14px">Every option includes</b>
+              <sc-for list="{{ includes }}" as="i" hint-placeholder-count="5"><span style="display:flex;gap:10px;font-size:14px;color:var(--ink2)"><span style="width:6px;height:6px;border-radius:50%;background:var(--blue);margin-top:7px;flex:none"></span>{{ i }}</span></sc-for>
+            </div>
+            <span style="font-size:12px;color:var(--mut);line-height:1.5">Prices include taxes. Credits are valid for 12 months.</span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_checkout }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:8px 16px 24px;display:flex;flex-direction:column;gap:16px">
+            <div style="border-radius:20px;box-shadow:var(--raise);padding:16px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;justify-content:space-between;gap:12px"><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;font-weight:800;color:var(--ielts);letter-spacing:.05em">{{ coExam }}</span><b style="font-size:16px">{{ coPlan }}</b><span style="font-size:12px;color:var(--mut);font-weight:600">{{ coNote }}</span></span><b style="font-size:16px;white-space:nowrap">{{ coSubtotal }}</b></div>
+              <div style="display:flex;gap:8px"><input value="{{ promo }}" onChange="{{ setPromo }}" placeholder="Promo code" style="flex:1;min-width:0;height:46px;border-radius:14px;border:0;background:var(--bg);box-shadow:{{ promoShadow }};padding:0 14px;color:var(--ink);font-size:15px;font-weight:700;outline:none;text-transform:uppercase" /><button onClick="{{ applyPromo }}" style="height:46px;padding:0 14px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--blue);font-weight:800;font-size:14px;cursor:pointer">Apply</button></div>
+              <sc-if value="{{ promoOk }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;font-weight:700;color:var(--ok)">EDUVO10 · −{{ coDiscount }}</span></sc-if>
+              <sc-if value="{{ promoBad }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;font-weight:700;color:var(--err)">This code isn’t valid. Try EDUVO10.</span></sc-if>
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2)"><span>Taxes</span><span>Included</span></div>
+            </div>
+            <b style="font-size:16px">Pay with</b>
+            <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+              <sc-for list="{{ payMethods }}" as="m" hint-placeholder-count="5">
+                <button onClick="{{ m.pick }}" style="width:100%;min-height:58px;border:0;border-top:{{ m.border }};background:transparent;cursor:pointer;color:var(--ink);padding:0 16px;display:flex;align-items:center;gap:12px;text-align:start">
+                  <span style="width:40px;height:28px;border-radius:7px;flex:none;background:repeating-linear-gradient(135deg,var(--hover) 0 5px,transparent 5px 10px);box-shadow:var(--inset)"></span>
+                  <span style="flex:1;display:flex;flex-direction:column;gap:1px"><b style="font-size:15px">{{ m.name }}</b><span style="font-size:12px;color:var(--mut);font-weight:600">{{ m.note }}</span></span>
+                  <span style="width:22px;height:22px;border-radius:50%;border:2px solid {{ m.ring }};display:grid;place-items:center"><span style="width:10px;height:10px;border-radius:50%;background:{{ m.dot }}"></span></span>
+                </button>
+              </sc-for>
+            </div>
+            <sc-if value="{{ payCard }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <input value="{{ card }}" onChange="{{ setCard }}" inputMode="numeric" placeholder="Card number" dir="ltr" style="height:54px;border-radius:16px;border:0;background:var(--bg);box-shadow:{{ cardShadow }};padding:0 16px;color:var(--ink);font-size:16px;font-weight:700;outline:none;letter-spacing:.04em" />
+                <sc-if value="{{ cardErr }}" hint-placeholder-val="{{ false }}"><span style="color:var(--err);font-size:12px;font-weight:600">Enter all 16 digits of your card number.</span></sc-if>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><input placeholder="MM / YY" inputMode="numeric" dir="ltr" style="height:54px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 16px;color:var(--ink);font-size:16px;outline:none;min-width:0" /><input placeholder="CVC" inputMode="numeric" dir="ltr" style="height:54px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 16px;color:var(--ink);font-size:16px;outline:none;min-width:0" /></div>
+              </div>
+            </sc-if>
+            <span style="font-size:12px;color:var(--mut);line-height:1.5">Local providers are to be confirmed. You return here after paying.</span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_payresult }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:48px 24px 24px;display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center">
+            <span style="width:88px;height:88px;border-radius:50%;background:{{ prBg }};display:grid;place-items:center"><span style="width:{{ prMarkW }};height:{{ prMarkH }};border-bottom:5px solid {{ prFg }};border-inline-end:5px solid {{ prFg }};transform:rotate({{ prMarkRot }});margin-top:-8px;border-radius:2px"></span></span>
+            <span style="padding:5px 12px;border-radius:999px;background:{{ prBg }};color:{{ prFg }};font-size:12px;font-weight:800">{{ prTag }}</span>
+            <h1 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;line-height:1.2">{{ prTitle }}</h1>
+            <span style="color:var(--ink2);font-size:15px;line-height:1.6">{{ prBody }}</span>
+            <sc-if value="{{ prSuccess }}" hint-placeholder-val="{{ true }}">
+              <div style="width:100%;border-radius:20px;box-shadow:var(--inset);padding:16px;display:flex;flex-direction:column;gap:8px;font-size:13px;text-align:start;margin-top:8px">
+                <div style="display:flex;justify-content:space-between;font-weight:800"><span>Receipt EM-2026-10-04187</span><span style="color:var(--blue)">PDF</span></div>
+                <div style="display:flex;justify-content:space-between;color:var(--ink2)"><span>{{ coPlan }}</span><span>{{ coSubtotal }}</span></div>
+                <div style="display:flex;justify-content:space-between;color:var(--ink2)"><span>Taxes</span><span>Included</span></div>
+                <div style="display:flex;justify-content:space-between;font-weight:800;padding-top:8px;border-top:1px solid var(--line)"><span>Paid</span><span>{{ coTotal }}</span></div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ hasCta }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:none;padding:12px 16px {{ ctaPadB }};background:var(--bar);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;gap:10px;position:relative;z-index:4">
+          <sc-if value="{{ hasCta2 }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ cta2 }}" style="flex:{{ cta2Flex }};height:54px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;font-size:15px;cursor:pointer;white-space:nowrap;padding:0 14px">{{ cta2Label }}</button>
+          </sc-if>
+          <button onClick="{{ cta }}" style="flex:1;height:54px;border-radius:16px;border:0;background:{{ ctaBg }};color:#fff;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 10px 22px -12px rgba(46,107,230,.9);display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;padding:0 14px">
+            <sc-if value="{{ ctaBusy }}" hint-placeholder-val="{{ false }}"><span style="width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .8s linear infinite"></span></sc-if>{{ ctaLabel }}
+          </button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ hasTabs }}" hint-placeholder-val="{{ false }}">
+        <nav style="flex:none;display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px {{ tabPadB }};background:var(--bar);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);position:relative;z-index:4">
+          <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="4">
+            <button onClick="{{ tb.go }}" style="height:54px;border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:{{ tb.color }};font-weight:800;font-size:11px">
+              <span style="width:44px;height:28px;border-radius:12px;display:grid;place-items:center;box-shadow:{{ tb.shadow }}">
+                <sc-if value="{{ tb.iHome }}" hint-placeholder-val="{{ false }}"><span style="width:16px;height:15px;border:2.2px solid currentColor;border-radius:4px 4px 3px 3px"></span></sc-if>
+                <sc-if value="{{ tb.iMocks }}" hint-placeholder-val="{{ false }}"><span style="width:14px;height:18px;border:2.2px solid currentColor;border-radius:3px;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:0 2px"><span style="height:2px;background:currentColor;border-radius:1px"></span><span style="height:2px;background:currentColor;border-radius:1px;width:60%"></span></span></sc-if>
+                <sc-if value="{{ tb.iProg }}" hint-placeholder-val="{{ false }}"><span style="display:flex;gap:3px;align-items:flex-end;height:16px"><span style="width:4px;height:7px;border-radius:2px;background:currentColor"></span><span style="width:4px;height:11px;border-radius:2px;background:currentColor"></span><span style="width:4px;height:16px;border-radius:2px;background:currentColor"></span></span></sc-if>
+                <sc-if value="{{ tb.iProf }}" hint-placeholder-val="{{ false }}"><span style="display:flex;flex-direction:column;align-items:center;gap:1px"><span style="width:8px;height:8px;border-radius:50%;border:2.2px solid currentColor"></span><span style="width:15px;height:7px;border:2.2px solid currentColor;border-bottom:0;border-radius:8px 8px 0 0"></span></span></sc-if>
+              </span>
+              {{ tb.label }}
+            </button>
+          </sc-for>
+        </nav>
+      </sc-if>
+
+      <sc-if value="{{ framed }}" hint-placeholder-val="{{ true }}">
+        <span style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:var(--ink);opacity:.85;z-index:20;pointer-events:none"></span>
+      </sc-if>
+
+      <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ closeSheet }}" style="position:absolute;inset:0;background:rgba(10,15,25,.45);z-index:30;animation:fadeIn .2s"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;max-height:86%;z-index:31;background:var(--bg);border-radius:28px 28px 0 0;display:flex;flex-direction:column;animation:sheetUp .28s cubic-bezier(.2,.8,.2,1);box-shadow:0 -10px 40px -10px rgba(0,0,0,.3)">
+          <div style="display:flex;justify-content:center;padding:10px 0 4px"><span style="width:40px;height:5px;border-radius:3px;background:var(--line)"></span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 20px 12px"><b style="font-size:18px">{{ sheetTitle }}</b><button onClick="{{ closeSheet }}" style="height:36px;padding:0 12px;border-radius:12px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink2);font-weight:800;font-size:13px;cursor:pointer">Done</button></div>
+          <div style="overflow-y:auto;scrollbar-width:none;padding:0 20px 28px;display:flex;flex-direction:column;gap:14px">
+            <sc-if value="{{ shLang }}" hint-placeholder-val="{{ false }}">
+              <input value="{{ q }}" onChange="{{ setQ }}" placeholder="Search language" style="height:48px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--inset);padding:0 14px;color:var(--ink);font-size:16px;outline:none" />
+              <div style="border-radius:20px;box-shadow:var(--raise);overflow:hidden">
+                <sc-for list="{{ langs }}" as="l" hint-placeholder-count="12">
+                  <button onClick="{{ l.pick }}" lang="{{ l.code }}" style="width:100%;min-height:52px;border:0;border-top:{{ l.border }};background:transparent;cursor:pointer;color:var(--ink);padding:0 16px;display:flex;align-items:center;gap:10px;text-align:start">
+                    <span dir="{{ l.dir }}" style="flex:1;font-weight:700;font-size:15px;text-align:start">{{ l.name }}</span><span style="font-size:11px;color:var(--mut);font-weight:800">{{ l.tag }}</span>
+                    <span style="width:20px;height:20px;border-radius:50%;border:2px solid {{ l.ring }};display:grid;place-items:center"><span style="width:9px;height:9px;border-radius:50%;background:{{ l.dot }}"></span></span>
+                  </button>
+                </sc-for>
+              </div>
+              <span style="font-size:12px;color:var(--mut)">Exam content stays in English.</span>
+            </sc-if>
+            <sc-if value="{{ shShare }}" hint-placeholder-val="{{ false }}">
+              <div style="aspect-ratio:1/1;border-radius:24px;background:linear-gradient(160deg,#5B8DEF,#2E6BE6);color:#fff;padding:24px;display:flex;flex-direction:column;justify-content:space-between">
+                <span style="font-weight:800;font-size:14px;display:flex;gap:8px;align-items:center"><span style="width:24px;height:24px;border-radius:7px;background:#fff;color:#2E6BE6;display:grid;place-items:center;font-size:12px">e</span>Eduvo Mock</span>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;font-weight:700">IELTS Academic · Overall band</span><span style="font-size:88px;font-weight:800;letter-spacing:-0.05em;line-height:1">6.5</span><span style="font-size:13px;font-weight:700">CEFR B2 · L 7.0 · R 6.5 · W 6.0</span></div>
+                <span style="font-size:11px">mock.eduvo.uz · Practice test</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+                <button onClick="{{ shareDone }}" style="height:64px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;font-size:12px;cursor:pointer">Save image</button>
+                <button onClick="{{ shareDone }}" style="height:64px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;font-size:12px;cursor:pointer">Telegram</button>
+                <button onClick="{{ shareDone }}" style="height:64px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;font-size:12px;cursor:pointer">Copy link</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ shQ }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:15px;font-weight:700;line-height:1.5">{{ sq.q }}</span>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div style="padding:12px;border-radius:14px;box-shadow:var(--inset);display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;font-weight:800;color:var(--mut)">YOUR ANSWER</span><b style="font-size:15px;color:{{ sq.yc }}">{{ sq.yours }}</b></div>
+                <div style="padding:12px;border-radius:14px;box-shadow:var(--inset);display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;font-weight:800;color:var(--mut)">CORRECT</span><b style="font-size:15px;color:var(--ok)">{{ sq.correct }}</b></div>
+              </div>
+              <span style="font-size:14px;line-height:1.6;color:var(--ink2)">{{ sq.why }}</span>
+              <span style="font-size:12px;font-weight:800;color:var(--mut)">IN THE TEXT · PARAGRAPH {{ sq.para }}</span>
+              <div dir="ltr" lang="en" style="padding:14px;border-radius:14px;background:var(--paper);font-family:'Source Serif 4',serif;font-size:16px;line-height:1.65"><span style="background:#FFE9A8;color:#1E2A3A;border-radius:3px;padding:0 2px">{{ sq.ev }}</span></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><button onClick="{{ prevQ }}" style="height:48px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;cursor:pointer">Previous</button><button onClick="{{ nextQ }}" style="height:48px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;cursor:pointer">Next</button></div>
+            </sc-if>
+            <sc-if value="{{ shDelete }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:15px;line-height:1.6;color:var(--ink2)">Your mocks, results and unused credits are removed for good after 14 days. You can download your data first.</span>
+              <button onClick="{{ closeSheet }}" style="height:52px;border-radius:16px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;font-size:15px;cursor:pointer">Download my data</button>
+              <button onClick="{{ closeSheet }}" style="height:52px;border-radius:16px;border:0;background:var(--ink);color:var(--bg);font-weight:800;font-size:15px;cursor:pointer">Delete account</button>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;left:16px;right:16px;top:{{ toastTop }};z-index:40;padding:14px 16px;border-radius:16px;background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;box-shadow:0 12px 30px -10px rgba(0,0,0,.4);animation:fadeIn .2s">{{ toast }}</div>
+      </sc-if>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;landing&quot;,&quot;auth&quot;,&quot;verify&quot;,&quot;onb&quot;,&quot;home&quot;,&quot;mocks&quot;,&quot;progress&quot;,&quot;profile&quot;,&quot;start&quot;,&quot;results&quot;,&quot;pricing&quot;,&quot;checkout&quot;,&quot;payresult&quot;],&quot;default&quot;:&quot;landing&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const RTL=['ar','fa','ur','he'];
+const LANGS=[['en','English'],['uz','O‘zbekcha'],['uz-Cyrl','Ўзбекча'],['ru','Русский'],['kk','Қазақша'],['ky','Кыргызча'],['tg','Тоҷикӣ'],['tk','Türkmençe'],['tr','Türkçe'],['az','Azərbaycanca'],['ar','العربية'],['fa','فارسی'],['ur','اردو'],['he','עברית'],['hi','हिन्दी'],['bn','বাংলা'],['zh','简体中文'],['zh-Hant','繁體中文'],['ja','日本語'],['ko','한국어'],['id','Bahasa Indonesia'],['ms','Bahasa Melayu'],['vi','Tiếng Việt'],['th','ไทย'],['fil','Filipino'],['de','Deutsch'],['fr','Français'],['es','Español'],['pt','Português'],['it','Italiano'],['nl','Nederlands'],['pl','Polski'],['uk','Українська'],['ro','Română'],['cs','Čeština'],['hu','Magyar'],['el','Ελληνικά'],['sv','Svenska'],['sw','Kiswahili'],['mn','Монгол']];
+const T={
+en:{login:'Log in',h1:'Real-format IELTS and SAT mocks. Your score in minutes.',sub:'Same interface, timing and rules as the computer-delivered exam. Writing graded by AI on every criterion.',exams:'Choose your exam',how:'How it works',get:'What you get',pricing:'Pricing',faq:'Questions',startFree:'Start free',sample:'Sample',greet:'Good afternoon,',nextAction:'NEXT STEP',progress:'Band by mock',weak:'Weakest question types',recent:'Recent mocks',mocks:'My mocks',progressTab:'Progress',emptyTitle:'Start with a free section',tHome:'Home',tMocks:'Mocks',tProg:'Progress',tProf:'Profile'},
+uz:{login:'Kirish',h1:'IELTS va SAT mocklari haqiqiy formatda. Natija daqiqalarda.',sub:'Kompyuterdagi imtihon bilan bir xil interfeys, vaqt va qoidalar. Writing AI tomonidan har bir mezon bo‘yicha baholanadi.',exams:'Imtihonni tanlang',how:'Qanday ishlaydi',get:'Nimalar kiradi',pricing:'Narxlar',faq:'Savollar',startFree:'Bepul boshlash',sample:'Namuna',greet:'Xayrli kun,',nextAction:'KEYINGI QADAM',progress:'Mocklar bo‘yicha ball',weak:'Eng zaif savol turlari',recent:'So‘nggi mocklar',mocks:'Mocklarim',progressTab:'Natijalar',emptyTitle:'Bepul bo‘limdan boshlang',tHome:'Asosiy',tMocks:'Mocklar',tProg:'Natijalar',tProf:'Profil'},
+ru:{login:'Войти',h1:'Моки IELTS и SAT в реальном формате. Результат за минуты.',sub:'Тот же интерфейс, время и правила, что на компьютерном экзамене. Writing оценивает ИИ по каждому критерию.',exams:'Выберите экзамен',how:'Как это работает',get:'Что входит',pricing:'Цены',faq:'Вопросы',startFree:'Начать бесплатно',sample:'Пример',greet:'Добрый день,',nextAction:'СЛЕДУЮЩИЙ ШАГ',progress:'Балл по мокам',weak:'Слабые типы вопросов',recent:'Недавние моки',mocks:'Мои моки',progressTab:'Прогресс',emptyTitle:'Начните с бесплатного раздела',tHome:'Главная',tMocks:'Моки',tProg:'Прогресс',tProf:'Профиль'},
+ar:{login:'دخول',h1:'اختبارات IELTS وSAT تجريبية بالشكل الحقيقي. نتيجتك خلال دقائق.',sub:'الواجهة والتوقيت والقواعد نفسها كما في الاختبار المحوسب. تُقيَّم الكتابة بالذكاء الاصطناعي لكل معيار.',exams:'اختر اختبارك',how:'كيف يعمل',get:'ما ستحصل عليه',pricing:'الأسعار',faq:'الأسئلة',startFree:'ابدأ مجانًا',sample:'نموذج',greet:'مساء الخير،',nextAction:'الخطوة التالية',progress:'الدرجة في كل اختبار',weak:'أضعف أنواع الأسئلة',recent:'أحدث الاختبارات',mocks:'اختباراتي',progressTab:'التقدم',emptyTitle:'ابدأ بقسم مجاني',tHome:'الرئيسية',tMocks:'الاختبارات',tProg:'التقدم',tProf:'الملف'}};
+const PR={ielts:{section:[29000,2.49,2.29],full:[79000,6.99,6.49],b3:[199000,17.49,15.99],b5:[299000,25.99,23.99],b10:[549000,47.99,43.99],unl:[149000,12.99,11.99]},sat:{section:[35000,2.99,2.79],full:[89000,7.99,7.29],b3:[229000,19.99,18.49],b5:[339000,29.99,27.49],b10:[619000,54.99,49.99],unl:[169000,14.99,13.79]}};
+const PN={section:['One section','1 section credit'],full:['Full mock','1 full-mock credit'],b3:['3 mocks','3 full-mock credits'],b5:['5 mocks','5 full-mock credits'],b10:['10 mocks','10 full-mock credits'],unl:['Unlimited · monthly','Cancel any time']};
+const fmt=(v,c)=>c==='UZS'?Math.round(v).toLocaleString('fr-FR').replace(/\u202f|\u00a0/g,' ')+' UZS':c==='USD'?'$'+v.toFixed(2):'€'+v.toFixed(2);
+const RD=[[1,'Urban orchards were common in European cities before the 1960s.','True / False / Not Given','TRUE','TRUE','A','a practice largely abandoned in the 1960s','“Abandoned in the 1960s” means the practice existed before then.'],[2,'Malmö has published the full cost of its orchard programme.','True / False / Not Given','NOT GIVEN','FALSE','A','although no full budget has been published','The passage says no full budget has been published, so the statement contradicts it.'],[3,'Fruit could be picked freely at any time in fifteenth-century Ghent.','True / False / Not Given','FALSE','FALSE','B','fines for picking fruit before the official harvest day','Fines for early picking show it was not free at any time.'],[4,'Most volunteers surveyed had previously belonged to a community group.','True / False / Not Given','FALSE','FALSE','C','just under half had never joined a community group before','Just under half had never joined, so just over half had.'],[5,'Volunteers in Malmö are paid for pruning work.','True / False / Not Given','FALSE','NOT GIVEN','C','drawn by the chance to learn pruning and grafting','Pay is never mentioned. If the text says nothing either way, the answer is NOT GIVEN.'],[6,'Vandalism has caused less damage than planners expected.','True / False / Not Given','TRUE','TRUE','D','losses have been lower than predicted','Lower than predicted matches “less than expected”.'],[7,'Twentieth-century parks were designed mainly to be…','Multiple choice','B','B','B','places to look at rather than to use','Paragraph B contrasts looking with using.'],[8,'What attracted most volunteers?','Multiple choice','C','C','C','the chance to learn pruning and grafting','Pruning and grafting are practical skills.'],[9,'Researchers link the low level of vandalism to…','Multiple choice','C','B','D','residents help plant the trees themselves','The cause is shared ownership from planting. Fines appear in paragraph B and are about Ghent.'],[10,'Some ecologists are concerned that fruit trees…','Multiple choice','C','C','E','offer less to local insects than native hedgerow species','Fewer benefits for local insects.'],[11,'Records from Ghent mention ______ for picking fruit early.','Sentence completion','fines','fines','B','fines for picking fruit','Word taken directly from the passage.'],[12,'Volunteers wanted to learn pruning and ______.','Sentence completion','grafting trees','grafting','C','learn pruning and grafting','“Trees” is not in that phrase, so the answer changes the meaning and is marked wrong.'],[13,'Uncollected fruit can attract wasps and ______.','Sentence completion','rats','rats','E','attract wasps and rats','Exact word from paragraph E.']].map(r=>({n:r[0],q:r[1],type:r[2],yours:r[3],correct:r[4],para:r[5],ev:r[6],why:r[7]}));
+const ESSAYS=[{prompt:'Task 1 · Car ownership',words:176,band:'6.0',text:'The line graph compares the proportion of households that owned at least one car in Germany, Poland and Turkey over a thirty-year period from 1990.\n\nOverall, car ownership rose in all three countries, although Germany remained far ahead throughout.\n\nIn 1990 around 70% of German households had a car, compared with roughly 35% in Poland and only 15% in Turkey.',crit:[['Task Achievement','6.0','Clear overview and key figures. Some data is listed rather than compared.'],['Coherence and Cohesion','6.5','Logical paragraphing. Linking is accurate but repetitive.'],['Lexical Resource','6.0','Adequate range for trends. Try “a steady climb”, “narrowed the gap”.'],['Grammatical Range and Accuracy','6.0','Mostly accurate simple and compound sentences.']],good:['A clear overview sentence.','Figures are accurate.'],todo:['Compare countries in the same sentence.','Use one relative clause per paragraph.']},
+{prompt:'Task 2 · Parks or roads?',words:268,band:'6.0',text:'Many cities face a choice between building new roads and creating more public parks. In my opinion, parks should usually come first, although some road investment is still necessary.\n\nThe main reason is health. When people have green space near their homes, they walk more and feel less stressed. In Tashkent, for example, the new parks along the canals are full of families every evening.\n\nOn the other hand, roads are important for the economy.',crit:[['Task Response','6.0','Position is clear. The roads argument needs a concrete example.'],['Coherence and Cohesion','6.0','Each paragraph has one idea. Signal the turn in paragraph 4 more clearly.'],['Lexical Resource','6.0','Several words repeat (“roads” ×9); vary with “infrastructure”.'],['Grammatical Range and Accuracy','6.5','Good control of conditionals.']],good:['A clear opinion, repeated in the conclusion.','A specific local example.'],todo:['Add one example to the roads paragraph.','Plan in two minutes: opinion, two reasons, one counter-argument.']}];
+const DATA={overall:[5.5,6.0,6.0,6.5,6.5],listening:[6.0,6.5,6.5,7.0,7.0],reading:[5.5,6.0,6.0,6.0,6.5],writing:[5.0,5.5,5.5,6.0,6.0]};
+const DATES=['Jul','Aug','Aug','Sep','Oct'];
+const TABS=['home','mocks','progress','profile'];
+function readPrefs(){const q=new URLSearchParams(location.search);let s={};try{s=JSON.parse(localStorage.getItem('eduvo-mock-prefs')||'{}')}catch(e){}return{theme:q.get('theme')||s.theme||'light',lang:q.get('lang')||s.lang||'en'}}
+function savePrefs(p){let s={};try{s=JSON.parse(localStorage.getItem('eduvo-mock-prefs')||'{}')}catch(e){}localStorage.setItem('eduvo-mock-prefs',JSON.stringify({...s,...p}));window.dispatchEvent(new Event('eduvo-prefs'))}
+class Component extends DCLogic {
+  constructor(p){super(p);const q=new URLSearchParams(location.search);
+    this.state={...readPrefs(),w:window.innerWidth,h:window.innerHeight,bare:q.get('bare')==='1',stack:[q.get('screen')||this.props.screen||'landing'],sheet:null,q:'',toast:'',faq:0,notified:{},
+      email:'',pw:'',tried:false,authMode:'signup',resent:false,step:0,exam:'ielts',target:'7.0',date:'2026-12-12',noDate:false,
+      empty:q.get('empty')==='1',mockTab:'done',sec:'overall',startSec:'reading',rtab:q.get('tab')||'overview',wtab:1,essayOpen:false,filter:'all',qi:0,
+      pExam:'ielts',pModel:'per',cur:'UZS',plan:'b5',promo:'',promoState:'',method:0,card:'',cardTried:false,busy:false,payResult:q.get('pay')||'success',notif:{results:true,writing:true,tips:false}};
+    this.sRef=React.createRef();}
+  componentDidMount(){this.p=()=>this.setState(readPrefs());this.r=()=>this.setState({w:window.innerWidth,h:window.innerHeight});this.r();window.addEventListener('eduvo-prefs',this.p);window.addEventListener('resize',this.r)}
+  componentWillUnmount(){window.removeEventListener('eduvo-prefs',this.p);window.removeEventListener('resize',this.r);clearTimeout(this.tt);clearTimeout(this.pt)}
+  componentDidUpdate(){if(this._lastStack!==this.state.stack){this._lastStack=this.state.stack;if(this.sRef.current)this.sRef.current.scrollTop=0}}
+  go(s){this.setState(st=>({stack:TABS.includes(s)?[s]:[...st.stack,s],sheet:null}))}
+  back(){this.setState(st=>({stack:st.stack.length>1?st.stack.slice(0,-1):['landing']}))}
+  toastMsg(m){this.setState({toast:m});clearTimeout(this.tt);this.tt=setTimeout(()=>this.setState({toast:''}),2200)}
+  renderVals(){
+    const s=this.state,t=T[s.lang]||T.en,cur=s.stack[s.stack.length-1],rtl=RTL.includes(s.lang);
+    const framed=!s.bare&&s.w>=600;
+    const seg=(arr,v,key)=>arr.map(([k,l])=>({label:l,color:v===k?'var(--ink)':'var(--ink2)',shadow:v===k?'var(--raise-sm)':'none',pick:()=>this.setState({[key]:k})}));
+    const pill=(arr,v,key)=>arr.map(([k,l])=>({label:l,bg:v===k?'var(--ink)':'var(--bg)',color:v===k?'var(--bg)':'var(--ink2)',shadow:v===k?'none':'var(--raise-sm)',pick:()=>this.setState({[key]:k})}));
+    const radio=on=>({ring:on?'var(--blue)':'var(--mut)',dot:on?'var(--blue)':'transparent',shadow:on?'var(--inset)':'var(--raise-sm)',outline:on?'2px solid var(--blue)':'0'});
+    const bt=i=>i?'1px solid var(--line)':'0';
+    // auth
+    const emailBad=!/^\S+@\S+\.\S+$/.test(s.email),pwBad=s.pw.length<8,emailErr=s.tried&&emailBad,pwErr=s.tried&&pwBad,isLogin=s.authMode==='login';
+    // pricing
+    const ci=['UZS','USD','EUR'].indexOf(s.cur),P=PR[s.pExam];
+    const planKeys=s.pModel==='unl'?['unl']:['section','full','b3','b5','b10'];
+    const plan=planKeys.includes(s.plan)?s.plan:planKeys[0];
+    const base=P[plan][ci],pOk=s.promoState==='ok',disc=pOk?base*0.1:0;
+    const planNote=k=>k==='section'?'Listening, Reading or Writing':k==='full'?'All sections, one sitting':k==='unl'?'Mocks and sections, no limit · cancel any time':fmt(P[k][ci]/+k.slice(1),s.cur)+' per mock · 12 months';
+    // results
+    const allRows=s.filter==='wrong'?RD.filter(r=>r.yours!==r.correct):RD;
+    const curQ=allRows[Math.min(s.qi,allRows.length-1)]||RD[0];
+    const essay={...ESSAYS[s.wtab],crit:ESSAYS[s.wtab].crit.map(([name,score,fb])=>({name,score,fb}))};
+    // chart
+    const vals=DATA[s.sec],yh=v=>((v-4)/(8-4)*100);
+    const bars=vals.map((v,i)=>({v:v.toFixed(1),h:yh(v)*0.78+'%',d:DATES[i],bg:i===vals.length-1?'linear-gradient(180deg,#5B8DEF,#2E6BE6)':'var(--hover)'}));
+    // bar config per screen
+    const C={
+      landing:{logo:true,lang:true,login:true,cta:t.startFree,cta2:t.sample},
+      auth:{back:true,cta:isLogin?'Log in':'Create account'},
+      verify:{back:true,cta:'I’ve verified my email',title:'Verify email'},
+      onb:{back:s.step>0,skip:true,cta:s.step===3?'Finish':'Continue',logo:s.step===0},
+      home:{tabs:true,logo:true,lang:true},mocks:{tabs:true,logo:true,lang:true},progress:{tabs:true,logo:true,lang:true},profile:{tabs:true,logo:true,lang:true},
+      start:{back:true,title:'Free section',cta:'Email me the link',cta2:'Copy link'},
+      results:{back:true,title:'Result',share:true,cta:'Take another mock',cta2:'PDF'},
+      pricing:{back:true,title:'Pricing',cta:'Continue · '+fmt(base,s.cur)},
+      checkout:{back:true,title:'Checkout',cta:s.busy?'Confirming…':'Pay '+fmt(base-disc,s.cur)},
+      payresult:{cta:s.payResult==='failed'?'Try again':s.payResult==='pending'?'Check status':'Start a mock',cta2:s.payResult==='success'?'Home':null}}[cur]||{};
+    const ctaActs={landing:()=>{this.setState({authMode:'signup'});this.go('auth')},auth:()=>{if(emailBad||pwBad){this.setState({tried:true});return}this.setState({tried:false});if(isLogin)this.go('home');else this.go('verify')},
+      verify:()=>{this.setState({step:0});this.go('onb')},onb:()=>{if(s.step<3)this.setState({step:s.step+1});else this.setState({stack:['home']},()=>this.go('start'))},
+      start:()=>this.toastMsg('Link sent to your email'),results:()=>this.go('pricing'),pricing:()=>{this.setState({plan});this.go('checkout')},
+      checkout:()=>{if(s.method===0&&s.card.replace(/\D/g,'').length<16){this.setState({cardTried:true});return}this.setState({busy:true});this.pt=setTimeout(()=>{this.setState({busy:false});this.go('payresult')},1400)},
+      payresult:()=>{if(s.payResult==='failed')this.back();else if(s.payResult==='pending')this.setState({payResult:'success'});else this.setState({stack:['home']},()=>this.go('start'))}};
+    const cta2Acts={landing:()=>this.go('results'),start:()=>this.toastMsg('Link copied'),results:()=>this.toastMsg('Preparing your PDF…'),payresult:()=>this.setState({stack:['home']})};
+    const barTitle=C.title||(cur==='auth'?'':'');
+    const curLang=LANGS.find(l=>l[0]===s.lang)||LANGS[0];
+    const jumpList=[['Landing','landing'],['Sign up','auth'],['Verify email','verify'],['Onboarding','onb'],['Home','home'],['Home · first time','home-empty'],['Free section (phone)','start'],['Results','results'],['Results · Writing','results-writing'],['Results · Review','results-review'],['Pricing','pricing'],['Checkout','checkout'],['Payment success','pay-success'],['Payment failed','pay-failed'],['Mocks','mocks'],['Progress','progress'],['Profile','profile'],['Language sheet','sheet-lang']];
+    const doJump=k=>{const m={'home-empty':()=>this.setState({stack:['home'],empty:true,sheet:null}),'results-writing':()=>this.setState({stack:['home','results'],rtab:'writing',sheet:null}),'results-review':()=>this.setState({stack:['home','results'],rtab:'review',sheet:null}),'pay-success':()=>this.setState({stack:['pricing','checkout','payresult'],payResult:'success',sheet:null}),'pay-failed':()=>this.setState({stack:['pricing','checkout','payresult'],payResult:'failed',sheet:null}),'sheet-lang':()=>this.setState({sheet:'lang'}),home:()=>this.setState({stack:['home'],empty:false,sheet:null}),results:()=>this.setState({stack:['home','results'],rtab:'overview',sheet:null}),auth:()=>this.setState({stack:['landing','auth'],authMode:'signup',sheet:null}),onb:()=>this.setState({stack:['landing','onb'],step:0,sheet:null})};(m[k]||(()=>this.setState({stack:TABS.includes(k)||k==='landing'?[k]:['home',k],sheet:null})))()};
+    const curJump=cur==='home'&&s.empty?'home-empty':cur==='results'&&s.rtab!=='overview'?'results-'+s.rtab:cur==='payresult'?'pay-'+s.payResult:cur;
+    const pr={success:{bg:'var(--okBg)',fg:'var(--ok)',tag:'Payment received',title:PN[plan][1]+' added',body:'A receipt is on its way to dilnoza@example.com.',w:'22px',h:'40px',rot:'45deg'},failed:{bg:'var(--errBg)',fg:'var(--err)',tag:'Payment failed',title:'Your bank declined the payment',body:'No money was taken. Check the card details or try another method.',w:'0px',h:'36px',rot:'0deg'},pending:{bg:'var(--warnBg)',fg:'var(--warn)',tag:'Pending',title:'Waiting for the provider',body:'Local payments can take up to 15 minutes. We add your credits as soon as it’s confirmed.',w:'0px',h:'30px',rot:'0deg'}}[s.payResult];
+    return {theme:s.theme,lang:s.lang,dir:rtl?'rtl':'ltr',t,framed,zoom:framed?Math.min(1,Math.max(0.6,(s.h-64)/868)):1,
+      rootPad:framed?'32px':'0',rootBg:framed?(s.theme==='dark'?'#121722':'#DDE2EA'):'var(--bg)',
+      bezelPad:framed?'12px':'0',bezelR:framed?'60px':'0',bezelBg:framed?'#0E1218':'transparent',bezelShadow:framed?'0 40px 80px -30px rgba(14,18,24,.55)':'none',
+      appW:framed?'390px':'100vw',appH:framed?'844px':'100dvh',appR:framed?'48px':'0',
+      themeLabel:s.theme==='dark'?'Light theme':'Dark theme',rtlLabel:rtl?'English (LTR)':'العربية (RTL)',
+      toggleTheme:()=>savePrefs({theme:s.theme==='dark'?'light':'dark'}),toggleRtl:()=>savePrefs({lang:rtl?'en':'ar'}),
+      jump:jumpList.map(([label,k])=>({label,bg:curJump===k?'#E8ECF3':'transparent',color:curJump===k?'#2E6BE6':'#1E2A3A',go:()=>doJump(k)})),
+      showBar:true,showBack:!!C.back,showLogo:!!C.logo&&!C.back,barTitle,barLang:!!C.lang,barLogin:!!C.login,barSkip:!!C.skip,barShare:!!C.share,barLine:C.tabs||cur==='landing'?'transparent':'var(--line)',
+      chev:rtl?'-135deg':'45deg',chevFwd:rtl?'-135deg':'45deg',langShort:s.lang.slice(0,2).toUpperCase(),langName:curLang[1],
+      back:()=>{if(cur==='onb'&&s.step>0)this.setState({step:s.step-1});else this.back()},openLang:()=>this.setState({sheet:'lang',q:''}),goLogin:()=>{this.setState({authMode:'login',tried:false});this.go('auth')},
+      skipOnb:()=>this.setState({stack:['home'],empty:true}),openShare:()=>this.setState({sheet:'share'}),
+      hasCta:!!C.cta,ctaLabel:C.cta,cta:ctaActs[cur]||(()=>{}),ctaBusy:cur==='checkout'&&s.busy,ctaBg:'linear-gradient(135deg,#5B8DEF,#2E6BE6)',hasCta2:!!C.cta2,cta2Label:C.cta2,cta2:cta2Acts[cur]||(()=>{}),cta2Flex:cur==='landing'||cur==='results'||cur==='payresult'?'0 0 auto':'1',
+      ctaPadB:framed&&!C.tabs?'30px':'max(12px, env(safe-area-inset-bottom))',
+      hasTabs:!!C.tabs,tabPadB:framed?'24px':'max(6px, env(safe-area-inset-bottom))',
+      tabs:[['home',t.tHome,'iHome'],['mocks',t.tMocks,'iMocks'],['progress',t.tProg,'iProg'],['profile',t.tProf,'iProf']].map(([k,label,ic])=>({label,color:cur===k?'var(--blue)':'var(--mut)',shadow:cur===k?'var(--inset)':'none',iHome:ic==='iHome',iMocks:ic==='iMocks',iProg:ic==='iProg',iProf:ic==='iProf',go:()=>this.go(k)})),
+      s_landing:cur==='landing',s_auth:cur==='auth',s_verify:cur==='verify',s_onb:cur==='onb',s_home:cur==='home',s_mocks:cur==='mocks',s_progress:cur==='progress',s_profile:cur==='profile',s_start:cur==='start',s_results:cur==='results',s_pricing:cur==='pricing',s_checkout:cur==='checkout',s_payresult:cur==='payresult',
+      // landing
+      goSample:()=>this.go('results'),goPricing:()=>this.go('pricing'),
+      examCards:[['IELTS ACADEMIC','Listening, Reading, Writing','var(--ielts)',[['2h 40m','full mock'],['80','questions'],['0–9','band']],'79 000 UZS','ielts'],['DIGITAL SAT','Reading and Writing, Math','var(--sat)',[['2h 14m','4 modules'],['98','questions'],['1600','max']],'89 000 UZS','sat']].map(([tag,name,color,facts,price,k])=>({tag,name,color,price,facts:facts.map(([v,kk])=>({v,k:kk})),go:()=>{this.setState({pExam:k});this.go('pricing')}})),
+      soon:[['CEFR','var(--cefr)'],['TOEFL iBT','var(--toefl)'],['HSK','var(--hsk)']].map(([n,c],i)=>{const d=!!s.notified[n];return{name:n,color:c,border:bt(i),state:d?'We’ll email you at launch':'Coming soon',btn:d?'Added':'Notify me',btnColor:d?'var(--ok)':'var(--blue)',btnShadow:d?'var(--inset)':'var(--raise-sm)',notify:()=>{this.setState(st=>({notified:{...st.notified,[n]:true}}));if(!d)this.toastMsg('We’ll email you when '+n+' opens')}}}),
+      how:[['Choose your exam','Full mock or one section. Every test is new to you.'],['Sit it on a computer','Same layout, timer and rules as the real test.'],['Scores right away','Writing graded by AI within minutes.'],['Know what to practise','Weakest question types and next steps.']].map(([title,text],i)=>({n:i+1,title,text,lineOp:i===3?0:1})),
+      features:[['IELTS','Computer-delivered interface','ielts'],['IELTS','Audio plays once','ielts'],['IELTS','Highlight and notes','ielts'],['SAT','Bluebook-style adaptive modules','sat'],['SAT','Desmos and reference sheet','sat'],['BOTH','Band or score on submit','blue'],['BOTH','Every question explained','blue'],['AI','Writing feedback per criterion','ai']].map(([tag,title,c],i)=>({tag,title,color:'var(--'+(c==='blue'?'blue':c)+')',border:bt(i)})),
+      priceRows:[['One section','Any single section','29 000 UZS'],['Full mock','All sections, one sitting','79 000 UZS'],['5 mocks','59 800 UZS per mock','299 000 UZS']].map(([name,note,price],i)=>({name,note,price,border:bt(i)})),
+      faq:[['Is this the same as the real exam?','Layout, timing, question types and rules follow the computer-delivered IELTS Academic and the Digital SAT. It is a practice test, not an official certificate.'],['Can I take it on my phone?','Sign up, pay and read results on your phone. The exam itself runs on a laptop or desktop, like the real test.'],['How is Writing graded?','AI scores each task on the four IELTS criteria with written feedback, within minutes.'],['Will I get the same test twice?','No. Every mock you start is new to you.'],['Which currencies?','UZS, USD and EUR. Prices include taxes.']].map(([q,a],i)=>({q,a,border:bt(i),open:s.faq===i,sign:s.faq===i?'−':'+',toggle:()=>this.setState({faq:s.faq===i?-1:i})})),
+      // auth
+      authTitle:isLogin?'Welcome back':'Create your account',authSub:isLogin?'Log in to continue your mocks.':'Free to sign up. No card needed.',email:s.email,pw:s.pw,emailErr,pwErr,isLogin,isSignupOnly:!isLogin,
+      emailShadow:emailErr?'var(--inset), 0 0 0 2px var(--err)':'var(--inset)',pwShadow:pwErr?'var(--inset), 0 0 0 2px var(--err)':'var(--inset)',
+      setEmail:e=>this.setState({email:e.target.value}),setPw:e=>this.setState({pw:e.target.value}),google:()=>{this.setState({step:0});this.go('onb')},
+      forgot:()=>this.toastMsg('Reset link sent to '+(s.email||'your email')),switchText:isLogin?'New here?':'Already have an account?',switchLink:isLogin?'Create an account':'Log in',switchAuth:()=>this.setState({authMode:isLogin?'signup':'login',tried:false}),
+      verifyTitle:'Check your inbox',verifyBody:'We sent a link to '+(s.email||'your email')+'. Open it on this phone to activate your account.',resendLabel:s.resent?'Sent again. Check spam too.':'Resend email',resend:()=>this.setState({resent:true}),
+      // onboarding
+      steps:[0,1,2,3].map(i=>({bar:i<=s.step?'linear-gradient(135deg,#5B8DEF,#2E6BE6)':'transparent'})),stepNum:s.step+1,
+      onbTitle:['Which exam are you preparing for?',s.exam==='ielts'?'What band are you aiming for?':'What score are you aiming for?','When is your exam?','Where are you studying from?'][s.step],
+      step0:s.step===0,step1:s.step===1,step2:s.step===2,step3:s.step===3,
+      examOpts:[['ielts','IELTS ACADEMIC','IELTS','Band 0–9','var(--ielts)'],['sat','DIGITAL SAT','SAT','400–1600','var(--sat)']].map(([k,tag,name,meta,color])=>({tag,name,meta,color,...radio(s.exam===k),pick:()=>this.setState({exam:k,target:k==='ielts'?'7.0':'1450'})})),
+      targets:(s.exam==='ielts'?['5.5','6.0','6.5','7.0','7.5','8.0','8.5','9.0']:['1200','1300','1350','1400','1450','1500','1550','1600']).map(v=>({v,bg:s.target===v?'linear-gradient(135deg,#5B8DEF,#2E6BE6)':'var(--bg)',color:s.target===v?'#fff':'var(--ink)',shadow:s.target===v?'none':'var(--raise-sm)',pick:()=>this.setState({target:v})})),
+      date:s.date,setDate:e=>this.setState({date:e.target.value,noDate:false}),toggleNoDate:()=>this.setState({noDate:!s.noDate}),noDateBg:s.noDate?'var(--blue)':'transparent',noDateMark:s.noDate?'✓':'',
+      // home
+      homeEmpty:s.empty,homeData:!s.empty,goProfile:()=>this.go('profile'),goStart:()=>this.go('start'),goProgress:()=>this.go('progress'),goMocks:()=>this.go('mocks'),days:61,
+      bars,targetBottom:'calc('+(yh(7)*0.78)+'% + 20px)',
+      weak:[['Matching headings',57],['True / False / Not Given',62],['Map / plan labelling',68]].map(([name,p],i)=>({name,pct:p,w:p+'%',border:bt(i)})),
+      recent:[['IELTS','Full mock · IA-0142','12 Oct · CEFR B2','6.5','var(--ielts)'],['IELTS','Reading · IA-0131','21 Sep · 28 of 40','6.5','var(--ielts)'],['SAT','Math · SAT-0044','30 Aug · 33 of 44','660','var(--sat)']].map(([exam,name,meta,score,color],i)=>({exam,name,meta,score,color,scoreColor:'var(--ink)',border:bt(i),go:()=>this.go('results')})),
+      mockTabs:seg([['progress','In progress · 1'],['done','Completed · 4']],s.mockTab,'mockTab'),
+      mockList:(s.mockTab==='progress'?[['IELTS','Full mock · IA-0151','Started today · Listening 7.0','—','Resume','var(--blue)','var(--ielts)','start']]:[['IELTS','Full mock · IA-0142','12 Oct 2026','6.5','Result','var(--ink2)','var(--ielts)','results'],['IELTS','Reading · IA-0131','21 Sep 2026','6.5','Result','var(--ink2)','var(--ielts)','results'],['SAT','Math · SAT-0044','30 Aug 2026','660','Result','var(--ink2)','var(--sat)','results'],['IELTS','Listening · IA-0120','9 Aug 2026','6.5','Result','var(--ink2)','var(--ielts)','results']]).map(([exam,name,meta,score,action,actColor,color,to],i)=>({exam,name,meta,score,action,actColor,color,border:bt(i),go:()=>this.go(to)})),
+      secTabs:pill([['overall','Overall'],['listening','Listening'],['reading','Reading'],['writing','Writing']],s.sec,'sec'),secLatest:vals[4].toFixed(1),secDelta:'+'+(vals[4]-vals[0]).toFixed(1)+' since July',
+      history:[['Full mock · IA-0142','12 Oct 2026'],['Reading · IA-0131','21 Sep 2026'],['Full mock · IA-0118','30 Aug 2026'],['Listening · IA-0120','9 Aug 2026'],['Free Reading section','12 Jul 2026']].map(([name,date],i)=>({name,date,v:vals[4-i].toFixed(1),border:bt(i)})),
+      settingGroups:[{title:'ACCOUNT',rows:[['Name','Dilnoza'],['Email','dilnoza@…'],['Password','Change']]},{title:'PREFERENCES',rows:[['Language',curLang[1],'lang'],['Dark theme',null,'theme'],['Target','IELTS 7.0'],['Exam date','12 Dec 2026']]},{title:'EMAIL NOTIFICATIONS',rows:[['Result is ready',null,'n:results'],['Writing graded',null,'n:writing'],['Weekly study tips',null,'n:tips']]},{title:'BILLING',rows:[['Purchases and receipts','3'],['Buy credits','','pricing']]},{title:'SUPPORT',rows:[['Help center',''],['Contact us','']]},{title:'DATA',rows:[['Export my data',''],['Delete account','','delete'],['Log out','','logout']]}].map(g=>({title:g.title,rows:g.rows.map(([label,value,act],i)=>{const isT=act==='theme'||(act||'').startsWith('n:');const on=act==='theme'?s.theme==='dark':act&&act.startsWith('n:')?s.notif[act.slice(2)]:false;
+        return{label,value:value||'',hasValue:!!value,isToggle:isT,hasChev:!isT,justify:on?'flex-end':'flex-start',track:on?'var(--blue)':'var(--hover)',border:bt(i),color:'var(--ink)',
+          go:()=>{if(act==='lang')this.setState({sheet:'lang',q:''});else if(act==='theme')savePrefs({theme:s.theme==='dark'?'light':'dark'});else if(act&&act.startsWith('n:'))this.setState(st=>({notif:{...st.notif,[act.slice(2)]:!st.notif[act.slice(2)]}}));else if(act==='pricing')this.go('pricing');else if(act==='delete')this.setState({sheet:'delete'});else if(act==='logout')this.setState({stack:['landing']});else this.toastMsg(label)}}})})),
+      // start
+      startSecs:[['listening','Listening','4 parts · audio plays once','32 min'],['reading','Reading','3 passages · 40 questions','60 min'],['writing','Writing','2 tasks · AI-graded','60 min']].map(([k,name,meta,time])=>({name,meta,time,...radio(s.startSec===k),pick:()=>this.setState({startSec:k})})),
+      // results
+      resTabs:seg([['overview','Overview'],['writing','Writing'],['review','Review']],s.rtab,'rtab'),rOverview:s.rtab==='overview',rWriting:s.rtab==='writing',rReview:s.rtab==='review',
+      acc:[['Sentence completion',15,17],['Form completion',9,10],['Multiple choice',11,14],['Map / plan labelling',7,10],['Matching headings',4,7],['True / False / Not Given',8,13]].map(([n,a,b])=>{const p=Math.round(a/b*100);return{name:n,frac:a+' of '+b,w:p+'%',color:p<65?'var(--warn)':'var(--blue)'}}),
+      nextSteps:['Do 3 True / False / Not Given sets. Underline the exact words that decide each answer.','Add one example to every Task 2 body paragraph.','Take a Reading-only mock in 7 days.'].map((text,i)=>({n:i+1,text})),
+      wTabs:pill([[0,'Task 1'],[1,'Task 2']],s.wtab,'wtab'),essay,essayOpen:s.essayOpen,essayLabel:s.essayOpen?'Hide your essay':'Read your essay',toggleEssay:()=>this.setState({essayOpen:!s.essayOpen}),
+      revChips:pill([['all','All · 13'],['wrong','Wrong only · 4']],s.filter,'filter'),
+      rows:allRows.map((r,i)=>{const ok=r.yours===r.correct;return{n:r.n,q:r.q,type:r.type,status:ok?'Correct':'Wrong',bg:ok?'var(--okBg)':'var(--warnBg)',fg:ok?'var(--ok)':'var(--warn)',border:bt(i),open:()=>this.setState({sheet:'q',qi:i})}}),
+      sq:{...curQ,yc:curQ.yours===curQ.correct?'var(--ok)':'var(--warn)'},prevQ:()=>this.setState({qi:Math.max(0,s.qi-1)}),nextQ:()=>this.setState({qi:Math.min(allRows.length-1,s.qi+1)}),
+      // pricing
+      pExams:seg([['ielts','IELTS'],['sat','SAT']],s.pExam,'pExam'),pModels:seg([['per','Pay per mock'],['unl','Unlimited']],s.pModel,'pModel'),pExamName:s.pExam==='ielts'?'IELTS':'SAT',cur:s.cur,setCur:e=>this.setState({cur:e.target.value}),
+      plans:planKeys.map(k=>({name:PN[k][0],note:planNote(k),price:fmt(P[k][ci],s.cur)+(k==='unl'?' / mo':''),badge:k==='full'?'Most chosen':k==='b5'?'Best value':'',...radio(plan===k),pick:()=>this.setState({plan:k})})),
+      includes:['Real computer-based format','Score the moment you submit','Every question explained','AI Writing feedback (IELTS)','Progress tracking'],
+      // checkout
+      coExam:s.pExam==='ielts'?'IELTS ACADEMIC':'DIGITAL SAT',coPlan:PN[plan][0],coNote:PN[plan][1]+' · 12 months',coSubtotal:fmt(base,s.cur),coDiscount:fmt(disc,s.cur),coTotal:fmt(base-disc,s.cur),
+      promo:s.promo,setPromo:e=>this.setState({promo:e.target.value,promoState:''}),applyPromo:()=>this.setState({promoState:s.promo.trim().toUpperCase()==='EDUVO10'?'ok':'bad'}),promoOk:pOk,promoBad:s.promoState==='bad',promoShadow:s.promoState==='bad'?'var(--inset), 0 0 0 2px var(--err)':'var(--inset)',
+      payMethods:[['Card','Visa, Mastercard, UnionPay'],['Apple Pay',''],['Google Pay',''],['Local wallet','Provider to be confirmed'],['Local card network','Provider to be confirmed']].map(([name,note],i)=>({name,note,border:bt(i),...radio(s.method===i),pick:()=>this.setState({method:i})})),
+      payCard:s.method===0,card:s.card,setCard:e=>{const d=e.target.value.replace(/\D/g,'').slice(0,16);this.setState({card:d.replace(/(.{4})/g,'$1 ').trim()})},cardErr:s.cardTried&&s.card.replace(/\D/g,'').length<16,cardShadow:s.cardTried&&s.card.replace(/\D/g,'').length<16?'var(--inset), 0 0 0 2px var(--err)':'var(--inset)',
+      prSuccess:s.payResult==='success',prBg:pr.bg,prFg:pr.fg,prTag:pr.tag,prTitle:pr.title,prBody:pr.body,prMarkW:pr.w,prMarkH:pr.h,prMarkRot:pr.rot,
+      // sheets
+      sheetOpen:!!s.sheet,closeSheet:()=>this.setState({sheet:null}),sheetTitle:{lang:'Language',share:'Share result',q:'Question '+curQ.n,delete:'Delete account?'}[s.sheet]||'',
+      shLang:s.sheet==='lang',shShare:s.sheet==='share',shQ:s.sheet==='q',shDelete:s.sheet==='delete',shareDone:()=>{this.setState({sheet:null});this.toastMsg('Result card saved')},
+      q:s.q,setQ:e=>this.setState({q:e.target.value}),
+      langs:LANGS.filter(([c,n])=>!s.q||n.toLowerCase().includes(s.q.toLowerCase())).map(([c,n],i)=>({code:c,name:n,dir:RTL.includes(c)?'rtl':'ltr',tag:RTL.includes(c)?'RTL':'',border:bt(i),ring:c===s.lang?'var(--blue)':'var(--line)',dot:c===s.lang?'var(--blue)':'transparent',pick:()=>{savePrefs({lang:c});this.setState({sheet:null})}})),
+      toast:s.toast,toastTop:framed?'60px':'12px'};
+  }
+}
+</script>
+</body>
+</html>

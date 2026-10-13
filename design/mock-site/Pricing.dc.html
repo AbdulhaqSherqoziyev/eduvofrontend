@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Eduvo Mock — Pricing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#E8ECF3}body{font-family:Manrope,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:#2E6BE6;text-decoration:none}a:hover{color:#1F55C4}button,input,select,textarea{font-family:inherit}
+:root{--bg:#E8ECF3;--ink:#1E2A3A;--ink2:#5b6b82;--mut:#7A8699;--line:#d5dbe5;--hover:#dde3ec;--raise:8px 8px 20px #c8cfdb,-8px -8px 20px #ffffff;--raise-sm:4px 4px 10px #c8cfdb,-4px -4px 10px #ffffff;--inset:inset 3px 3px 7px #c8cfdb,inset -3px -3px 7px #ffffff;--blue:#2E6BE6;--ok:#1F7A55;--okBg:#E5F5EE;--ai:#5B3FD1;--aiBg:#EEE9FF;--warn:#B7790F;--warnBg:#FFF1D6;--ielts:oklch(0.5 0.15 255);--sat:oklch(0.5 0.13 300)}
+[data-theme=dark]{--bg:#1B2230;--ink:#E7ECF4;--ink2:#A9B5C7;--mut:#8592A6;--line:#2C3648;--hover:#242D3E;--raise:8px 8px 20px #121722,-8px -8px 20px #242d3f;--raise-sm:4px 4px 10px #121722,-4px -4px 10px #242d3f;--inset:inset 3px 3px 7px #121722,inset -3px -3px 7px #252e40;--blue:#6E9BF5;--ok:#5FCB98;--okBg:#173629;--ai:#B3A2FF;--aiBg:#2A2450;--warn:#F0B54A;--warnBg:#3A2D12;--ielts:oklch(0.72 0.13 255);--sat:oklch(0.72 0.12 300)}
+</style>
+</helmet>
+<div data-theme="{{ theme }}" dir="{{ dir }}" lang="{{ lang }}" style="min-height:100vh;background:var(--bg);color:var(--ink)">
+  <dc-import name="SiteHeader" active="pricing" hint-size="100%,64px"></dc-import>
+  <main style="max-width:1200px;margin:0 auto;padding:clamp(28px,5vw,64px) 20px 32px;display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:680px">
+      <h1 style="margin:0;font-size:clamp(30px,4vw,48px);font-weight:800;letter-spacing:-0.035em">Pay per mock, or go unlimited</h1>
+      <p style="margin:0;color:var(--ink2);font-size:16px;line-height:1.6">Every account gets one free section per exam. Prices include taxes.</p>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <div style="display:flex;gap:4px;padding:5px;border-radius:14px;box-shadow:var(--inset)">
+        <sc-for list="{{ exams }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.pick }}" style="height:40px;padding:0 18px;border-radius:10px;border:0;cursor:pointer;font-weight:800;font-size:14px;background:var(--bg);color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for>
+      </div>
+      <div style="display:flex;gap:4px;padding:5px;border-radius:14px;box-shadow:var(--inset)">
+        <sc-for list="{{ models }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.pick }}" style="height:40px;padding:0 16px;border-radius:10px;border:0;cursor:pointer;font-weight:700;font-size:14px;background:var(--bg);color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for>
+      </div>
+      <div style="display:flex;gap:4px;padding:5px;border-radius:14px;box-shadow:var(--inset);margin-inline-start:auto">
+        <sc-for list="{{ curs }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="height:40px;padding:0 14px;border-radius:10px;border:0;cursor:pointer;font-weight:800;font-size:13px;background:var(--bg);color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for>
+      </div>
+    </div>
+
+    <div style="border-radius:20px;padding:16px 20px;background:var(--okBg);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+      <span style="font-weight:700;font-size:14px;color:var(--ink)"><span style="color:var(--ok);font-weight:800">Free</span> · One {{ examName }} section on us. No card needed.</span>
+      <a href="Exam Start.dc.html?exam={{ exam }}&free=1" style="font-weight:800;font-size:14px;color:var(--ok)">Start free section</a>
+    </div>
+
+    <sc-if value="{{ perMock }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px;align-items:stretch">
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:28px;display:flex;flex-direction:column;gap:16px">
+          <span style="font-weight:800;font-size:17px">One section</span>
+          <span style="font-size:36px;font-weight:800;letter-spacing:-0.03em">{{ p.section }}</span>
+          <span style="color:var(--ink2);font-size:14px;line-height:1.55">{{ sectionDesc }}</span>
+          <a href="Checkout.dc.html?plan=section&exam={{ exam }}&cur={{ cur }}" style="margin-top:auto;height:50px;border-radius:14px;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;display:grid;place-items:center" style-hover="color:var(--blue)">Buy one section</a>
+        </div>
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:28px;display:flex;flex-direction:column;gap:16px;outline:2px solid var(--blue);outline-offset:-2px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:800;font-size:17px">Full mock</span><span style="padding:4px 10px;border-radius:999px;background:var(--blue);color:#fff;font-size:12px;font-weight:800">Most chosen</span></div>
+          <span style="font-size:36px;font-weight:800;letter-spacing:-0.03em">{{ p.full }}</span>
+          <span style="color:var(--ink2);font-size:14px;line-height:1.55">{{ fullDesc }}</span>
+          <a href="Checkout.dc.html?plan=full&exam={{ exam }}&cur={{ cur }}" style="margin-top:auto;height:50px;border-radius:14px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:700;display:grid;place-items:center;box-shadow:0 10px 22px -10px rgba(46,107,230,.8)" style-hover="background:#1F55C4;color:#fff">Buy full mock</a>
+        </div>
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:28px;display:flex;flex-direction:column;gap:16px">
+          <span style="font-weight:800;font-size:17px">Bundle</span>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:5px;border-radius:14px;box-shadow:var(--inset)">
+            <sc-for list="{{ bundles }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="height:38px;border-radius:10px;border:0;cursor:pointer;font-weight:800;font-size:13px;background:var(--bg);color:{{ o.color }};box-shadow:{{ o.shadow }}">{{ o.label }}</button></sc-for>
+          </div>
+          <span style="font-size:36px;font-weight:800;letter-spacing:-0.03em">{{ bundlePrice }}</span>
+          <span style="color:var(--ink2);font-size:14px;line-height:1.55">{{ bundleDesc }}</span>
+          <a href="Checkout.dc.html?plan=b{{ bundle }}&exam={{ exam }}&cur={{ cur }}" style="margin-top:auto;height:50px;border-radius:14px;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:700;display:grid;place-items:center" style-hover="color:var(--blue)">Buy {{ bundle }} mocks</a>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ unlimited }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px">
+        <div style="border-radius:24px;box-shadow:var(--raise);padding:32px;display:flex;flex-direction:column;gap:16px;outline:2px solid var(--blue);outline-offset:-2px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:800;font-size:18px">Unlimited · {{ examName }}</span><span style="padding:4px 10px;border-radius:999px;background:var(--blue);color:#fff;font-size:12px;font-weight:800">Monthly</span></div>
+          <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:44px;font-weight:800;letter-spacing:-0.03em">{{ p.unl }}</span><span style="color:var(--mut);font-weight:700">per month</span></div>
+          <span style="color:var(--ink2);font-size:15px;line-height:1.6">Full mocks and single sections with no limit. Cancel any time; access runs to the end of the paid month.</span>
+          <a href="Checkout.dc.html?plan=unl&exam={{ exam }}&cur={{ cur }}" style="height:52px;border-radius:14px;background:linear-gradient(135deg,#5B8DEF,#2E6BE6);color:#fff;font-weight:700;display:grid;place-items:center" style-hover="background:#1F55C4;color:#fff">Subscribe</a>
+        </div>
+        <div style="border-radius:24px;box-shadow:var(--inset);padding:32px;display:flex;flex-direction:column;gap:12px;justify-content:center">
+          <span style="font-weight:800;font-size:16px">When unlimited pays off</span>
+          <span style="color:var(--ink2);font-size:15px;line-height:1.6">{{ breakEven }}</span>
+          <button onClick="{{ toPer }}" style="align-self:flex-start;border:0;background:transparent;color:var(--blue);font-weight:800;font-size:14px;cursor:pointer;padding:0">Compare with paying per mock</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <section style="border-radius:24px;box-shadow:var(--raise);padding:clamp(16px,3vw,28px);overflow:auto">
+      <div style="font-weight:800;font-size:20px;margin-bottom:16px">Compare options</div>
+      <table style="width:100%;min-width:640px;border-collapse:collapse;font-size:14px">
+        <thead><tr style="text-align:start;color:var(--mut);font-size:12px;letter-spacing:.04em">
+          <th style="text-align:start;padding:12px 8px;font-weight:800">&nbsp;</th><th style="text-align:start;padding:12px 8px;font-weight:800">FREE</th><th style="text-align:start;padding:12px 8px;font-weight:800">SECTION</th><th style="text-align:start;padding:12px 8px;font-weight:800">FULL MOCK</th><th style="text-align:start;padding:12px 8px;font-weight:800">BUNDLE</th><th style="text-align:start;padding:12px 8px;font-weight:800">UNLIMITED</th>
+        </tr></thead>
+        <tbody>
+          <sc-for list="{{ cmp }}" as="r" hint-placeholder-count="7">
+            <tr style="border-top:1px solid var(--line)"><td style="padding:14px 8px;font-weight:700">{{ r.k }}</td><td style="padding:14px 8px;color:var(--ink2)">{{ r.a }}</td><td style="padding:14px 8px;color:var(--ink2)">{{ r.b }}</td><td style="padding:14px 8px;color:var(--ink2)">{{ r.c }}</td><td style="padding:14px 8px;color:var(--ink2)">{{ r.d }}</td><td style="padding:14px 8px;color:var(--ink2)">{{ r.e }}</td></tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </section>
+    <div style="font-size:13px;color:var(--mut);line-height:1.6">Prices shown in {{ cur }} include VAT and local taxes. Credits from bundles are valid for 12 months. See the <a href="Help.dc.html?tab=refund">refund policy</a>.</div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,320px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RTL=['ar','fa','ur','he'];
+function readPrefs(){const q=new URLSearchParams(location.search);let s={};try{s=JSON.parse(localStorage.getItem('eduvo-mock-prefs')||'{}')}catch(e){}return{theme:q.get('theme')||s.theme||'light',lang:q.get('lang')||s.lang||'en'}}
+const PR={ielts:{section:[29000,2.49,2.29],full:[79000,6.99,6.49],b3:[199000,17.49,15.99],b5:[299000,25.99,23.99],b10:[549000,47.99,43.99],unl:[149000,12.99,11.99]},sat:{section:[35000,2.99,2.79],full:[89000,7.99,7.29],b3:[229000,19.99,18.49],b5:[339000,29.99,27.49],b10:[619000,54.99,49.99],unl:[169000,14.99,13.79]}};
+const fmt=(v,c)=>c==='UZS'?v.toLocaleString('fr-FR').replace(/\u202f|\u00a0/g,' ')+' UZS':c==='USD'?'$'+v.toFixed(2):'€'+v.toFixed(2);
+class Component extends DCLogic {
+  state={...readPrefs(),exam:new URLSearchParams(location.search).get('exam')||'ielts',model:'per',cur:'UZS',bundle:5};
+  componentDidMount(){if(window.innerWidth<520&&!new URLSearchParams(location.search).has('web')){location.replace('Mobile App.dc.html?bare=1&screen='+'pricing');return}this.p=()=>this.setState(readPrefs());window.addEventListener('eduvo-prefs',this.p)}
+  componentWillUnmount(){window.removeEventListener('eduvo-prefs',this.p)}
+  renderVals(){
+    const s=this.state,ci=['UZS','USD','EUR'].indexOf(s.cur),P=PR[s.exam],get=k=>fmt(P[k][ci],s.cur);
+    const seg=(arr,cur,key)=>arr.map(([k,l])=>({label:l,color:cur===k?'var(--ink)':'var(--ink2)',shadow:cur===k?'var(--raise-sm)':'none',pick:()=>this.setState({[key]:k})}));
+    const ielts=s.exam==='ielts',b=P['b'+s.bundle][ci];
+    const per=b/s.bundle,save=Math.round((1-per/P.full[ci])*100);
+    return {theme:s.theme,lang:s.lang,dir:RTL.includes(s.lang)?'rtl':'ltr',exam:s.exam,cur:s.cur,bundle:s.bundle,examName:ielts?'IELTS':'SAT',
+      exams:seg([['ielts','IELTS'],['sat','SAT']],s.exam,'exam'),models:seg([['per','Pay per mock'],['unl','Monthly unlimited']],s.model,'model'),curs:seg([['UZS','UZS'],['USD','USD'],['EUR','EUR']],s.cur,'cur'),
+      bundles:[3,5,10].map(n=>({label:n+' mocks',color:s.bundle===n?'var(--ink)':'var(--ink2)',shadow:s.bundle===n?'var(--raise-sm)':'none',pick:()=>this.setState({bundle:n})})),
+      perMock:s.model==='per',unlimited:s.model==='unl',toPer:()=>this.setState({model:'per'}),
+      p:{section:get('section'),full:get('full'),unl:get('unl')},bundlePrice:fmt(b,s.cur),
+      bundleDesc:fmt(s.cur==='UZS'?Math.round(per/100)*100:per,s.cur)+' per mock · save '+save+'% · valid 12 months',
+      sectionDesc:ielts?'Listening, Reading or Writing. Scored on submit; Writing graded by AI.':'Reading and Writing, or Math. Two adaptive modules.',
+      fullDesc:ielts?'Listening, Reading and Writing in one sitting, with your overall band and CEFR level.':'Both sections with the 10-minute break and your total score out of 1600.',
+      breakEven:'Two full mocks a month cost '+fmt(P.full[ci]*2,s.cur)+' separately. Unlimited is '+get('unl')+', so it is cheaper from the second mock.',
+      cmp:[['Price',ielts?'0':'0',get('section'),get('full'),fmt(b,s.cur),get('unl')+' / mo'],['Sections','1 · once per exam','1','All','All','All, no limit'],['Instant scores','Yes','Yes','Yes','Yes','Yes'],['AI Writing feedback',ielts?'If Writing':'—',ielts?'If Writing':'—',ielts?'Yes':'—',ielts?'Yes':'—',ielts?'Yes':'—'],['Question review','Yes','Yes','Yes','Yes','Yes'],['Progress tracking','Yes','Yes','Yes','Yes','Yes'],['Validity','—','12 months','12 months','12 months','While subscribed']].map(([k,a,b2,c,d,e])=>({k,a,b:b2,c,d,e}))};
+  }
+}
+</script>
+</body>
+</html>
