@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "title": "Eduvo Mock — IELTS & SAT mock exams",
+    "description": "Take a real-format IELTS Academic or Digital SAT mock on a computer. Listening, Reading and SAT scores on submit; Writing graded by AI with feedback on every criterion."
+  },
+  "notFound": {
+    "title": "This page does not exist",
+    "body": "The link may be old or mistyped.",
+    "home": "Go to the home page"
+  }
+}

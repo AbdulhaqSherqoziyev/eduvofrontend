@@ -1,7 +1,8 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: ['./src/**/*.{ts,tsx}'],
+  // the mock site (src/app/(mock), src/components/mock-site) is plain CSS — keep it out of the ERP Tailwind build
+  content: ['./src/**/*.{ts,tsx}', '!./src/app/(mock)/**', '!./src/components/mock-site/**'],
   // The theme toggle puts `.dark` on <html>; without this the `dark:` variant
   // would compile to a prefers-color-scheme query and miss the class entirely.
   darkMode: 'class',

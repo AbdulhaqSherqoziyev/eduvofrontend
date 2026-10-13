@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "title": "Eduvo Mock — IELTS va SAT mock imtihonlari",
+    "description": "IELTS Academic yoki Digital SAT mock imtihonini kompyuterda haqiqiy formatda topshiring. Listening, Reading va SAT natijalari topshirilganda chiqadi; Writing AI tomonidan har bir mezon bo‘yicha izoh bilan baholanadi."
+  },
+  "notFound": {
+    "title": "Bunday sahifa yo‘q",
+    "body": "Havola eskirgan yoki xato yozilgan bo‘lishi mumkin.",
+    "home": "Bosh sahifaga o‘tish"
+  }
+}
