@@ -265,6 +265,7 @@ export function DashboardView() {
                         <span>{p.title.kind === 'bundle' ? t('purchase.bundle', { n: p.title.qty }) : t(`purchase.${p.title.kind}`)}</span>
                         <span style={sx('display:flex;gap:8px;align-items:center')}>
                           {p.status === 'PENDING' && <><span className="m-pill m-pill--warn" style={sx('padding:2px 8px;font-size:11px')}>{tc('chips.pending')}</span><a href={href(`/checkout/orders/${p.orderId}`)} style={sx('font-weight:700')}>{t('open')}</a></>}
+                          {p.status === 'REFUNDED' && <span className="m-pill m-pill--warn" style={sx('padding:2px 8px;font-size:11px')}>{tc('chips.refunded')}</span>}
                           {p.status !== 'PENDING' && <span>{fmtDate(lang, p.paidAt)}</span>}
                         </span>
                       </div>

@@ -80,7 +80,8 @@
     "soon": "Soon",
     "correct": "Correct",
     "wrong": "Wrong",
-    "pending": "Pending"
+    "pending": "Pending",
+    "refunded": "Refunded"
   },
   "errors": {
     "network": "Can't reach the server. Check your connection and try again.",

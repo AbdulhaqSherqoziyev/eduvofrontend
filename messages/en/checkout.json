@@ -120,5 +120,38 @@
   "processing": "Confirming your payment…",
   "dontClose": "Don’t close this page.",
   "loadError": "We couldn't load this order. Check your connection and try again.",
-  "notFound": "We couldn't find this order."
+  "notFound": "We couldn't find this order.",
+  "paddle": {
+    "cardNote": "You enter your card details in a secure Paddle window. Paddle.com is our Merchant of Record and handles the payment.",
+    "walletNote": "Apple Pay and Google Pay appear in the secure Paddle window when your device supports them.",
+    "pay": "Pay {total}",
+    "opening": "Opening the payment window…",
+    "usdOnly": "Card and wallet payments are in USD or EUR.",
+    "switchUsd": "Switch to USD",
+    "uzsOnly": "Local methods are in UZS only.",
+    "loadErr": "The payment window didn't open. Check your connection or turn off ad blockers for this page, then try again.",
+    "declined": "Your bank declined the payment. No money was taken. Try again or use another card.",
+    "closed": "Payment not finished. You can try again whenever you're ready.",
+    "notAvailable": "This plan can't be paid by card yet. Switch to UZS to pay with a local method.",
+    "phoneCta": "Pay · {total}"
+  },
+  "pendingPaddle": {
+    "title": "Waiting for the provider to confirm",
+    "body": "Card payments are usually confirmed within a minute. Your credits are added as soon as we hear back, and we will email you.",
+    "continue": "Continue to payment"
+  },
+  "failedBy": {
+    "providerTitle": "We couldn't open the payment window",
+    "providerBody": "No money was taken. Try again in a minute.",
+    "expiredTitle": "This payment was not completed in time",
+    "expiredBody": "No money was taken. Start a new order.",
+    "mismatchTitle": "We couldn't confirm your payment",
+    "mismatchBody": "Contact support with your reference <ref></ref> and we will sort it out."
+  },
+  "refunded": {
+    "chip": "Refunded",
+    "title": "This order was refunded",
+    "body": "The money was returned to your payment method. Credits from this order were removed."
+  },
+  "methodCard": "Card · Paddle"
 }

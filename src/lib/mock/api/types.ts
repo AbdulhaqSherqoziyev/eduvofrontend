@@ -201,6 +201,7 @@ export interface ShareCard {
 /* ---- §9 checkout ---- */
 export type ProviderCode = 'manual' | 'paddle';
 export type PaymentMethodGroup = 'card' | 'wallet' | 'local';
+export type MethodReason = 'NOT_CONFIGURED' | 'CURRENCY_NOT_SUPPORTED' | null;
 export type OrderStatus = 'PENDING' | 'PAID' | 'FAILED' | 'CANCELLED' | 'REFUNDED';
 export interface Quote {
   sku: string; product: Product; currency: Currency;
@@ -220,6 +221,8 @@ export type OrderNextAction =
   | { kind: 'manual'; instructions: ManualInstructions };
 export interface Order {
   id: string; status: OrderStatus;
+  /** v0.3: always present ('EM-P-7Q4K2'), also on PAID */
+  reference: string;
   quote: Quote;
   provider: ProviderCode; methodGroup: PaymentMethodGroup;
   failureCode: 'DECLINED' | 'EXPIRED' | 'AMOUNT_MISMATCH' | 'PROVIDER_ERROR' | null;
@@ -229,6 +232,7 @@ export interface Order {
   createdAt: string; paidAt: string | null; expiresAt: string;
 }
 export interface CheckoutMethods {
-  methods: Array<{ group: PaymentMethodGroup; provider: ProviderCode; enabled: boolean; providers?: Array<{ code: string; name: string }> }>;
+  /** v0.3: card/wallet = paddle (USD/EUR only), local = manual (UZS only); `reason` explains `enabled:false` */
+  methods: Array<{ group: PaymentMethodGroup; provider: ProviderCode; enabled: boolean; reason: MethodReason; providers?: Array<{ code: string; name: string }> }>;
   serverNow: string;
 }

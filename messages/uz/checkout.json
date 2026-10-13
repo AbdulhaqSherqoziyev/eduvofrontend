@@ -120,5 +120,38 @@
   "processing": "To‘lovingiz tasdiqlanmoqda…",
   "dontClose": "Bu sahifani yopmang.",
   "loadError": "Buyurtmani yuklab bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.",
-  "notFound": "Bu buyurtma topilmadi."
+  "notFound": "Bu buyurtma topilmadi.",
+  "paddle": {
+    "cardNote": "Karta ma’lumotlarini xavfsiz Paddle oynasida kiritasiz. Paddle.com — bizning Merchant of Record, to‘lovni u amalga oshiradi.",
+    "walletNote": "Qurilmangiz qo‘llasa, Apple Pay va Google Pay xavfsiz Paddle oynasida chiqadi.",
+    "pay": "{total} to‘lash",
+    "opening": "To‘lov oynasi ochilmoqda…",
+    "usdOnly": "Karta va hamyon orqali to‘lov USD yoki EUR’da.",
+    "switchUsd": "USD’ga o‘tish",
+    "uzsOnly": "Mahalliy usullar faqat UZS’da.",
+    "loadErr": "To‘lov oynasi ochilmadi. Internetni tekshiring yoki bu sahifa uchun reklama bloklagichni o‘chiring va qayta urinib ko‘ring.",
+    "declined": "Bankingiz to‘lovni rad etdi. Pul yechilmadi. Qayta urinib ko‘ring yoki boshqa kartadan foydalaning.",
+    "closed": "To‘lov yakunlanmadi. Tayyor bo‘lganingizda qayta urinishingiz mumkin.",
+    "notAvailable": "Bu tarifni hozircha karta bilan to‘lab bo‘lmaydi. Mahalliy usul bilan to‘lash uchun UZS’ga o‘ting.",
+    "phoneCta": "To‘lash · {total}"
+  },
+  "pendingPaddle": {
+    "title": "Provayder tasdig‘i kutilmoqda",
+    "body": "Karta to‘lovlari odatda bir daqiqa ichida tasdiqlanadi. Javob kelishi bilan kreditlaringiz qo‘shiladi va emailga xabar beramiz.",
+    "continue": "To‘lovni davom ettirish"
+  },
+  "failedBy": {
+    "providerTitle": "To‘lov oynasini ochib bo‘lmadi",
+    "providerBody": "Pul yechilmadi. Bir daqiqadan keyin qayta urinib ko‘ring.",
+    "expiredTitle": "To‘lov o‘z vaqtida yakunlanmadi",
+    "expiredBody": "Pul yechilmadi. Yangi buyurtma bering.",
+    "mismatchTitle": "To‘lovingizni tasdiqlay olmadik",
+    "mismatchBody": "<ref></ref> kodi bilan qo‘llab-quvvatlashga yozing — hal qilamiz."
+  },
+  "refunded": {
+    "chip": "Qaytarildi",
+    "title": "Bu buyurtma uchun pul qaytarildi",
+    "body": "Pul to‘lov usulingizga qaytarildi. Bu buyurtmadagi kreditlar olib tashlandi."
+  },
+  "methodCard": "Karta · Paddle"
 }

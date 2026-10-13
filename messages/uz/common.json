@@ -80,7 +80,8 @@
     "soon": "Tez kunda",
     "correct": "To‘g‘ri",
     "wrong": "Xato",
-    "pending": "Kutilmoqda"
+    "pending": "Kutilmoqda",
+    "refunded": "Qaytarildi"
   },
   "errors": {
     "network": "Serverga ulanib bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.",
