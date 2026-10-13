@@ -1,1 +1,223 @@
-{}
+{
+  "meta": {
+    "title": "Eduvo Mock — real-format IELTS and SAT mock tests",
+    "description": "Take a computer-delivered IELTS Academic or Digital SAT mock in the real format. Listening, Reading and SAT scores on submit; Writing graded by AI with feedback on every criterion."
+  },
+  "hero": {
+    "h1": "Take a real-format IELTS or SAT mock. Get your score in minutes.",
+    "sub": "Same interface, timing and rules as the computer-delivered exam. Listening and Reading are scored on submit; Writing is graded by AI with feedback on every criterion.",
+    "cta1": "Try a free section",
+    "cta2": "See a sample result",
+    "trust1": "One free section per exam",
+    "trust2": "No card to start",
+    "trust3": "Interface in 40 languages"
+  },
+  "visual": {
+    "overall": "Overall band",
+    "listening": "Listening",
+    "reading": "Reading",
+    "writing": "Writing"
+  },
+  "exams": {
+    "title": "Choose your exam",
+    "sub": "Two exams are live today. Leave your email for the others and we will write once when they open.",
+    "freeSection": "Free section",
+    "ieltsName": "Listening, Reading, Writing",
+    "satName": "Reading & Writing, Math",
+    "ieltsFacts": {
+      "a": "2h 40m",
+      "aLabel": "full mock",
+      "b": "80",
+      "bLabel": "questions + 2 tasks",
+      "c": "0–9",
+      "cLabel": "band"
+    },
+    "satFacts": {
+      "a": "2h 14m",
+      "aLabel": "4 adaptive modules",
+      "b": "98",
+      "bLabel": "questions",
+      "c": "400–1600",
+      "cLabel": "total"
+    },
+    "fullMock": "Full mock",
+    "viewIelts": "View IELTS",
+    "viewSat": "View SAT",
+    "comingSoon": "Coming soon",
+    "cefrDesc": "Uzbekistan national multilevel exam, A1–C1.",
+    "toeflDesc": "Reading, Listening, Speaking, Writing.",
+    "hskDesc": "Chinese proficiency, levels 1–6.",
+    "emailPh": "Email",
+    "notify": "Notify me",
+    "notified": "We will email you when it opens.",
+    "emailInvalid": "Enter a valid email, like name@example.com"
+  },
+  "how": {
+    "title": "How it works",
+    "s1": {
+      "title": "Choose your exam",
+      "text": "IELTS Academic or Digital SAT. Full mock or one section. Each test you get is one you have not taken before."
+    },
+    "s2": {
+      "title": "Sit it in the real interface",
+      "text": "Same layout, timer and rules as the computer-delivered exam. Audio plays once. Take it on a laptop or desktop."
+    },
+    "s3": {
+      "title": "Scores right away",
+      "text": "Listening, Reading and SAT scores appear on submit. Writing is graded by AI within minutes, with feedback per criterion."
+    },
+    "s4": {
+      "title": "Know what to practise",
+      "text": "See your weakest question types and two to four next steps, then track every mock on one chart."
+    }
+  },
+  "get": {
+    "title": "What you get",
+    "tagIelts": "IELTS",
+    "tagSat": "SAT",
+    "tagBoth": "BOTH",
+    "tagAi": "AI",
+    "f1": "Computer-delivered IELTS interface",
+    "f2": "Audio played once, with a timed review",
+    "f3": "Highlight and notes on reading passages",
+    "f4": "Bluebook-style modules with adaptive Module 2",
+    "f5": "Built-in Desmos graphing calculator",
+    "f6": "Reference sheet, annotate, option eliminator",
+    "f7": "Mark for review and a live timer",
+    "f8": "Band or score the moment you submit",
+    "f9": "Per-question review with explanations",
+    "f10": "Writing feedback on each official criterion",
+    "f11": "Progress over time, by section"
+  },
+  "sample": {
+    "title": "A result you can act on",
+    "sub": "Every result shows your band, how many you got right, where you lost marks and what to do next.",
+    "open": "Open the full sample result",
+    "overallLabel": "IELTS Academic · Overall band",
+    "correct": "{n} of {total} correct",
+    "tasks": "{n} tasks",
+    "accTitle": "Accuracy by question type",
+    "t1": "Sentence completion",
+    "t2": "Multiple choice",
+    "t3": "Map / plan labelling",
+    "t4": "True / False / Not Given",
+    "t5": "Matching headings"
+  },
+  "pricing": {
+    "title": "Pricing",
+    "compare": "Compare all options",
+    "section": "One section",
+    "sectionNote": "Listening, Reading, Writing or one SAT section",
+    "full": "Full mock",
+    "fullNote": "Every section, one sitting, full result",
+    "bundle": "Bundle of {n} mocks",
+    "bundleNote": "<per></per> per mock · valid {months} months",
+    "loadError": "Prices didn't load.",
+    "retry": "Try again"
+  },
+  "quotes": {
+    "title": "From learners",
+    "placeholder": "learner quote",
+    "name": "Learner name",
+    "m1": "IELTS · target 7.0",
+    "m2": "SAT · target 1450",
+    "m3": "IELTS · target 6.5"
+  },
+  "faq": {
+    "title": "Questions",
+    "q1": "Is this the same as the real exam?",
+    "a1": "The layout, timing, question types and rules follow the computer-delivered IELTS Academic and the Digital SAT. Content is written by our team; it is a practice test, not an official certificate.",
+    "q2": "How is Writing graded?",
+    "a2": "An AI grader scores each task on the four IELTS criteria and gives a band per criterion with written feedback. Results arrive within a few minutes of submitting.",
+    "q3": "Can I take the test on my phone?",
+    "a3": "You can sign up, pay and read your results on a phone. The exam itself runs on a laptop or desktop, like the real computer-based test.",
+    "q4": "Will I get the same test twice?",
+    "a4": "No. Every mock you start is one you have not taken before.",
+    "q5": "Which currencies can I pay in?",
+    "a5": "UZS, USD and EUR. Prices include taxes.",
+    "q6": "What if my internet drops?",
+    "a6": "Your answers are saved as you go. The timer keeps running, as in the real exam; when the connection returns, you continue where you stopped."
+  },
+  "centers": {
+    "eyebrow": "For learning centers",
+    "title": "Run these mocks for your students inside Eduvo ERP",
+    "body": "Same exam engine, with groups, schedules, teacher review and centre-level reports.",
+    "cta": "Go to eduvo.uz"
+  },
+  "phone": {
+    "h1": "Real-format IELTS and SAT mocks. Your score in minutes.",
+    "sub": "Same interface, timing and rules as the computer-delivered exam. Writing graded by AI on every criterion.",
+    "sampleResult": "Sample result",
+    "overallBand": "Overall band",
+    "listen": "Listen",
+    "read": "Read",
+    "write": "Write",
+    "seeSample": "See the full sample result",
+    "satName": "Reading and Writing, Math",
+    "ieltsFacts": {
+      "a": "2h 40m",
+      "aLabel": "full mock",
+      "b": "80",
+      "bLabel": "questions",
+      "c": "0–9",
+      "cLabel": "band"
+    },
+    "satFacts": {
+      "a": "2h 14m",
+      "aLabel": "4 modules",
+      "b": "98",
+      "bLabel": "questions",
+      "c": "1600",
+      "cLabel": "max"
+    },
+    "fullFrom": "Full mock from <b><price></price></b>",
+    "soonState": "Coming soon",
+    "soonDone": "We’ll email you at launch",
+    "notify": "Notify me",
+    "added": "Added",
+    "notifyToast": "We’ll email you when {exam} opens",
+    "how1": {
+      "title": "Choose your exam",
+      "text": "Full mock or one section. Every test is new to you."
+    },
+    "how2": {
+      "title": "Sit it on a computer",
+      "text": "Same layout, timer and rules as the real test."
+    },
+    "how3": {
+      "title": "Scores right away",
+      "text": "Writing graded by AI within minutes."
+    },
+    "how4": {
+      "title": "Know what to practise",
+      "text": "Weakest question types and next steps."
+    },
+    "f1": "Computer-delivered interface",
+    "f2": "Audio plays once",
+    "f3": "Highlight and notes",
+    "f4": "Bluebook-style adaptive modules",
+    "f5": "Desmos and reference sheet",
+    "f6": "Band or score on submit",
+    "f7": "Every question explained",
+    "f8": "Writing feedback per criterion",
+    "seeAll": "See all",
+    "pSection": "One section",
+    "pSectionNote": "Any single section",
+    "pFull": "Full mock",
+    "pFullNote": "All sections, one sitting",
+    "pBundle": "{n} mocks",
+    "pBundleNote": "<per></per> per mock",
+    "fq1": "Is this the same as the real exam?",
+    "fa1": "Layout, timing, question types and rules follow the computer-delivered IELTS Academic and the Digital SAT. It is a practice test, not an official certificate.",
+    "fq2": "Can I take it on my phone?",
+    "fa2": "Sign up, pay and read results on your phone. The exam itself runs on a laptop or desktop, like the real test.",
+    "fq3": "How is Writing graded?",
+    "fa3": "AI scores each task on the four IELTS criteria with written feedback, within minutes.",
+    "fq4": "Will I get the same test twice?",
+    "fa4": "No. Every mock you start is new to you.",
+    "fq5": "Which currencies?",
+    "fa5": "UZS, USD and EUR. Prices include taxes.",
+    "startFree": "Start free",
+    "sample": "Sample"
+  }
+}

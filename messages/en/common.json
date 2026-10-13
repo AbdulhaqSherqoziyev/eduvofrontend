@@ -7,5 +7,87 @@
     "title": "This page does not exist",
     "body": "The link may be old or mistyped.",
     "home": "Go to the home page"
+  },
+  "brand": {
+    "eduvo": "Eduvo",
+    "mock": "Mock",
+    "home": "Eduvo Mock home"
+  },
+  "nav": {
+    "ielts": "IELTS",
+    "sat": "SAT",
+    "pricing": "Pricing",
+    "how": "How it works",
+    "centers": "For centers",
+    "login": "Log in",
+    "start": "Start free",
+    "dashboard": "Dashboard",
+    "takeMock": "Take a mock",
+    "progress": "Progress",
+    "language": "Language",
+    "theme": "Theme",
+    "menu": "Menu",
+    "back": "Back",
+    "skip": "Skip",
+    "share": "Share",
+    "account": "Account"
+  },
+  "tabs": {
+    "home": "Home",
+    "mocks": "Mocks",
+    "progress": "Progress",
+    "profile": "Profile"
+  },
+  "lang": {
+    "search": "Search language",
+    "note": "Exam content stays in English. Interface and AI feedback follow your language.",
+    "noteShort": "Exam content stays in English.",
+    "title": "Language",
+    "rtl": "RTL",
+    "empty": "No language matches"
+  },
+  "sheet": {
+    "done": "Done"
+  },
+  "footer": {
+    "about": "Computer-based IELTS Academic and Digital SAT mock exams with instant results.",
+    "exams": "Exams",
+    "company": "Company",
+    "legal": "Legal",
+    "languages": "Languages",
+    "ieltsAcademic": "IELTS Academic",
+    "digitalSat": "Digital SAT",
+    "soon": "CEFR · TOEFL iBT · HSK — soon",
+    "pricing": "Pricing",
+    "centers": "For learning centers",
+    "help": "Help center",
+    "contact": "Contact",
+    "erp": "Eduvo ERP",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "refund": "Refund policy",
+    "cookies": "Cookies",
+    "more": "+{n} more",
+    "copyright": "© {year} Eduvo · mock.eduvo.uz"
+  },
+  "legalLine": "Practice test — not an official certificate. Not affiliated with IELTS, British Council, IDP, Cambridge or College Board.",
+  "chips": {
+    "ai": "AI",
+    "comingSoon": "Coming soon",
+    "free": "Free",
+    "freeSection": "Free section",
+    "mostChosen": "Most chosen",
+    "soon": "Soon",
+    "correct": "Correct",
+    "wrong": "Wrong",
+    "pending": "Pending"
+  },
+  "errors": {
+    "network": "Can't reach the server. Check your connection and try again.",
+    "server": "Something went wrong on our side. Try again in a minute.",
+    "rateLimited": "Too many attempts. Try again in {sec} seconds.",
+    "disabled": "Eduvo Mock is updating. Try again in a few minutes.",
+    "tryAgain": "Try again",
+    "reload": "Reload"
   }
 }

@@ -1,0 +1,103 @@
+{
+  "ielts": {
+    "meta": {
+      "title": "IELTS Academic mock test — computer-delivered format",
+      "description": "A full IELTS Academic mock in the computer-delivered format: Listening, Reading and Writing, with your band on submit and AI feedback on Writing."
+    },
+    "eyebrow": "IELTS ACADEMIC",
+    "h1": "IELTS Academic mock, in the real computer-delivered format",
+    "sub": "Listening, Reading and Writing with the official timing and question types. Listening and Reading are scored on submit; Writing is graded by AI on all four criteria.",
+    "faq": {
+      "q1": "Does the mock include Speaking?",
+      "a1": "Not yet. The full mock covers Listening, Reading and Writing in one sitting (2 hours 40 minutes).",
+      "q2": "Which question types are in Reading?",
+      "a2": "True / False / Not Given, multiple choice, matching headings, sentence and summary completion, and the other types used in the computer-delivered test.",
+      "q3": "How is the overall band worked out?",
+      "a3": "Each section is scored on the 0–9 band scale in 0.5 steps. The overall band is the average of your Listening, Reading and Writing bands.",
+      "q4": "Can I take only one section?",
+      "a4": "Yes. Buy one section, or use your free Listening or Reading section. Writing is a paid section because it is graded by AI."
+    }
+  },
+  "sat": {
+    "meta": {
+      "title": "Digital SAT mock test — Bluebook-style adaptive modules",
+      "description": "A full Digital SAT mock with two adaptive modules per section, built-in Desmos and a reference sheet. Your total out of 1600 on submit."
+    },
+    "eyebrow": "DIGITAL SAT",
+    "h1": "Digital SAT mock with adaptive modules, like Bluebook",
+    "sub": "Reading and Writing, then Math, each in two modules where Module 2 adapts to how you did. Built-in Desmos, reference sheet, annotate and option eliminator.",
+    "faq": {
+      "q1": "Is Module 2 really adaptive?",
+      "a1": "Yes. Your Module 1 result decides whether Module 2 is the easier or the harder version, as on the real Digital SAT.",
+      "q2": "Can I use a calculator?",
+      "a2": "Yes. Math has the Desmos graphing calculator and the reference sheet built in.",
+      "q3": "Is there a break?",
+      "a3": "Yes. A 10-minute break between Reading and Writing and Math, with a countdown.",
+      "q4": "What does the free section include?",
+      "a4": "The whole Reading and Writing section, both modules, with your section score and a review of every question."
+    }
+  },
+  "common": {
+    "fullMockPrice": "Full mock <b><price></price></b>",
+    "startFull": "Start full mock",
+    "tryFree": "Try free section",
+    "trust1": "One free section",
+    "trust2": "No card to start",
+    "trust3": "Scores on submit",
+    "formatTitle": "Format",
+    "colSection": "Section",
+    "colTime": "Time",
+    "colQuestions": "Questions",
+    "scoreLabel": "Score",
+    "includedTitle": "What's included",
+    "previewTitle": "Sample question",
+    "previewSub": "The same question styles you meet in the exam. Exam content is always in English.",
+    "faqTitle": "Questions about this exam",
+    "ctaTitle": "Ready to try it?",
+    "ctaBody": "Start with one free section. No card needed.",
+    "breakRow": "Break",
+    "priceLoadError": "Prices didn't load."
+  },
+  "format": {
+    "ielts": {
+      "listening": "Listening",
+      "listeningTime": "30 min + 2 min check",
+      "listeningQ": "40 questions · 4 parts",
+      "reading": "Reading",
+      "readingTime": "60 min",
+      "readingQ": "40 questions · 3 passages",
+      "writing": "Writing",
+      "writingTime": "60 min",
+      "writingQ": "2 tasks",
+      "score": "Band 0–9 in 0.5 steps"
+    },
+    "sat": {
+      "rw": "Reading and Writing",
+      "rwTime": "2 × 32 min",
+      "rwQ": "54 questions · 2 modules",
+      "math": "Math",
+      "mathTime": "2 × 35 min",
+      "mathQ": "44 questions · 2 modules",
+      "break": "Break",
+      "breakTime": "10 min",
+      "score": "400–1600"
+    }
+  },
+  "how": {
+    "meta": {
+      "title": "How Eduvo Mock works",
+      "description": "Choose IELTS or SAT, sit the mock in the real computer-based interface, get your score on submit and AI Writing feedback, then practise what you missed."
+    },
+    "h1": "How it works",
+    "sub": "From sign-up to a result you can act on, in four steps.",
+    "scoringTitle": "How scoring works",
+    "scoring": {
+      "l": "Listening and Reading",
+      "lText": "Marked automatically the moment you submit. Your band comes from the number of correct answers, using the IELTS conversion.",
+      "w": "Writing",
+      "wText": "Graded by AI on Task Achievement or Response, Coherence and Cohesion, Lexical Resource and Grammatical Range and Accuracy, usually within minutes.",
+      "s": "Digital SAT",
+      "sText": "Each section is scored from your answers in both modules; the total is out of 1600."
+    }
+  }
+}

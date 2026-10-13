@@ -1,0 +1,103 @@
+{
+  "ielts": {
+    "meta": {
+      "title": "IELTS Academic mock testi — kompyuter formatida",
+      "description": "Kompyuter formatidagi to‘liq IELTS Academic mock: Listening, Reading va Writing, topshirilganda ball va Writing bo‘yicha AI izohi."
+    },
+    "eyebrow": "IELTS ACADEMIC",
+    "h1": "IELTS Academic mock — haqiqiy kompyuter formatida",
+    "sub": "Rasmiy vaqt va savol turlari bilan Listening, Reading va Writing. Listening va Reading topshirilganda baholanadi; Writing AI tomonidan to‘rtta mezon bo‘yicha baholanadi.",
+    "faq": {
+      "q1": "Mockda Speaking bormi?",
+      "a1": "Hozircha yo‘q. To‘liq mock Listening, Reading va Writing’ni bir o‘tirishda qamraydi (2 soat 40 daqiqa).",
+      "q2": "Reading’da qaysi savol turlari bor?",
+      "a2": "True / False / Not Given, ko‘p variantli savollar, sarlavhalarni moslash, gap va xulosani to‘ldirish va kompyuterdagi imtihonda uchraydigan boshqa turlar.",
+      "q3": "Umumiy ball qanday hisoblanadi?",
+      "a3": "Har bir bo‘lim 0–9 shkalada 0.5 qadam bilan baholanadi. Umumiy ball — Listening, Reading va Writing ballaringiz o‘rtachasi.",
+      "q4": "Faqat bitta bo‘limni topshirsa bo‘ladimi?",
+      "a4": "Ha. Bitta bo‘lim sotib oling yoki bepul Listening yoki Reading bo‘limidan foydalaning. Writing pullik, chunki uni AI baholaydi."
+    }
+  },
+  "sat": {
+    "meta": {
+      "title": "Digital SAT mock testi — Bluebook uslubidagi adaptiv modullar",
+      "description": "Har bo‘limda ikkita adaptiv modulli to‘liq Digital SAT mock, ichki Desmos va formulalar varag‘i. 1600 dan umumiy ball topshirilganda chiqadi."
+    },
+    "eyebrow": "DIGITAL SAT",
+    "h1": "Bluebook’dagidek adaptiv modulli Digital SAT mock",
+    "sub": "Avval Reading and Writing, keyin Math — har biri ikki moduldan, 2-modul natijangizga moslashadi. Ichki Desmos, formulalar varag‘i, izoh qoldirish va variantni chiqarib tashlash.",
+    "faq": {
+      "q1": "2-modul haqiqatan adaptivmi?",
+      "a1": "Ha. 1-modul natijangiz 2-modul osonroq yoki qiyinroq bo‘lishini belgilaydi — haqiqiy Digital SAT’dagidek.",
+      "q2": "Kalkulyatordan foydalansa bo‘ladimi?",
+      "a2": "Ha. Math bo‘limida Desmos grafik kalkulyatori va formulalar varag‘i bor.",
+      "q3": "Tanaffus bormi?",
+      "a3": "Ha. Reading and Writing va Math orasida 10 daqiqalik tanaffus, teskari sanoq bilan.",
+      "q4": "Bepul bo‘limga nima kiradi?",
+      "a4": "Butun Reading and Writing bo‘limi, ikkala modul bilan — bo‘lim balli va har bir savol tahlili."
+    }
+  },
+  "common": {
+    "fullMockPrice": "To‘liq mock <b><price></price></b>",
+    "startFull": "To‘liq mockni boshlash",
+    "tryFree": "Bepul bo‘limni sinash",
+    "trust1": "Bitta bo‘lim bepul",
+    "trust2": "Boshlash uchun karta kerak emas",
+    "trust3": "Ball topshirilganda",
+    "formatTitle": "Format",
+    "colSection": "Bo‘lim",
+    "colTime": "Vaqt",
+    "colQuestions": "Savollar",
+    "scoreLabel": "Ball",
+    "includedTitle": "Nimalar kiradi",
+    "previewTitle": "Namuna savol",
+    "previewSub": "Imtihonda uchraydigan savol ko‘rinishlari. Imtihon matni har doim ingliz tilida.",
+    "faqTitle": "Bu imtihon haqida savollar",
+    "ctaTitle": "Sinab ko‘rasizmi?",
+    "ctaBody": "Bitta bepul bo‘limdan boshlang. Karta kerak emas.",
+    "breakRow": "Tanaffus",
+    "priceLoadError": "Narxlar yuklanmadi."
+  },
+  "format": {
+    "ielts": {
+      "listening": "Listening",
+      "listeningTime": "30 daq + 2 daq tekshirish",
+      "listeningQ": "40 savol · 4 qism",
+      "reading": "Reading",
+      "readingTime": "60 daq",
+      "readingQ": "40 savol · 3 matn",
+      "writing": "Writing",
+      "writingTime": "60 daq",
+      "writingQ": "2 topshiriq",
+      "score": "0–9 ball, 0.5 qadam bilan"
+    },
+    "sat": {
+      "rw": "Reading and Writing",
+      "rwTime": "2 × 32 daq",
+      "rwQ": "54 savol · 2 modul",
+      "math": "Math",
+      "mathTime": "2 × 35 daq",
+      "mathQ": "44 savol · 2 modul",
+      "break": "Tanaffus",
+      "breakTime": "10 daq",
+      "score": "400–1600"
+    }
+  },
+  "how": {
+    "meta": {
+      "title": "Eduvo Mock qanday ishlaydi",
+      "description": "IELTS yoki SAT’ni tanlang, mockni haqiqiy kompyuter interfeysida topshiring, ballni darhol va Writing bo‘yicha AI izohini oling, keyin xato qilgan joylaringizni mashq qiling."
+    },
+    "h1": "Qanday ishlaydi",
+    "sub": "Ro‘yxatdan o‘tishdan amal qilsa bo‘ladigan natijagacha — to‘rt qadam.",
+    "scoringTitle": "Qanday baholanadi",
+    "scoring": {
+      "l": "Listening va Reading",
+      "lText": "Topshirishingiz bilan avtomatik tekshiriladi. Ball to‘g‘ri javoblar soniga qarab IELTS jadvali bo‘yicha hisoblanadi.",
+      "w": "Writing",
+      "wText": "AI tomonidan Task Achievement yoki Response, Coherence and Cohesion, Lexical Resource va Grammatical Range and Accuracy mezonlari bo‘yicha, odatda bir necha daqiqada baholanadi.",
+      "s": "Digital SAT",
+      "sText": "Har bir bo‘lim ikkala moduldagi javoblaringiz bo‘yicha baholanadi; umumiy ball 1600 dan."
+    }
+  }
+}

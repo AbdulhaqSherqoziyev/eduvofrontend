@@ -6,7 +6,7 @@
 import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
-import { LOCALES, dirOf, htmlLang, isLocale, type MockLocale } from '@/i18n/locales';
+import { LOCALES, RTL_LOCALES, dirOf, htmlLang, isLocale, isTranslated, type MockLocale } from '@/i18n/locales';
 import { fontVarsFor } from '@/lib/mock/fonts';
 import { MOCK_ORIGIN } from '@/lib/mock/seo';
 import '../../mock.css';
@@ -45,8 +45,10 @@ export default async function MockRootLayout({ children, params: { lang } }: { c
   const locale = (isLocale(lang) ? lang : 'en') as MockLocale;
   setRequestLocale(locale);
   const messages = await getMessages();
+  // an RTL locale still showing the English fallback: mirrored layout, but each text run takes its own direction
+  const fallbackRtl = RTL_LOCALES.has(locale) && !isTranslated(locale);
   return (
-    <html lang={htmlLang(locale)} dir={dirOf(locale)} className={fontVarsFor(locale)} data-theme="light" suppressHydrationWarning>
+    <html lang={htmlLang(locale)} dir={dirOf(locale)} className={`${fontVarsFor(locale)}${fallbackRtl ? ' m-fallback' : ''}`} data-theme="light" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>

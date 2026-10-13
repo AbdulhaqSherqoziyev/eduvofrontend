@@ -1,1 +1,223 @@
-{}
+{
+  "meta": {
+    "title": "Eduvo Mock — IELTS va SAT mock testlari haqiqiy formatda",
+    "description": "IELTS Academic yoki Digital SAT mock imtihonini kompyuterda haqiqiy formatda topshiring. Listening, Reading va SAT natijasi topshirilganda chiqadi; Writing AI tomonidan har bir mezon bo‘yicha izoh bilan baholanadi."
+  },
+  "hero": {
+    "h1": "IELTS yoki SAT mock imtihonini haqiqiy formatda topshiring. Natijani daqiqalarda oling.",
+    "sub": "Kompyuterdagi imtihon bilan bir xil interfeys, vaqt va qoidalar. Listening va Reading darhol baholanadi, Writing esa AI tomonidan har bir mezon bo‘yicha izoh bilan baholanadi.",
+    "cta1": "Bepul bo‘limni sinash",
+    "cta2": "Namuna natija",
+    "trust1": "Har imtihonda bitta bo‘lim bepul",
+    "trust2": "Boshlash uchun karta kerak emas",
+    "trust3": "Interfeys 40 tilda"
+  },
+  "visual": {
+    "overall": "Umumiy ball",
+    "listening": "Listening",
+    "reading": "Reading",
+    "writing": "Writing"
+  },
+  "exams": {
+    "title": "Imtihonni tanlang",
+    "sub": "Hozir ikki imtihon ochiq. Qolganlari uchun emailingizni qoldiring — ochilganda bir marta xabar beramiz.",
+    "freeSection": "Bepul bo‘lim",
+    "ieltsName": "Listening, Reading, Writing",
+    "satName": "Reading & Writing, Math",
+    "ieltsFacts": {
+      "a": "2 s 40 daq",
+      "aLabel": "to‘liq mock",
+      "b": "80",
+      "bLabel": "savol + 2 topshiriq",
+      "c": "0–9",
+      "cLabel": "ball"
+    },
+    "satFacts": {
+      "a": "2 s 14 daq",
+      "aLabel": "4 ta adaptiv modul",
+      "b": "98",
+      "bLabel": "savol",
+      "c": "400–1600",
+      "cLabel": "umumiy"
+    },
+    "fullMock": "To‘liq mock",
+    "viewIelts": "IELTS haqida",
+    "viewSat": "SAT haqida",
+    "comingSoon": "Tez kunda",
+    "cefrDesc": "O‘zbekiston milliy ko‘p darajali imtihoni, A1–C1.",
+    "toeflDesc": "Reading, Listening, Speaking, Writing.",
+    "hskDesc": "Xitoy tili, 1–6 darajalar.",
+    "emailPh": "Email",
+    "notify": "Xabar berish",
+    "notified": "Ochilganda emailingizga yozamiz.",
+    "emailInvalid": "To‘g‘ri email kiriting, masalan name@example.com"
+  },
+  "how": {
+    "title": "Qanday ishlaydi",
+    "s1": {
+      "title": "Imtihonni tanlang",
+      "text": "IELTS Academic yoki Digital SAT. To‘liq mock yoki bitta bo‘lim. Har safar siz hali topshirmagan test beriladi."
+    },
+    "s2": {
+      "title": "Haqiqiy interfeysda topshiring",
+      "text": "Kompyuterdagi imtihon bilan bir xil ko‘rinish, taymer va qoidalar. Audio bir marta eshittiriladi. Noutbuk yoki kompyuterda topshiriladi."
+    },
+    "s3": {
+      "title": "Natija darhol",
+      "text": "Listening, Reading va SAT natijasi topshirilganda chiqadi. Writing daqiqalar ichida AI tomonidan har bir mezon bo‘yicha izoh bilan baholanadi."
+    },
+    "s4": {
+      "title": "Nimani mashq qilishni biling",
+      "text": "Eng zaif savol turlaringizni va 2–4 ta keyingi qadamni ko‘ring, har bir mockni bitta grafikda kuzating."
+    }
+  },
+  "get": {
+    "title": "Nimalar kiradi",
+    "tagIelts": "IELTS",
+    "tagSat": "SAT",
+    "tagBoth": "IKKALASI",
+    "tagAi": "AI",
+    "f1": "Kompyuterdagi IELTS interfeysi",
+    "f2": "Audio bir marta, tekshirish vaqti bilan",
+    "f3": "Reading matnida belgilash va izohlar",
+    "f4": "Bluebook uslubidagi modullar, 2-modul adaptiv",
+    "f5": "Ichki Desmos grafik kalkulyatori",
+    "f6": "Formulalar varag‘i, izoh qoldirish, variantni chiqarib tashlash",
+    "f7": "Ko‘rib chiqish uchun belgi va jonli taymer",
+    "f8": "Topshirishingiz bilan ball",
+    "f9": "Har bir savol bo‘yicha tushuntirish",
+    "f10": "Writing bo‘yicha har bir rasmiy mezon uchun izoh",
+    "f11": "Vaqt o‘tishi bilan bo‘limlar bo‘yicha o‘sish"
+  },
+  "sample": {
+    "title": "Amal qilsa bo‘ladigan natija",
+    "sub": "Har bir natijada ballingiz, nechta to‘g‘ri javob berganingiz, qayerda ball yo‘qotganingiz va keyin nima qilish kerakligi ko‘rinadi.",
+    "open": "To‘liq namuna natijani ochish",
+    "overallLabel": "IELTS Academic · Umumiy ball",
+    "correct": "{total} tadan {n} ta to‘g‘ri",
+    "tasks": "{n} ta topshiriq",
+    "accTitle": "Savol turlari bo‘yicha aniqlik",
+    "t1": "Gapni to‘ldirish",
+    "t2": "Ko‘p variantli savol",
+    "t3": "Xarita / reja belgilash",
+    "t4": "True / False / Not Given",
+    "t5": "Sarlavhalarni moslash"
+  },
+  "pricing": {
+    "title": "Narxlar",
+    "compare": "Barcha variantlarni solishtirish",
+    "section": "Bitta bo‘lim",
+    "sectionNote": "Listening, Reading, Writing yoki bitta SAT bo‘limi",
+    "full": "To‘liq mock",
+    "fullNote": "Barcha bo‘limlar, bir o‘tirishda, to‘liq natija",
+    "bundle": "{n} ta mock to‘plami",
+    "bundleNote": "Har biri <per></per> · {months} oy amal qiladi",
+    "loadError": "Narxlar yuklanmadi.",
+    "retry": "Qayta urinish"
+  },
+  "quotes": {
+    "title": "O‘quvchilar fikri",
+    "placeholder": "o‘quvchi fikri",
+    "name": "O‘quvchi ismi",
+    "m1": "IELTS · maqsad 7.0",
+    "m2": "SAT · maqsad 1450",
+    "m3": "IELTS · maqsad 6.5"
+  },
+  "faq": {
+    "title": "Savollar",
+    "q1": "Bu haqiqiy imtihon bilan bir xilmi?",
+    "a1": "Ko‘rinish, vaqt, savol turlari va qoidalar kompyuterdagi IELTS Academic va Digital SAT’ga mos. Kontentni jamoamiz yozgan; bu mashq testi, rasmiy sertifikat emas.",
+    "q2": "Writing qanday baholanadi?",
+    "a2": "AI baholovchi har bir topshiriqni IELTS’ning to‘rtta mezoni bo‘yicha baholaydi va har mezonga ball hamda yozma izoh beradi. Natija topshirgandan keyin bir necha daqiqada chiqadi.",
+    "q3": "Testni telefonda topshirsa bo‘ladimi?",
+    "a3": "Ro‘yxatdan o‘tish, to‘lash va natijani ko‘rish telefonda ham bo‘ladi. Imtihonning o‘zi haqiqiy kompyuter imtihoni kabi noutbuk yoki kompyuterda topshiriladi.",
+    "q4": "Bir xil test ikki marta tushadimi?",
+    "a4": "Yo‘q. Har bir boshlagan mockingiz siz hali topshirmagan test bo‘ladi.",
+    "q5": "Qaysi valyutalarda to‘lash mumkin?",
+    "a5": "UZS, USD va EUR. Narxlarga soliqlar kiritilgan.",
+    "q6": "Internet uzilib qolsa-chi?",
+    "a6": "Javoblaringiz yozish davomida saqlanib boradi. Taymer haqiqiy imtihondagidek to‘xtamaydi; aloqa tiklangach, to‘xtagan joyingizdan davom etasiz."
+  },
+  "centers": {
+    "eyebrow": "O‘quv markazlari uchun",
+    "title": "Bu mocklarni o‘quvchilaringiz uchun Eduvo ERP ichida o‘tkazing",
+    "body": "O‘sha imtihon tizimi — guruhlar, jadval, ustoz tekshiruvi va markaz hisobotlari bilan.",
+    "cta": "eduvo.uz saytiga o‘tish"
+  },
+  "phone": {
+    "h1": "IELTS va SAT mocklari haqiqiy formatda. Natija daqiqalarda.",
+    "sub": "Kompyuterdagi imtihon bilan bir xil interfeys, vaqt va qoidalar. Writing AI tomonidan har bir mezon bo‘yicha baholanadi.",
+    "sampleResult": "Namuna natija",
+    "overallBand": "Umumiy ball",
+    "listen": "Listening",
+    "read": "Reading",
+    "write": "Writing",
+    "seeSample": "To‘liq namuna natijani ko‘rish",
+    "satName": "Reading and Writing, Math",
+    "ieltsFacts": {
+      "a": "2 s 40 d",
+      "aLabel": "to‘liq mock",
+      "b": "80",
+      "bLabel": "savol",
+      "c": "0–9",
+      "cLabel": "ball"
+    },
+    "satFacts": {
+      "a": "2 s 14 d",
+      "aLabel": "4 modul",
+      "b": "98",
+      "bLabel": "savol",
+      "c": "1600",
+      "cLabel": "maks."
+    },
+    "fullFrom": "To‘liq mock <b><price></price></b> dan",
+    "soonState": "Tez kunda",
+    "soonDone": "Ochilganda emailga yozamiz",
+    "notify": "Xabar berish",
+    "added": "Qo‘shildi",
+    "notifyToast": "{exam} ochilganda emailingizga yozamiz",
+    "how1": {
+      "title": "Imtihonni tanlang",
+      "text": "To‘liq mock yoki bitta bo‘lim. Har bir test siz uchun yangi."
+    },
+    "how2": {
+      "title": "Kompyuterda topshiring",
+      "text": "Haqiqiy test bilan bir xil ko‘rinish, taymer va qoidalar."
+    },
+    "how3": {
+      "title": "Natija darhol",
+      "text": "Writing daqiqalar ichida AI tomonidan baholanadi."
+    },
+    "how4": {
+      "title": "Nimani mashq qilishni biling",
+      "text": "Eng zaif savol turlari va keyingi qadamlar."
+    },
+    "f1": "Kompyuterdagi imtihon interfeysi",
+    "f2": "Audio bir marta eshittiriladi",
+    "f3": "Belgilash va izohlar",
+    "f4": "Bluebook uslubidagi adaptiv modullar",
+    "f5": "Desmos va formulalar varag‘i",
+    "f6": "Topshirishingiz bilan ball",
+    "f7": "Har bir savol tushuntirilgan",
+    "f8": "Writing bo‘yicha har mezonga izoh",
+    "seeAll": "Hammasi",
+    "pSection": "Bitta bo‘lim",
+    "pSectionNote": "Istalgan bitta bo‘lim",
+    "pFull": "To‘liq mock",
+    "pFullNote": "Barcha bo‘limlar, bir o‘tirishda",
+    "pBundle": "{n} ta mock",
+    "pBundleNote": "Har biri <per></per>",
+    "fq1": "Bu haqiqiy imtihon bilan bir xilmi?",
+    "fa1": "Ko‘rinish, vaqt, savol turlari va qoidalar kompyuterdagi IELTS Academic va Digital SAT’ga mos. Bu mashq testi, rasmiy sertifikat emas.",
+    "fq2": "Telefonda topshirsa bo‘ladimi?",
+    "fa2": "Ro‘yxatdan o‘tish, to‘lash va natijani ko‘rish telefonda ham bo‘ladi. Imtihonning o‘zi haqiqiy test kabi noutbuk yoki kompyuterda topshiriladi.",
+    "fq3": "Writing qanday baholanadi?",
+    "fa3": "AI har bir topshiriqni IELTS’ning to‘rtta mezoni bo‘yicha daqiqalar ichida yozma izoh bilan baholaydi.",
+    "fq4": "Bir xil test ikki marta tushadimi?",
+    "fa4": "Yo‘q. Har bir boshlagan mockingiz siz uchun yangi.",
+    "fq5": "Qaysi valyutalarda?",
+    "fa5": "UZS, USD va EUR. Narxlarga soliqlar kiritilgan.",
+    "startFree": "Bepul boshlash",
+    "sample": "Namuna"
+  }
+}

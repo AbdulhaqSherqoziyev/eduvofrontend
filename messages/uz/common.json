@@ -7,5 +7,87 @@
     "title": "Bunday sahifa yo‘q",
     "body": "Havola eskirgan yoki xato yozilgan bo‘lishi mumkin.",
     "home": "Bosh sahifaga o‘tish"
+  },
+  "brand": {
+    "eduvo": "Eduvo",
+    "mock": "Mock",
+    "home": "Eduvo Mock bosh sahifasi"
+  },
+  "nav": {
+    "ielts": "IELTS",
+    "sat": "SAT",
+    "pricing": "Narxlar",
+    "how": "Qanday ishlaydi",
+    "centers": "Markazlar uchun",
+    "login": "Kirish",
+    "start": "Bepul boshlash",
+    "dashboard": "Bosh sahifa",
+    "takeMock": "Mock topshirish",
+    "progress": "Natijalar",
+    "language": "Til",
+    "theme": "Mavzu",
+    "menu": "Menyu",
+    "back": "Orqaga",
+    "skip": "O‘tkazib yuborish",
+    "share": "Ulashish",
+    "account": "Akkaunt"
+  },
+  "tabs": {
+    "home": "Asosiy",
+    "mocks": "Mocklar",
+    "progress": "Natijalar",
+    "profile": "Profil"
+  },
+  "lang": {
+    "search": "Tilni qidirish",
+    "note": "Imtihon matni ingliz tilida qoladi. Interfeys va AI izohlari siz tanlagan tilda.",
+    "noteShort": "Imtihon matni ingliz tilida qoladi.",
+    "title": "Til",
+    "rtl": "RTL",
+    "empty": "Mos til topilmadi"
+  },
+  "sheet": {
+    "done": "Tayyor"
+  },
+  "footer": {
+    "about": "Kompyuterda IELTS Academic va Digital SAT mock imtihonlari, natija darhol.",
+    "exams": "Imtihonlar",
+    "company": "Kompaniya",
+    "legal": "Huquqiy",
+    "languages": "Tillar",
+    "ieltsAcademic": "IELTS Academic",
+    "digitalSat": "Digital SAT",
+    "soon": "CEFR · TOEFL iBT · HSK — tez kunda",
+    "pricing": "Narxlar",
+    "centers": "O‘quv markazlari uchun",
+    "help": "Yordam markazi",
+    "contact": "Aloqa",
+    "erp": "Eduvo ERP",
+    "terms": "Foydalanish shartlari",
+    "privacy": "Maxfiylik",
+    "refund": "Pulni qaytarish",
+    "cookies": "Cookie fayllar",
+    "more": "+{n} ta yana",
+    "copyright": "© {year} Eduvo · mock.eduvo.uz"
+  },
+  "legalLine": "Mashq testi — rasmiy sertifikat emas. IELTS, British Council, IDP, Cambridge yoki College Board bilan bog‘liq emas.",
+  "chips": {
+    "ai": "AI",
+    "comingSoon": "Tez kunda",
+    "free": "Bepul",
+    "freeSection": "Bepul bo‘lim",
+    "mostChosen": "Eng ko‘p tanlanadi",
+    "soon": "Tez kunda",
+    "correct": "To‘g‘ri",
+    "wrong": "Xato",
+    "pending": "Kutilmoqda"
+  },
+  "errors": {
+    "network": "Serverga ulanib bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.",
+    "server": "Bizda xatolik yuz berdi. Bir daqiqadan keyin qayta urinib ko‘ring.",
+    "rateLimited": "Juda ko‘p urinish. {sec} soniyadan keyin qayta urining.",
+    "disabled": "Eduvo Mock yangilanmoqda. Bir necha daqiqadan keyin qayta urinib ko‘ring.",
+    "tryAgain": "Qayta urinish",
+    "reload": "Sahifani yangilash"
   }
 }

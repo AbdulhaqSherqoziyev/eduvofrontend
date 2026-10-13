@@ -1,0 +1,22 @@
+'use client';
+import { isTranslated, type MockLocale } from '@/i18n/locales';
+import { getSession } from '@/lib/mock/api/client';
+import { patchMe } from '@/lib/mock/api/endpoints';
+import { usePathRest } from '@/lib/mock/hooks/use-lang';
+
+/**
+ * Switch the interface language: remember it (NEXT_LOCALE cookie, read by the middleware on `/`),
+ * sync it to the learner profile when the backend accepts that locale, then load the same page in it.
+ */
+export function useSwitchLocale() {
+  const rest = usePathRest();
+  return async (l: MockLocale) => {
+    document.cookie = `NEXT_LOCALE=${l};path=/;max-age=31536000;samesite=lax`;
+    const s = getSession();
+    // the API accepts only the MVP locales (contract §0.4) — others stay a client preference
+    if (s.status === 'learner' && isTranslated(l) && s.learner.locale !== l) {
+      try { await patchMe({ locale: l }); } catch { /* the page still switches */ }
+    }
+    window.location.assign(`/${l}${rest}${window.location.search}${window.location.hash}`);
+  };
+}

@@ -7,5 +7,87 @@
     "title": "Такой страницы нет",
     "body": "Возможно, ссылка устарела или в ней опечатка.",
     "home": "На главную"
+  },
+  "brand": {
+    "eduvo": "Eduvo",
+    "mock": "Mock",
+    "home": "Главная Eduvo Mock"
+  },
+  "nav": {
+    "ielts": "IELTS",
+    "sat": "SAT",
+    "pricing": "Цены",
+    "how": "Как это работает",
+    "centers": "Для центров",
+    "login": "Войти",
+    "start": "Начать бесплатно",
+    "dashboard": "Главная",
+    "takeMock": "Пройти мок",
+    "progress": "Прогресс",
+    "language": "Язык",
+    "theme": "Тема",
+    "menu": "Меню",
+    "back": "Назад",
+    "skip": "Пропустить",
+    "share": "Поделиться",
+    "account": "Аккаунт"
+  },
+  "tabs": {
+    "home": "Главная",
+    "mocks": "Моки",
+    "progress": "Прогресс",
+    "profile": "Профиль"
+  },
+  "lang": {
+    "search": "Поиск языка",
+    "note": "Материалы экзамена остаются на английском. Интерфейс и комментарии ИИ — на вашем языке.",
+    "noteShort": "Материалы экзамена остаются на английском.",
+    "title": "Язык",
+    "rtl": "RTL",
+    "empty": "Язык не найден"
+  },
+  "sheet": {
+    "done": "Готово"
+  },
+  "footer": {
+    "about": "Компьютерные пробные экзамены IELTS Academic и Digital SAT с мгновенным результатом.",
+    "exams": "Экзамены",
+    "company": "Компания",
+    "legal": "Документы",
+    "languages": "Языки",
+    "ieltsAcademic": "IELTS Academic",
+    "digitalSat": "Digital SAT",
+    "soon": "CEFR · TOEFL iBT · HSK — скоро",
+    "pricing": "Цены",
+    "centers": "Для учебных центров",
+    "help": "Центр помощи",
+    "contact": "Контакты",
+    "erp": "Eduvo ERP",
+    "terms": "Условия",
+    "privacy": "Конфиденциальность",
+    "refund": "Возврат средств",
+    "cookies": "Cookies",
+    "more": "ещё +{n}",
+    "copyright": "© {year} Eduvo · mock.eduvo.uz"
+  },
+  "legalLine": "Пробный тест — не официальный сертификат. Не связан с IELTS, British Council, IDP, Cambridge или College Board.",
+  "chips": {
+    "ai": "ИИ",
+    "comingSoon": "Скоро",
+    "free": "Бесплатно",
+    "freeSection": "Бесплатный раздел",
+    "mostChosen": "Чаще всего выбирают",
+    "soon": "Скоро",
+    "correct": "Верно",
+    "wrong": "Ошибка",
+    "pending": "Ожидание"
+  },
+  "errors": {
+    "network": "Нет связи с сервером. Проверьте интернет и попробуйте снова.",
+    "server": "Что-то пошло не так на нашей стороне. Попробуйте через минуту.",
+    "rateLimited": "Слишком много попыток. Повторите через {sec} с.",
+    "disabled": "Eduvo Mock обновляется. Попробуйте через несколько минут.",
+    "tryAgain": "Попробовать снова",
+    "reload": "Обновить страницу"
   }
 }
