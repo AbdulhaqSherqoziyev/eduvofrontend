@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "mocks": "Mocklarim",
+    "progress": "Natijalar",
+    "account": "Akkaunt"
+  },
+  "mocks": {
+    "title": "Mocklarim",
+    "inProgress": "Jarayonda · {n}",
+    "completed": "Tugallangan · {n}",
+    "inProgressShort": "Jarayonda",
+    "completedShort": "Tugallangan",
+    "empty": "Hozircha hech narsa yo‘q.",
+    "newMock": "Yangi mock",
+    "more": "Yana ko‘rsatish",
+    "result": "Natija",
+    "resume": "Davom ettirish"
+  },
+  "progress": {
+    "title": "Natijalar",
+    "since": "{month} dan beri {delta}",
+    "history": "Tarix",
+    "weak": "Eng zaif savol turlari",
+    "rec": "Bu hafta uchun tavsiya",
+    "empty": "Birinchi baholangan bo‘limdan keyin o‘sishingiz shu yerda chiqadi.",
+    "examTab": {
+      "ielts": "IELTS",
+      "sat": "SAT"
+    },
+    "colDate": "SANA",
+    "colMock": "MOCK",
+    "colScore": "BALL"
+  },
+  "account": {
+    "title": "Akkaunt",
+    "groups": {
+      "account": "Akkaunt",
+      "prefs": "Sozlamalar",
+      "notif": "Email xabarnomalar",
+      "billing": "To‘lovlar",
+      "support": "Yordam",
+      "data": "Ma’lumotlar"
+    },
+    "name": "Ism",
+    "email": "Email",
+    "password": "Parol",
+    "change": "O‘zgartirish",
+    "set": "O‘rnatish",
+    "language": "Til",
+    "dark": "Qorong‘i mavzu",
+    "target": "Maqsad",
+    "examDate": "Imtihon sanasi",
+    "notSet": "Belgilanmagan",
+    "nResult": "Natija tayyor",
+    "nWriting": "Writing baholandi",
+    "nTips": "Haftalik maslahatlar",
+    "purchases": "Xaridlar va kvitansiyalar",
+    "buy": "Kredit sotib olish",
+    "help": "Yordam markazi",
+    "contact": "Biz bilan bog‘lanish",
+    "export": "Ma’lumotlarimni yuklab olish",
+    "delete": "Akkauntni o‘chirish",
+    "logout": "Chiqish",
+    "logoutAll": "Hamma qurilmalardan chiqish",
+    "footer": "Eduvo Mock · v1.0 · Mashq testi — rasmiy sertifikat emas.",
+    "deleteBody": "Mocklaringiz, natijalaringiz va ishlatilmagan kreditlar 14 kundan keyin butunlay o‘chiriladi. Avval ma’lumotlaringizni yuklab olishingiz mumkin.",
+    "download": "Ma’lumotlarimni yuklab olish",
+    "soon": "Bu tez kunda ochiladi.",
+    "nameSave": "Saqlash",
+    "nameTitle": "Ismingiz",
+    "pwTitle": "Parolni o‘zgartirish",
+    "pwCurrent": "Joriy parol",
+    "pwNew": "Yangi parol",
+    "pwSave": "Parolni saqlash",
+    "pwSaved": "Parol o‘zgartirildi.",
+    "saved": "Saqlandi",
+    "wrong": "Parol noto‘g‘ri.",
+    "short": "Kamida 8 ta belgi kiriting.",
+    "weak": "Bu parol juda keng tarqalgan. Boshqasini tanlang.",
+    "cancel": "Bekor qilish",
+    "saveErr": "Saqlab bo‘lmadi. Qayta urinib ko‘ring."
+  }
+}

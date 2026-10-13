@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "mocks": "My mocks",
+    "progress": "Progress",
+    "account": "Account"
+  },
+  "mocks": {
+    "title": "My mocks",
+    "inProgress": "In progress · {n}",
+    "completed": "Completed · {n}",
+    "inProgressShort": "In progress",
+    "completedShort": "Completed",
+    "empty": "Nothing here yet.",
+    "newMock": "New mock",
+    "more": "Show more",
+    "result": "Result",
+    "resume": "Resume"
+  },
+  "progress": {
+    "title": "Progress",
+    "since": "{delta} since {month}",
+    "history": "History",
+    "weak": "Weakest question types",
+    "rec": "Recommended this week",
+    "empty": "Your progress will appear here after your first scored section.",
+    "examTab": {
+      "ielts": "IELTS",
+      "sat": "SAT"
+    },
+    "colDate": "DATE",
+    "colMock": "MOCK",
+    "colScore": "SCORE"
+  },
+  "account": {
+    "title": "Account",
+    "groups": {
+      "account": "Account",
+      "prefs": "Preferences",
+      "notif": "Email notifications",
+      "billing": "Billing",
+      "support": "Support",
+      "data": "Data"
+    },
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "change": "Change",
+    "set": "Set",
+    "language": "Language",
+    "dark": "Dark theme",
+    "target": "Target",
+    "examDate": "Exam date",
+    "notSet": "Not set",
+    "nResult": "Result is ready",
+    "nWriting": "Writing graded",
+    "nTips": "Weekly study tips",
+    "purchases": "Purchases and receipts",
+    "buy": "Buy credits",
+    "help": "Help center",
+    "contact": "Contact us",
+    "export": "Export my data",
+    "delete": "Delete account",
+    "logout": "Log out",
+    "logoutAll": "Log out everywhere",
+    "footer": "Eduvo Mock · v1.0 · Practice test — not an official certificate.",
+    "deleteBody": "Your mocks, results and unused credits are removed for good after 14 days. You can download your data first.",
+    "download": "Download my data",
+    "soon": "This opens soon.",
+    "nameSave": "Save",
+    "nameTitle": "Your name",
+    "pwTitle": "Change password",
+    "pwCurrent": "Current password",
+    "pwNew": "New password",
+    "pwSave": "Save password",
+    "pwSaved": "Password changed.",
+    "saved": "Saved",
+    "wrong": "Wrong password.",
+    "short": "Use at least 8 characters.",
+    "weak": "This password is too common. Choose another one.",
+    "cancel": "Cancel",
+    "saveErr": "Couldn't save. Try again."
+  }
+}

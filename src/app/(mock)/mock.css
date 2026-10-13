@@ -429,3 +429,6 @@ select.m-input { padding: 0 14px; }
 .m-fallback :is(h1, h2, h3, p, span, b, a, button, label, td, th, li, small) { unicode-bidi: plaintext; }
 .m-ts { display: flex; justify-content: center; padding: 0 16px 16px; }
 .m-ts:empty { display: none; }
+/* settings row chevron (Mobile App profile) */
+.m-chev { width: 8px; height: 8px; border-inline-end: 2px solid var(--mut); border-top: 2px solid var(--mut); transform: rotate(45deg); flex: none; }
+[dir='rtl'] .m-chev { transform: rotate(-135deg); }

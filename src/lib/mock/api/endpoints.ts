@@ -2,7 +2,8 @@
 import { api, clearSession, currentAccessToken, setAuthSession, setLearner } from './client';
 import type {
   AttemptListItem, AttemptMode, AuthSession, Catalog, CheckoutMethods, CreatedAttempt, Currency, Dashboard, ExamCredits,
-  Learner, MePatch, MockResultExt, OpenExamSlug, Order, PaymentMethodGroup, Quote, SectionKey, ShareCard, StartInfo, WaitlistTopic,
+  Learner, MePatch, MockResultExt, OpenExamSlug, Order, PaymentMethodGroup, ProgressSeries, Quote, Recommendation, SectionKey, ShareCard,
+  StartInfo, WaitlistTopic, WeakType,
 } from './types';
 
 /* ---- §1 auth ---- */
@@ -96,4 +97,21 @@ export async function downloadReceipt(id: string, filename: string) {
   const a = document.createElement('a');
   a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+/* ---- §5 D2 progress, §1 A10 password change ---- */
+export const getProgress = (exam: OpenExamSlug, signal?: AbortSignal) =>
+  api<ProgressResp>(`/mock/progress?exam=${exam}`, { signal });
+export interface ProgressResp {
+  exam: OpenExamSlug;
+  series: ProgressSeries;
+  history: Array<{ attemptId: string; at: string; testCode: string; mode: AttemptMode; sectionKey: SectionKey | null; overall: number | null; sections: Partial<Record<SectionKey, number | null>> }>;
+  weakestTypes: WeakType[];
+  recommendations: Recommendation[];
+  serverNow: string;
+}
+export async function changePassword(body: { currentPassword?: string; newPassword: string }) {
+  const s = await api<AuthSession>('/mock/auth/password/change', { method: 'POST', body, cookie: true });
+  setAuthSession(s);
+  return s;
 }

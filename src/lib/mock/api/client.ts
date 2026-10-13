@@ -128,10 +128,20 @@ async function raw<T>(path: string, o: ReqOpts): Promise<T> {
 
 let refreshing: Promise<boolean> | null = null;
 
+/**
+ * The refresh cookie rotates on every use and a replayed one revokes the whole session family
+ * (contract §0.2). Two tabs loading at once would both send the same cookie, so the request runs
+ * under a cross-tab lock (Web Locks API); the second tab then sends the already-rotated cookie.
+ */
+function withRefreshLock<T>(fn: () => Promise<T>): Promise<T> {
+  const locks = typeof navigator !== 'undefined' && 'locks' in navigator ? navigator.locks : undefined;
+  return locks ? (locks.request('eduvo-mock-refresh', fn) as Promise<T>) : fn();
+}
+
 /** POST /mock/auth/refresh (A4). Resolves true when a session was restored. Concurrent callers share one request. */
 export function refreshSession(): Promise<boolean> {
   if (!refreshing) {
-    refreshing = raw<AuthSession>('/mock/auth/refresh', { method: 'POST', cookie: true, auth: false })
+    refreshing = withRefreshLock(() => raw<AuthSession>('/mock/auth/refresh', { method: 'POST', cookie: true, auth: false }))
       .then((s) => { setAuthSession(s); return true; })
       .catch((e: unknown) => {
         if (e instanceof MockApiError && e.status === 401) { clearSession(); return false; }
