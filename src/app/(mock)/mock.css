@@ -427,3 +427,5 @@ select.m-input { padding: 0 14px; }
 
 /* RTL locale without its translation yet: English strings in a mirrored layout read correctly */
 .m-fallback :is(h1, h2, h3, p, span, b, a, button, label, td, th, li, small) { unicode-bidi: plaintext; }
+.m-ts { display: flex; justify-content: center; padding: 0 16px 16px; }
+.m-ts:empty { display: none; }

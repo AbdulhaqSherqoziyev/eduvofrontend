@@ -2,15 +2,17 @@
 /** Phone language bottom sheet (Mobile App.dc.html `shLang`). */
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { LOCALES, LOCALE_NAMES, RTL_LOCALES, htmlLang } from '@/i18n/locales';
+import { LOCALES, LOCALE_NAMES, RTL_LOCALES, htmlLang, type MockLocale } from '@/i18n/locales';
 import { useLang } from '@/lib/mock/hooks/use-lang';
 import { sx } from '@/lib/mock/sx';
 import { BottomSheet } from './bottom-sheet';
 import { useSwitchLocale } from './use-switch-locale';
 
-export function LanguageSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+/** Default: switch the site language. With `onPick`, it only reports the choice (onboarding step 4). */
+export function LanguageSheet({ open, onClose, current, onPick }: { open: boolean; onClose: () => void; current?: MockLocale; onPick?: (l: MockLocale) => void }) {
   const t = useTranslations('common');
-  const { lang } = useLang();
+  const { lang: siteLang } = useLang();
+  const lang = current ?? siteLang;
   const switchTo = useSwitchLocale();
   const [q, setQ] = useState('');
   const list = useMemo(() => {
@@ -23,7 +25,7 @@ export function LanguageSheet({ open, onClose }: { open: boolean; onClose: () =>
         style={sx('height:48px;border-radius:14px;padding:0 14px;font-size:16px')} />
       <div className="m-rows" role="radiogroup" aria-label={t('lang.title')}>
         {list.map((l) => (
-          <button key={l} type="button" role="radio" aria-checked={l === lang} lang={htmlLang(l)} onClick={() => { onClose(); void switchTo(l); }}
+          <button key={l} type="button" role="radio" aria-checked={l === lang} lang={htmlLang(l)} onClick={() => { if (onPick) { onPick(l); return; } onClose(); void switchTo(l); }}
             style={sx('width:100%;min-height:52px;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:0 16px;display:flex;align-items:center;gap:10px;text-align:start')}>
             <span dir={RTL_LOCALES.has(l) ? 'rtl' : 'ltr'} style={sx('flex:1;font-weight:700;font-size:15px;text-align:start')}>{LOCALE_NAMES[l]}</span>
             <span style={sx('font-size:11px;color:var(--mut);font-weight:800')}>{RTL_LOCALES.has(l) ? t('lang.rtl') : ''}</span>
