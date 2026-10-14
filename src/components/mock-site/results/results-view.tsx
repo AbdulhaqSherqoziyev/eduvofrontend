@@ -3,7 +3,7 @@
  * Results — Results.dc.html (≥520) and Mobile App.dc.html `results` (<520).
  * Data: R1 GET /mock/attempts/:id/result (EXAM §1.10 body + `mock` extension). Writing grading is
  * polled every 10 s; the overall shows "—" until it is ready. No hedging words about scores.
- * Share (R2–R4) and PDF are not built yet → their buttons keep their place in a "Soon" state.
+ * Share = R2 + client-side card image (share-modal.tsx); PDF is not built yet → "Soon" (contract Q3).
  */
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -22,6 +22,8 @@ import { BottomSheet } from '../bottom-sheet';
 import { Segmented } from '../segmented';
 import { StickyCta } from '../sticky-cta';
 import { useToast } from '../toast';
+import { CancelledCard } from '../cancelled-card';
+import { ShareModal } from './share-modal';
 
 export type FullResult = ResultResp & { mock: MockResultExt };
 const POLL_MS = 10_000;
@@ -42,6 +44,8 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
   const { lang, href } = useLang();
   const [res, setRes] = useState<FullResult | null>(sample ?? null);
   const [err, setErr] = useState<'notfound' | 'load' | null>(null);
+  const [cancelled, setCancelled] = useState<null | { refunded: boolean }>(null);
+  const [shareOpen, setShareOpen] = useState(false);
   const [wtab, setWtab] = useState(0);
   const [rtab, setRtab] = useState<string>('');
   const [filter, setFilter] = useState<'all' | 'wrong'>('all');
@@ -59,6 +63,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
       setRes(r); setErr(null);
     } catch (e) {
       if (e instanceof MockApiError && e.code === 'ATTEMPT_NOT_FINISHED') { router.replace(href(`/exam/${attemptId}`)); return; }
+      if (e instanceof MockApiError && e.code === 'ATTEMPT_CANCELLED') { setCancelled({ refunded: e.body.refunded !== false }); return; }
       setErr(e instanceof MockApiError && (e.status === 404 || e.code === 'ATTEMPT_NOT_FOUND') ? 'notfound' : 'load');
     }
   }, [attemptId, router, href]);
@@ -91,7 +96,9 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
     if (typeof p.section === 'string') p.section = sName(p.section);
     if (typeof p.criterion === 'string') p.criterion = t.has(`crit.${p.criterion}`) ? t(`crit.${p.criterion}` as 'crit.TA') : p.criterion;
     if (typeof p.task === 'string') p.task = p.task === 'task1' ? t('task', { n: 1 }) : p.task === 'task2' ? t('task', { n: 2 }) : p.task;
-    return tq.has(`rec.${r.code}`) ? tq(`rec.${r.code}`, p) : tq('rec.generic');
+    if (typeof p.gap === 'number') p.gap = fmtScore(p.gap, exam);
+    const key = r.code === 'section_focus' && exam === 'sat' ? 'section_focus_sat' : r.code;
+    return tq.has(`rec.${key}`) ? tq(`rec.${key}`, p) : tq('rec.generic');
   };
 
   const full = m?.mode === 'full';
@@ -99,7 +106,10 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
   const overallShown = overallVal == null ? '—' : fmtScore(overallVal, exam);
   const overallLabel = full ? (ielts ? t('overallBand') : t('totalScore')) : ielts ? t('sectionBand', { section: sName(m?.sectionKey ?? '') }) : t('sectionScore', { section: sName(m?.sectionKey ?? '') });
   const scaleMax = ielts ? '9.0' : full ? '1600' : '800';
-  const targetLine = !m ? '' : full && res?.overallBand?.pending ? t('targetPending') : m.target ? (m.target.gap != null && m.target.gap > 0 ? t('targetGap', { target: fmtScore(m.target.value, exam), gap: fmtScore(m.target.gap, exam) }) : t('targetAhead', { target: fmtScore(m.target.value, exam) })) : t('targetNone');
+  const unavailable = !!(res?.overallBand as { unavailable?: string } | null | undefined)?.unavailable;
+  const targetLine = !m ? '' : full && unavailable ? t('overallUnavailable') : full && res?.overallBand?.pending ? t('targetPending') : m.target
+    ? (m.target.gap == null ? t('targetOnly', { target: fmtScore(m.target.value, exam) }) : m.target.gap > 0 ? t('targetGap', { target: fmtScore(m.target.value, exam), gap: fmtScore(m.target.gap, exam) }) : t('targetAhead', { target: fmtScore(m.target.value, exam) }))
+    : t('targetNone');
   const dateStr = m?.finishedAt ? fmtDateLong(lang, m.finishedAt) : '';
   const modeStr = full ? t('full') : t('section', { section: sName(m?.sectionKey ?? '') });
 
@@ -123,10 +133,18 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
   const rowNo = (r: ReviewRow) => { const mm = /_m(\d+)$/.exec(r.stageKey ?? r.sectionKey); return mm ? `M${mm[1]}·${r.no}` : String(r.no); };
 
   const pdf = () => toast(t('pdfSoonToast'));
-  const share = () => toast(t('shareSoon'));
+  const share = () => setShareOpen(true);
+  const shareView = {
+    label: overallLabel,
+    score: overallShown,
+    sub: ielts
+      ? (full ? `IELTS Academic${m?.cefr ? ` · CEFR ${m.cefr}` : ''}` : `IELTS Academic · ${sName(m?.sectionKey ?? '')}`)
+      : (full ? ['Digital SAT', ...(m?.sectionCards ?? []).filter((c) => c.score != null).map((c) => `${c.key === 'reading_writing' ? 'R&W' : sName(c.key)} ${fmtScore(c.score, 'sat')}`)].join(' · ') : `Digital SAT · ${sName(m?.sectionKey ?? '')}`),
+  };
   const anotherHref = sample ? href('/signup?next=free') : href(`/start/${exam}?mode=full`);
 
   /* ---------- states ---------- */
+  if (cancelled) return <CancelledCard refunded={cancelled.refunded} />;
   if (err) {
     return (
       <main style={sx('max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,40px) 20px 40px')}>
@@ -169,8 +187,8 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
             <span style={sx('font-size:14px;color:var(--ai);font-weight:700')}>{t('grading')}</span>
             <span style={sx('font-size:12px;color:var(--mut)')}>{t('gradingNote')}</span>
           </>
-        ) : s.status === 'NEEDS_HUMAN' ? (
-          <span style={sx('font-size:14px;color:var(--warn);font-weight:700;line-height:1.5')}>{t('needsHuman')}</span>
+        ) : s.status === 'NOT_GRADED' ? (
+          <span style={sx('font-size:14px;color:var(--warn);font-weight:700;line-height:1.5')}>{m.notGraded?.refunded === false ? t('notGradedNoRefund') : t('notGraded')}</span>
         ) : s.status === 'NOT_TAKEN' ? (
           <span style={sx('font-size:14px;color:var(--mut);font-weight:700')}>{t('notTaken')}</span>
         ) : (
@@ -199,8 +217,8 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
         <span style={sx('color:var(--ink2);font-size:14px;line-height:var(--lh-body)')}>{t('writingPendingBody')}</span>
         <div style={sx('width:100%;max-width:420px;height:8px;border-radius:99px;box-shadow:var(--inset);overflow:hidden')}><div className="m-skel" style={sx('height:100%;width:100%;border-radius:99px')} /></div>
       </div>
-    ) : essay.status === 'NEEDS_HUMAN' ? (
-      <div className="m-banner m-banner--warn">{t('needsHuman')}</div>
+    ) : essay.status === 'NOT_GRADED' ? (
+      <div className="m-banner m-banner--warn">{m.notGraded?.refunded === false ? t('notGradedNoRefund') : t('notGraded')}</div>
     ) : (
       <>
         <div style={sx('display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:24px')}>
@@ -248,7 +266,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
             <span style={sx('font-size:14px;color:var(--ink2);font-weight:600')}>{t.rich('metaLine', { mode: modeStr, date: dateStr, code: () => <bdi dir="ltr">{m.testCode}</bdi> })}</span>
           </div>
           <div style={sx('display:flex;gap:10px;flex-wrap:wrap')}>
-            <button type="button" className="m-btn m-btn--soft" aria-disabled="true" onClick={share} title={t('pdfSoonTip')} style={sx('height:46px;padding:0 16px;border-radius:13px;font-size:14px;color:var(--mut);opacity:.7;cursor:not-allowed')}>{t('share')} <span className="m-soon">{tc('chips.soon')}</span></button>
+            <button type="button" className="m-btn m-btn--soft" onClick={share} style={sx('height:46px;padding:0 16px;border-radius:13px;font-size:14px')}>{t('share')}</button>
             <button type="button" className="m-btn m-btn--soft" aria-disabled="true" onClick={pdf} title={t('pdfSoonTip')} style={sx('height:46px;padding:0 16px;border-radius:13px;font-size:14px;color:var(--mut);opacity:.7;cursor:not-allowed')}>{t('pdf')} <span className="m-soon">{tc('chips.soon')}</span></button>
             <Link className="m-btn m-btn--primary" href={anotherHref} style={sx('height:46px;padding:0 18px;border-radius:13px;font-weight:700;font-size:14px;box-shadow:0 8px 18px -8px rgba(46,107,230,.7)')}>{t('another')}</Link>
           </div>
@@ -432,6 +450,8 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
         )}
       </BottomSheet>
       <StickyCta secondary={{ label: <>{t('phone.pdf')} <span className="m-soon">{tc('chips.soon')}</span></>, onClick: pdf }} primary={{ label: t('another'), href: anotherHref }} />
+      <ShareModal open={shareOpen} onClose={() => setShareOpen(false)} view={shareView} attemptId={sample ? undefined : attemptId} ready={overallVal != null}
+        sampleUrl={sample && typeof window !== 'undefined' ? `${window.location.origin}${href('/sample-result')}` : undefined} />
     </>
   );
 }

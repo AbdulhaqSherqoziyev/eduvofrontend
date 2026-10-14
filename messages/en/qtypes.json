@@ -42,7 +42,8 @@
     "practice_type": "Practise {type}: do 3 short sets and check every answer against the text.",
     "take_full_mock": "Take a full mock to see your overall band.",
     "writing_criterion": "Writing {task}: work on {criterion}.",
-    "section_focus": "Focus on {section}: it is {gap} below your target.",
-    "generic": "Review the questions you got wrong and read each explanation."
+    "section_focus": "Focus on {section}: your band is {gap} below your target.",
+    "generic": "Review the questions you got wrong and read each explanation.",
+    "section_focus_sat": "Focus on {section}: your score is {gap} points below your target."
   }
 }

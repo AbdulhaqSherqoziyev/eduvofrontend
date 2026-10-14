@@ -75,6 +75,7 @@ export const emailStartLink = (body: { exam: OpenExamSlug; mode: AttemptMode; se
 /** EXAM §1.10 body is typed loosely here; the results page reads only what it renders. */
 export type MockResult = Record<string, unknown> & { status?: string; mock: MockResultExt; serverNow: string };
 export const getResult = (attemptId: string, signal?: AbortSignal) => api<MockResult>(`/mock/attempts/${encodeURIComponent(attemptId)}/result`, { signal });
+export const getSharedCard = (token: string) => api<{ card: ShareCard; serverNow: string }>(`/mock/share/${encodeURIComponent(token)}`, { auth: false });
 export const createShare = (attemptId: string) =>
   api<{ token: string; url: string; card: ShareCard }>(`/mock/attempts/${encodeURIComponent(attemptId)}/share`, { method: 'POST' });
 

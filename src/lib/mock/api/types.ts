@@ -1,5 +1,5 @@
 /**
- * mock.eduvo.uz B2C API types — .claude/specs/mock-site/_api-contract.md v0.2 (Bekzod).
+ * mock.eduvo.uz B2C API types — .claude/specs/mock-site/_api-contract.md v0.5 (Bekzod).
  * Keep in sync with the contract's Changelog; names follow the contract 1:1.
  */
 
@@ -64,6 +64,8 @@ export interface CatalogExam {
   sections: CatalogSection[];
   breakMin: number | null;
   fullMockPrice: PriceSet | null;
+  /** v0.5: tests this learner (guest: the bank) has not seen yet */
+  freshTests?: number | null;
 }
 export type ProductKind = 'section' | 'full' | 'bundle' | 'unlimited';
 export interface Product {
@@ -78,6 +80,8 @@ export interface Product {
   validityMonths: number | null;
   badge: 'most_chosen' | null;
   available: boolean;
+  /** v0.5: why `available:false` — NOT_ENOUGH_TESTS = more credits than unseen tests */
+  unavailableReason?: 'INACTIVE' | 'COMING_SOON' | 'NOT_ENOUGH_TESTS' | null;
 }
 export interface Catalog {
   exams: CatalogExam[];
@@ -98,6 +102,10 @@ export interface ExamCredits {
   freeSectionAvailable: boolean;
   unlimitedUntil: string | null;
   nextExpiry: { fullMocks: number; sections: number; at: string } | null;
+  /** v0.5 */
+  freshTests?: number;
+  unusableCredits?: number;
+  blockedReason?: 'NO_FRESH_TEST' | null;
 }
 
 /* ---- §5 dashboard ---- */
@@ -106,7 +114,7 @@ export type NextStep =
   | { kind: 'verify_email' }
   | { kind: 'free_section'; exams: OpenExamSlug[] }
   | { kind: 'writing_grading'; attemptId: string; exam: OpenExamSlug }
-  | { kind: 'take_mock'; exam: OpenExamSlug; hasCredit: boolean }
+  | { kind: 'take_mock'; exam: OpenExamSlug; hasCredit: boolean; noFreshTest?: boolean }
   | { kind: 'review_result'; attemptId: string; exam: OpenExamSlug };
 
 export type SeriesKey = 'overall' | SectionKey;
@@ -119,8 +127,11 @@ export interface ProgressSeries {
 export interface WeakType { type: string; correct: number; total: number; pct: number }
 export interface AttemptListItem {
   attemptId: string; exam: OpenExamSlug; testCode: string; mode: AttemptMode; sectionKey: SectionKey | null;
-  status: 'in_progress' | 'grading' | 'completed' | 'expired';
+  status: 'in_progress' | 'grading' | 'completed' | 'expired' | 'cancelled';
   startedAt: string; finishedAt: string | null;
+  /** v0.5: Writing could not be graded (score null, credit refunded) */
+  notGraded?: boolean;
+  refunded?: boolean;
   remainingSec: number | null;
   score: { value: number | null; label: string | null } | null;
   isFree: boolean;
@@ -162,6 +173,7 @@ export interface StartInfo {
   systemCheck: SystemCheckKey[];
   startUrl: string;
   serverNow: string;
+  freshTests?: number;
 }
 export interface CreatedAttempt {
   attemptId: string; examCode: string; testId: string; testCode: string;
@@ -175,7 +187,7 @@ export interface CreatedAttempt {
 export interface ResultCriterion { code: 'TA' | 'TR' | 'CC' | 'LR' | 'GRA'; score: number; max: number; feedback: string }
 export type WaitlistTopic = 'cefr' | 'toefl' | 'hsk' | 'unlimited_ielts' | 'unlimited_sat';
 export interface ResultWriting {
-  taskKey: 'task1' | 'task2'; status: 'GRADING' | 'READY' | 'NEEDS_HUMAN';
+  taskKey: 'task1' | 'task2'; status: 'GRADING' | 'READY' | 'NOT_GRADED';
   prompt: string; essay: string; words: number; band: number | null;
   criteria: ResultCriterion[] | null; strengths: string[]; nextSteps: string[]; feedbackLang: Locale;
 }
@@ -184,7 +196,9 @@ export interface MockResultExt {
   finishedAt: string | null;
   cefr: string | null;
   target: { value: number; gap: number | null } | null;
-  sectionCards: Array<{ key: SectionKey; score: number | null; label: string | null; correct: number | null; total: number | null; aiGraded: boolean; status: 'READY' | 'GRADING' | 'NEEDS_HUMAN' | 'NOT_TAKEN' }>;
+  sectionCards: Array<{ key: SectionKey; score: number | null; label: string | null; correct: number | null; total: number | null; aiGraded: boolean; status: 'READY' | 'GRADING' | 'NOT_GRADED' | 'NOT_TAKEN' }>;
+  /** v0.5: Writing could not be graded — no overall, credit refunded */
+  notGraded: { sections: SectionKey[]; refunded: boolean; reason: string } | null;
   accuracyByType: Array<{ section: SectionKey; type: string; correct: number; total: number; pct: number }>;
   strongest: string[]; weakest: string[];
   nextSteps: Recommendation[];
@@ -196,6 +210,8 @@ export interface MockResultExt {
 export interface ShareCard {
   exam: OpenExamSlug; scoreLabel: string; scaleMax: number; cefr: string | null;
   mode: AttemptMode; sectionKey: SectionKey | null; takenAt: string; firstName: string | null;
+  /** v0.5: full mock section scores */
+  sections?: Array<{ key: SectionKey; label: string | null }>;
 }
 
 /* ---- §9 checkout ---- */

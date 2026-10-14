@@ -92,5 +92,34 @@
     "strongest": "STRONGEST",
     "needs": "NEEDS PRACTICE",
     "pdf": "PDF"
+  },
+  "notGraded": "We could not grade this Writing. The credit for this mock is back in your account.",
+  "notGradedNoRefund": "We could not grade this Writing.",
+  "overallUnavailable": "No overall band: it needs a graded Writing section.",
+  "targetOnly": "Your target is {target} for the full exam.",
+  "shareModal": {
+    "title": "Share your result",
+    "close": "Close",
+    "save": "Save image",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "linkErr": "Couldn’t create a link. Try again in a minute.",
+    "notReady": "You can share once your score is ready.",
+    "footer": "mock.eduvo.uz · Practice test",
+    "saved": "Image saved",
+    "copyManual": "Press Ctrl+C to copy the link"
+  },
+  "sharePage": {
+    "title": "Mock exam result",
+    "titleName": "{name}’s mock exam result",
+    "body": "Taken on Eduvo Mock — computer-based IELTS Academic and Digital SAT practice tests with instant scores.",
+    "cta": "Try a free section",
+    "gone": "This result link is no longer available.",
+    "err": "Couldn’t load this result. Try again in a minute.",
+    "retry": "Try again",
+    "overall": "Overall band",
+    "total": "Total score",
+    "section": "{section} score",
+    "taken": "Taken {date}"
   }
 }

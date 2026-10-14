@@ -16,7 +16,7 @@ export default function ResultsPage({ params: { lang, attemptId } }: { params: {
   setRequestLocale(lang);
   return (
     <PageShell ns={['results', 'qtypes']}>
-      <SiteHeader active="progress" />
+      <SiteHeader active="dash" />
       <ResultsGate attemptId={attemptId} />
     </PageShell>
   );

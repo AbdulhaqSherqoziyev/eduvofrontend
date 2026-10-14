@@ -92,5 +92,34 @@
     "strongest": "ENG KUCHLI",
     "needs": "MASHQ KERAK",
     "pdf": "PDF"
+  },
+  "notGraded": "Bu Writing’ni baholay olmadik. Shu mock uchun kredit hisobingizga qaytarildi.",
+  "notGradedNoRefund": "Bu Writing’ni baholay olmadik.",
+  "overallUnavailable": "Umumiy ball yo‘q: buning uchun Writing baholangan bo‘lishi kerak.",
+  "targetOnly": "To‘liq imtihon uchun maqsadingiz — {target}.",
+  "shareModal": {
+    "title": "Natijani ulashish",
+    "close": "Yopish",
+    "save": "Rasmni saqlash",
+    "copy": "Havolani nusxalash",
+    "copied": "Havola nusxalandi",
+    "linkErr": "Havola yaratib bo‘lmadi. Bir daqiqadan keyin urinib ko‘ring.",
+    "notReady": "Ball tayyor bo‘lgach ulashishingiz mumkin.",
+    "footer": "mock.eduvo.uz · Mashq testi",
+    "saved": "Rasm saqlandi",
+    "copyManual": "Havolani nusxalash uchun Ctrl+C bosing"
+  },
+  "sharePage": {
+    "title": "Mock imtihon natijasi",
+    "titleName": "{name}ning mock imtihon natijasi",
+    "body": "Eduvo Mock’da topshirilgan — kompyuterda IELTS Academic va Digital SAT mashq testlari, natija darhol.",
+    "cta": "Bepul bo‘limni sinash",
+    "gone": "Bu natija havolasi endi mavjud emas.",
+    "err": "Natijani yuklab bo‘lmadi. Bir daqiqadan keyin urinib ko‘ring.",
+    "retry": "Qayta urinish",
+    "overall": "Umumiy ball",
+    "total": "Jami ball",
+    "section": "{section} balli",
+    "taken": "Topshirilgan: {date}"
   }
 }

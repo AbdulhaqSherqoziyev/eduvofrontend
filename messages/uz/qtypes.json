@@ -42,7 +42,8 @@
     "practice_type": "{type} turini mashq qiling: 3 ta qisqa to‘plam yeching va har javobni matn bilan solishtiring.",
     "take_full_mock": "Umumiy ballingizni bilish uchun to‘liq mock topshiring.",
     "writing_criterion": "Writing {task}: {criterion} ustida ishlang.",
-    "section_focus": "{section} bo‘limiga e’tibor bering: maqsaddan {gap} past.",
-    "generic": "Xato qilgan savollaringizni ko‘rib chiqing va har bir tushuntirishni o‘qing."
+    "section_focus": "{section} bo‘limiga e’tibor bering: ballingiz maqsaddan {gap} past.",
+    "generic": "Xato qilgan savollaringizni ko‘rib chiqing va har bir tushuntirishni o‘qing.",
+    "section_focus_sat": "{section} bo‘limiga e’tibor bering: ballingiz maqsaddan {gap} ball past."
   }
 }
