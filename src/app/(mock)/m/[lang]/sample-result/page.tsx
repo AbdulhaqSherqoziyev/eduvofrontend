@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { MockLocale } from '@/i18n/locales';
 import { PageShell } from '@/components/mock-site/page-shell';
 import { ResultsView } from '@/components/mock-site/results/results-view';
-import { SAMPLE_RESULT } from '@/components/mock-site/results/sample';
+import { sampleResultFor } from '@/components/mock-site/results/sample';
 import { SiteFooter } from '@/components/mock-site/site-footer';
 import { SiteHeader } from '@/components/mock-site/site-header';
 import { publicPageMeta } from '@/lib/mock/seo';
@@ -19,7 +19,7 @@ export default function SampleResultPage({ params: { lang } }: { params: { lang:
   return (
     <PageShell ns={['results', 'qtypes']}>
       <SiteHeader />
-      <ResultsView sample={SAMPLE_RESULT} />
+      <ResultsView sample={sampleResultFor(lang)} />
       <SiteFooter />
     </PageShell>
   );

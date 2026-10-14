@@ -102,7 +102,7 @@ export function CheckoutForm() {
       if (e instanceof MockApiError && (e.code === 'PRODUCT_UNAVAILABLE' || e.code === 'PRODUCT_NOT_FOUND')) { router.replace(href('/pricing?model=unl')); return; }
       setQuoteErr(true);
     }
-  }, [sku, cur, router, href]);
+  }, [sku, cur, router, href, t]);
   useEffect(() => {
     if (learner && sku) void loadQuote(applied);
     // re-quote when the product or currency changes; promo changes go through Apply

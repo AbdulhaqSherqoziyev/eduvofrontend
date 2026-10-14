@@ -85,3 +85,70 @@ export const SAMPLE_RESULT = {
     reviewExtra, share: null, pdfAvailable: false,
   },
 } as unknown as FullResult;
+
+/*
+ * The sample's AI Writing feedback in the page language (AI feedback follows the interface language,
+ * README "Language switcher"). Essays and prompts stay English. Order: task1 [TA, CC, LR, GRA],
+ * strengths, nextSteps; task2 [TR, CC, LR, GRA], strengths, nextSteps.
+ */
+type WFb = { criteria: [string, string, string, string]; strengths: [string, string]; nextSteps: [string, string] };
+const SAMPLE_FB: Record<'uz' | 'ru', [WFb, WFb]> = {
+  uz: [
+    {
+      criteria: [
+        'Umumiy xulosa va asosiy raqamlar aniq. Ba’zi ma’lumotlar solishtirilmay, sanab o‘tilgan; Polsha va Turkiyani tez o‘sganlar sifatida birga guruhlang.',
+        'Xatboshilar mantiqiy. Bog‘lovchilar to‘g‘ri, lekin takrorlanadi (“also”, “but”).',
+        'Tendensiyalar uchun so‘z boyligi yetarli. “a steady climb”, “narrowed the gap”, “trailed behind” kabi iboralarni sinab ko‘ring.',
+        'Sodda va qo‘shma gaplar asosan to‘g‘ri; murakkab tuzilmalar kam.',
+      ],
+      strengths: ['Ikkinchi xatboshida aniq umumiy xulosa gapi bor.', 'Raqamlar to‘g‘ri va grafikdan olingan.'],
+      nextSteps: ['Mamlakatlarni birma-bir tasvirlash o‘rniga bir gapda solishtiring.', 'Har xatboshida bitta nisbiy ergash gap ishlatib, xilma-xillikni ko‘rsating.'],
+    },
+    {
+      criteria: [
+        'Pozitsiya aniq va oxirigacha saqlangan. Yo‘llar haqidagi dalil to‘liq ochilishi uchun aniq misol kerak.',
+        'Har xatboshida bitta fikr. 4-xatboshi “However” bilan boshlanadi, lekin 2-xatboshidagi tomonni davom ettiradi; burilishni aniqroq ko‘rsating.',
+        'Mavzu so‘zlari to‘g‘ri ishlatilgan. Ba’zi so‘zlar takrorlanadi (“roads” ×9); “infrastructure”, “motorways” bilan almashtiring.',
+        'Shart gaplar yaxshi boshqarilgan. Bir nechta uzunroq gap ko‘proq xilma-xillikni ko‘rsatadi.',
+      ],
+      strengths: ['Kirishda aniq fikr bor va xulosada takrorlangan.', 'Toshkentdan aniq mahalliy misol.'],
+      nextSteps: ['Ikkala tomon ham ochilishi uchun yo‘llar haqidagi xatboshiga bitta misol qo‘shing.', 'Inshoni ikki daqiqada rejalang: fikr, ikki sabab, bitta qarshi dalil.'],
+    },
+  ],
+  ru: [
+    {
+      criteria: [
+        'Ясный обзор и ключевые цифры. Часть данных перечислена, а не сопоставлена; объедините Польшу и Турцию как быстро растущие страны.',
+        'Логичное деление на абзацы. Связки точные, но повторяются («also», «but»).',
+        'Словарного запаса для описания тенденций достаточно. Попробуйте «a steady climb», «narrowed the gap», «trailed behind».',
+        'Простые и сложносочинённые предложения в основном точны; сложных конструкций мало.',
+      ],
+      strengths: ['Чёткое обобщающее предложение во втором абзаце.', 'Цифры точные и взяты из графика.'],
+      nextSteps: ['Сравнивайте страны в одном предложении, а не описывайте каждую по очереди.', 'Используйте одно придаточное определительное в каждом абзаце, чтобы показать разнообразие.'],
+    },
+    {
+      criteria: [
+        'Позиция ясна и выдержана до конца. Аргументу о дорогах нужен конкретный пример, чтобы он был раскрыт полностью.',
+        'В каждом абзаце одна мысль. Абзац 4 начинается с «However», но продолжает ту же сторону, что и абзац 2; обозначьте поворот яснее.',
+        'Тематическая лексика использована верно. Некоторые слова повторяются («roads» ×9); варьируйте с «infrastructure», «motorways».',
+        'Хорошее владение условными предложениями. Несколько длинных предложений показали бы больше разнообразия.',
+      ],
+      strengths: ['Ясное мнение во введении, повторённое в заключении.', 'Конкретный местный пример из Ташкента.'],
+      nextSteps: ['Добавьте пример в абзац о дорогах, чтобы обе стороны были раскрыты.', 'Планируйте эссе две минуты: мнение, две причины, один контраргумент.'],
+    },
+  ],
+};
+
+/** SAMPLE_RESULT with the Writing feedback in `lang` (en/uz/ru; other languages keep English). */
+export function sampleResultFor(lang: string): FullResult {
+  if (lang !== 'uz' && lang !== 'ru') return SAMPLE_RESULT;
+  const fb = SAMPLE_FB[lang];
+  const writing = SAMPLE_RESULT.mock.writing.map((w, i) => ({
+    ...w,
+    feedbackLang: lang,
+    criteria: (w.criteria ?? []).map((c, j) => ({ ...c, feedback: fb[i].criteria[j] ?? c.feedback })),
+    strengths: fb[i].strengths,
+    nextSteps: fb[i].nextSteps,
+  }));
+  return { ...SAMPLE_RESULT, mock: { ...SAMPLE_RESULT.mock, writing } } as FullResult;
+}
