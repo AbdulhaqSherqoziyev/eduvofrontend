@@ -1,13 +1,14 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { Building2, BadgeDollarSign, Boxes, ArrowLeftRight, Users, FileText, LogOut, ClipboardList } from 'lucide-react';
+import { Building2, BadgeDollarSign, Boxes, ArrowLeftRight, Users, FileText, LogOut, ClipboardList, GraduationCap } from 'lucide-react';
 import { Brand } from '@/components/layout/brand';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { NavItemLink } from '@/components/layout/nav-item';
 import { useMobileNav } from '@/components/layout/mobile-nav';
 import { useAuth } from '@/providers/auth-provider';
 import { cn } from '@/lib/utils/cn';
+import { canManageMock } from '@/lib/auth/can-mock';
 
 const ITEMS = [
   { href: '/owner', label: 'Markazlar', icon: Building2 },
@@ -16,6 +17,8 @@ const ITEMS = [
   { href: '/owner/plans', label: 'Tariflar', icon: BadgeDollarSign },
   { href: '/owner/modules', label: 'Modullar', icon: Boxes },
   { href: '/owner/exams', label: 'Imtihonlar', icon: ClipboardList },
+  // mock.eduvo.uz orders / learners / promo — platform permission `mock.manage`
+  { href: '/owner/mock', label: 'Mock', icon: GraduationCap, mock: true },
   { href: '/owner/offerta', label: 'Oferta', icon: FileText },
 ];
 
@@ -45,7 +48,7 @@ export function OwnerSidebar() {
         <div className="mb-6 px-1"><Brand /></div>
         <div className="mb-3.5 px-2.5 text-[10px] font-bold tracking-[1px] text-[#9aa6b8]">PLATFORMA — OWNER</div>
         <nav className="flex flex-col">
-          {ITEMS.map((i) => (
+          {ITEMS.filter((i) => !('mock' in i) || canManageMock(user)).map((i) => (
             <NavItemLink key={i.href} href={i.href} label={i.label} icon={i.icon}
               active={pathname === i.href || (i.href !== '/owner' && pathname.startsWith(i.href))}
               onClick={() => setOpen(false)} />
