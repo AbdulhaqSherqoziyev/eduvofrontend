@@ -1,12 +1,10 @@
-/**
- * /help/contact — README §12 lists a contact form, but its endpoint (contract U4) is not built yet.
- * Until it is, the page offers the two real channels: email (mailto) and Telegram (when configured).
- */
+/** /help/contact — README §12 contact form (U4) plus the direct channels: email and Telegram. */
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { MockLocale } from '@/i18n/locales';
 import { AppBar } from '@/components/mock-site/app-bar';
 import { ContactChannels } from '@/components/mock-site/help/contact-channels';
+import { ContactForm } from '@/components/mock-site/help/contact-form';
 import { RichLine } from '@/components/mock-site/legal/rich-line';
 import { PageShell } from '@/components/mock-site/page-shell';
 import { SiteFooter } from '@/components/mock-site/site-footer';
@@ -34,6 +32,7 @@ export default async function ContactPage({ params: { lang } }: { params: { lang
           <p className="m-lead">{SUPPORT_TELEGRAM ? t('sub') : t('subEmailOnly')}</p>
         </header>
         <div style={sx('display:flex;flex-direction:column;gap:24px')}>
+          <ContactForm />
           <ContactChannels />
           <div className="m-card" style={sx('padding:24px;display:flex;flex-direction:column;gap:12px')}>
             <b style={sx('font-size:16px')}>{t('includeTitle')}</b>

@@ -105,7 +105,7 @@
   "contactCta": "Contact support",
   "contact": {
     "h1": "Contact support",
-    "sub": "Write to us by email or Telegram. We answer in English, Uzbek and Russian.",
+    "sub": "Use the form, email or Telegram. We answer in English, Uzbek and Russian.",
     "subEmailOnly": "Write to us by email. We answer in English, Uzbek and Russian.",
     "emailTitle": "Email",
     "emailText": "Best for payments, refunds and account questions.",
@@ -123,5 +123,32 @@
     "paddle": "Orders paid by card are handled by Paddle.com, our Merchant of Record. For payment questions you can also contact Paddle's buyer support at paddle.net.",
     "copy": "Copy address",
     "copied": "Email address copied"
+  },
+  "form": {
+    "title": "Send us a message",
+    "name": "Your name",
+    "email": "Email",
+    "topic": "Topic",
+    "topics": {
+      "exams": "Exams",
+      "payments": "Payments",
+      "account": "Account",
+      "technical": "Technical",
+      "other": "Other"
+    },
+    "message": "Message",
+    "messagePh": "Tell us what happened. Include the receipt number for payments.",
+    "testId": "Test ID (optional)",
+    "testIdPh": "IA-0142",
+    "send": "Send message",
+    "sending": "Sending…",
+    "sent": "Thanks! We got your message and will reply by email.",
+    "sentId": "Request number: {id}",
+    "another": "Send another message",
+    "errName": "Enter your name.",
+    "errEmail": "Enter a valid email, like name@example.com",
+    "errMessage": "Write at least 10 characters.",
+    "errCaptcha": "The security check failed. Reload the page and try again.",
+    "errServer": "Couldn’t send the message. Try again in a minute or email us."
   }
 }

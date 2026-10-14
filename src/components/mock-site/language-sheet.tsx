@@ -21,8 +21,11 @@ export function LanguageSheet({ open, onClose, current, onPick }: { open: boolea
   }, [q]);
   return (
     <BottomSheet open={open} title={t('lang.title')} onClose={onClose}>
-      <input className="m-input" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('lang.search')} aria-label={t('lang.search')}
-        style={sx('height:48px;border-radius:14px;padding:0 14px;font-size:16px')} />
+      {/* search stays visible while the 40 rows scroll under it */}
+      <div style={sx('position:sticky;top:0;z-index:1;background:var(--bg);padding:2px 0 6px;margin-top:-2px')}>
+        <input className="m-input" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('lang.search')} aria-label={t('lang.search')}
+          style={sx('height:48px;border-radius:14px;padding:0 14px;font-size:16px;width:100%')} />
+      </div>
       <div className="m-rows" role="radiogroup" aria-label={t('lang.title')}>
         {list.map((l) => (
           <button key={l} type="button" role="radio" aria-checked={l === lang} lang={htmlLang(l)} onClick={() => { if (onPick) { onPick(l); return; } onClose(); void switchTo(l); }}

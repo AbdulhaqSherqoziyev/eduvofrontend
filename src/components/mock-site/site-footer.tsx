@@ -3,7 +3,12 @@ import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { LOCALES, LOCALE_NAMES, htmlLang, type MockLocale } from '@/i18n/locales';
 import { sx } from '@/lib/mock/sx';
+import { SUPPORT_EMAIL, SUPPORT_TELEGRAM } from '@/lib/mock/legal';
+import { FooterMoreLangs } from './footer-more-langs';
 import { FooterLogo } from './logo';
+
+/** Social profiles with a real URL (TL 10-15: Telegram only for now). */
+const SOCIAL: Array<[string, string]> = SUPPORT_TELEGRAM ? [['Telegram', `https://t.me/${SUPPORT_TELEGRAM.slice(1)}`]] : [];
 
 const SHOWN: MockLocale[] = ['en', 'uz', 'ru', 'kk', 'tr', 'ar', 'de'];
 const COL = sx('display:flex;flex-direction:column;gap:10px;font-size:14px');
@@ -19,14 +24,13 @@ export async function SiteFooter() {
         <div style={sx('display:flex;flex-direction:column;gap:14px;min-width:0')}>
           <FooterLogo href={h('')} label={t('brand.home')} />
           <p style={sx('margin:0;color:var(--ink2);font-size:14px;line-height:var(--lh-body)')}>{t('footer.about')}</p>
-          <a href="mailto:hello@eduvo.uz" style={sx('font-size:14px;font-weight:600')}><bdi dir="ltr">hello@eduvo.uz</bdi></a>
-          {/* social profile URLs are not supplied yet (design uses `#`) — plain labels until they are */}
-          <div style={sx('display:flex;gap:14px;flex-wrap:wrap;font-size:13px;font-weight:600')}>
-            <span style={sx('color:var(--ink2)')}>Telegram</span>
-            <span style={sx('color:var(--ink2)')}>Instagram</span>
-            <span style={sx('color:var(--ink2)')}>YouTube</span>
-            <span style={sx('color:var(--ink2)')}>LinkedIn</span>
-          </div>
+          <a href={`mailto:${SUPPORT_EMAIL}`} style={sx('font-size:14px;font-weight:600')}><bdi dir="ltr">{SUPPORT_EMAIL}</bdi></a>
+          {/* only networks with a real profile are shown (Instagram / YouTube / LinkedIn have none yet) */}
+          {SOCIAL.length > 0 && (
+            <div style={sx('display:flex;gap:6px 14px;flex-wrap:wrap;font-size:13px;font-weight:600')}>
+              {SOCIAL.map(([n, u]) => <a key={n} className="m-link-soft" href={u} target="_blank" rel="noopener noreferrer">{n}</a>)}
+            </div>
+          )}
         </div>
         <div style={COL}>
           <div style={HEAD}>{t('footer.exams')}</div>
@@ -53,7 +57,7 @@ export async function SiteFooter() {
           <div style={HEAD}>{t('footer.languages')}</div>
           <div style={sx('display:flex;flex-wrap:wrap;gap:6px 12px;color:var(--ink2)')}>
             {SHOWN.map((l) => <a key={l} className="m-link-mut" href={`/${l}`} lang={htmlLang(l)} hrefLang={htmlLang(l)}>{LOCALE_NAMES[l]}</a>)}
-            <span style={sx('color:var(--blue);font-weight:700')}>{t('footer.more', { n: LOCALES.length - SHOWN.length })}</span>
+            <FooterMoreLangs label={t('footer.more', { n: LOCALES.length - SHOWN.length })} />
           </div>
         </div>
       </div>

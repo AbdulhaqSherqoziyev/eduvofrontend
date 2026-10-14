@@ -323,10 +323,18 @@ select.m-input { padding: 0 14px; }
 
 /* ---------- language menu ---------- */
 .m-langpanel {
-  position: absolute; top: 52px; inset-inline-end: 0; width: min(560px, calc(100vw - 32px)); max-height: 70vh; overflow: auto;
+  position: absolute; top: 52px; inset-inline-end: 0; width: min(560px, calc(100vw - 32px)); max-height: 70vh; display: flex; flex-direction: column;
   background: var(--bg); border-radius: 20px; box-shadow: var(--raise); padding: 16px; z-index: 70;
 }
-.m-langgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 4px; }
+/* the list scrolls inside the panel with a visible thin scrollbar and edge shadows that show there is more */
+.m-langgrid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 4px; min-height: 0; overflow-y: auto; scrollbar-width: thin;
+  background:
+    linear-gradient(var(--bg) 30%, transparent) top / 100% 24px no-repeat local,
+    linear-gradient(transparent, var(--bg) 70%) bottom / 100% 24px no-repeat local,
+    radial-gradient(farthest-side at 50% 0, rgba(10, 15, 25, .18), transparent) top / 100% 10px no-repeat scroll,
+    radial-gradient(farthest-side at 50% 100%, rgba(10, 15, 25, .18), transparent) bottom / 100% 10px no-repeat scroll;
+}
 .m-langitem {
   text-align: start; padding: 10px 12px; border-radius: 10px; border: 0; cursor: pointer; font-weight: 600; font-size: 14px;
   color: var(--ink); background: transparent; display: flex; justify-content: space-between; gap: 8px; text-decoration: none;

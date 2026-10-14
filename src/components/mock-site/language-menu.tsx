@@ -6,6 +6,9 @@ import { LOCALES, LOCALE_NAMES, RTL_LOCALES, htmlLang, type MockLocale } from '@
 import { useLang } from '@/lib/mock/hooks/use-lang';
 import { useSwitchLocale } from './use-switch-locale';
 
+/** window event: open the header language menu (footer "+N more"). Phones open the sheet instead. */
+export const OPEN_LANG_EVENT = 'eduvo:open-language';
+
 export function LanguageMenu() {
   const t = useTranslations('common');
   const { lang } = useLang();
@@ -15,6 +18,12 @@ export function LanguageMenu() {
   const box = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
 
+  // the footer's "+N more" opens this menu
+  useEffect(() => {
+    const on = () => { window.scrollTo({ top: 0, behavior: 'smooth' }); setOpen(true); };
+    window.addEventListener(OPEN_LANG_EVENT, on);
+    return () => window.removeEventListener(OPEN_LANG_EVENT, on);
+  }, []);
   useEffect(() => {
     if (!open) return;
     input.current?.focus();

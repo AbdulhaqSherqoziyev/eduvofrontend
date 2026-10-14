@@ -105,7 +105,7 @@
   "contactCta": "Qo‘llab-quvvatlashga yozish",
   "contact": {
     "h1": "Qo‘llab-quvvatlash bilan aloqa",
-    "sub": "Bizga email yoki Telegram orqali yozing. O‘zbek, rus va ingliz tillarida javob beramiz.",
+    "sub": "Forma, email yoki Telegram orqali yozing. Ingliz, o‘zbek va rus tillarida javob beramiz.",
     "subEmailOnly": "Bizga email orqali yozing. O‘zbek, rus va ingliz tillarida javob beramiz.",
     "emailTitle": "Email",
     "emailText": "To‘lov, pulni qaytarish va akkaunt bo‘yicha savollar uchun eng qulayi.",
@@ -123,5 +123,32 @@
     "paddle": "Karta bilan to‘langan buyurtmalarni Merchant of Record — Paddle.com yuritadi. To‘lov bo‘yicha savollar bilan paddle.net’dagi Paddle xaridorlarni qo‘llab-quvvatlash xizmatiga ham murojaat qilishingiz mumkin.",
     "copy": "Manzilni nusxalash",
     "copied": "Email manzil nusxalandi"
+  },
+  "form": {
+    "title": "Bizga xabar yuboring",
+    "name": "Ismingiz",
+    "email": "Email",
+    "topic": "Mavzu",
+    "topics": {
+      "exams": "Imtihonlar",
+      "payments": "To‘lovlar",
+      "account": "Akkaunt",
+      "technical": "Texnik",
+      "other": "Boshqa"
+    },
+    "message": "Xabar",
+    "messagePh": "Nima bo‘lganini yozing. To‘lov bo‘yicha bo‘lsa, kvitansiya raqamini qo‘shing.",
+    "testId": "Test ID (ixtiyoriy)",
+    "testIdPh": "IA-0142",
+    "send": "Xabar yuborish",
+    "sending": "Yuborilmoqda…",
+    "sent": "Rahmat! Xabaringizni oldik, emailga javob beramiz.",
+    "sentId": "Murojaat raqami: {id}",
+    "another": "Yana xabar yuborish",
+    "errName": "Ismingizni kiriting.",
+    "errEmail": "To‘g‘ri email kiriting, masalan name@example.com",
+    "errMessage": "Kamida 10 ta belgi yozing.",
+    "errCaptcha": "Xavfsizlik tekshiruvidan o‘tmadi. Sahifani yangilab, qayta urinib ko‘ring.",
+    "errServer": "Xabarni yuborib bo‘lmadi. Bir daqiqadan keyin urinib ko‘ring yoki emailga yozing."
   }
 }
