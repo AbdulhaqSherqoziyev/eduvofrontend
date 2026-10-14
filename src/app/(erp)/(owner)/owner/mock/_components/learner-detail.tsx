@@ -66,6 +66,11 @@ export function LearnerDetail({ id }: { id: string }) {
                         <span className="text-muted"><bdi dir="ltr">{a.testCode}</bdi>{a.isFree ? ' · bepul' : ''}</span>
                         <span className="text-foreground">{ATTEMPT_STATUS[a.status] ?? a.status}{a.notGraded ? ' · Writing baholanmadi' : ''}{a.refunded ? ' · kredit qaytarildi' : ''}</span>
                         <span className="font-bold text-foreground">{a.score?.label ?? (a.score?.value != null ? String(a.score.value) : '')}</span>
+                        {a.correct != null && a.total ? (
+                          <span className="text-muted">
+                            {a.total} tadan {a.correct} ta to&apos;g&apos;ri{a.correctBySection && a.correctBySection.length > 1 ? ` (${a.correctBySection.map((x) => `${x.key}: ${x.correct}/${x.total}`).join(', ')})` : ''}
+                          </span>
+                        ) : null}
                         <span className="ml-auto text-muted">{fmtDateTime(a.finishedAt ?? a.startedAt)}</span>
                       </div>
                     ))}

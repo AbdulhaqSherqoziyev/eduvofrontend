@@ -132,6 +132,10 @@ export interface AttemptListItem {
   /** v0.5: Writing could not be graded (score null, credit refunded) */
   notGraded?: boolean;
   refunded?: boolean;
+  /** v0.5 §18.9: objective answers (null while in progress/grading, cancelled, not graded, old snapshots) */
+  correct?: number | null;
+  total?: number | null;
+  correctBySection?: Array<{ key: SectionKey; correct: number; total: number }> | null;
   remainingSec: number | null;
   score: { value: number | null; label: string | null } | null;
   isFree: boolean;

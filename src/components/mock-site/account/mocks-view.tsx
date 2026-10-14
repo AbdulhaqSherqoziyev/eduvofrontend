@@ -39,7 +39,8 @@ export function MocksView() {
   const row = (m: AttemptListItem) => {
     const name = `${m.mode === 'full' ? td('full') : td('section', { section: SEC[m.sectionKey ?? 'reading'] })} · `;
     const date = fmtDate(lang, m.finishedAt ?? m.startedAt);
-    const meta = m.status === 'in_progress' ? td('metaStarted', { date }) : m.status === 'grading' ? td('metaGrading', { date }) : m.status === 'expired' ? td('metaExpired', { date }) : m.status === 'cancelled' ? td('metaCancelled', { date }) : m.notGraded ? td('metaNotGraded', { date }) : date;
+    const meta0 = m.status === 'in_progress' ? td('metaStarted', { date }) : m.status === 'grading' ? td('metaGrading', { date }) : m.status === 'expired' ? td('metaExpired', { date }) : m.status === 'cancelled' ? td('metaCancelled', { date }) : m.notGraded ? td('metaNotGraded', { date }) : date;
+    const meta = m.correct != null && m.total ? `${meta0} · ${td('correctOf', { correct: m.correct, total: m.total })}` : meta0;
     const score = m.score?.value != null ? fmtScore(m.score.value, m.exam) : m.score?.label ?? '—';
     const to = m.status === 'in_progress' ? href(`/exam/${m.attemptId}`) : href(`/results/${m.attemptId}`);
     return (

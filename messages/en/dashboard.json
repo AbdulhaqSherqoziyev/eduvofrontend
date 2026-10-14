@@ -127,5 +127,6 @@
   "noFreshTitle": "You have taken every {exam} test we have",
   "noFreshSub": "Your credits are kept. You can use them when new tests are added.",
   "noFreshCta": "See progress",
-  "creditsKept": "{n} {exam} credits wait for new tests"
+  "creditsKept": "{n} {exam} credits wait for new tests",
+  "correctOf": "{correct} of {total} correct"
 }

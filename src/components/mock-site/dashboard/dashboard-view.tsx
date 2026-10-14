@@ -140,7 +140,7 @@ export function DashboardView() {
     const to = m.status === 'in_progress' ? href(`/exam/${m.attemptId}`) : href(`/results/${m.attemptId}`);
     // IELTS always with one decimal ("6.5", "0.0"); the server label is only a fallback
     const score = m.score?.value != null ? fmtScore(m.score.value, m.exam) : m.score?.label ?? '—';
-    return { ...m, nm, meta, action, to, score };
+    return { ...m, nm, meta: m.correct != null && m.total ? `${meta} · ${t('correctOf', { correct: m.correct, total: m.total })}` : meta, action, to, score };
   };
   const mocks = d.mocks.map(mockRow);
 

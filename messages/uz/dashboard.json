@@ -127,5 +127,6 @@
   "noFreshTitle": "Barcha {exam} testlarimizni topshirib bo‘ldingiz",
   "noFreshSub": "Kreditlaringiz saqlanadi. Yangi testlar qo‘shilganda ishlatasiz.",
   "noFreshCta": "Natijalarni ko‘rish",
-  "creditsKept": "{n} ta {exam} krediti yangi testlarni kutmoqda"
+  "creditsKept": "{n} ta {exam} krediti yangi testlarni kutmoqda",
+  "correctOf": "{total} tadan {correct} ta to‘g‘ri"
 }

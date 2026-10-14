@@ -47,6 +47,7 @@ export interface MockAttemptItem {
   attemptId: string; exam: MockExam; testCode: string; mode: 'full' | 'section'; sectionKey: string | null;
   status: 'in_progress' | 'grading' | 'completed' | 'expired' | 'cancelled';
   startedAt: string; finishedAt: string | null; score: { value: number | null; label: string | null } | null; isFree: boolean; notGraded?: boolean; refunded?: boolean;
+  correct?: number | null; total?: number | null; correctBySection?: Array<{ key: string; correct: number; total: number }> | null;
 }
 
 export interface OwnerOrderDetail { order: OwnerOrder; learner: OwnerLearner | null; events: MockPaymentEvent[]; actions: MockAdminAction[]; lots: MockLot[] }
