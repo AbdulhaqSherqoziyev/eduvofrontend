@@ -153,5 +153,6 @@
     "title": "Bu buyurtma uchun pul qaytarildi",
     "body": "Pul to‘lov usulingizga qaytarildi. Bu buyurtmadagi kreditlar olib tashlandi."
   },
-  "methodCard": "Karta · Paddle"
+  "methodCard": "Karta · Paddle",
+  "notEnoughTests": "Bu rejada siz hali topshirmagan testlardan ko‘ra ko‘proq mock bor. Hozir ko‘pi bilan {n} ta yangi testdan foydalana olasiz — kichikroq rejani tanlang."
 }

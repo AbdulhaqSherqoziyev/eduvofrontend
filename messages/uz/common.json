@@ -89,7 +89,8 @@
     "rateLimited": "Juda ko‘p urinish. {sec} soniyadan keyin qayta urining.",
     "disabled": "Eduvo Mock yangilanmoqda. Bir necha daqiqadan keyin qayta urinib ko‘ring.",
     "tryAgain": "Qayta urinish",
-    "reload": "Sahifani yangilash"
+    "reload": "Sahifani yangilash",
+    "deletionPending": "Akkauntingiz o‘chirishga rejalashtirilgan. Mock topshirish yoki kredit olish uchun uni Akkaunt bo‘limida tiklang."
   },
   "cookieNotice": {
     "text": "Faqat zaruriy cookie’lardan foydalanamiz: tizimda qolishingiz va tilingizni eslab qolish uchun. Analitika va reklama yo‘q.",

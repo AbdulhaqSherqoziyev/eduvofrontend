@@ -146,6 +146,7 @@ export function StartView({ examParam }: { examParam: string }) {
     } catch (e) {
       setStarting(false);
       if (e instanceof MockApiError && (e.code === 'TEST_ALREADY_TAKEN' || e.code === 'NO_CREDIT' || e.code === 'NO_FRESH_TEST' || e.code === 'ACTIVE_ATTEMPT_EXISTS' || e.code === 'FREE_SECTION_USED')) { load(); return; }
+      if (e instanceof MockApiError && e.code === 'ACCOUNT_DELETION_PENDING') { setStartErr(tc('errors.deletionPending')); return; }
       setStartErr(e instanceof MockApiError && e.code === 'NETWORK' ? tc('errors.network') : e instanceof MockApiError && e.code === 'RATE_LIMITED' ? tc('errors.rateLimited', { sec: e.retryAfterSec ?? 60 }) : tc('errors.server'));
     }
   };

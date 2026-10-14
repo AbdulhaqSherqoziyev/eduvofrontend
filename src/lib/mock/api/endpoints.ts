@@ -1,5 +1,5 @@
 /** Contract endpoints (`_api-contract.md` section numbers in brackets). */
-import { api, clearSession, currentAccessToken, setAuthSession, setLearner } from './client';
+import { api, clearSession, currentAccessToken, refreshSession, setAuthSession, setLearner } from './client';
 import type {
   AttemptListItem, AttemptMode, AuthSession, Catalog, CheckoutMethods, CreatedAttempt, Currency, Dashboard, ExamCredits,
   Learner, MePatch, MockResultExt, OpenExamSlug, Order, PaymentMethodGroup, ProgressSeries, Quote, Recommendation, SectionKey, ShareCard,
@@ -88,17 +88,40 @@ export const createOrder = (body: { sku: string; currency: Currency; promoCode?:
 export const getOrder = (id: string, signal?: AbortSignal) =>
   api<{ order: Order; credits: ExamCredits; serverNow: string }>(`/mock/orders/${encodeURIComponent(id)}`, { signal });
 export const cancelOrder = (id: string) => api<{ order: Order }>(`/mock/orders/${encodeURIComponent(id)}/cancel`, { method: 'POST' });
-/** O6 receipt (text/html attachment, Bearer-protected) → saved via a blob link. */
-export async function downloadReceipt(id: string, filename: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API_BASE || '/api'}/mock/orders/${encodeURIComponent(id)}/receipt`, {
+/* ---- §9 O5, §11 U1–U4 (v0.5) ---- */
+export const listOrders = (cursor?: string) => api<{ items: Order[]; nextCursor: string | null; serverNow: string }>(`/mock/orders?limit=20${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`);
+export const deleteAccount = (body: { password?: string; googleIdToken?: string; reason?: string }) =>
+  api<{ status: 'DELETION_PENDING'; deletionScheduledAt: string }>('/mock/me/delete', { method: 'POST', body });
+export async function restoreAccount() {
+  const r = await api<{ learner: Learner }>('/mock/me/restore', { method: 'POST' });
+  setLearner(r.learner);
+  return r.learner;
+}
+export const contactSupport = (body: { name: string; email?: string; topic: 'exams' | 'payments' | 'account' | 'technical' | 'other'; message: string; testCode?: string; orderId?: string; locale: string; turnstile?: string }) =>
+  api<{ ticketId: string }>('/mock/support/contact', { method: 'POST', body });
+/** Authenticated attachment (U1 export, O6 receipt) → saved via a blob link. Throws MockApiError-like codes. */
+async function downloadAuthed(path: string, fallbackName: string) {
+  const call = () => fetch(`${process.env.NEXT_PUBLIC_MOCK_API_BASE || '/api'}${path}`, {
     headers: currentAccessToken() ? { Authorization: `Bearer ${currentAccessToken()}` } : {},
   });
-  if (!res.ok) throw new Error(`receipt ${res.status}`);
+  let res = await call();
+  if (res.status === 401 && (await refreshSession(true))) res = await call();
+  if (!res.ok) {
+    let code = `HTTP_${res.status}`;
+    try { const j = await res.json(); if (typeof j.error === 'string') code = j.error; } catch { /* not JSON */ }
+    throw new Error(code);
+  }
+  const cd = res.headers.get('content-disposition') ?? '';
+  const name = /filename="?([^";]+)"?/.exec(cd)?.[1] ?? fallbackName;
   const url = URL.createObjectURL(await res.blob());
   const a = document.createElement('a');
-  a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+  a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 5000);
 }
+export const exportMyData = () => downloadAuthed('/mock/me/export', `eduvo-mock-export-${new Date().toISOString().slice(0, 10)}.json`);
+
+/** O6 receipt (text/html attachment, Bearer-protected) → saved via a blob link. */
+export const downloadReceipt = (id: string, filename: string) => downloadAuthed(`/mock/orders/${encodeURIComponent(id)}/receipt`, filename);
 
 /* ---- §5 D2 progress, §1 A10 password change ---- */
 export const getProgress = (exam: OpenExamSlug, signal?: AbortSignal) =>

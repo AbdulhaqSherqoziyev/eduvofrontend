@@ -78,6 +78,43 @@
     "short": "Kamida 8 ta belgi kiriting.",
     "weak": "Bu parol juda keng tarqalgan. Boshqasini tanlang.",
     "cancel": "Bekor qilish",
-    "saveErr": "Saqlab bo‘lmadi. Qayta urinib ko‘ring."
+    "saveErr": "Saqlab bo‘lmadi. Qayta urinib ko‘ring.",
+    "purch": {
+      "title": "Xaridlar va kvitansiyalar",
+      "empty": "Hali xarid yo‘q.",
+      "loadErr": "Xaridlarni yuklab bo‘lmadi. Qayta urinib ko‘ring.",
+      "retry": "Qayta urinish",
+      "receipt": "Kvitansiya",
+      "receiptErr": "Kvitansiyani yuklab bo‘lmadi. Qayta urinib ko‘ring.",
+      "open": "Ochish",
+      "more": "Yana ko‘rsatish",
+      "status": {
+        "PENDING": "Kutilmoqda",
+        "PAID": "To‘langan",
+        "FAILED": "Muvaffaqiyatsiz",
+        "CANCELLED": "Bekor qilingan",
+        "REFUNDED": "Qaytarilgan"
+      }
+    },
+    "exportDone": "Ma’lumotlaringiz fayli yuklanmoqda.",
+    "exportErr": "Ma’lumotlarni tayyorlab bo‘lmadi. Keyinroq urinib ko‘ring.",
+    "exportLimit": "Ma’lumotlarni kuniga 3 marta yuklab olish mumkin. Ertaga urinib ko‘ring.",
+    "del": {
+      "pw": "Tasdiqlash uchun parolingizni kiriting",
+      "google": "Google orqali tasdiqlash",
+      "confirm": "Akkauntni o‘chirish",
+      "reason": "Nega ketyapsiz? (ixtiyoriy)",
+      "wrong": "Parol noto‘g‘ri.",
+      "googleErr": "Google sizni tasdiqlay olmadi. Qayta urinib ko‘ring.",
+      "already": "O‘chirish allaqachon rejalashtirilgan.",
+      "err": "Akkauntni o‘chirib bo‘lmadi. Qayta urinib ko‘ring."
+    },
+    "pending": {
+      "body": "Akkauntingiz {date} kuni o‘chiriladi. Shungacha uni tiklashingiz mumkin.",
+      "restore": "Akkauntni tiklash",
+      "restored": "Akkauntingiz tiklandi.",
+      "err": "Akkauntni tiklab bo‘lmadi. Qayta urinib ko‘ring.",
+      "blocked": "Akkauntingiz o‘chirishga rejalashtirilgan. Mock topshirish yoki kredit olish uchun uni tiklang."
+    }
   }
 }

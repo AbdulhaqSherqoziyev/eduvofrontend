@@ -153,5 +153,6 @@
     "title": "This order was refunded",
     "body": "The money was returned to your payment method. Credits from this order were removed."
   },
-  "methodCard": "Card · Paddle"
+  "methodCard": "Card · Paddle",
+  "notEnoughTests": "This plan has more mocks than tests you have not taken yet. You can use up to {n} new tests now — choose a smaller plan."
 }

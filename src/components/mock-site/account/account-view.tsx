@@ -1,8 +1,8 @@
 'use client';
 /**
  * /account — Mobile App.dc.html `profile` (grouped settings rows, toggles, delete-account sheet);
- * desktop per README §11 spec with the same groups. P1/P2, A5, A10. Export / delete / restore
- * (U1–U4) are not built on the backend yet → those rows keep their place with a "Soon" state.
+ * desktop per README §11 spec with the same groups. P1/P2, A5, A10, O5/O6 purchases, U1 export,
+ * U2 delete (password or Google re-confirm), U3 restore banner while deletion is pending.
  */
 import Link from 'next/link';
 import { useState } from 'react';
@@ -10,7 +10,11 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { LOCALE_NAMES, htmlLang } from '@/i18n/locales';
 import { MockApiError } from '@/lib/mock/api/client';
-import { changePassword, logout, patchMe } from '@/lib/mock/api/endpoints';
+import { changePassword, deleteAccount, exportMyData, logout, patchMe } from '@/lib/mock/api/endpoints';
+import { SUPPORT_EMAIL } from '@/lib/mock/legal';
+import { useGoogleSignIn } from '../auth/google';
+import { DeletionBanner } from './deletion-banner';
+import { Purchases } from './purchases';
 import type { Learner } from '@/lib/mock/api/types';
 import { fmtDate, fmtScore } from '@/lib/mock/format';
 import { useLang } from '@/lib/mock/hooks/use-lang';
@@ -37,11 +41,14 @@ export function AccountView() {
   const [del, setDel] = useState(false);
   const [edit, setEdit] = useState<'name' | 'password' | null>(null);
   const [dark, setDark] = useState<boolean | null>(null);
+  const [purch, setPurch] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   if (!learner) return <main style={sx('min-height:60vh')} aria-busy="true" />;
   const L: Learner = learner;
   const isDark = dark ?? (typeof document !== 'undefined' && currentTheme() === 'dark');
-  const name = L.displayName || L.email?.split('@')[0] || '';
+  const name = L.displayName || '';
+  const initial = (L.displayName || L.email || '?').charAt(0).toUpperCase();
 
   const toggleNotif = async (k: keyof Learner['notifications']) => {
     try { await patchMe({ notifications: { [k]: !L.notifications[k] } }); } catch { toast(t('saveErr')); }
@@ -51,13 +58,19 @@ export function AccountView() {
     applyTheme(next); setDark(!isDark);
     void patchMe({ theme: next }).catch(() => undefined);
   };
-  const soon = () => toast(t('soon'));
+  const doExport = async () => {
+    if (exporting) return;
+    setExporting(true);
+    try { await exportMyData(); toast(t('exportDone')); }
+    catch (e) { toast((e as Error).message === 'RATE_LIMITED' ? t('exportLimit') : t('exportErr')); }
+    finally { setExporting(false); }
+  };
   const doLogout = async () => { await logout().catch(() => undefined); router.replace(href('')); };
 
   const goal = L.goal;
   const groups: Array<{ title: string; rows: Row[] }> = [
     { title: t('groups.account'), rows: [
-      { label: t('name'), value: name, go: () => setEdit('name') },
+      { label: t('name'), value: name || t('notSet'), go: () => setEdit('name') },
       { label: t('email'), value: <bdi dir="ltr">{L.email}</bdi> },
       { label: t('password'), value: L.hasPassword ? t('change') : t('set'), go: () => setEdit('password') },
     ] },
@@ -72,9 +85,9 @@ export function AccountView() {
       { label: t('nWriting'), toggle: true, on: L.notifications.writingGraded, go: () => void toggleNotif('writingGraded') },
       { label: t('nTips'), toggle: true, on: L.notifications.weeklyTips, go: () => void toggleNotif('weeklyTips') },
     ] },
-    { title: t('groups.billing'), rows: [{ label: t('purchases'), go: soon, soon: true }, { label: t('buy'), href: href('/pricing') }] },
-    { title: t('groups.support'), rows: [{ label: t('help'), go: soon, soon: true }, { label: t('contact'), value: <bdi dir="ltr">hello@eduvo.uz</bdi>, href: 'mailto:hello@eduvo.uz' }] },
-    { title: t('groups.data'), rows: [{ label: t('export'), go: soon, soon: true }, { label: t('delete'), go: () => setDel(true) }, { label: t('logout'), go: () => void doLogout() }] },
+    { title: t('groups.billing'), rows: [{ label: t('purchases'), go: () => setPurch(true) }, { label: t('buy'), href: href('/pricing') }] },
+    { title: t('groups.support'), rows: [{ label: t('help'), href: href('/help') }, { label: t('contact'), value: <bdi dir="ltr">{SUPPORT_EMAIL}</bdi>, href: href('/help/contact') }] },
+    { title: t('groups.data'), rows: [{ label: t('export'), go: () => void doExport() }, ...(L.status === 'DELETION_PENDING' ? [] : [{ label: t('delete'), go: () => setDel(true) }]), { label: t('logout'), go: () => void doLogout() }] },
   ];
 
   const rowEl = (r: Row, i: number) => {
@@ -98,7 +111,7 @@ export function AccountView() {
 
   const header = (
     <div style={sx('display:flex;align-items:center;gap:14px;padding-top:8px')}>
-      <span style={sx('width:64px;height:64px;border-radius:50%;box-shadow:var(--raise);display:grid;place-items:center;font-weight:800;font-size:24px;color:var(--blue);flex:none')}>{name.charAt(0).toUpperCase()}</span>
+      <span style={sx('width:64px;height:64px;border-radius:50%;box-shadow:var(--raise);display:grid;place-items:center;font-weight:800;font-size:24px;color:var(--blue);flex:none')}>{initial}</span>
       <span style={sx('display:flex;flex-direction:column;gap:2px;min-width:0')}><b style={sx('font-size:20px')}>{name}</b><span style={sx('font-size:13px;color:var(--mut);font-weight:600;overflow-wrap:anywhere')}><bdi dir="ltr">{L.email}</bdi></span></span>
     </div>
   );
@@ -109,23 +122,19 @@ export function AccountView() {
     </div>
   ));
 
-  const deleteContent = (
-    <>
-      <span style={sx('font-size:15px;line-height:1.6;color:var(--ink2)')}>{t('deleteBody')}</span>
-      <button type="button" className="m-btn m-btn--soft" aria-disabled="true" onClick={soon} style={sx('height:52px;border-radius:16px;font-size:15px;font-weight:800')}>{t('download')} <span className="m-soon">{tc('chips.soon')}</span></button>
-      <button type="button" aria-disabled="true" onClick={soon} style={sx('height:52px;border-radius:16px;border:0;background:var(--ink);color:var(--bg);font-weight:800;font-size:15px;cursor:not-allowed;opacity:.7;display:flex;align-items:center;justify-content:center;gap:8px')}>{t('delete')} <span className="m-soon">{tc('chips.soon')}</span></button>
-    </>
-  );
+  const deleteContent = <DeleteForm learner={L} onExport={() => void doExport()} onDone={() => { setDel(false); router.replace(href('')); }} />;
 
   return (
     <>
       <main className="m-desk" style={sx('max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) 20px 56px;display:flex;flex-direction:column;gap:24px')}>
         <h1 className="m-h1" style={sx('font-size:clamp(26px,3.2vw,36px);letter-spacing:var(--ls-h)')}>{t('title')}</h1>
+        <DeletionBanner />
         {header}
         <div style={sx('display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px;align-items:start')}>{groupEls}</div>
         <span style={sx('font-size:11px;color:var(--mut);text-align:center;line-height:1.5')}>{t('footer')}</span>
       </main>
       <main className="m-phone m-with-tabs-phone" style={sx('padding:4px 16px 32px;display:flex;flex-direction:column;gap:20px')}>
+        <DeletionBanner />
         {header}
         {groupEls}
         <span style={sx('font-size:11px;color:var(--mut);text-align:center;line-height:1.5')}>{t('footer')}</span>
@@ -136,6 +145,7 @@ export function AccountView() {
         ? <BottomSheet open={del} title={`${t('delete')}?`} onClose={() => setDel(false)}>{deleteContent}</BottomSheet>
         : <Modal open={del} onClose={() => setDel(false)} label={t('delete')}><span style={sx('font-size:20px;font-weight:800')}>{t('delete')}?</span>{deleteContent}</Modal>}
       <EditModal kind={edit} learner={L} onClose={() => setEdit(null)} />
+      <Purchases open={purch} onClose={() => setPurch(false)} />
     </>
   );
 }
@@ -181,5 +191,47 @@ function EditModal({ kind, learner, onClose }: { kind: 'name' | 'password' | nul
         </div>
       </form>
     </Modal>
+  );
+}
+
+/** U2 delete: password (or Google re-confirm for Google-only accounts), optional reason. */
+function DeleteForm({ learner, onExport, onDone }: { learner: Learner; onExport: () => void; onDone: () => void }) {
+  const t = useTranslations('account.account');
+  const google = useGoogleSignIn();
+  const [pw, setPw] = useState('');
+  const [reason, setReason] = useState('');
+  const [err, setErr] = useState('');
+  const [busy, setBusy] = useState(false);
+  const run = async (body: { password?: string; googleIdToken?: string }) => {
+    setErr(''); setBusy(true);
+    try {
+      await deleteAccount({ ...body, ...(reason.trim() ? { reason: reason.trim().slice(0, 500) } : {}) });
+      await logout().catch(() => undefined); // sessions are revoked server-side; clear this tab and the others
+      onDone();
+    } catch (e) {
+      const code = e instanceof MockApiError ? e.code : '';
+      setErr(code === 'INVALID_CREDENTIALS' ? t('del.wrong') : code === 'GOOGLE_TOKEN_INVALID' ? t('del.googleErr') : code === 'ALREADY_PENDING' ? t('del.already') : t('del.err'));
+    } finally { setBusy(false); }
+  };
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (learner.hasPassword) { if (!pw) { setErr(t('del.wrong')); return; } await run({ password: pw }); return; }
+    const idToken = await google.signIn().catch(() => null);
+    if (!idToken) { setErr(t('del.googleErr')); return; }
+    await run({ googleIdToken: idToken });
+  };
+  return (
+    <form onSubmit={(e) => void submit(e)} noValidate style={sx('display:flex;flex-direction:column;gap:12px')}>
+      <span style={sx('font-size:15px;line-height:1.6;color:var(--ink2)')}>{t('deleteBody')}</span>
+      <button type="button" className="m-btn m-btn--soft" onClick={onExport} style={sx('height:52px;border-radius:16px;font-size:15px;font-weight:800')}>{t('download')}</button>
+      {learner.hasPassword && (
+        <label className="m-field">{t('del.pw')}<input className="m-input" type="password" autoComplete="current-password" value={pw} onChange={(e) => setPw(e.target.value)} aria-invalid={!!err} /></label>
+      )}
+      <label className="m-field">{t('del.reason')}<input className="m-input" value={reason} maxLength={500} onChange={(e) => setReason(e.target.value)} /></label>
+      {err && <span className="m-err-text" role="alert">{err}</span>}
+      <button type="submit" disabled={busy} style={sx('height:52px;border-radius:16px;border:0;background:var(--ink);color:var(--bg);font-weight:800;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px')}>
+        {busy && <span className="m-spin" aria-hidden />}{learner.hasPassword ? t('del.confirm') : t('del.google')}
+      </button>
+    </form>
   );
 }

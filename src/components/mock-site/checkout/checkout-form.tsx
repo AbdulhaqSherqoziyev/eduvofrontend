@@ -98,6 +98,7 @@ export function CheckoutForm() {
       setQuote(r.quote); setApplied(code); setPromoErr(false);
     } catch (e) {
       if (e instanceof MockApiError && e.code === 'PROMO_INVALID') { setPromoErr(true); return; }
+      if (e instanceof MockApiError && e.code === 'NOT_ENOUGH_TESTS') { setBanner({ kind: 'warn', text: t('notEnoughTests', { n: typeof e.body.available === 'number' ? e.body.available : 0 }) }); return; }
       if (e instanceof MockApiError && (e.code === 'PRODUCT_UNAVAILABLE' || e.code === 'PRODUCT_NOT_FOUND')) { router.replace(href('/pricing?model=unl')); return; }
       setQuoteErr(true);
     }
@@ -174,6 +175,8 @@ export function CheckoutForm() {
       switch (e.code) {
         case 'TOO_MANY_PENDING_ORDERS': setBanner({ kind: 'warn', text: <>{t('tooMany')} <Link href={href('/dashboard')} style={sx('font-weight:800')}>{t('seeOrders')}</Link></> }); break;
         case 'EMAIL_NOT_VERIFIED': setBanner({ kind: 'warn', text: <VerifyFirst /> }); break;
+        case 'ACCOUNT_DELETION_PENDING': setBanner({ kind: 'warn', text: tc('errors.deletionPending') }); break;
+        case 'NOT_ENOUGH_TESTS': setBanner({ kind: 'warn', text: t('notEnoughTests', { n: typeof e.body.available === 'number' ? e.body.available : 0 }) }); break;
         case 'PROMO_INVALID': setPromoErr(true); setApplied(undefined); break;
         case 'PRODUCT_UNAVAILABLE': router.replace(href('/pricing?model=unl')); break;
         case 'METHOD_NOT_AVAILABLE':

@@ -78,6 +78,43 @@
     "short": "Use at least 8 characters.",
     "weak": "This password is too common. Choose another one.",
     "cancel": "Cancel",
-    "saveErr": "Couldn't save. Try again."
+    "saveErr": "Couldn't save. Try again.",
+    "purch": {
+      "title": "Purchases and receipts",
+      "empty": "No purchases yet.",
+      "loadErr": "Couldn’t load your purchases. Try again.",
+      "retry": "Try again",
+      "receipt": "Receipt",
+      "receiptErr": "Couldn’t download the receipt. Try again.",
+      "open": "Open",
+      "more": "Show more",
+      "status": {
+        "PENDING": "Pending",
+        "PAID": "Paid",
+        "FAILED": "Failed",
+        "CANCELLED": "Cancelled",
+        "REFUNDED": "Refunded"
+      }
+    },
+    "exportDone": "Your data file is downloading.",
+    "exportErr": "Couldn’t prepare your data. Try again later.",
+    "exportLimit": "You can download your data 3 times a day. Try again tomorrow.",
+    "del": {
+      "pw": "Enter your password to confirm",
+      "google": "Confirm with Google",
+      "confirm": "Delete account",
+      "reason": "Why are you leaving? (optional)",
+      "wrong": "Wrong password.",
+      "googleErr": "Google could not confirm it is you. Try again.",
+      "already": "Deletion is already scheduled.",
+      "err": "Couldn’t delete the account. Try again."
+    },
+    "pending": {
+      "body": "Your account will be deleted on {date}. Until then you can restore it.",
+      "restore": "Restore account",
+      "restored": "Your account is restored.",
+      "err": "Couldn’t restore the account. Try again.",
+      "blocked": "Your account is scheduled for deletion. Restore it to take mocks or buy credits."
+    }
   }
 }

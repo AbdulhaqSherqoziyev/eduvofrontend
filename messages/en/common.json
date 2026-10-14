@@ -89,7 +89,8 @@
     "rateLimited": "Too many attempts. Try again in {sec} seconds.",
     "disabled": "Eduvo Mock is updating. Try again in a few minutes.",
     "tryAgain": "Try again",
-    "reload": "Reload"
+    "reload": "Reload",
+    "deletionPending": "Your account is scheduled for deletion. Restore it in Account to take mocks or buy credits."
   },
   "cookieNotice": {
     "text": "We use only necessary cookies: to keep you signed in and to remember your language. No analytics or advertising.",
