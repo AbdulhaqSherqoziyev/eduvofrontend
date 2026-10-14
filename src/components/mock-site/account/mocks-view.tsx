@@ -2,6 +2,7 @@
 /** /mocks — Mobile App.dc.html `mocks` (In progress / Completed, grouped rows, New mock); desktop uses the same list in a card. D3. */
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { getAttempts } from '@/lib/mock/api/endpoints';
 import type { AttemptListItem } from '@/lib/mock/api/types';
@@ -15,6 +16,7 @@ import { Segmented } from '../segmented';
 const SEC: Record<string, string> = { listening: 'Listening', reading: 'Reading', writing: 'Writing', reading_writing: 'Reading and Writing', math: 'Math' };
 
 export function MocksView() {
+  const router = useRouter();
   const t = useTranslations('account.mocks');
   const td = useTranslations('dashboard');
   const { lang, href } = useLang();
@@ -37,15 +39,15 @@ export function MocksView() {
   const row = (m: AttemptListItem) => {
     const name = `${m.mode === 'full' ? td('full') : td('section', { section: SEC[m.sectionKey ?? 'reading'] })} · `;
     const date = fmtDate(lang, m.finishedAt ?? m.startedAt);
-    const meta = m.status === 'in_progress' ? td('metaStarted', { date }) : m.status === 'grading' ? td('metaGrading', { date }) : m.status === 'expired' ? td('metaExpired', { date }) : date;
-    const score = m.score?.label ?? (m.score?.value != null ? fmtScore(m.score.value, m.exam) : '—');
+    const meta = m.status === 'in_progress' ? td('metaStarted', { date }) : m.status === 'grading' ? td('metaGrading', { date }) : m.status === 'expired' ? td('metaExpired', { date }) : m.status === 'cancelled' ? td('metaCancelled', { date }) : m.notGraded ? td('metaNotGraded', { date }) : date;
+    const score = m.score?.value != null ? fmtScore(m.score.value, m.exam) : m.score?.label ?? '—';
     const to = m.status === 'in_progress' ? href(`/exam/${m.attemptId}`) : href(`/results/${m.attemptId}`);
     return (
-      <a key={m.attemptId} href={m.status === 'expired' ? undefined : to} style={sx('width:100%;color:var(--ink);padding:16px;display:flex;align-items:center;gap:12px;text-align:start')}>
+      <a key={m.attemptId} href={m.status === 'expired' ? undefined : to} onClick={(e) => { if (m.status !== 'expired' && !e.metaKey && !e.ctrlKey) { e.preventDefault(); router.push(to); } }} style={sx('width:100%;color:var(--ink);padding:16px;display:flex;align-items:center;gap:12px;text-align:start')}>
         <span style={{ ...sx('width:40px;height:40px;border-radius:12px;box-shadow:var(--inset);display:grid;place-items:center;font-size:10px;font-weight:800;flex:none'), color: `var(--${m.exam})` }} lang="en">{m.exam === 'ielts' ? 'IELTS' : 'SAT'}</span>
         <span style={sx('flex:1;display:flex;flex-direction:column;gap:2px;min-width:0')}><b style={sx('font-size:15px')}>{name}<bdi dir="ltr">{m.testCode}</bdi></b><span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{meta}</span></span>
         <span style={sx('display:flex;flex-direction:column;align-items:flex-end;gap:2px')}><b style={sx('font-size:17px')}><bdi dir="ltr">{score}</bdi></b>
-          {m.status !== 'expired' && <span style={{ ...sx('font-size:12px;font-weight:800'), color: m.status === 'in_progress' ? 'var(--blue)' : 'var(--ink2)' }}>{m.status === 'in_progress' ? t('resume') : t('result')}</span>}</span>
+          {m.status !== 'expired' && m.status !== 'cancelled' && <span style={{ ...sx('font-size:12px;font-weight:800'), color: m.status === 'in_progress' ? 'var(--blue)' : 'var(--ink2)' }}>{m.status === 'in_progress' ? t('resume') : t('result')}</span>}</span>
       </a>
     );
   };

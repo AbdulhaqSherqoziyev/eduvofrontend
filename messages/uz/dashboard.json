@@ -116,5 +116,16 @@
   },
   "loadError": "Bosh sahifani yuklab bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.",
   "retry": "Qayta urinish",
-  "open": "Ochish"
+  "open": "Ochish",
+  "greetNoName": {
+    "morning": "Xayrli tong",
+    "afternoon": "Xayrli kun",
+    "evening": "Xayrli kech"
+  },
+  "metaCancelled": "{date} · Yopildi, kredit qaytarildi",
+  "metaNotGraded": "{date} · Writing baholanmadi, kredit qaytarildi",
+  "noFreshTitle": "Barcha {exam} testlarimizni topshirib bo‘ldingiz",
+  "noFreshSub": "Kreditlaringiz saqlanadi. Yangi testlar qo‘shilganda ishlatasiz.",
+  "noFreshCta": "Natijalarni ko‘rish",
+  "creditsKept": "{n} ta {exam} krediti yangi testlarni kutmoqda"
 }

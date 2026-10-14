@@ -47,7 +47,9 @@ export function DashboardView() {
   useEffect(() => { if (!learner) return; const ac = load(); return () => ac.abort(); }, [learner, load]);
   const slow = useDelayedFlag(!data && !err);
 
-  const name = (data?.learner.displayName || learner?.displayName || learner?.email?.split('@')[0] || '').trim();
+  // the learner's own name only (never the email local-part); no name → greeting without one
+  const name = (data?.learner.displayName || learner?.displayName || '').trim();
+  const initial = (name || learner?.email || '?').charAt(0).toUpperCase();
   const typeLabel = (k: string) => (tq.has(`types.${k}`) ? tq(`types.${k}`) : k.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase()));
   const secName = (k: SectionKey | 'overall') => t(`tab.${k}`);
 
@@ -81,7 +83,7 @@ export function DashboardView() {
 
   const d = data;
   const goal = d.learner.goal;
-  const greet = t(`greet.${pod}`, { name });
+  const greet = name ? t(`greet.${pod}`, { name }) : t(`greetNoName.${pod}`);
   const subline = d.isEmpty
     ? goal ? (goal.examDate ? t('welcomeGoal', { exam: EXAM_NAME[goal.exam], score: fmtScore(goal.targetScore, goal.exam), date: fmtDayMonthLong(lang, goal.examDate) }) : t('welcomeGoalNoDate', { exam: EXAM_NAME[goal.exam], score: fmtScore(goal.targetScore, goal.exam) })) : t('welcome')
     : d.stats.lastMockAt ? t('subline', { n: d.stats.mocksTaken, date: fmtDayMonthLong(lang, d.stats.lastMockAt) }) : t('sublineNone');
@@ -104,7 +106,9 @@ export function DashboardView() {
       case 'verify_email': return { title: t('verifyTitle'), sub: t.rich('verifySub', { email: () => <bdi dir="ltr">{learner?.email ?? ''}</bdi> }), cta: resent ? t('verifySent') : t('verifyCta'), onClick: () => { void resendVerification().finally(() => setResent(true)); } };
       case 'free_section': return { title: t('freeTitle', { exam: EXAM_NAME[ns.exams[0] ?? 'ielts'] }), sub: t('freeSub'), cta: t('freeCta'), href: href(`/start/${ns.exams[0] ?? 'ielts'}?mode=section`) };
       case 'writing_grading': return { title: t('gradingTitle'), sub: t('gradingSub'), cta: t('gradingCta'), href: href(`/results/${ns.attemptId}`) };
-      case 'take_mock': return ns.hasCredit
+      case 'take_mock': return ns.noFreshTest
+        ? { title: t('noFreshTitle', { exam: EXAM_NAME[ns.exam] }), sub: t('noFreshSub'), cta: t('noFreshCta'), href: href('/progress') }
+        : ns.hasCredit
         ? { title: t('takeTitle', { exam: EXAM_NAME[ns.exam] }), sub: t('takeSub'), cta: t('takeCta'), href: href(`/start/${ns.exam}?mode=full`) }
         : { title: t('buyTitle', { exam: EXAM_NAME[ns.exam] }), sub: t('buySub', { exam: EXAM_NAME[ns.exam] }), cta: t('buyCta'), href: href(`/pricing?exam=${ns.exam}`) };
       case 'review_result': return { title: t('reviewTitle'), sub: t.rich('reviewSub', { exam: EXAM_NAME[ns.exam], code: code('') }), cta: t('reviewCta'), href: href(`/results/${ns.attemptId}`) };
@@ -131,10 +135,11 @@ export function DashboardView() {
   const mockRow = (m: AttemptListItem) => {
     const nm = `${m.mode === 'full' ? t('full') : t('section', { section: secName(m.sectionKey ?? 'reading') })} · `;
     const date = fmtDate(lang, m.finishedAt ?? m.startedAt);
-    const meta = m.status === 'in_progress' ? t('metaStarted', { date }) : m.status === 'grading' ? t('metaGrading', { date }) : m.status === 'expired' ? t('metaExpired', { date }) : date;
-    const action = m.status === 'in_progress' ? t('resume') : m.status === 'expired' ? '' : t('openResult');
+    const meta = m.status === 'in_progress' ? t('metaStarted', { date }) : m.status === 'grading' ? t('metaGrading', { date }) : m.status === 'expired' ? t('metaExpired', { date }) : m.status === 'cancelled' ? t('metaCancelled', { date }) : m.notGraded ? t('metaNotGraded', { date }) : date;
+    const action = m.status === 'in_progress' ? t('resume') : m.status === 'expired' || m.status === 'cancelled' ? '' : t('openResult');
     const to = m.status === 'in_progress' ? href(`/exam/${m.attemptId}`) : href(`/results/${m.attemptId}`);
-    const score = m.score?.label ?? (m.score?.value != null ? fmtScore(m.score.value, m.exam) : '—');
+    // IELTS always with one decimal ("6.5", "0.0"); the server label is only a fallback
+    const score = m.score?.value != null ? fmtScore(m.score.value, m.exam) : m.score?.label ?? '—';
     return { ...m, nm, meta, action, to, score };
   };
   const mocks = d.mocks.map(mockRow);
@@ -259,6 +264,9 @@ export function DashboardView() {
                     ))}
                   </div>
                 ) : <span style={sx('font-size:14px;color:var(--ink2)')}>{t('creditsNone')}</span>}
+                {d.credits.filter((c) => c.blockedReason === 'NO_FRESH_TEST' && (c.unusableCredits ?? 0) > 0).map((c) => (
+                  <div key={c.exam} className="m-banner m-banner--info" style={sx('font-size:13px')}>{t('creditsKept', { n: c.unusableCredits ?? 0, exam: EXAM_NAME[c.exam] })}</div>
+                ))}
                 {d.recentPurchases.length > 0 && (
                   <div style={sx('display:flex;flex-direction:column;gap:8px;font-size:13px')}>
                     {d.recentPurchases.map((p) => (
@@ -283,8 +291,8 @@ export function DashboardView() {
       {/* ================= <520 (Mobile App `home`) ================= */}
       <main className="m-phone m-with-tabs-phone" style={sx('padding:4px 16px 24px;display:flex;flex-direction:column;gap:20px')}>
         <div style={sx('display:flex;align-items:center;gap:12px')}>
-          <div style={sx('flex:1;display:flex;flex-direction:column;gap:2px;min-width:0')}><span style={sx('font-size:14px;color:var(--ink2);font-weight:700')}>{t(`greetShort.${pod}`)}</span><span style={sx('font-size:28px;font-weight:800;letter-spacing:var(--ls-h);overflow:hidden;text-overflow:ellipsis')}>{name}</span></div>
-          <Link href={href('/account')} className="m-avatar" style={sx('width:44px;height:44px;font-size:16px')}>{name.charAt(0).toUpperCase()}</Link>
+          <div style={sx('flex:1;display:flex;flex-direction:column;gap:2px;min-width:0')}>{name ? <><span style={sx('font-size:14px;color:var(--ink2);font-weight:700')}>{t(`greetShort.${pod}`)}</span><span style={sx('font-size:28px;font-weight:800;letter-spacing:var(--ls-h);overflow:hidden;text-overflow:ellipsis')}>{name}</span></> : <span style={sx('font-size:28px;font-weight:800;letter-spacing:var(--ls-h)')}>{t(`greetNoName.${pod}`)}</span>}</div>
+          <Link href={href('/account')} className="m-avatar" style={sx('width:44px;height:44px;font-size:16px')}>{initial}</Link>
         </div>
         {d.isEmpty ? (
           <>

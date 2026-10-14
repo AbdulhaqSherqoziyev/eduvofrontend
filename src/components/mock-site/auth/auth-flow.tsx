@@ -69,6 +69,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
   // onboarding
   const [step, setStep] = useState(0);
   const [exam, setExam] = useState<OpenExamSlug>('ielts');
+  const [dname, setDname] = useState('');
   const [target, setTarget] = useState('7.0');
   const [date, setDate] = useState('');
   const [noDate, setNoDate] = useState(false);
@@ -122,6 +123,10 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
       }
       default: return tc('errors.server');
     }
+  }
+  /** TOKEN_INVALID, or the token failed validation (400 VALIDATION_FAILED, field token BAD_FORMAT) */
+  function badToken(e: unknown): boolean {
+    return e instanceof MockApiError && (e.code === 'TOKEN_INVALID' || (e.code === 'VALIDATION_FAILED' && e.fields.some((f) => f.field === 'token')));
   }
   function applyFields(e: unknown): boolean {
     if (!(e instanceof MockApiError) || e.code !== 'VALIDATION_FAILED') return false;
@@ -183,7 +188,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
       .catch((e: unknown) => {
         if (e instanceof MockApiError && e.code === 'ALREADY_VERIFIED') setTokenState('done');
         else if (e instanceof MockApiError && e.code === 'TOKEN_EXPIRED') setTokenState('expired');
-        else if (e instanceof MockApiError && e.code === 'TOKEN_INVALID') setTokenState('invalid');
+        else if (badToken(e)) setTokenState('invalid');
         else { setTokenState('idle'); setFormErr(apiError(e)); }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -218,7 +223,10 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
     if (pw !== pw2) { setFieldErr({ password2: t('err.differ') }); return; }
     if (!token) { setFormErr(t('err.tokenInvalid')); return; }
     setBusy(true);
-    try { const s = await resetPassword(token, pw, pw2); afterAuth(s.learner); } catch (e) { if (!applyFields(e)) setFormErr(apiError(e)); } finally { setBusy(false); }
+    try { const s = await resetPassword(token, pw, pw2); afterAuth(s.learner); } catch (e) {
+      if (badToken(e) || (e instanceof MockApiError && e.code === 'TOKEN_EXPIRED')) setFormErr(<>{t('err.tokenInvalid')} <Link href={href('/forgot')} style={sx('font-weight:800')}>{t('err.newLink')}</Link></>);
+      else if (!applyFields(e)) setFormErr(apiError(e));
+    } finally { setBusy(false); }
   };
 
   /* ---------- onboarding ---------- */
@@ -228,7 +236,8 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
     onbChecked.current = true;
     void ensureSession().then((s) => {
       if (s.status === 'guest') router.replace(href(`/login?next=${encodeURIComponent(href('/onboarding'))}`));
-      else if (s.status === 'learner' && s.learner.goal) { setExam(s.learner.goal.exam); setTarget(s.learner.goal.exam === 'ielts' ? s.learner.goal.targetScore.toFixed(1) : String(s.learner.goal.targetScore)); }
+      if (s.status === 'learner' && s.learner.displayName) setDname(s.learner.displayName);
+      if (s.status === 'learner' && s.learner.goal) { setExam(s.learner.goal.exam); setTarget(s.learner.goal.exam === 'ielts' ? s.learner.goal.targetScore.toFixed(1) : String(s.learner.goal.targetScore)); }
     });
   }, [initial, href, router]);
   const pickExam = (e: OpenExamSlug) => { setExam(e); setTarget(e === 'ielts' ? '7.0' : '1450'); };
@@ -242,6 +251,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
         country: country === 'other' ? null : country,
         ...(isTranslated(uiLang) ? { locale: uiLang } : {}),
         timezone: tz(),
+        ...(dname.trim() ? { displayName: dname.trim().slice(0, 60) } : {}),
         completeOnboarding: true,
       });
       document.cookie = `NEXT_LOCALE=${uiLang};path=/;max-age=31536000;samesite=lax`;
@@ -255,7 +265,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
   };
   const skip = async () => {
     setBusy(true);
-    try { await patchMe({ completeOnboarding: true }); router.push(href('/dashboard')); } catch (e) { setFormErr(apiError(e)); } finally { setBusy(false); }
+    try { await patchMe({ ...(dname.trim() ? { displayName: dname.trim().slice(0, 60) } : {}), completeOnboarding: true }); router.push(href('/dashboard')); } catch (e) { setFormErr(apiError(e)); } finally { setBusy(false); }
   };
   const onbNext = () => { if (step < 3) setStep(step + 1); else void finish(); };
 
@@ -363,6 +373,10 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
         <h2 style={sx('margin:0;font-size:24px;font-weight:800;letter-spacing:var(--ls-t)')}>{onbTitle}</h2>
         {step === 0 && (
           <>
+            <label className="m-field" style={sx('display:flex;flex-direction:column;gap:6px')}>{t('onb.name')}
+              <input className="m-input" value={dname} maxLength={60} autoComplete="given-name" placeholder={t('onb.namePh')} onChange={(e) => setDname(e.target.value)} />
+              <span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{t('onb.nameNote')}</span>
+            </label>
             <div role="radiogroup" aria-label={onbTitle} style={sx('display:grid;grid-template-columns:1fr 1fr;gap:14px')}>
               {(['ielts', 'sat'] as const).map((k) => (
                 <button key={k} type="button" role="radio" aria-checked={exam === k} className="m-radiocard" onClick={() => pickExam(k)} style={sx('padding:18px;border-radius:16px;display:flex;flex-direction:column;gap:6px')}>
@@ -465,6 +479,11 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
         <div style={sx('display:flex;flex-direction:column;gap:6px')}><span style={sx('font-size:13px;font-weight:800;color:var(--mut)')}>{t('onb.stepOf', { n: step + 1 })}</span><h1 style={sx('margin:0;font-size:26px;font-weight:800;letter-spacing:var(--ls-t);line-height:1.2')}>{onbTitlePhone}</h1></div>
         {step === 0 && (
           <div role="radiogroup" aria-label={onbTitlePhone} style={sx('display:flex;flex-direction:column;gap:12px')}>
+            <label className="m-field" style={sx('display:flex;flex-direction:column;gap:6px')}>{t('onb.name')}
+              <input className="m-input" value={dname} maxLength={60} autoComplete="given-name" placeholder={t('onb.namePh')} onChange={(e) => setDname(e.target.value)} style={sx('height:52px;border-radius:16px')} />
+              <span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{t('onb.nameNote')}</span>
+            </label>
+
             {(['ielts', 'sat'] as const).map((k) => (
               <button key={k} type="button" role="radio" aria-checked={exam === k} className="m-radiocard" onClick={() => pickExam(k)} style={sx('min-height:76px;border-radius:20px;padding:16px 18px;display:flex;align-items:center;gap:14px')}>
                 <span className="m-radio" />
