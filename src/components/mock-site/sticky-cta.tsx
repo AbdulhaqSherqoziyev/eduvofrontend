@@ -2,6 +2,7 @@
  * Phone sticky bottom CTA bar (Mobile App.dc.html): one primary (gradient) + optional soft secondary,
  * 54px buttons, radius 16, safe-area padding. Pages add `m-with-cta` to the content to keep it clear.
  */
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 
 export interface CtaAction { label: ReactNode; href?: string; onClick?: () => void; disabled?: boolean; busy?: boolean; grow?: boolean }
@@ -9,7 +10,7 @@ export interface CtaAction { label: ReactNode; href?: string; onClick?: () => vo
 function Btn({ a, soft }: { a: CtaAction; soft?: boolean }) {
   const cls = `m-cta__btn${soft ? ' m-cta__btn--soft' : ''}${soft && a.grow ? ' m-cta__btn--grow' : ''}`;
   const body = <>{a.busy && <span className="m-spin" aria-hidden />}{a.label}</>;
-  if (a.href && !a.disabled) return <a className={cls} href={a.href}>{body}</a>;
+  if (a.href && !a.disabled) return <Link className={cls} href={a.href}>{body}</Link>;
   return <button type="button" className={cls} onClick={a.onClick} disabled={a.disabled || a.busy} aria-busy={a.busy || undefined}>{body}</button>;
 }
 

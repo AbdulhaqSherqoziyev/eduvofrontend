@@ -1,4 +1,5 @@
 /** Landing <520px — Mobile App.dc.html `landing` screen (app bar + sticky CTA are rendered by the page). */
+import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { sx } from '@/lib/mock/sx';
 import { CatalogError } from '../catalog-error';
@@ -30,7 +31,7 @@ export async function LandingPhone() {
         <p style={sx('margin:0;font-size:15px;line-height:1.55;color:var(--ink2);text-wrap:pretty')}>{t('phone.sub')}</p>
       </div>
 
-      <a href={h('/sample-result')} className="m-card" style={sx('text-align:start;color:var(--ink);padding:18px;display:flex;flex-direction:column;gap:14px')}>
+      <Link href={h('/sample-result')} className="m-card" style={sx('text-align:start;color:var(--ink);padding:18px;display:flex;flex-direction:column;gap:14px')}>
         <div style={sx('display:flex;justify-content:space-between;align-items:center;width:100%')}>
           <span className="m-eyebrow" style={sx('color:var(--mut)')}>{t('phone.sampleResult')}</span>
           <span className="m-pill m-pill--ok">CEFR B2</span>
@@ -47,7 +48,7 @@ export async function LandingPhone() {
           </div>
         </div>
         <span style={sx('font-size:13px;font-weight:800;color:var(--blue)')}>{t('phone.seeSample')}</span>
-      </a>
+      </Link>
 
       <div style={sx('display:flex;flex-direction:column;gap:12px')}>
         <div style={H}>{t('exams.title')}</div>
@@ -55,7 +56,7 @@ export async function LandingPhone() {
           {(['ielts', 'sat'] as const).map((ex) => {
             const f = ex === 'ielts' ? 'phone.ieltsFacts' : 'phone.satFacts';
             return (
-              <a key={ex} href={h(`/pricing?exam=${ex}`)} className="m-card" style={sx('flex:none;width:78%;text-align:start;color:var(--ink);padding:18px;display:flex;flex-direction:column;gap:12px')}>
+              <Link key={ex} href={h(`/pricing?exam=${ex}`)} className="m-card" style={sx('flex:none;width:78%;text-align:start;color:var(--ink);padding:18px;display:flex;flex-direction:column;gap:12px')}>
                 <div style={sx('display:flex;justify-content:space-between;width:100%;gap:8px')}>
                   <span className="m-eyebrow" style={{ ...sx('letter-spacing:var(--ls-eyebrow-sm)'), color: `var(--${ex})` }} lang="en">{ex === 'ielts' ? 'IELTS ACADEMIC' : 'DIGITAL SAT'}</span>
                   <span className="m-pill m-pill--ok" style={sx('padding:3px 9px;font-size:11px')}>{tc('chips.freeSection')}</span>
@@ -67,7 +68,7 @@ export async function LandingPhone() {
                   ))}
                 </div>
                 <span style={sx('font-size:13px;color:var(--ink2);font-weight:600')}>{t.rich('phone.fullFrom', { b: (c) => <b style={sx('color:var(--ink)')}>{c}</b>, price: () => <Price exam={ex} kind="examFull" skelWidth={80} /> })}</span>
-              </a>
+              </Link>
             );
           })}
         </div>
@@ -107,22 +108,22 @@ export async function LandingPhone() {
       <div style={sx('display:flex;flex-direction:column;gap:12px')}>
         <div style={sx('display:flex;justify-content:space-between;align-items:baseline')}>
           <span style={H}>{t('pricing.title')}</span>
-          <a href={h('/pricing')} style={sx('color:var(--blue);font-weight:800;font-size:14px')}>{t('phone.seeAll')}</a>
+          <Link href={h('/pricing')} style={sx('color:var(--blue);font-weight:800;font-size:14px')}>{t('phone.seeAll')}</Link>
         </div>
         <CatalogError text={t('pricing.loadError')} retry={t('pricing.retry')} />
         <div className="m-rows">
-          <a href={h('/pricing')} style={ROW}>
+          <Link href={h('/pricing')} style={ROW}>
             <span style={sx('flex:1;display:flex;flex-direction:column;gap:2px')}><b style={sx('font-size:15px')}>{t('phone.pSection')}</b><span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{t('phone.pSectionNote')}</span></span>
             <b style={sx('font-size:15px;white-space:nowrap')}><Price exam="ielts" kind="section" skelWidth={80} /></b>
-          </a>
-          <a href={h('/pricing')} style={ROW}>
+          </Link>
+          <Link href={h('/pricing')} style={ROW}>
             <span style={sx('flex:1;display:flex;flex-direction:column;gap:2px')}><b style={sx('font-size:15px')}>{t('phone.pFull')}</b><span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{t('phone.pFullNote')}</span></span>
             <b style={sx('font-size:15px;white-space:nowrap')}><Price exam="ielts" kind="full" skelWidth={80} /></b>
-          </a>
-          <a href={h('/pricing')} style={ROW}>
+          </Link>
+          <Link href={h('/pricing')} style={ROW}>
             <span style={sx('flex:1;display:flex;flex-direction:column;gap:2px')}><b style={sx('font-size:15px')}>{t('phone.pBundle', { n: 5 })}</b><span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{t.rich('phone.pBundleNote', { per: () => <Price exam="ielts" kind="bundle" qty={5} field="perMock" skelWidth={70} /> })}</span></span>
             <b style={sx('font-size:15px;white-space:nowrap')}><Price exam="ielts" kind="bundle" qty={5} skelWidth={80} /></b>
-          </a>
+          </Link>
         </div>
       </div>
 

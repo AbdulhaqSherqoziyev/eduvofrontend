@@ -1,4 +1,5 @@
 /** Web footer (SiteFooter.dc.html): brand · Exams · Company · Legal · Languages, then the legal line. Hidden on phones. */
+import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { LOCALES, LOCALE_NAMES, htmlLang, type MockLocale } from '@/i18n/locales';
 import { sx } from '@/lib/mock/sx';
@@ -29,24 +30,24 @@ export async function SiteFooter() {
         </div>
         <div style={COL}>
           <div style={HEAD}>{t('footer.exams')}</div>
-          <a className="m-link-soft" href={h('/ielts')}>{t('footer.ieltsAcademic')}</a>
-          <a className="m-link-soft" href={h('/sat')}>{t('footer.digitalSat')}</a>
+          <Link className="m-link-soft" href={h('/ielts')}>{t('footer.ieltsAcademic')}</Link>
+          <Link className="m-link-soft" href={h('/sat')}>{t('footer.digitalSat')}</Link>
           <span style={sx('color:var(--mut)')}>{t('footer.soon')}</span>
-          <a className="m-link-soft" href={h('/pricing')}>{t('footer.pricing')}</a>
+          <Link className="m-link-soft" href={h('/pricing')}>{t('footer.pricing')}</Link>
         </div>
         <div style={COL}>
           <div style={HEAD}>{t('footer.company')}</div>
-          <a className="m-link-soft" href={`${h('')}#centers`}>{t('footer.centers')}</a>
-          <a className="m-link-soft" href={h('/help')}>{t('footer.help')}</a>
-          <a className="m-link-soft" href={h('/help/contact')}>{t('footer.contact')}</a>
+          <Link className="m-link-soft" href={`${h('')}#centers`}>{t('footer.centers')}</Link>
+          <Link className="m-link-soft" href={h('/help')}>{t('footer.help')}</Link>
+          <Link className="m-link-soft" href={h('/help/contact')}>{t('footer.contact')}</Link>
           <a className="m-link-soft" href="https://eduvo.uz">{t('footer.erp')}</a>
         </div>
         <div style={COL}>
           <div style={HEAD}>{t('footer.legal')}</div>
-          <a className="m-link-soft" href={h('/terms')}>{t('footer.terms')}</a>
-          <a className="m-link-soft" href={h('/privacy')}>{t('footer.privacy')}</a>
-          <a className="m-link-soft" href={h('/refunds')}>{t('footer.refund')}</a>
-          <a className="m-link-soft" href={h('/cookies')}>{t('footer.cookies')}</a>
+          <Link className="m-link-soft" href={h('/terms')}>{t('footer.terms')}</Link>
+          <Link className="m-link-soft" href={h('/privacy')}>{t('footer.privacy')}</Link>
+          <Link className="m-link-soft" href={h('/refunds')}>{t('footer.refund')}</Link>
+          <Link className="m-link-soft" href={h('/cookies')}>{t('footer.cookies')}</Link>
         </div>
         <div style={COL}>
           <div style={HEAD}>{t('footer.languages')}</div>

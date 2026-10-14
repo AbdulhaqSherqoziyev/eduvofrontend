@@ -7,6 +7,7 @@
  * Quote = O1, order = O2; a Paddle order opens the overlay on this page and, once Paddle reports
  * `checkout.completed`, hands over to the order page, which polls O3 (credits come only from the webhook).
  */
+import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -23,6 +24,7 @@ import { AppBar } from '../app-bar';
 import { Segmented } from '../segmented';
 import { StickyCta } from '../sticky-cta';
 import { useToast } from '../toast';
+import { PayIcon } from './pay-icons';
 
 const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`);
 type Banner = { kind: 'warn' | 'err' | 'info'; text: React.ReactNode } | null;
@@ -170,7 +172,7 @@ export function CheckoutForm() {
       if (!(e instanceof MockApiError)) { setBanner({ kind: 'err', text: t('serverErr') }); return; }
       if (e.code === 'PROVIDER_ERROR' && typeof e.body.orderId === 'string') { router.push(orderUrl(e.body.orderId)); return; }
       switch (e.code) {
-        case 'TOO_MANY_PENDING_ORDERS': setBanner({ kind: 'warn', text: <>{t('tooMany')} <a href={href('/dashboard')} style={sx('font-weight:800')}>{t('seeOrders')}</a></> }); break;
+        case 'TOO_MANY_PENDING_ORDERS': setBanner({ kind: 'warn', text: <>{t('tooMany')} <Link href={href('/dashboard')} style={sx('font-weight:800')}>{t('seeOrders')}</Link></> }); break;
         case 'EMAIL_NOT_VERIFIED': setBanner({ kind: 'warn', text: <VerifyFirst /> }); break;
         case 'PROMO_INVALID': setPromoErr(true); setApplied(undefined); break;
         case 'PRODUCT_UNAVAILABLE': router.replace(href('/pricing?model=unl')); break;
@@ -222,7 +224,7 @@ export function CheckoutForm() {
     <div style={sx('padding:12px 14px;border-radius:14px;box-shadow:var(--inset);font-size:13px;line-height:1.55;color:var(--ink2)')}>{group === 'card' ? t('paddle.cardNote') : t('paddle.walletNote')}</div>
   );
   const methodsState = methodsErr ? <div className="m-banner m-banner--err" role="alert">{t('methodsErr')}</div>
-    : methods && !anyEnabled ? <div className="m-banner m-banner--warn">{t('methodsEmpty')} <a href={href('/help/contact')}>{tc('footer.contact')}</a></div> : null;
+    : methods && !anyEnabled ? <div className="m-banner m-banner--warn">{t('methodsEmpty')} <Link href={href('/help/contact')}>{tc('footer.contact')}</Link></div> : null;
   const sk = (w: string, h = 16) => slow ? <span className="m-skel" style={{ display: 'inline-block', width: w, height: h }} /> : <span style={{ display: 'inline-block', width: w }} />;
 
   return (
@@ -249,7 +251,7 @@ export function CheckoutForm() {
                   <div style={sx('display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px')}>
                     {(localProviders.length ? localProviders : [{ code: 'manual', name: '' }]).map((p) => (
                       <button key={p.code} type="button" role="radio" aria-checked="true" className="m-radiocard" style={sx('height:72px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px')}>
-                        <span className="m-mono" style={sx('width:70%;height:24px;border-radius:6px;background:repeating-linear-gradient(135deg,var(--hover) 0 6px,transparent 6px 12px);font-size:10px;color:var(--mut);display:grid;place-items:center')}>logo</span>
+                        <PayIcon kind="local" tile={false} />
                         <span style={sx('font-size:12px;font-weight:700')}>{p.name || t('manualTile')}</span>
                       </button>
                     ))}
@@ -259,7 +261,7 @@ export function CheckoutForm() {
               )}
               {bannerEl}
               <button type="button" className="m-btn m-btn--primary" disabled={!canPay} onClick={() => void pay()} style={sx('height:54px;font-weight:800;font-size:16px')}>{(busy || paddle.state === 'opening') && <span className="m-spin" aria-hidden />}{ctaLabel}</button>
-              <div style={sx('font-size:12px;color:var(--mut);line-height:1.5')}>{t('secure')}</div>
+              {paddleGroup && enabled(group) && <div style={sx('font-size:12px;color:var(--mut);line-height:1.5')}>{t('secure')}</div>}
             </div>
           </div>
 
@@ -280,7 +282,7 @@ export function CheckoutForm() {
               <div style={sx('display:flex;justify-content:space-between')}><span>{t('taxes')}</span><span>{t('included')}</span></div>
             </div>
             <div style={sx('display:flex;justify-content:space-between;align-items:baseline;padding:14px 16px;border-radius:16px;box-shadow:var(--inset)')}><span style={sx('font-weight:800')}>{t('total')}</span><span style={sx('font-size:24px;font-weight:800')}>{quote ? <bdi dir="ltr">{total}</bdi> : sk('100px', 22)}</span></div>
-            <a href={href(`/pricing${product ? `?exam=${product.exam}` : ''}`)} style={sx('font-size:13px;font-weight:700')}>{t('changePlan')}</a>
+            <Link href={href(`/pricing${product ? `?exam=${product.exam}` : ''}`)} style={sx('font-size:13px;font-weight:700')}>{t('changePlan')}</Link>
           </div>
         </div>
       </main>
@@ -313,7 +315,7 @@ export function CheckoutForm() {
               <button key={k} type="button" role="radio" aria-checked={checked} aria-disabled={!on || undefined}
                 onClick={() => { if (on) { setGroup(g); if (g === 'wallet') setPhoneWallet(k as 'wallet' | 'wallet2'); } else toast(soon(g) ? t('cardSoonToast') : t('paddle.usdOnly')); }}
                 style={sx('width:100%;min-height:58px;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:0 16px;display:flex;align-items:center;gap:12px;text-align:start')}>
-                <span style={{ ...sx('width:40px;height:28px;border-radius:7px;flex:none;background:repeating-linear-gradient(135deg,var(--hover) 0 5px,transparent 5px 10px);box-shadow:var(--inset)'), opacity: on ? 1 : 0.55 }} />
+                <PayIcon kind={g} dim={!on} />
                 <span style={{ ...sx('flex:1;display:flex;flex-direction:column;gap:1px'), opacity: on ? 1 : 0.55 }}><b style={sx('font-size:15px')}>{name}</b>{note && <span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{note}</span>}</span>
                 {soon(g) ? soonPill : on ? <span className={`m-radio${checked ? ' is-on' : ''}`} /> : <span style={sx('font-size:12px;font-weight:700;color:var(--mut)')}>USD · EUR</span>}
               </button>
@@ -323,7 +325,7 @@ export function CheckoutForm() {
             <button key={p.code} type="button" role="radio" aria-checked={group === 'local' && enabled('local')} aria-disabled={!enabled('local') || undefined}
               onClick={() => { if (enabled('local')) setGroup('local'); else if (reason('local') === 'CURRENCY_NOT_SUPPORTED') toast(t('paddle.uzsOnly')); }}
               style={sx('width:100%;min-height:58px;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:0 16px;display:flex;align-items:center;gap:12px;text-align:start')}>
-              <span style={sx('width:40px;height:28px;border-radius:7px;flex:none;background:repeating-linear-gradient(135deg,var(--hover) 0 5px,transparent 5px 10px);box-shadow:var(--inset)')} />
+              <PayIcon kind="local" dim={!enabled('local')} />
               <span style={{ ...sx('flex:1;display:flex;flex-direction:column;gap:1px'), opacity: enabled('local') ? 1 : 0.55 }}><b style={sx('font-size:15px')}>{p.name || t('manualTile')}</b><span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{t('phone.localNote')}</span></span>
               <span className={`m-radio${group === 'local' && enabled('local') ? ' is-on' : ''}`} />
             </button>

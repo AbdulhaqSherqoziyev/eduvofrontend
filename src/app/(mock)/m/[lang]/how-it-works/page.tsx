@@ -11,12 +11,12 @@ import { PageShell } from '@/components/mock-site/page-shell';
 import { SiteFooter } from '@/components/mock-site/site-footer';
 import { SiteHeader } from '@/components/mock-site/site-header';
 import { StickyCta } from '@/components/mock-site/sticky-cta';
-import { pageMeta } from '@/lib/mock/seo';
+import { publicPageMeta } from '@/lib/mock/seo';
 import { sx } from '@/lib/mock/sx';
 
 export async function generateMetadata({ params: { lang } }: { params: { lang: MockLocale } }): Promise<Metadata> {
   const t = await getTranslations({ locale: lang, namespace: 'exams.how.meta' });
-  return { title: t('title'), description: t('description'), ...pageMeta(lang, '/how-it-works') };
+  return publicPageMeta(lang, '/how-it-works', { title: t('title'), description: t('description') });
 }
 
 const SEC = sx('max-width:1280px;margin:0 auto;padding:clamp(40px,5vw,72px) 20px');

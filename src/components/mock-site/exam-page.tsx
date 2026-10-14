@@ -3,12 +3,14 @@
  * visual language: hero (accent eyebrow, H1, price, Start full mock / Try free section), format table,
  * what's included, sample question preview (player question styles), exam FAQ.
  */
+import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import type { OpenExamSlug } from '@/lib/mock/api/types';
 import { sx } from '@/lib/mock/sx';
 import { CatalogError } from './catalog-error';
 import { FaqDesktop, FaqPhone } from './landing/faq';
 import { Price } from './price';
+import { BrandMark } from './logo';
 
 const SEC = sx('max-width:1280px;margin:0 auto;padding:clamp(40px,5vw,72px) 20px');
 const QBTN = sx('padding:6px 10px;border-radius:9px;box-shadow:var(--raise-sm);font-weight:700');
@@ -17,7 +19,7 @@ function IeltsPreview() {
   return (
     <div lang="en" dir="ltr" className="m-card" style={sx('overflow:hidden')}>
       <div style={sx('display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);font-size:12px;font-weight:700')}>
-        <span style={sx('width:22px;height:22px;border-radius:7px;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:12px')}>e</span>
+        <BrandMark size={22} shadow={false} />
         <span style={sx('color:var(--ink2)')}>IELTS Academic · Reading</span>
         <span style={sx('margin-inline-start:auto;padding:5px 10px;border-radius:9px;box-shadow:var(--inset)')}>58:40</span>
       </div>
@@ -48,7 +50,7 @@ function SatPreview() {
   return (
     <div lang="en" dir="ltr" className="m-card" style={sx('overflow:hidden')}>
       <div style={sx('display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);font-size:12px;font-weight:700')}>
-        <span style={sx('width:22px;height:22px;border-radius:7px;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:12px')}>e</span>
+        <BrandMark size={22} shadow={false} />
         <span style={sx('color:var(--ink2)')}>Section 1, Module 1: Reading and Writing</span>
         <span style={sx('margin-inline-start:auto;padding:5px 10px;border-radius:9px;box-shadow:var(--inset)')}>27:05</span>
       </div>
@@ -96,8 +98,8 @@ export async function ExamPageDesktop({ exam }: { exam: OpenExamSlug }) {
             <p style={sx('margin:0;font-size:clamp(16px,1.4vw,19px);line-height:var(--lh-body);color:var(--ink2);max-width:560px')}>{t(`${exam}.sub`)}</p>
             <span style={sx('font-size:15px;color:var(--ink2)')}>{t.rich('common.fullMockPrice', { b: (c) => <b style={sx('color:var(--ink);font-size:20px')}>{c}</b>, price: () => <Price exam={exam} kind="full" skelWidth={120} /> })}</span>
             <div style={sx('display:flex;gap:12px;flex-wrap:wrap')}>
-              <a className="m-btn m-btn--primary" href={h(`/start/${exam}?mode=full`)} style={sx('height:54px;padding:0 26px;font-weight:700;font-size:16px')}>{t('common.startFull')}</a>
-              <a className="m-btn m-btn--soft" href={h(`/start/${exam}?mode=section`)} style={sx('height:54px;padding:0 24px;font-size:16px')}>{t('common.tryFree')}</a>
+              <Link className="m-btn m-btn--primary" href={h(`/start/${exam}?mode=full`)} style={sx('height:54px;padding:0 26px;font-weight:700;font-size:16px')}>{t('common.startFull')}</Link>
+              <Link className="m-btn m-btn--soft" href={h(`/start/${exam}?mode=section`)} style={sx('height:54px;padding:0 24px;font-size:16px')}>{t('common.tryFree')}</Link>
             </div>
             <CatalogError text={t('common.priceLoadError')} retry={tl('pricing.retry')} />
             <div style={sx('display:flex;gap:8px 20px;flex-wrap:wrap;font-size:13px;color:var(--mut);font-weight:600')}>
@@ -145,7 +147,7 @@ export async function ExamPageDesktop({ exam }: { exam: OpenExamSlug }) {
               <span style={sx('font-size:clamp(20px,2.2vw,26px);font-weight:800;letter-spacing:var(--ls-t)')}>{t('common.ctaTitle')}</span>
               <span style={sx('color:var(--ink2);font-size:15px;line-height:var(--lh-body)')}>{t('common.ctaBody')}</span>
             </div>
-            <a className="m-btn m-btn--primary" href={h(`/start/${exam}?mode=section`)} style={sx('height:50px;font-size:16px;font-weight:700')}>{t('common.tryFree')}</a>
+            <Link className="m-btn m-btn--primary" href={h(`/start/${exam}?mode=section`)} style={sx('height:50px;font-size:16px;font-weight:700')}>{t('common.tryFree')}</Link>
           </div>
         </section>
       </div>

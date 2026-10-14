@@ -49,6 +49,16 @@ function publicOrigin(req: NextRequest, host: { name: string; raw: string }) {
   return `${proto}://${local ? host.raw : host.name}`;
 }
 
+/** Root-level icon/manifest paths browsers and crawlers ask for; on the mock host they get the mock brand. */
+const BRAND_FILES: Record<string, string> = {
+  '/favicon.ico': '/brand/favicon.ico',
+  '/favicon.svg': '/brand/favicon.svg',
+  '/apple-touch-icon.png': '/brand/apple-touch-icon.png',
+  '/apple-touch-icon-precomposed.png': '/brand/apple-touch-icon.png',
+  '/manifest.json': '/brand/manifest.webmanifest',
+  '/manifest.webmanifest': '/brand/manifest.webmanifest',
+};
+
 const erpNotFound = (req: NextRequest) => NextResponse.rewrite(new URL(ERP_404, req.url), { status: 404 });
 
 function redirect(req: NextRequest, host: { name: string; raw: string }, path: string) {
@@ -61,6 +71,12 @@ function redirect(req: NextRequest, host: { name: string; raw: string }, path: s
 
 function mockRoute(req: NextRequest, host: { name: string; raw: string }) {
   const { pathname } = req.nextUrl;
+  const brand = BRAND_FILES[pathname];
+  if (brand) {
+    const url = req.nextUrl.clone();
+    url.pathname = brand;
+    return NextResponse.rewrite(url);
+  }
   if (pathname === '/') return redirect(req, host, `/${pickLocale(req)}`);
 
   const seg = pathname.split('/')[1];
@@ -86,6 +102,7 @@ export function middleware(req: NextRequest) {
   if (isMockHost(host.name)) return mockRoute(req, host);
 
   const { pathname } = req.nextUrl;
+  if (pathname in BRAND_FILES) return NextResponse.next(); // ERP host: its own public/ files, unchanged
   if (pathname === '/m' || pathname.startsWith('/m/')) return erpNotFound(req);
   // dev: pages added while `next dev` runs are not in the generated manifest yet
   if (!PROD) return NextResponse.next();
@@ -94,5 +111,8 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   // skip Next internals, the API proxy and files with an extension (public/, robots.txt, sitemap.xml…)
-  matcher: ['/((?!_next/|api/|.*\\.[a-zA-Z0-9]+$).*)'],
+  matcher: [
+    '/((?!_next/|api/|.*\\.[a-zA-Z0-9]+$).*)',
+    '/favicon.ico', '/favicon.svg', '/apple-touch-icon.png', '/apple-touch-icon-precomposed.png', '/manifest.json', '/manifest.webmanifest',
+  ],
 };

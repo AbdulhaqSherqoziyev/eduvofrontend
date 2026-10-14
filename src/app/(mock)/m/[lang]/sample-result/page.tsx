@@ -7,11 +7,11 @@ import { ResultsView } from '@/components/mock-site/results/results-view';
 import { SAMPLE_RESULT } from '@/components/mock-site/results/sample';
 import { SiteFooter } from '@/components/mock-site/site-footer';
 import { SiteHeader } from '@/components/mock-site/site-header';
-import { pageMeta } from '@/lib/mock/seo';
+import { publicPageMeta } from '@/lib/mock/seo';
 
 export async function generateMetadata({ params: { lang } }: { params: { lang: MockLocale } }): Promise<Metadata> {
   const t = await getTranslations({ locale: lang, namespace: 'results.meta' });
-  return { title: t('sample'), ...pageMeta(lang, '/sample-result') };
+  return publicPageMeta(lang, '/sample-result', { title: t('sample'), description: t('sampleDescription') });
 }
 
 export default function SampleResultPage({ params: { lang } }: { params: { lang: MockLocale } }) {

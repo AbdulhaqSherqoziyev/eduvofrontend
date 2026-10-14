@@ -5,6 +5,7 @@
  * dialog (Accept all / Only necessary / Settings would offer a choice that does not exist).
  * Not shown inside the exam player. Dismissal is kept in localStorage.
  */
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useLang, usePathRest } from '@/lib/mock/hooks/use-lang';
@@ -26,7 +27,7 @@ export function CookieNotice() {
   };
   return (
     <div className="m-cookie" role="region" aria-label={t('label')}>
-      <p>{t('text')} <a href={href('/cookies')} style={{ fontWeight: 700 }}>{t('more')}</a></p>
+      <p>{t('text')} <Link href={href('/cookies')} style={{ fontWeight: 700 }}>{t('more')}</Link></p>
       <button type="button" className="m-btn m-btn--soft m-btn--sm" onClick={ok}>{t('ok')}</button>
     </div>
   );

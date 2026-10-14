@@ -9,13 +9,13 @@ import { SiteFooter } from '@/components/mock-site/site-footer';
 import { SiteHeader } from '@/components/mock-site/site-header';
 import { CatalogProvider } from '@/lib/mock/catalog';
 import { CATALOG_REVALIDATE, fetchCatalogServer } from '@/lib/mock/catalog-server';
-import { pageMeta } from '@/lib/mock/seo';
+import { publicPageMeta } from '@/lib/mock/seo';
 
 export const revalidate = CATALOG_REVALIDATE;
 
 export async function generateMetadata({ params: { lang } }: { params: { lang: MockLocale } }): Promise<Metadata> {
   const t = await getTranslations({ locale: lang, namespace: 'pricing.meta' });
-  return { title: t('title'), description: t('description'), ...pageMeta(lang, '/pricing') };
+  return publicPageMeta(lang, '/pricing', { title: t('title'), description: t('description') });
 }
 
 export default async function PricingPage({ params: { lang } }: { params: { lang: MockLocale } }) {

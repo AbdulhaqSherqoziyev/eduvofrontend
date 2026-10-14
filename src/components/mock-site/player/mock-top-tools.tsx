@@ -11,6 +11,7 @@ import { useExam } from '@/lib/exam/engine/context';
 import type { Locale } from '@/lib/exam/i18n';
 import { RichLine } from '@/components/mock-site/legal/rich-line';
 import { useLang } from '@/lib/mock/hooks/use-lang';
+import { BrandMark } from '../logo';
 
 const ctl = { height: 36, borderRadius: 9, border: '1.5px solid var(--x-line)', background: 'transparent', color: 'var(--x-ink)', fontSize: 12.5, fontWeight: 700 } as const;
 
@@ -24,7 +25,7 @@ export function MockPlayerBrand() {
   return (
     <>
       <span dir="ltr" style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 800, fontSize: 15, flex: 'none' }} aria-label="Eduvo Mock">
-        <span aria-hidden style={{ width: 26, height: 26, borderRadius: 8, background: 'linear-gradient(135deg,#5B8DEF,#2E6BE6)', color: '#fff', display: 'grid', placeItems: 'center', fontSize: 13 }}>e</span>
+        <BrandMark size={26} shadow={false} />
         <span aria-hidden>Eduvo<span style={{ color: 'var(--x-accent)', marginInlineStart: 4 }}>Mock</span></span>
       </span>
       <span aria-hidden style={{ width: 1, height: 24, background: 'var(--x-line)', flex: 'none' }} />

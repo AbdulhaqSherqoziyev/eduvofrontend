@@ -3,6 +3,7 @@
  * (≥1024 px; a collapsible card above the text on smaller screens) and numbered sections.
  * Server-rendered and static per locale; copy lives in messages/{lang}/legal.json.
  */
+import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import type { MockLocale } from '@/i18n/locales';
 import { AppBar } from '@/components/mock-site/app-bar';
@@ -10,7 +11,7 @@ import { PageShell } from '@/components/mock-site/page-shell';
 import { SiteFooter } from '@/components/mock-site/site-footer';
 import { SiteHeader } from '@/components/mock-site/site-header';
 import { fmtDateLong } from '@/lib/mock/format';
-import { pageMeta } from '@/lib/mock/seo';
+import { publicPageMeta } from '@/lib/mock/seo';
 import { LEGAL_DOCS, LEGAL_UPDATED, type LegalDoc, type LegalSection } from '@/lib/mock/legal';
 import { sx } from '@/lib/mock/sx';
 import { RichLine } from './rich-line';
@@ -49,7 +50,7 @@ export async function LegalPage({ doc, lang }: { doc: LegalDoc; lang: MockLocale
               <div style={sx('font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:var(--tt-eyebrow);color:var(--mut)')}>{t('other')}</div>
               <div className="m-legal__more">
                 {LEGAL_DOCS.filter((d) => d !== doc).map((d) => (
-                  <a key={d} className="m-btn m-btn--soft m-btn--sm" href={`/${lang}/${d}`}>{t(`${d}.title`)}</a>
+                  <Link key={d} className="m-btn m-btn--soft m-btn--sm" href={`/${lang}/${d}`}>{t(`${d}.title`)}</Link>
                 ))}
               </div>
               <p><RichLine text={t('questions')} lang={lang} /></p>
@@ -64,5 +65,5 @@ export async function LegalPage({ doc, lang }: { doc: LegalDoc; lang: MockLocale
 
 export async function legalMetadata(lang: MockLocale, doc: LegalDoc) {
   const t = await getTranslations({ locale: lang, namespace: 'legal.meta' });
-  return { title: t(`${doc}.title`), description: t(`${doc}.description`), ...pageMeta(lang, `/${doc}`) };
+  return publicPageMeta(lang, `/${doc}`, { title: t(`${doc}.title`), description: t(`${doc}.description`) });
 }

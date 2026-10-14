@@ -4,6 +4,7 @@
  * exam, model, currency, bundle size, selected phone plan. Prices and availability come only from
  * the catalog (C1). Unlimited with `available:false` follows design addendum §4.
  */
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { findProduct, readCurrency, saveCurrency, useCatalog } from '@/lib/mock/catalog';
@@ -114,7 +115,7 @@ export function PricingView() {
 
         <div style={sx('border-radius:20px;padding:16px 20px;background:var(--okBg);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center')}>
           <span style={sx('font-weight:700;font-size:14px;color:var(--ink)')}>{t.rich('free', { exam: examName, b: (c) => <span style={sx('color:var(--ok);font-weight:800')}>{c}</span> })}</span>
-          <a href={freeHref} style={sx('font-weight:800;font-size:14px;color:var(--ok)')}>{t('freeCta')}</a>
+          <Link href={freeHref} style={sx('font-weight:800;font-size:14px;color:var(--ok)')}>{t('freeCta')}</Link>
         </div>
 
         {loadError}
@@ -214,7 +215,7 @@ export function PricingView() {
             </tbody>
           </table>
         </section>
-        <div style={sx('font-size:13px;color:var(--mut);line-height:var(--lh-body)')}>{t.rich('note', { cur, a: (c) => <a href={href('/refunds')}>{c}</a> })}</div>
+        <div style={sx('font-size:13px;color:var(--mut);line-height:var(--lh-body)')}>{t.rich('note', { cur, a: (c) => <Link href={href('/refunds')}>{c}</Link> })}</div>
       </main>
 
       {/* ================= phone ================= */}
@@ -232,7 +233,7 @@ export function PricingView() {
         </div>
         <div style={sx('border-radius:16px;padding:14px 16px;background:var(--okBg);display:flex;align-items:center;gap:10px')}>
           <span style={sx('flex:1;font-size:13px;font-weight:700;line-height:1.4')}>{t.rich('phone.freeShort', { exam: examName, b: (c) => <b style={sx('color:var(--ok)')}>{c}</b> })}</span>
-          <a href={freeHref} style={sx('color:var(--ok);font-weight:800;font-size:13px')}>{t('phone.start')}</a>
+          <Link href={freeHref} style={sx('color:var(--ok);font-weight:800;font-size:13px')}>{t('phone.start')}</Link>
         </div>
         {loadError}
         <div role="radiogroup" aria-label={t('phone.title')} style={sx('display:flex;flex-direction:column;gap:10px')}>
@@ -279,5 +280,5 @@ export function PricingView() {
 function BuyLink({ href, label, soft, grid }: { href?: string; label: string; soft?: boolean; grid?: boolean }) {
   const style = sx(`margin-top:auto;height:${grid ? 52 : 50}px;border-radius:14px;font-weight:700;font-size:16px;width:100%`);
   if (!href) return <button type="button" className={`m-btn ${soft ? 'm-btn--soft' : 'm-btn--primary'}`} disabled aria-disabled="true" style={style}>{label}</button>;
-  return <a className={`m-btn ${soft ? 'm-btn--soft' : 'm-btn--primary'}`} href={href} style={style}>{label}</a>;
+  return <Link className={`m-btn ${soft ? 'm-btn--soft' : 'm-btn--primary'}`} href={href} style={style}>{label}</Link>;
 }

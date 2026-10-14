@@ -8,8 +8,9 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { LOCALES, RTL_LOCALES, dirOf, htmlLang, isLocale, isTranslated, type MockLocale } from '@/i18n/locales';
 import { CookieNotice } from '@/components/mock-site/cookie-notice';
+import { SessionBanner } from '@/components/mock-site/session-banner';
 import { fontVarsFor } from '@/lib/mock/fonts';
-import { MOCK_ORIGIN } from '@/lib/mock/seo';
+import { MOCK_ORIGIN, socialMeta } from '@/lib/mock/seo';
 import '../../mock.css';
 
 export const dynamicParams = false;
@@ -19,12 +20,21 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params: { lang } }: { params: { lang: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale: lang, namespace: 'common.meta' });
+  const locale = (isLocale(lang) ? lang : 'en') as MockLocale;
   return {
     metadataBase: new URL(MOCK_ORIGIN),
     title: { default: t('title'), template: `%s · Eduvo Mock` },
     description: t('description'),
-    icons: { icon: '/favicon.svg' },
+    applicationName: 'Eduvo Mock',
+    icons: {
+      icon: [{ url: '/brand/favicon.svg', type: 'image/svg+xml' }, { url: '/brand/favicon.ico', sizes: '16x16 32x32 48x48' }],
+      apple: [{ url: '/brand/apple-touch-icon.png', sizes: '180x180' }],
+    },
+    manifest: '/brand/manifest.webmanifest',
+    appleWebApp: { title: 'Eduvo Mock', statusBarStyle: 'default' },
     formatDetection: { telephone: false },
+    // private pages inherit this card; public pages set their own (publicPageMeta)
+    ...socialMeta(locale, { title: t('title'), description: t('description'), path: '', absolute: true }),
   };
 }
 
@@ -55,7 +65,7 @@ export default async function MockRootLayout({ children, params: { lang } }: { c
       </head>
       <body>
         {/* only `common` goes to every client bundle; pages add their own namespaces where needed */}
-        <NextIntlClientProvider locale={locale} messages={{ common: messages.common }}>{children}<CookieNotice /></NextIntlClientProvider>
+        <NextIntlClientProvider locale={locale} messages={{ common: messages.common }}>{children}<SessionBanner /><CookieNotice /></NextIntlClientProvider>
       </body>
     </html>
   );

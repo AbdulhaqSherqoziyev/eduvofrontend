@@ -7,6 +7,7 @@
  * "Confirming your payment…" while O3 is polled every 5 s for up to 60 s, then the design's
  * "Waiting for the provider to confirm" pending card. An unpaid Paddle order can reopen its overlay.
  */
+import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -219,8 +220,8 @@ export function OrderView({ orderId }: { orderId: string }) {
           <span style={sx('font-size:28px;font-weight:800;letter-spacing:var(--ls-t)')}>{creditLine}</span>
           <span style={sx('color:var(--ink2);font-size:15px;line-height:var(--lh-body)')}>{t.rich('success.receiptTo', { email: () => <bdi dir="ltr">{learner?.email ?? ''}</bdi> })}</span>
           <div style={sx('display:flex;gap:10px;flex-wrap:wrap;margin-top:6px')}>
-            <a className="m-btn m-btn--primary" href={startHref} style={sx('flex:1;min-width:180px;height:52px;font-size:16px')}>{t('success.start')}</a>
-            <a className="m-btn m-btn--soft" href={href('/dashboard')} style={sx('flex:1;min-width:160px;height:52px;font-size:16px')}>{t('success.dashboard')}</a>
+            <Link className="m-btn m-btn--primary" href={startHref} style={sx('flex:1;min-width:180px;height:52px;font-size:16px')}>{t('success.start')}</Link>
+            <Link className="m-btn m-btn--soft" href={href('/dashboard')} style={sx('flex:1;min-width:160px;height:52px;font-size:16px')}>{t('success.dashboard')}</Link>
           </div>
         </div>
         {receiptBox}
@@ -232,7 +233,7 @@ export function OrderView({ orderId }: { orderId: string }) {
           {chip('warn', t('refunded.chip'))}
           <span style={sx('font-size:26px;font-weight:800')}>{t('refunded.title')}</span>
           <span style={sx('color:var(--ink2);font-size:15px;line-height:var(--lh-body)')}>{t('refunded.body')}</span>
-          <a className="m-btn m-btn--soft" href={href('/dashboard')} style={sx('height:52px;font-size:16px')}>{t('success.dashboard')}</a>
+          <Link className="m-btn m-btn--soft" href={href('/dashboard')} style={sx('height:52px;font-size:16px')}>{t('success.dashboard')}</Link>
         </div>
         {order.receiptNo && receiptBox}
       </div>
@@ -242,8 +243,8 @@ export function OrderView({ orderId }: { orderId: string }) {
         {chip('err', t('failed.chip'))}
         <span style={sx('font-size:26px;font-weight:800')}>{failTitle}</span>
         <span style={sx('color:var(--ink2);font-size:15px;line-height:var(--lh-body)')}>{failBody}</span>
-        <a className="m-btn m-btn--primary" href={retryHref} style={sx('height:52px;font-size:16px')}>{t('failed.retry')}</a>
-        <a href={href('/help/contact')} style={sx('text-align:center;font-weight:700;font-size:14px')}>{t('failed.contact')}</a>
+        <Link className="m-btn m-btn--primary" href={retryHref} style={sx('height:52px;font-size:16px')}>{t('failed.retry')}</Link>
+        <Link href={href('/help/contact')} style={sx('text-align:center;font-weight:700;font-size:14px')}>{t('failed.contact')}</Link>
       </div>
     );
     if (isPaddle) return (

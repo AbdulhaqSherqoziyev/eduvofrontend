@@ -4,6 +4,7 @@
  * Search matches question and answer text in the current language; nothing found → a plain line
  * with the contact link.
  */
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { FaqDesktop, FaqPhone } from '@/components/mock-site/landing/faq';
@@ -36,7 +37,7 @@ export function HelpCenter() {
         <input className="m-input" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('search')} aria-label={t('search')} style={sx('width:100%')} />
       </div>
       {groups.length === 0 && (
-        <p className="m-lead" role="status">{t('noResults', { q: q.trim() })} <a href={href('/help/contact')} style={sx('font-weight:700')}>{t('contactCta')}</a></p>
+        <p className="m-lead" role="status">{t('noResults', { q: q.trim() })} <Link href={href('/help/contact')} style={sx('font-weight:700')}>{t('contactCta')}</Link></p>
       )}
       {groups.map(({ g, items }) => (
         <section key={`${g}-${query}`} aria-labelledby={`help-${g}`} style={sx('display:flex;flex-direction:column;gap:14px')}>
@@ -47,7 +48,7 @@ export function HelpCenter() {
       ))}
       <div className="m-card" style={sx('padding:24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px')}>
         <b style={sx('font-size:18px')}>{t('stillNeed')}</b>
-        <a className="m-btn m-btn--primary" href={href('/help/contact')}>{t('contactCta')}</a>
+        <Link className="m-btn m-btn--primary" href={href('/help/contact')}>{t('contactCta')}</Link>
       </div>
     </div>
   );

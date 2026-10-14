@@ -5,6 +5,7 @@
  * polled every 10 s; the overall shows "—" until it is ready. No hedging words about scores.
  * Share (R2–R4) and PDF are not built yet → their buttons keep their place in a "Soon" state.
  */
+import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -131,7 +132,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
       <main style={sx('max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,40px) 20px 40px')}>
         <div className={`m-banner ${err === 'notfound' ? 'm-banner--warn' : 'm-banner--err'}`} role="alert" style={sx('align-items:center')}>
           <span style={sx('flex:1')}>{err === 'notfound' ? t('notFound') : t('loadError')}</span>
-          {err === 'load' ? <button type="button" className="m-btn m-btn--soft m-btn--sm" onClick={() => void load()}>{t('retry')}</button> : <a className="m-btn m-btn--soft m-btn--sm" href={href('/dashboard')}>{t('toDashboard')}</a>}
+          {err === 'load' ? <button type="button" className="m-btn m-btn--soft m-btn--sm" onClick={() => void load()}>{t('retry')}</button> : <Link className="m-btn m-btn--soft m-btn--sm" href={href('/dashboard')}>{t('toDashboard')}</Link>}
         </div>
       </main>
     );
@@ -249,7 +250,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
           <div style={sx('display:flex;gap:10px;flex-wrap:wrap')}>
             <button type="button" className="m-btn m-btn--soft" aria-disabled="true" onClick={share} title={t('pdfSoonTip')} style={sx('height:46px;padding:0 16px;border-radius:13px;font-size:14px;color:var(--mut);opacity:.7;cursor:not-allowed')}>{t('share')} <span className="m-soon">{tc('chips.soon')}</span></button>
             <button type="button" className="m-btn m-btn--soft" aria-disabled="true" onClick={pdf} title={t('pdfSoonTip')} style={sx('height:46px;padding:0 16px;border-radius:13px;font-size:14px;color:var(--mut);opacity:.7;cursor:not-allowed')}>{t('pdf')} <span className="m-soon">{tc('chips.soon')}</span></button>
-            <a className="m-btn m-btn--primary" href={anotherHref} style={sx('height:46px;padding:0 18px;border-radius:13px;font-weight:700;font-size:14px;box-shadow:0 8px 18px -8px rgba(46,107,230,.7)')}>{t('another')}</a>
+            <Link className="m-btn m-btn--primary" href={anotherHref} style={sx('height:46px;padding:0 18px;border-radius:13px;font-weight:700;font-size:14px;box-shadow:0 8px 18px -8px rgba(46,107,230,.7)')}>{t('another')}</Link>
           </div>
         </div>
 
@@ -257,7 +258,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
           <div className="m-card" style={sx('padding:28px;display:flex;flex-direction:column;gap:16px')}>
             <div style={sx('display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap')}><span style={sx('font-size:14px;font-weight:700;color:var(--ink2)')}>{overallLabel}</span>{m.cefr && <span className="m-pill m-pill--ok" style={sx('padding:6px 12px;font-size:13px')}>CEFR {m.cefr}</span>}</div>
             <div style={sx('display:flex;align-items:baseline;gap:12px;flex-wrap:wrap')}><span style={sx('font-size:clamp(72px,9vw,104px);font-weight:800;letter-spacing:var(--ls-score-xl);line-height:.9')}><bdi dir="ltr">{overallShown}</bdi></span><span style={sx('font-size:15px;color:var(--mut);font-weight:700')}>{t('ofScale', { max: scaleMax })}</span></div>
-            <div style={sx('padding:12px 14px;border-radius:14px;box-shadow:var(--inset);font-size:14px;font-weight:600;color:var(--ink2)')}>{targetLine}{!m.target && !sample && <> <a href={href('/onboarding')} style={sx('font-weight:700')}>{t('setTarget')}</a></>}</div>
+            <div style={sx('padding:12px 14px;border-radius:14px;box-shadow:var(--inset);font-size:14px;font-weight:600;color:var(--ink2)')}>{targetLine}{!m.target && !sample && <> <Link href={href('/onboarding')} style={sx('font-weight:700')}>{t('setTarget')}</Link></>}</div>
           </div>
           {full && sectionCards.map((s) => sectionCard(s))}
         </div>

@@ -4,6 +4,7 @@
  * recommendations card); desktop per README §9 spec: line chart, history table, weak types,
  * recommendations. D2 GET /mock/progress?exam=.
  */
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { getProgress, type ProgressResp } from '@/lib/mock/api/endpoints';
@@ -88,7 +89,7 @@ export function ProgressView() {
                   <thead><tr><th>{t('colDate')}</th><th>{t('colMock')}</th><th style={sx('text-align:end')}>{t('colScore')}</th></tr></thead>
                   <tbody>
                     {data.history.map((h) => (
-                      <tr key={h.attemptId}><td style={sx('font-weight:400;color:var(--ink)')}>{fmtDate(lang, h.at)}</td><td><a href={href(`/results/${h.attemptId}`)} style={sx('color:var(--ink)')}>{histName(h)}<bdi dir="ltr">{h.testCode}</bdi></a></td><td style={sx('text-align:end;font-weight:800;color:var(--ink)')}><bdi dir="ltr">{histScore(h)}</bdi></td></tr>
+                      <tr key={h.attemptId}><td style={sx('font-weight:400;color:var(--ink)')}>{fmtDate(lang, h.at)}</td><td><Link href={href(`/results/${h.attemptId}`)} style={sx('color:var(--ink)')}>{histName(h)}<bdi dir="ltr">{h.testCode}</bdi></Link></td><td style={sx('text-align:end;font-weight:800;color:var(--ink)')}><bdi dir="ltr">{histScore(h)}</bdi></td></tr>
                     ))}
                   </tbody>
                 </table>
@@ -137,10 +138,10 @@ export function ProgressView() {
             <b style={sx('font-size:16px')}>{t('history')}</b>
             <div className="m-rows">
               {data.history.map((h) => (
-                <a key={h.attemptId} href={href(`/results/${h.attemptId}`)} style={sx('padding:14px 16px;display:flex;align-items:center;gap:12px;color:var(--ink)')}>
+                <Link key={h.attemptId} href={href(`/results/${h.attemptId}`)} style={sx('padding:14px 16px;display:flex;align-items:center;gap:12px;color:var(--ink)')}>
                   <span style={sx('flex:1;display:flex;flex-direction:column;gap:2px')}><b style={sx('font-size:14px')}>{histName(h)}<bdi dir="ltr">{h.testCode}</bdi></b><span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{fmtDate(lang, h.at)}</span></span>
                   <b style={sx('font-size:16px')}><bdi dir="ltr">{histScore(h)}</bdi></b>
-                </a>
+                </Link>
               ))}
               {!data.history.length && <span style={sx('display:block;padding:14px 16px;font-size:14px;color:var(--ink2)')}>{t('empty')}</span>}
             </div>

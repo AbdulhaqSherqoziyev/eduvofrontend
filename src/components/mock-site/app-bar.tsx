@@ -3,11 +3,13 @@
  * Phone app bar (<520px, Mobile App.dc.html + addendum §6): 52px grid — back or logo · title · actions.
  * Rendered next to SiteHeader; CSS shows exactly one of them.
  */
+import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { langShort } from '@/i18n/locales';
 import { useLang } from '@/lib/mock/hooks/use-lang';
 import { LanguageSheet } from './language-sheet';
+import { BrandMark } from './logo';
 
 export interface AppBarProps {
   /** `logo` (tab screens, landing) or `back` with a fallback URL when there is no history */
@@ -38,16 +40,16 @@ export function AppBar({ left = 'logo', backHref, onBack, title, lang, login, sk
         <div className="m-appbar__side">
           {left === 'back' && <button type="button" className="m-back" aria-label={t('nav.back')} onClick={back} />}
           {left === 'logo' && (
-            <a className="m-applogo" href={href('')} aria-label={t('brand.home')}>
-              <span className="m-applogo__mark" aria-hidden>e</span>
+            <Link className="m-applogo" href={href('')} aria-label={t('brand.home')}>
+              <BrandMark size={30} shadow={false} className="m-applogo__mark" />
               <span className="m-applogo__word" dir="ltr" style={{ display: 'flex', gap: 4 }} aria-hidden>Eduvo<span style={{ color: 'var(--blue)' }}>Mock</span></span>
-            </a>
+            </Link>
           )}
         </div>
         <span className="m-appbar__title">{title}</span>
         <div className="m-appbar__side m-appbar__side--end">
           {lang && <button type="button" className="m-langpill" aria-label={t('nav.language')} onClick={() => setSheet(true)}>{langShort(cur)}</button>}
-          {login && <a className="m-applogin" href={href('/login')}>{t('nav.login')}</a>}
+          {login && <Link className="m-applogin" href={href('/login')}>{t('nav.login')}</Link>}
           {skip && <button type="button" className="m-appghost" onClick={skip.onClick}>{skip.label ?? t('nav.skip')}</button>}
           {share && <button type="button" className="m-langpill" style={{ fontSize: 13 }} onClick={share}>{t('nav.share')}</button>}
         </div>

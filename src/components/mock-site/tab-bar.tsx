@@ -1,5 +1,6 @@
 'use client';
 /** Phone bottom tab bar for learners (Home, Mocks, Progress, Profile) — icons are the design's CSS glyphs. */
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useLang } from '@/lib/mock/hooks/use-lang';
 import { sx } from '@/lib/mock/sx';
@@ -32,10 +33,10 @@ export function TabBar({ active }: { active: TabKey }) {
   return (
     <nav className="m-tabbar m-phone" aria-label="Tabs">
       {tabs.map(([k, p]) => (
-        <a key={k} href={href(p)} aria-current={active === k ? 'page' : undefined}>
+        <Link key={k} href={href(p)} aria-current={active === k ? 'page' : undefined}>
           <span aria-hidden><Icon k={k} /></span>
           {t(k)}
-        </a>
+        </Link>
       ))}
     </nav>
   );

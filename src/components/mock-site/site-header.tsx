@@ -4,6 +4,7 @@
  * ≥1024: nav inline. 520–1023: language · theme · burger, nav + Log in / Start free in the menu.
  * Guest nav: IELTS, SAT, Pricing, How it works, For centers. Learner: Dashboard, Take a mock, Progress, Pricing + avatar.
  */
+import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useLang } from '@/lib/mock/hooks/use-lang';
@@ -33,7 +34,7 @@ export function SiteHeader({ active = '' }: { active?: NavKey }) {
         <Logo href={href('')} label={tb('home')} />
         <nav className="m-nav m-only-lg" aria-label="Main">
           {items.map(([k, label, h]) => (
-            <a key={k} href={k === 'centers' ? `${href('')}#centers` : h} aria-current={active === k ? 'page' : undefined}>{label}</a>
+            <Link key={k} href={k === 'centers' ? `${href('')}#centers` : h} aria-current={active === k ? 'page' : undefined}>{label}</Link>
           ))}
         </nav>
         <div className="m-header__end">
@@ -41,11 +42,11 @@ export function SiteHeader({ active = '' }: { active?: NavKey }) {
           <ThemeToggle />
           <span className="m-only-lg" style={{ display: 'contents' }}>
             {learner ? (
-              <a className="m-avatar" href={href('/account')} aria-label={t('account')}>{initial}</a>
+              <Link className="m-avatar" href={href('/account')} aria-label={t('account')}>{initial}</Link>
             ) : (
               <>
-                <a className="m-login" href={href('/login')}>{t('login')}</a>
-                <a className="m-startfree" href={href('/signup')}>{t('start')}</a>
+                <Link className="m-login" href={href('/login')}>{t('login')}</Link>
+                <Link className="m-startfree" href={href('/signup')}>{t('start')}</Link>
               </>
             )}
           </span>
@@ -57,14 +58,14 @@ export function SiteHeader({ active = '' }: { active?: NavKey }) {
       {menu && (
         <div className="m-menu m-only-md">
           {items.map(([k, label, h]) => (
-            <a key={k} href={k === 'centers' ? `${href('')}#centers` : h} aria-current={active === k ? 'page' : undefined}>{label}</a>
+            <Link key={k} href={k === 'centers' ? `${href('')}#centers` : h} aria-current={active === k ? 'page' : undefined}>{label}</Link>
           ))}
           {learner ? (
-            <a href={href('/account')}>{t('account')}</a>
+            <Link href={href('/account')}>{t('account')}</Link>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
-              <a className="m-btn m-btn--soft" href={href('/login')} style={{ height: 48, fontWeight: 700 }}>{t('login')}</a>
-              <a className="m-btn m-btn--primary" href={href('/signup')} style={{ height: 48, fontWeight: 700 }}>{t('start')}</a>
+              <Link className="m-btn m-btn--soft" href={href('/login')} style={{ height: 48, fontWeight: 700 }}>{t('login')}</Link>
+              <Link className="m-btn m-btn--primary" href={href('/signup')} style={{ height: 48, fontWeight: 700 }}>{t('start')}</Link>
             </div>
           )}
         </div>

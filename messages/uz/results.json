@@ -1,7 +1,8 @@
 {
   "meta": {
     "title": "Natijangiz",
-    "sample": "Namuna natija"
+    "sample": "Namuna natija",
+    "sampleDescription": "Eduvo Mock natijasi qanday ko‘rinishini ko‘ring: umumiy ball, bo‘limlar bo‘yicha ball, savol turlari bo‘yicha aniqlik, AI Writing izohi va savollar tahlili."
   },
   "title": "Natijangiz",
   "sampleTitle": "Namuna natija",

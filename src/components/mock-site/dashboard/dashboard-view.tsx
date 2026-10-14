@@ -4,6 +4,7 @@
  * GET /mock/dashboard (D1). Skeleton after 300 ms, error banner with retry, empty state when
  * `isEmpty`.
  */
+import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { getDashboard, resendVerification } from '@/lib/mock/api/endpoints';
@@ -156,8 +157,8 @@ export function DashboardView() {
               <span style={sx('color:var(--ink2);font-size:15px;line-height:var(--lh-body)')}>{t('emptyBody')}</span>
               {ns.kind === 'verify_email' && <div className="m-banner m-banner--warn" style={sx('align-items:center')}><span style={sx('flex:1')}>{t('verifyTitle')}</span><button type="button" className="m-btn m-btn--soft m-btn--sm" onClick={next.onClick}>{next.cta}</button></div>}
               <div style={sx('display:flex;gap:10px;flex-wrap:wrap')}>
-                <a className="m-btn m-btn--primary" href={href('/start/ielts?mode=section')} style={sx('height:52px;padding:0 22px')}>{t('freeIelts')}</a>
-                <a className="m-btn m-btn--soft" href={href('/start/sat?mode=section')} style={sx('height:52px;padding:0 20px')}>{t('freeSat')}</a>
+                <Link className="m-btn m-btn--primary" href={href('/start/ielts?mode=section')} style={sx('height:52px;padding:0 22px')}>{t('freeIelts')}</Link>
+                <Link className="m-btn m-btn--soft" href={href('/start/sat?mode=section')} style={sx('height:52px;padding:0 20px')}>{t('freeSat')}</Link>
               </div>
             </div>
             <div style={sx('border-radius:20px;box-shadow:var(--inset);padding:24px;display:flex;flex-direction:column;gap:12px')}>
@@ -173,7 +174,7 @@ export function DashboardView() {
                 <span style={sx('font-size:22px;font-weight:800;letter-spacing:var(--ls-t);line-height:1.25')}>{next.title}</span>
                 <span style={sx('color:var(--ink2);font-size:14px;line-height:1.55')}>{next.sub}</span>
                 {next.href
-                  ? <a className="m-btn m-btn--primary" href={next.href} style={sx('margin-top:auto;align-self:flex-start;height:50px;padding:0 22px')}>{next.cta}</a>
+                  ? <Link className="m-btn m-btn--primary" href={next.href} style={sx('margin-top:auto;align-self:flex-start;height:50px;padding:0 22px')}>{next.cta}</Link>
                   : <button type="button" className="m-btn m-btn--primary" onClick={next.onClick} style={sx('margin-top:auto;align-self:flex-start;height:50px;padding:0 22px')}>{next.cta}</button>}
               </div>
               <div className="m-card" style={sx('padding:24px;display:flex;flex-direction:column;gap:14px')}>
@@ -193,7 +194,7 @@ export function DashboardView() {
                       {below.length > 0 && ` · ${t('belowSections', { list: below.join(', '), n: below.length })}`}
                     </span>
                   </>
-                ) : <a href={href('/onboarding')} style={sx('font-size:14px;font-weight:700;margin-top:auto')}>{t('setTarget')}</a>}
+                ) : <Link href={href('/onboarding')} style={sx('font-size:14px;font-weight:700;margin-top:auto')}>{t('setTarget')}</Link>}
               </div>
               <div className="m-card" style={sx('padding:24px;display:flex;flex-direction:column;gap:10px')}>
                 <span style={sx('font-size:13px;font-weight:700;color:var(--ink2)')}>{t('countdown')}</span>
@@ -201,9 +202,9 @@ export function DashboardView() {
                   <>
                     <div style={sx('display:flex;align-items:baseline;gap:8px')}><span style={sx('font-size:48px;font-weight:800;letter-spacing:var(--ls-score);line-height:1')}><bdi dir="ltr">{d.countdown.days}</bdi></span><span style={sx('font-size:16px;color:var(--mut);font-weight:800')}>{t('days', { n: d.countdown.days })}</span></div>
                     <span style={sx('font-size:13px;color:var(--mut);font-weight:600')}>{d.countdown.exam === 'ielts' ? 'IELTS Academic' : 'Digital SAT'} · {fmtDateLong(lang, d.countdown.examDate)}</span>
-                    <a href={href('/onboarding')} style={sx('font-size:13px;font-weight:700;margin-top:auto')}>{t('changeDate')}</a>
+                    <Link href={href('/onboarding')} style={sx('font-size:13px;font-weight:700;margin-top:auto')}>{t('changeDate')}</Link>
                   </>
-                ) : <a href={href('/onboarding')} style={sx('font-size:14px;font-weight:700;margin-top:auto')}>{t('addDate')}</a>}
+                ) : <Link href={href('/onboarding')} style={sx('font-size:14px;font-weight:700;margin-top:auto')}>{t('addDate')}</Link>}
               </div>
             </div>
 
@@ -219,7 +220,7 @@ export function DashboardView() {
                 </div>
                 {pts.length ? <LineChart pts={pts} target={series?.target ?? null} exam={series?.exam ?? 'ielts'} lang={lang} />
                   : <div style={sx('border-radius:16px;box-shadow:var(--inset);padding:24px;display:flex;flex-direction:column;gap:12px')}><span style={sx('font-size:13px;font-weight:800;color:var(--mut)')}>{t('noProgress')}</span><div style={sx('height:120px;border-radius:12px;background:repeating-linear-gradient(0deg,var(--line) 0 1px,transparent 1px 30px)')} /></div>}
-                <a href={href('/progress')} style={sx('font-size:14px;font-weight:700')}>{t('openProgress')}</a>
+                <Link href={href('/progress')} style={sx('font-size:14px;font-weight:700')}>{t('openProgress')}</Link>
               </div>
               <div className="m-card" style={sx('padding:24px;display:flex;flex-direction:column;gap:14px')}>
                 <span style={sx('font-weight:800;font-size:18px')}>{t('weak')}</span>
@@ -238,7 +239,7 @@ export function DashboardView() {
                 <span style={sx('font-weight:800;font-size:18px;margin-bottom:4px')}>{t('mocks')}</span>
                 {mocks.length === 0 && <span style={sx('font-size:14px;color:var(--ink2)')}>{t('mocksEmpty')}</span>}
                 {mocks.map((m) => (
-                  <a key={m.attemptId} href={m.to} style={sx('display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:14px 16px;border-radius:16px;box-shadow:var(--inset);color:var(--ink)')}>
+                  <Link key={m.attemptId} href={m.to} style={sx('display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:14px 16px;border-radius:16px;box-shadow:var(--inset);color:var(--ink)')}>
                     <span style={sx('display:flex;gap:8px;align-items:center;min-width:0;flex-wrap:wrap')}>
                       <span style={{ ...sx('font-size:11px;font-weight:800;letter-spacing:.05em'), color: `var(--${m.exam})` }} lang="en">{EXAM_NAME[m.exam]}</span>
                       <span style={sx('font-weight:700;font-size:15px')}>{m.nm}<bdi dir="ltr">{m.testCode}</bdi></span>
@@ -246,7 +247,7 @@ export function DashboardView() {
                     <span style={sx('font-weight:800;font-size:18px;text-align:end')}><bdi dir="ltr">{m.score}</bdi></span>
                     <span style={sx('font-size:13px;color:var(--mut);font-weight:600')}>{m.meta}</span>
                     <span style={{ ...sx('font-size:13px;font-weight:800;text-align:end'), color: m.status === 'in_progress' ? 'var(--blue)' : 'var(--ink2)' }}>{m.action}</span>
-                  </a>
+                  </Link>
                 ))}
               </div>
               <div className="m-card" style={sx('padding:24px;display:flex;flex-direction:column;gap:14px')}>
@@ -264,7 +265,7 @@ export function DashboardView() {
                       <div key={p.orderId} style={sx('display:flex;justify-content:space-between;gap:8px;color:var(--ink2);align-items:center')}>
                         <span>{p.title.kind === 'bundle' ? t('purchase.bundle', { n: p.title.qty }) : t(`purchase.${p.title.kind}`)}</span>
                         <span style={sx('display:flex;gap:8px;align-items:center')}>
-                          {p.status === 'PENDING' && <><span className="m-pill m-pill--warn" style={sx('padding:2px 8px;font-size:11px')}>{tc('chips.pending')}</span><a href={href(`/checkout/orders/${p.orderId}`)} style={sx('font-weight:700')}>{t('open')}</a></>}
+                          {p.status === 'PENDING' && <><span className="m-pill m-pill--warn" style={sx('padding:2px 8px;font-size:11px')}>{tc('chips.pending')}</span><Link href={href(`/checkout/orders/${p.orderId}`)} style={sx('font-weight:700')}>{t('open')}</Link></>}
                           {p.status === 'REFUNDED' && <span className="m-pill m-pill--warn" style={sx('padding:2px 8px;font-size:11px')}>{tc('chips.refunded')}</span>}
                           {p.status !== 'PENDING' && <span>{fmtDate(lang, p.paidAt)}</span>}
                         </span>
@@ -272,7 +273,7 @@ export function DashboardView() {
                     ))}
                   </div>
                 )}
-                <a className="m-btn m-btn--soft" href={href('/pricing')} style={sx('height:48px;font-weight:800;font-size:16px')}>{t('buyMore')}</a>
+                <Link className="m-btn m-btn--soft" href={href('/pricing')} style={sx('height:48px;font-weight:800;font-size:16px')}>{t('buyMore')}</Link>
               </div>
             </div>
           </>
@@ -283,7 +284,7 @@ export function DashboardView() {
       <main className="m-phone m-with-tabs-phone" style={sx('padding:4px 16px 24px;display:flex;flex-direction:column;gap:20px')}>
         <div style={sx('display:flex;align-items:center;gap:12px')}>
           <div style={sx('flex:1;display:flex;flex-direction:column;gap:2px;min-width:0')}><span style={sx('font-size:14px;color:var(--ink2);font-weight:700')}>{t(`greetShort.${pod}`)}</span><span style={sx('font-size:28px;font-weight:800;letter-spacing:var(--ls-h);overflow:hidden;text-overflow:ellipsis')}>{name}</span></div>
-          <a href={href('/account')} className="m-avatar" style={sx('width:44px;height:44px;font-size:16px')}>{name.charAt(0).toUpperCase()}</a>
+          <Link href={href('/account')} className="m-avatar" style={sx('width:44px;height:44px;font-size:16px')}>{name.charAt(0).toUpperCase()}</Link>
         </div>
         {d.isEmpty ? (
           <>
@@ -291,7 +292,7 @@ export function DashboardView() {
               <span style={sx('align-self:flex-start;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.2);font-size:12px;font-weight:800')}>{tc('chips.free')}</span>
               <b style={sx('font-size:22px;line-height:1.25')}>{t('emptyTitle')}</b>
               <span style={sx('font-size:14px;line-height:1.5')}>{t('phone.emptyBody')}</span>
-              <a href={href('/start/ielts?mode=section')} style={sx('height:50px;border-radius:14px;background:#fff;color:#2E6BE6;font-weight:800;font-size:15px;margin-top:4px;display:grid;place-items:center')}>{t('phone.emptyCta')}</a>
+              <Link href={href('/start/ielts?mode=section')} style={sx('height:50px;border-radius:14px;background:#fff;color:#2E6BE6;font-weight:800;font-size:15px;margin-top:4px;display:grid;place-items:center')}>{t('phone.emptyCta')}</Link>
             </div>
             <div style={sx('border-radius:20px;box-shadow:var(--inset);padding:18px;display:flex;flex-direction:column;gap:8px')}><b style={sx('font-size:15px')}>{t('phone.emptyHint')}</b><span style={sx('font-size:13px;color:var(--ink2);line-height:1.5')}>{t('phone.emptyHintBody')}</span></div>
           </>
@@ -308,7 +309,7 @@ export function DashboardView() {
               const style = sx('border:0;cursor:pointer;text-align:start;border-radius:24px;background:linear-gradient(150deg,#5B8DEF,#2E6BE6);color:#fff;padding:20px;display:flex;flex-direction:column;gap:10px;box-shadow:0 16px 30px -16px rgba(46,107,230,.8)');
               return !next.href
                 ? <button type="button" style={style} onClick={next.onClick}>{inner}</button>
-                : <a href={next.href} style={style}>{inner}</a>;
+                : <Link href={next.href} style={style}>{inner}</Link>;
             })()}
             <div className="m-carousel" style={sx('padding:6px 16px 12px')}>
               {tg && (
@@ -325,14 +326,14 @@ export function DashboardView() {
                   <span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{fmtDate(lang, d.countdown.examDate)}</span>
                 </div>
               )}
-              <a href={href('/pricing')} className="m-card" style={sx('flex:none;width:130px;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:4px;color:var(--ink)')}>
+              <Link href={href('/pricing')} className="m-card" style={sx('flex:none;width:130px;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:4px;color:var(--ink)')}>
                 <span style={sx('font-size:12px;font-weight:700;color:var(--ink2)')}>{t('phone.credits')}</span>
                 <span style={sx('font-size:30px;font-weight:800;letter-spacing:var(--ls-h)')}><bdi dir="ltr">{totalCredits}</bdi></span>
                 <span style={sx('font-size:12px;color:var(--blue);font-weight:800')}>{t('phone.buyMore')}</span>
-              </a>
+              </Link>
             </div>
             <div className="m-card" style={sx('padding:18px;display:flex;flex-direction:column;gap:14px')}>
-              <div style={sx('display:flex;justify-content:space-between;align-items:center')}><b style={sx('font-size:16px')}>{series?.exam === 'sat' ? t('progressSat') : t('progress')}</b><a href={href('/progress')} style={sx('font-weight:800;font-size:13px')}>{t('phone.details')}</a></div>
+              <div style={sx('display:flex;justify-content:space-between;align-items:center')}><b style={sx('font-size:16px')}>{series?.exam === 'sat' ? t('progressSat') : t('progress')}</b><Link href={href('/progress')} style={sx('font-weight:800;font-size:13px')}>{t('phone.details')}</Link></div>
               {(series?.series.overall ?? []).length
                 ? <BarChart pts={(series?.series.overall ?? []).slice(-5)} target={series?.target ?? null} exam={series?.exam ?? 'ielts'} lang={lang} />
                 : <span style={sx('font-size:13px;color:var(--ink2)')}>{t('noProgress')}</span>}
@@ -352,14 +353,14 @@ export function DashboardView() {
               </div>
             )}
             <div style={sx('display:flex;flex-direction:column;gap:10px')}>
-              <div style={sx('display:flex;justify-content:space-between;align-items:center')}><b style={sx('font-size:16px')}>{t('phone.recent')}</b><a href={href('/mocks')} style={sx('font-weight:800;font-size:13px')}>{t('phone.all')}</a></div>
+              <div style={sx('display:flex;justify-content:space-between;align-items:center')}><b style={sx('font-size:16px')}>{t('phone.recent')}</b><Link href={href('/mocks')} style={sx('font-weight:800;font-size:13px')}>{t('phone.all')}</Link></div>
               <div className="m-rows">
                 {mocks.slice(0, 3).map((m) => (
-                  <a key={m.attemptId} href={m.to} style={sx('width:100%;color:var(--ink);padding:14px 16px;display:flex;align-items:center;gap:12px;text-align:start')}>
+                  <Link key={m.attemptId} href={m.to} style={sx('width:100%;color:var(--ink);padding:14px 16px;display:flex;align-items:center;gap:12px;text-align:start')}>
                     <span style={{ ...sx('width:40px;height:40px;border-radius:12px;box-shadow:var(--inset);display:grid;place-items:center;font-size:10px;font-weight:800;flex:none'), color: `var(--${m.exam})` }} lang="en">{EXAM_NAME[m.exam]}</span>
                     <span style={sx('flex:1;display:flex;flex-direction:column;gap:2px;min-width:0')}><b style={sx('font-size:14px')}>{m.nm}<bdi dir="ltr">{m.testCode}</bdi></b><span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{m.meta}</span></span>
                     <b style={sx('font-size:17px')}><bdi dir="ltr">{m.score}</bdi></b>
-                  </a>
+                  </Link>
                 ))}
                 {mocks.length === 0 && <span style={sx('padding:14px 16px;font-size:14px;color:var(--ink2)')}>{t('mocksEmpty')}</span>}
               </div>

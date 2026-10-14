@@ -12,12 +12,12 @@ import { PageShell } from '@/components/mock-site/page-shell';
 import { SiteFooter } from '@/components/mock-site/site-footer';
 import { SiteHeader } from '@/components/mock-site/site-header';
 import { SUPPORT_TELEGRAM } from '@/lib/mock/legal';
-import { pageMeta } from '@/lib/mock/seo';
+import { publicPageMeta } from '@/lib/mock/seo';
 import { sx } from '@/lib/mock/sx';
 
 export async function generateMetadata({ params: { lang } }: { params: { lang: MockLocale } }): Promise<Metadata> {
   const t = await getTranslations({ locale: lang, namespace: 'help.meta' });
-  return { title: t('contactTitle'), description: t('contactDescription'), ...pageMeta(lang, '/help/contact') };
+  return publicPageMeta(lang, '/help/contact', { title: t('contactTitle'), description: t('contactDescription') });
 }
 
 export default async function ContactPage({ params: { lang } }: { params: { lang: MockLocale } }) {

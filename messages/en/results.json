@@ -1,7 +1,8 @@
 {
   "meta": {
     "title": "Your result",
-    "sample": "Sample result"
+    "sample": "Sample result",
+    "sampleDescription": "See what an Eduvo Mock result looks like: overall band, section scores, accuracy by question type, AI Writing feedback and question review."
   },
   "title": "Your result",
   "sampleTitle": "Sample result",

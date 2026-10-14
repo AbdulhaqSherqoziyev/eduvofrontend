@@ -1,4 +1,5 @@
 /** Landing ≥520px — Landing.dc.html section by section. Prices come from the catalog (C1). */
+import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { dirOf, htmlLang, type MockLocale } from '@/i18n/locales';
 import { sx } from '@/lib/mock/sx';
@@ -6,6 +7,10 @@ import { CatalogError } from '../catalog-error';
 import { Price } from '../price';
 import { FaqDesktop } from './faq';
 import { WaitlistForm } from './waitlist';
+import { BrandMark } from '../logo';
+
+/** Feature flag: turn on (NEXT_PUBLIC_MOCK_TESTIMONIALS=1) once real quotes replace the placeholders. */
+const SHOW_TESTIMONIALS = process.env.NEXT_PUBLIC_MOCK_TESTIMONIALS === '1';
 
 const SEC = sx('max-width:1280px;margin:0 auto;padding:clamp(40px,5vw,72px) 20px');
 const CARD = 'm-card';
@@ -39,8 +44,8 @@ export async function LandingDesktop() {
           <h1 className="m-hero-h1 m-hyph">{t('hero.h1')}</h1>
           <p style={sx('margin:0;font-size:clamp(16px,1.4vw,19px);line-height:var(--lh-body);color:var(--ink2);max-width:560px;text-wrap:pretty')}>{t('hero.sub')}</p>
           <div style={sx('display:flex;gap:12px;flex-wrap:wrap')}>
-            <a className="m-btn m-btn--primary" href={h('/signup?next=free')} style={sx('height:54px;padding:0 26px;font-weight:700;font-size:16px;box-shadow:0 10px 22px -8px rgba(46,107,230,.7)')}>{t('hero.cta1')}</a>
-            <a className="m-btn m-btn--soft" href={h('/sample-result')} style={sx('height:54px;padding:0 24px;font-size:16px')}>{t('hero.cta2')}</a>
+            <Link className="m-btn m-btn--primary" href={h('/signup?next=free')} style={sx('height:54px;padding:0 26px;font-weight:700;font-size:16px;box-shadow:0 10px 22px -8px rgba(46,107,230,.7)')}>{t('hero.cta1')}</Link>
+            <Link className="m-btn m-btn--soft" href={h('/sample-result')} style={sx('height:54px;padding:0 24px;font-size:16px')}>{t('hero.cta2')}</Link>
           </div>
           <div style={sx('display:flex;gap:8px 20px;flex-wrap:wrap;font-size:13px;color:var(--mut);font-weight:600')}>
             <span>{t('hero.trust1')}</span><span>{t('hero.trust2')}</span><span>{t('hero.trust3')}</span>
@@ -51,7 +56,7 @@ export async function LandingDesktop() {
         <div className="m-visual" dir="ltr" aria-hidden style={sx('position:relative;padding-bottom:72px;min-width:0')}>
           <div lang="en" style={sx('border-radius:24px;box-shadow:var(--raise);background:var(--bg);overflow:hidden')}>
             <div style={sx('display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);font-size:12px;font-weight:700')}>
-              <span style={sx('width:22px;height:22px;border-radius:7px;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:12px')}>e</span>
+              <BrandMark size={22} shadow={false} />
               <span style={sx('color:var(--ink2)')}>IELTS Academic · Reading</span>
               <span style={sx('margin-inline-start:auto;padding:5px 10px;border-radius:9px;box-shadow:var(--inset);font-variant-numeric:tabular-nums')}>42:18</span>
             </div>
@@ -118,7 +123,7 @@ export async function LandingDesktop() {
                 </div>
                 <div style={sx('display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;flex-wrap:wrap')}>
                   <span style={sx('font-size:14px;color:var(--ink2)')}>{t('exams.fullMock')} <b style={sx('color:var(--ink);font-size:18px')}><Price exam={ex} kind="examFull" /></b></span>
-                  <a className="m-btn m-btn--soft" href={h(`/${ex}`)} style={sx('height:46px;padding:0 18px;border-radius:13px;font-size:14px')}>{t(ex === 'ielts' ? 'exams.viewIelts' : 'exams.viewSat')}</a>
+                  <Link className="m-btn m-btn--soft" href={h(`/${ex}`)} style={sx('height:46px;padding:0 18px;border-radius:13px;font-size:14px')}>{t(ex === 'ielts' ? 'exams.viewIelts' : 'exams.viewSat')}</Link>
                 </div>
               </div>
             );
@@ -172,7 +177,7 @@ export async function LandingDesktop() {
             <h2 className="m-h2">{t('sample.title')}</h2>
             <p className="m-lead">{t('sample.sub')}</p>
           </div>
-          <a href={h('/sample-result')} style={sx('font-weight:700;font-size:15px')}>{t('sample.open')}</a>
+          <Link href={h('/sample-result')} style={sx('font-weight:700;font-size:15px')}>{t('sample.open')}</Link>
         </div>
         <div style={sx('display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px')}>
           <div className={CARD} style={sx('padding:28px;display:flex;flex-direction:column;gap:20px')}>
@@ -215,7 +220,7 @@ export async function LandingDesktop() {
       <section style={SEC}>
         <div style={sx('display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:28px')}>
           <h2 className="m-h2">{t('pricing.title')}</h2>
-          <a href={h('/pricing')} style={sx('font-weight:700;font-size:15px')}>{t('pricing.compare')}</a>
+          <Link href={h('/pricing')} style={sx('font-weight:700;font-size:15px')}>{t('pricing.compare')}</Link>
         </div>
         <div style={sx('margin-bottom:16px')}><CatalogError text={t('pricing.loadError')} retry={t('pricing.retry')} /></div>
         <div style={sx('display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px')}>
@@ -237,8 +242,8 @@ export async function LandingDesktop() {
         </div>
       </section>
 
-      {/* ---------- testimonials (placeholders until real quotes are supplied — README "Assets") ---------- */}
-      <section style={SEC}>
+      {/* ---------- testimonials: hidden until real learner quotes are supplied (README "Assets"; TL decision 10-15) ---------- */}
+      {SHOW_TESTIMONIALS && <section style={SEC}>
         <h2 className="m-h2" style={sx('margin:0 0 28px')}>{t('quotes.title')}</h2>
         <div style={sx('display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px')}>
           {(['m1', 'm2', 'm3'] as const).map((m) => (
@@ -251,7 +256,7 @@ export async function LandingDesktop() {
             </div>
           ))}
         </div>
-      </section>
+      </section>}
 
       {/* ---------- FAQ ---------- */}
       <section style={sx('max-width:880px;margin:0 auto;padding:clamp(40px,5vw,72px) 20px')}>

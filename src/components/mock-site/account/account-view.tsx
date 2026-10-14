@@ -4,6 +4,7 @@
  * desktop per README §11 spec with the same groups. P1/P2, A5, A10. Export / delete / restore
  * (U1–U4) are not built on the backend yet → those rows keep their place with a "Soon" state.
  */
+import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -90,7 +91,7 @@ export function AccountView() {
       </>
     );
     const style = sx('width:100%;min-height:54px;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:0 16px;display:flex;align-items:center;gap:12px;text-align:start');
-    if (r.href) return <a key={i} href={r.href} style={style}>{inner}</a>;
+    if (r.href) return <Link key={i} href={r.href} style={style}>{inner}</Link>;
     if (r.go) return <button key={i} type="button" onClick={r.go} style={style}>{inner}</button>;
     return <div key={i} style={{ ...style, cursor: 'default' }}>{inner}</div>;
   };

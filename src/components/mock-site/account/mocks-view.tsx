@@ -1,5 +1,6 @@
 'use client';
 /** /mocks — Mobile App.dc.html `mocks` (In progress / Completed, grouped rows, New mock); desktop uses the same list in a card. D3. */
+import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { getAttempts } from '@/lib/mock/api/endpoints';
@@ -61,7 +62,7 @@ export function MocksView() {
         </div>
       )}
       {cur?.next && <button type="button" className="m-btn m-btn--ghost" onClick={() => void load(tab, cur.next!)} style={sx('align-self:center')}>{t('more')}</button>}
-      <a href={href(`/start/${learner?.goal?.exam ?? 'ielts'}?mode=full`)} className="m-btn m-btn--soft" style={sx('height:52px;border-radius:16px;color:var(--blue);font-weight:800;font-size:15px')}>{t('newMock')}</a>
+      <Link href={href(`/start/${learner?.goal?.exam ?? 'ielts'}?mode=full`)} className="m-btn m-btn--soft" style={sx('height:52px;border-radius:16px;color:var(--blue);font-weight:800;font-size:15px')}>{t('newMock')}</Link>
     </>
   );
   return (

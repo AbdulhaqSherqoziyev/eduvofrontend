@@ -274,7 +274,9 @@ select.m-input { padding: 0 14px; }
 .m-logo__mark {
   width: 32px; height: 32px; border-radius: 10px; background: var(--grad); display: grid; place-items: center;
   color: #fff; font-size: 17px; font-weight: 800; box-shadow: 0 6px 14px -6px rgba(46, 107, 230, .7); letter-spacing: 0;
+  flex: none; overflow: hidden;
 }
+.m-logo__mark svg { display: block; }
 .m-logo__word { display: flex; gap: 5px; }
 .m-logo__word b { color: var(--blue); font-weight: 800; }
 
@@ -469,4 +471,16 @@ select.m-input { padding: 0 14px; }
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; animation: m-sheet-up .28s cubic-bezier(.2, .8, .2, 1);
 }
 .m-cookie p { margin: 0; flex: 1 1 260px; font-size: 14px; line-height: 1.55; color: var(--ink2); }
-@media (max-width: 519.98px) { .m-cookie { inset-inline: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); padding: 16px; } }
+@media (max-width: 519.98px) {
+  /* compact on phones; never covers the sticky CTA or the tab bar — it sits right above them */
+  .m-cookie { inset-inline: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); padding: 12px 14px; gap: 10px; border-radius: 18px; flex-wrap: nowrap; }
+  .m-cookie p { flex: 1 1 auto; font-size: 13px; line-height: 1.45; }
+  .m-cookie .m-btn { flex: none; }
+  body:has(.m-cta) .m-cookie { bottom: calc(86px + env(safe-area-inset-bottom)); }
+  body:has(.m-tabbar):not(:has(.m-cta)) .m-cookie { bottom: calc(76px + env(safe-area-inset-bottom)); }
+}
+
+/* session could not be restored (network / 5xx / 429): fixed strip under the header, above content */
+.m-session-banner { position: fixed; z-index: 60; inset-inline: 0; top: 72px; display: flex; justify-content: center; padding: 0 16px; pointer-events: none; }
+.m-session-banner .m-banner { pointer-events: auto; max-width: 640px; width: 100%; box-shadow: var(--raise-sm); }
+@media (max-width: 519.98px) { .m-session-banner { top: calc(60px + env(safe-area-inset-top)); } }

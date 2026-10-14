@@ -10,13 +10,13 @@ import { SiteHeader } from '@/components/mock-site/site-header';
 import { StickyCta } from '@/components/mock-site/sticky-cta';
 import { CatalogProvider } from '@/lib/mock/catalog';
 import { CATALOG_REVALIDATE, fetchCatalogServer } from '@/lib/mock/catalog-server';
-import { pageMeta } from '@/lib/mock/seo';
+import { publicPageMeta } from '@/lib/mock/seo';
 
 export const revalidate = CATALOG_REVALIDATE;
 
 export async function generateMetadata({ params: { lang } }: { params: { lang: MockLocale } }): Promise<Metadata> {
   const t = await getTranslations({ locale: lang, namespace: 'exams.sat.meta' });
-  return { title: t('title'), description: t('description'), ...pageMeta(lang, '/sat') };
+  return publicPageMeta(lang, '/sat', { title: t('title'), description: t('description') });
 }
 
 export default async function ExamPage({ params: { lang } }: { params: { lang: MockLocale } }) {

@@ -7,11 +7,11 @@ import { HelpCenter } from '@/components/mock-site/help/help-center';
 import { PageShell } from '@/components/mock-site/page-shell';
 import { SiteFooter } from '@/components/mock-site/site-footer';
 import { SiteHeader } from '@/components/mock-site/site-header';
-import { pageMeta } from '@/lib/mock/seo';
+import { publicPageMeta } from '@/lib/mock/seo';
 
 export async function generateMetadata({ params: { lang } }: { params: { lang: MockLocale } }): Promise<Metadata> {
   const t = await getTranslations({ locale: lang, namespace: 'help.meta' });
-  return { title: t('title'), description: t('description'), ...pageMeta(lang, '/help') };
+  return publicPageMeta(lang, '/help', { title: t('title'), description: t('description') });
 }
 
 export default async function HelpPage({ params: { lang } }: { params: { lang: MockLocale } }) {
