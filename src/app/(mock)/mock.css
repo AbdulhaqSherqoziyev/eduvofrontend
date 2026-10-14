@@ -317,6 +317,9 @@ select.m-input { padding: 0 14px; }
 /* desktop nav ≥1024, burger below */
 @media (max-width: 1023.98px) { .m-only-lg { display: none !important; } }
 @media (min-width: 1024px) { .m-only-md { display: none !important; } }
+/* exam player width (README §7: desktop-only ≥1280) — Exam Start switches to "Open on a computer" below it */
+@media (max-width: 1279.98px) { .m-only-xl { display: none !important; } }
+@media (min-width: 1280px) { .m-below-xl { display: none !important; } }
 
 /* ---------- language menu ---------- */
 .m-langpanel {

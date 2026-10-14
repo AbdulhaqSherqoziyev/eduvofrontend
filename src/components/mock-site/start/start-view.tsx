@@ -129,7 +129,10 @@ export function StartView({ examParam }: { examParam: string }) {
     } catch { setFsDenied(true); }
   };
 
-  const required: CheckKey[] = info?.systemCheck ?? (ielts ? ['audio', 'headphones', 'fullscreen', 'internet'] : ['fullscreen', 'internet']);
+  // audio checks only when Listening is part of the attempt (a Reading/Writing section has no audio); SAT: fullscreen + internet
+  const hasListening = ielts && (mode === 'full' || section === 'listening');
+  const required: CheckKey[] = (info?.systemCheck ?? ['audio', 'headphones', 'fullscreen', 'internet'])
+    .filter((k) => hasListening || (k !== 'audio' && k !== 'headphones'));
   const allReady = required.every((k) => checks[k] === 'ok');
   const blocked = info?.blocked ?? null;
   const canStart = !!info && !blocked && !!info.charge && allReady && !starting;
@@ -260,7 +263,7 @@ export function StartView({ examParam }: { examParam: string }) {
           </div>
 
           <div style={sx('display:flex;flex-direction:column;gap:24px;min-width:0')}>
-            <div className="m-only-lg" style={sx('display:flex;flex-direction:column;gap:24px')}>
+            <div className="m-only-xl" style={sx('display:flex;flex-direction:column;gap:24px')}>
               <div className="m-card" style={sx('padding:24px;display:flex;flex-direction:column;gap:14px')}>
                 <div style={sx('font-weight:800;font-size:17px')}>{t('check')}</div>
                 {checkRows.map((c) => (
@@ -274,7 +277,7 @@ export function StartView({ examParam }: { examParam: string }) {
               <div className="m-card" style={sx('padding:24px;display:flex;flex-direction:column;gap:14px')}>
                 <div style={sx('display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--ink2);font-weight:600')}>
                   <span>{mode === 'full' ? t('summaryFull', { n: rows.length }) : t('summarySection', { name: selName })}</span>
-                  <span style={sx('color:var(--ink);font-weight:800')}><bdi dir="ltr">{info ? fmtTotal(info.totalDurationMin) : ''}</bdi></span>
+                  <span style={sx('color:var(--ink);font-weight:800')}><bdi dir="ltr">{info ? fmtTotal(mode === 'full' ? catalog?.exams.find((e) => e.slug === exam)?.facts?.totalDurationMin ?? info.totalDurationMin : info.totalDurationMin) : ''}</bdi></span>
                 </div>
                 <button type="button" onClick={() => void start()} disabled={!canStart} aria-disabled={!canStart}
                   style={{ ...sx('height:56px;border-radius:14px;border:0;color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;gap:8px'), background: canStart ? 'var(--grad)' : 'var(--mut)', boxShadow: canStart ? 'var(--glow)' : 'none', cursor: canStart ? 'pointer' : 'not-allowed' }}>
@@ -284,7 +287,7 @@ export function StartView({ examParam }: { examParam: string }) {
                 {startErr && <div className="m-banner m-banner--err" role="alert">{startErr}</div>}
               </div>
             </div>
-            <div className="m-only-md">{computerCard}</div>
+            <div className="m-below-xl">{computerCard}</div>
           </div>
         </div>
       </main>
