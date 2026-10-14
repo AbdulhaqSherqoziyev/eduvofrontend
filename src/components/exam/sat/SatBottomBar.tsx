@@ -12,6 +12,7 @@ import type { FlatQ } from '@/lib/exam/engine/selectors';
 import { useSatTools } from '@/lib/exam/sat/tools';
 import { PreviewFinish } from '../shell/PreviewFinish';
 import { Btn } from '../shell/ui';
+import { useExamHost } from '../host';
 
 export function SatBottomBar({ flat }: { flat: FlatQ[] }) {
   const { s, dispatch, stageCfg } = useExam();
@@ -21,7 +22,9 @@ export function SatBottomBar({ flat }: { flat: FlatQ[] }) {
   const go = (i: number) => { const q = flat[i]; if (q) dispatch({ t: 'GOTO', partIdx: q.partIdx, q: q.id }); };
   const last = idx >= flat.length - 1;
   const early = stageCfg?.nav?.early_finish === true;
-  const name = s.attempt?.candidate?.name ?? '';
+  const host = useExamHost();
+  // B2C: the learner's display name (or "Candidate"), never the server's email local-part fallback
+  const name = host.candidateName || (s.attempt?.candidate?.name ?? '');
   const right: React.ReactNode = tools.review ? (
     <>
       <Btn h={40} variant="accent" onClick={() => tools.setReview(false)} style={{ fontSize: 13, padding: '0 20px', borderRadius: 10 }}>{t('chrome.back_to_question')}</Btn>
