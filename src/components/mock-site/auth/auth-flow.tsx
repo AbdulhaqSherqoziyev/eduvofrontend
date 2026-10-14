@@ -244,8 +244,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
   const finish = async () => {
     setFormErr(null); setDateErr(''); setBusy(true);
     try {
-      const today = new Date().toISOString().slice(0, 10);
-      if (!noDate && date && date < today) { setStep(2); setDateErr(t('err.dateInPast')); return; }
+      if (!noDate && date && date < todayLocal()) { setStep(2); setDateErr(t('err.dateInPast')); return; }
       await patchMe({
         goal: { exam, targetScore: Number(target), examDate: noDate || !date ? null : date, noDateYet: noDate || !date },
         country: country === 'other' ? null : country,
@@ -267,7 +266,13 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
     setBusy(true);
     try { await patchMe({ ...(dname.trim() ? { displayName: dname.trim().slice(0, 60) } : {}), completeOnboarding: true }); router.push(href('/dashboard')); } catch (e) { setFormErr(apiError(e)); } finally { setBusy(false); }
   };
-  const onbNext = () => { if (step < 3) setStep(step + 1); else void finish(); };
+  /** today in the learner's own calendar (not UTC) — the server checks DATE_IN_PAST the same way */
+  const todayLocal = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+  const onbNext = () => {
+    if (step === 2 && !noDate && date && date < todayLocal()) { setDateErr(t('err.dateInPast')); return; }
+    setDateErr('');
+    if (step < 3) setStep(step + 1); else void finish();
+  };
 
   /* ---------- texts ---------- */
   const copy = isLogin ? 'login' : isForgot ? 'forgot' : 'signup';

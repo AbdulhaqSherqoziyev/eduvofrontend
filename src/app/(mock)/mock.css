@@ -440,6 +440,8 @@ select.m-input { padding: 0 14px; }
 
 /* RTL locale without its translation yet: English strings in a mirrored layout read correctly */
 .m-fallback :is(h1, h2, h3, p, span, b, a, button, label, td, th, li, small) { unicode-bidi: plaintext; }
+/* …but blocks keep the page's (RTL) alignment, so English headings line up with the mirrored layout */
+.m-fallback[dir='rtl'] :is(h1, h2, h3, p, li, label, td, th) { text-align: match-parent; }
 .m-ts { display: flex; justify-content: center; padding: 0 16px 16px; }
 .m-ts:empty { display: none; }
 /* settings row chevron (Mobile App profile) */
