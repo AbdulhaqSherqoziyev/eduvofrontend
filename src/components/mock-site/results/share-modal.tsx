@@ -71,9 +71,9 @@ async function drawCard(v: ShareView, footer: string): Promise<Blob | null> {
   const subY = S - pad - 52 * k;
   g.fillText(v.sub, pad, subY);
   g.font = `800 ${96 * k}px ${family}`;
-  g.fillText(v.score, pad, subY - 18 * k);
+  g.fillText(v.score, pad, subY - 26 * k);
   g.font = `700 ${14 * k}px ${family}`; g.globalAlpha = 0.9;
-  g.fillText(v.label, pad, subY - 18 * k - 96 * k);
+  g.fillText(v.label, pad, subY - 26 * k - 88 * k);
   g.globalAlpha = 1;
   return new Promise((r) => c.toBlob((b) => r(b), 'image/png'));
 }
