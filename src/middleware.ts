@@ -16,7 +16,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { isLocale, negotiate } from '@/i18n/locales';
 import { isMockHost } from '@/lib/routing/hosts';
-import { isErpRoute, isMockRoute } from '@/lib/routing/match';
+import { isErpRoute, isMockRoute, isPublicFile, looksLikeFile } from '@/lib/routing/match';
 
 const ERP_404 = '/__not_found__';
 const PROD = process.env.NODE_ENV === 'production';
@@ -77,6 +77,13 @@ function mockRoute(req: NextRequest, host: { name: string; raw: string }) {
     url.pathname = brand;
     return NextResponse.rewrite(url);
   }
+  // a real file passes; a missing one is a 404 (not the catch-all page with 200)
+  if (looksLikeFile(pathname)) {
+    if (isPublicFile(pathname)) return NextResponse.next();
+    const url = req.nextUrl.clone();
+    url.pathname = `/m/${pickLocale(req)}/__missing`;
+    return NextResponse.rewrite(url, { status: 404 });
+  }
   if (pathname === '/') return redirect(req, host, `/${pickLocale(req)}`);
 
   const seg = pathname.split('/')[1];
@@ -102,7 +109,8 @@ export function middleware(req: NextRequest) {
   if (isMockHost(host.name)) return mockRoute(req, host);
 
   const { pathname } = req.nextUrl;
-  if (pathname in BRAND_FILES) return NextResponse.next(); // ERP host: its own public/ files, unchanged
+  // files: public/ ones pass; anything else with an extension is a 404 (ERP has no favicon.ico etc.)
+  if (looksLikeFile(pathname) && !isErpRoute(pathname)) return isPublicFile(pathname) ? NextResponse.next() : erpNotFound(req);
   if (pathname === '/m' || pathname.startsWith('/m/')) return erpNotFound(req);
   // dev: pages added while `next dev` runs are not in the generated manifest yet
   if (!PROD) return NextResponse.next();
@@ -110,9 +118,6 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  // skip Next internals, the API proxy and files with an extension (public/, robots.txt, sitemap.xml…)
-  matcher: [
-    '/((?!_next/|api/|.*\\.[a-zA-Z0-9]+$).*)',
-    '/favicon.ico', '/favicon.svg', '/apple-touch-icon.png', '/apple-touch-icon-precomposed.png', '/manifest.json', '/manifest.webmanifest',
-  ],
+  // everything except Next internals and the API proxy; files are checked against public/ (see above)
+  matcher: ['/((?!_next/|api/).*)'],
 };
