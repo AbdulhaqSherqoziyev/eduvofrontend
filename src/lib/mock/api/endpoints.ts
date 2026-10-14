@@ -1,5 +1,5 @@
 /** Contract endpoints (`_api-contract.md` section numbers in brackets). */
-import { api, clearSession, currentAccessToken, refreshSession, setAuthSession, setLearner } from './client';
+import { api, clearSession, currentAccessToken, getSession, refreshSession, setAuthSession, setLearner } from './client';
 import type {
   AttemptListItem, AttemptMode, AuthSession, Catalog, CheckoutMethods, CreatedAttempt, Currency, Dashboard, ExamCredits,
   Learner, MePatch, MockResultExt, OpenExamSlug, Order, PaymentMethodGroup, ProgressSeries, Quote, Recommendation, SectionKey, ShareCard,
@@ -49,7 +49,18 @@ export async function patchMe(body: MePatch) {
 }
 
 /* ---- §3 catalog ---- */
-export const getCatalog = (signal?: AbortSignal) => api<Catalog>('/mock/catalog', { auth: false, signal });
+/**
+ * C1 with the visitor's time zone (v0.5: Asia/Tashkent → UZ → UZS) and, for a learner, country +
+ * Bearer (products then reflect the tests this learner has not seen). Guests send no token.
+ */
+export const getCatalog = (signal?: AbortSignal) => {
+  const q = new URLSearchParams();
+  try { const tz = Intl.DateTimeFormat().resolvedOptions().timeZone; if (tz) q.set('tz', tz); } catch { /* old browser */ }
+  const s = getSession();
+  if (s.status === 'learner' && s.learner.country) q.set('country', s.learner.country);
+  const qs = q.toString();
+  return api<Catalog>(`/mock/catalog${qs ? `?${qs}` : ''}`, { auth: !!currentAccessToken(), signal });
+};
 export const joinWaitlist = (body: { exam: WaitlistTopic; email?: string; locale: string; turnstile?: string }) =>
   api<{ subscribed: true }>('/mock/waitlist', { method: 'POST', body });
 

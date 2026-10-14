@@ -49,9 +49,10 @@ export function PricingView() {
     const q = new URLSearchParams(window.location.search);
     if (q.get('exam') === 'sat') setExam('sat');
     if (q.get('model') === 'unl') setModel('unl');
-    setCur(readCurrency(cat.status === 'ready' ? cat.data.suggestedCurrency : undefined));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cat.status]);
+  }, []);
+  const suggested = cat.status === 'ready' ? cat.data.suggestedCurrency : undefined;
+  useEffect(() => { setCur(readCurrency(suggested)); }, [suggested]);
   const pickCur = (c: Currency) => { setCur(c); saveCurrency(c); };
 
   const products = cat.status === 'ready' ? cat.data.products : undefined;
@@ -74,6 +75,9 @@ export function PricingView() {
   const bundleProd = p[`b${bundle}` as PlanKey];
   const checkoutHref = (prod: Product | undefined) => (prod && prod.available ? href(`/checkout?sku=${encodeURIComponent(prod.sku)}&cur=${cur}`) : undefined);
   const ielts = exam === 'ielts';
+  /** v0.5: products the bank cannot serve yet (more credits than unseen tests) */
+  const notEnough = (prod: Product | undefined) => cat.status === 'ready' && prod && !prod.available && prod.unavailableReason === 'NOT_ENOUGH_TESTS'
+    ? <span role="note" style={sx('font-size:13px;font-weight:700;color:var(--warn);line-height:1.5')}>{t('notEnoughTests')}</span> : null;
 
   /* ---------- phone plan list ---------- */
   const phoneKeys: PlanKey[] = model === 'unl' ? ['unl'] : ['section', 'full', 'b3', 'b5', 'b10'];
@@ -81,6 +85,7 @@ export function PricingView() {
   const selProd = p[selected];
   const planName = (k: PlanKey) => k === 'section' ? t('phone.planSection') : k === 'full' ? t('phone.planFull') : k === 'unl' ? t('phone.planUnl') : t('phone.planBundle', { n: Number(k.slice(1)) });
   const planNote = (k: PlanKey) => {
+    if (cat.status === 'ready' && p[k] && !p[k]!.available && p[k]!.unavailableReason === 'NOT_ENOUGH_TESTS') return t('notEnoughTests');
     if (k === 'section') return t(ielts ? 'phone.noteSectionIelts' : 'phone.noteSectionSat');
     if (k === 'full') return t('phone.noteFull');
     if (k === 'unl') return unlAvailable ? t('phone.noteUnl') : t('unlSoonBody');
@@ -126,6 +131,7 @@ export function PricingView() {
               <span style={sx('font-weight:800;font-size:17px')}>{t('section')}</span>
               <span style={sx('font-size:36px;font-weight:800;letter-spacing:var(--ls-h)')}>{priceNode(p.section)}</span>
               <span style={sx('color:var(--ink2);font-size:14px;line-height:1.55')}>{t(ielts ? 'sectionDescIelts' : 'sectionDescSat')}</span>
+              {notEnough(p.section)}
               <BuyLink href={checkoutHref(p.section)} soft label={t('buySection')} />
             </div>
             <div className="m-card" style={sx('padding:28px;display:flex;flex-direction:column;gap:16px;outline:2px solid var(--blue);outline-offset:-2px')}>
@@ -135,6 +141,7 @@ export function PricingView() {
               </div>
               <span style={sx('font-size:36px;font-weight:800;letter-spacing:var(--ls-h)')}>{priceNode(p.full)}</span>
               <span style={sx('color:var(--ink2);font-size:14px;line-height:1.55')}>{t(ielts ? 'fullDescIelts' : 'fullDescSat')}</span>
+              {notEnough(p.full)}
               <BuyLink href={checkoutHref(p.full)} label={t('buyFull')} />
             </div>
             <div className="m-card" style={sx('padding:28px;display:flex;flex-direction:column;gap:16px')}>
@@ -145,6 +152,7 @@ export function PricingView() {
               <span style={sx('color:var(--ink2);font-size:14px;line-height:1.55')}>
                 {t.rich('bundleDesc', { per: () => priceNode(bundleProd, 'perMock', 70), pct: bundleProd?.savingPct ?? 0, months: bundleProd?.validityMonths ?? 12 })}
               </span>
+              {notEnough(bundleProd)}
               <BuyLink href={checkoutHref(bundleProd)} soft label={t('buyBundle', { n: bundle })} />
             </div>
           </div>
@@ -199,7 +207,7 @@ export function PricingView() {
             </tr></thead>
             <tbody>
               <tr>
-                <td>{t('row.price')}</td><td><Bdi>{t('cell.zero')}</Bdi></td><td>{priceNode(p.section, 'price', 70)}</td><td>{priceNode(p.full, 'price', 70)}</td><td>{priceNode(bundleProd, 'price', 70)}</td>
+                <td>{t('row.price')}</td><td><Bdi>{fmtMoney({ currency: cur, amountMinor: 0 })}</Bdi></td><td>{priceNode(p.section, 'price', 70)}</td><td>{priceNode(p.full, 'price', 70)}</td><td>{priceNode(bundleProd, 'price', 70)}</td>
                 <td>
                   <span style={cat.status === 'ready' && !unlAvailable ? sx('color:var(--mut)') : undefined}>{t.rich('cell.perMo', { p: () => priceNode(p.unl, 'price', 70) })}</span>
                   {cat.status === 'ready' && !unlAvailable && <div style={sx('font-size:12px;font-weight:700;color:var(--warn)')}>{t('comingSoon')}</div>}

@@ -100,5 +100,6 @@
     "taxNote": "Prices include taxes. Credits are valid for 12 months.",
     "cta": "Continue · {price}",
     "currency": "Currency"
-  }
+  },
+  "notEnoughTests": "Not available yet: this plan has more mocks than new tests in our bank. Choose a smaller plan."
 }

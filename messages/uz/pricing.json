@@ -100,5 +100,6 @@
     "taxNote": "Narxlarga soliqlar kiritilgan. Kreditlar 12 oy amal qiladi.",
     "cta": "Davom etish · {price}",
     "currency": "Valyuta"
-  }
+  },
+  "notEnoughTests": "Hozircha mavjud emas: bu rejadagi mocklar bankimizdagi yangi testlardan ko‘p. Kichikroq rejani tanlang."
 }

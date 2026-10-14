@@ -19,8 +19,11 @@ export function CatalogProvider({ initial, children }: { initial: Catalog | null
     return ac;
   }, []);
   useEffect(() => {
-    if (initial) return;
-    const ac = load();
+    if (!initial) { const ac = load(); return () => ac.abort(); }
+    // the build/ISR copy knows neither the visitor's zone (currency suggestion) nor the learner (fresh tests):
+    // refresh quietly in the background, keeping the server prices on screen meanwhile
+    const ac = new AbortController();
+    getCatalog(ac.signal).then((data) => setState({ status: 'ready', data })).catch(() => undefined);
     return () => ac.abort();
   }, [initial, load]);
   return <Ctx.Provider value={state}>{children}</Ctx.Provider>;
@@ -30,7 +33,7 @@ export function findProduct(c: Catalog, exam: OpenExamSlug, kind: ProductKind, q
   return c.products.find((p) => p.exam === exam && p.kind === kind && (kind !== 'bundle' || p.qty === qty));
 }
 
-/** Currency preference: ?cur= → saved → catalog suggestion → UZS. */
+/** Currency preference: ?cur= → saved → catalog suggestion (time zone / country) → UZS (as on the landing). */
 const CUR_KEY = 'eduvo_mock_currency';
 export function readCurrency(suggested?: Currency): Currency {
   try {
