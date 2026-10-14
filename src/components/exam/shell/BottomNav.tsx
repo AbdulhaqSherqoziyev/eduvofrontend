@@ -5,6 +5,8 @@
  * locked (.45 + lock). Next is the only primary; Finish section always opens the modal.
  */
 import { Lock } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { useExamHost } from '../host';
 import { useExam, useT } from '@/lib/exam/engine/context';
 import { answered, flatQuestions, partsOf, tasksOf } from '@/lib/exam/engine/selectors';
 import { PreviewFinish } from './PreviewFinish';
@@ -15,6 +17,8 @@ interface Box { id: string; label: string; partIdx: number; done: boolean }
 export function BottomNav({ finishDisabled, finishHint }: { finishDisabled?: boolean; finishHint?: string }) {
   const { s, dispatch, stageCfg } = useExam();
   const { t } = useT();
+  const host = useExamHost();
+  const navRef = useRef<HTMLElement>(null);
   const back = stageCfg?.nav?.back !== false;
   const hideUpcoming = !!stageCfg?.nav?.hide_upcoming;
   const tasks = tasksOf(s.content);
@@ -28,10 +32,64 @@ export function BottomNav({ finishDisabled, finishHint }: { finishDisabled?: boo
   const go = (partIdx: number, q: string | null) => dispatch({ t: 'GOTO', partIdx, q });
   const cur = s.currentQ;
   const canFlag = !tasks.length && !!cur && stageCfg?.nav?.flag !== false;
+  // many questions (IELTS 40) do not fit one row at 1440: keep the current box in view
+  useEffect(() => {
+    const el = navRef.current?.querySelector('[aria-current="step"]') as HTMLElement | null;
+    el?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }, [cur, s.partIdx]);
+
+  if (host.b2c) {
+    // Player.dc.html footer: Part tabs · numbers of the current part · Back / Next (Submit is in the top bar)
+    const g = groups[s.partIdx] ?? groups[0];
+    const curQ = flat.find((q) => q.id === cur);
+    // questions inside a template / multi / map group have no card of their own → their Review flag lives here
+    const cardless = !!curQ && (!!curQ.group.content?.template || !!curQ.group.multiGroup || curQ.group.layout === 'map' || curQ.group.questions[0]?.type === 'mcq_multi' || curQ.group.questions[0]?.type === 'map_labelling');
+    return (
+      <div style={{ height: 70, flexShrink: 0, background: 'var(--x-panel)', borderTop: '1px solid var(--x-line)', display: 'flex', alignItems: 'center', gap: 14, padding: '0 20px' }}>
+        <nav ref={navRef} aria-label={t('chrome.review')} style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: 14, overflowX: 'auto', padding: '6px 2px' }}>
+          <div role="tablist" style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+            {groups.map((gr) => {
+              const locked = !back && gr.partIdx < s.partIdx;
+              if (hideUpcoming && gr.partIdx > s.partIdx) return null;
+              const on = gr.partIdx === s.partIdx;
+              return (
+                <button key={gr.partIdx} type="button" role="tab" aria-selected={on} disabled={locked} onClick={() => go(gr.partIdx, gr.boxes[0]?.id ?? null)}
+                  style={{ height: 36, padding: '0 12px', borderRadius: 10, border: on ? '1.5px solid var(--x-focus)' : '1.5px solid var(--x-line)', background: on ? 'var(--x-sel-bg)' : 'transparent', color: on ? 'var(--x-sel-fg)' : 'var(--x-sub)', fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 4, opacity: locked ? 0.45 : 1 }}>
+                  {locked && <Lock size={11} aria-hidden />}{gr.label}
+                </button>
+              );
+            })}
+          </div>
+          {!tasks.length && g && (
+            <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+              {g.boxes.map((b) => {
+                const isCur = cur === b.id;
+                const flag = !!s.flags[b.id];
+                const states = [b.done ? 'answered' : 'unanswered', flag ? t('chrome.flagged').toLowerCase() : null].filter(Boolean).join(', ');
+                return (
+                  <button key={b.id} type="button" onClick={() => go(b.partIdx, b.id)} aria-label={`Question ${b.label}, ${states}`} aria-current={isCur ? 'step' : undefined}
+                    style={{ minWidth: 32, height: 32, padding: '0 6px', borderRadius: 9, fontSize: 12.5, fontWeight: 800, cursor: 'pointer',
+                      border: flag ? '2px solid var(--x-flag)' : 'none',
+                      background: b.done ? 'var(--x-accent)' : 'var(--x-tile)', color: b.done ? '#fff' : 'var(--x-sub)',
+                      boxShadow: isCur ? '0 0 0 2px var(--x-panel), 0 0 0 4px var(--x-focus)' : 'none' }}>{b.label}</button>
+                );
+              })}
+            </div>
+          )}
+        </nav>
+        <PreviewFinish />
+        {canFlag && cardless && (
+          <Btn onClick={() => dispatch({ t: 'FLAG', id: cur! })} style={{ color: 'var(--x-flag)', fontSize: 13 }}>{s.flags[cur!] ? t('chrome.unflag') : t('x.review_flag')}</Btn>
+        )}
+        {back && <Btn disabled={s.partIdx === 0} onClick={() => go(s.partIdx - 1, groups[s.partIdx - 1]?.boxes[0]?.id ?? null)} style={{ fontSize: 13 }}>{t('x.back')}</Btn>}
+        <Btn variant="accent" disabled={s.partIdx >= last} onClick={() => go(s.partIdx + 1, groups[s.partIdx + 1]?.boxes[0]?.id ?? null)} style={{ fontSize: 13, padding: '0 20px' }}>{t('chrome.next')}</Btn>
+      </div>
+    );
+  }
 
   return (
     <div style={{ height: 70, flexShrink: 0, background: 'var(--x-panel)', borderTop: '1px solid var(--x-line)', display: 'flex', alignItems: 'center', gap: 14, padding: '0 22px' }}>
-      <nav aria-label={t('chrome.review')} style={{ flex: 1, display: 'flex', gap: 14, overflowX: 'auto', padding: '6px 0' }}>
+      <nav ref={navRef} aria-label={t('chrome.review')} style={{ flex: 1, minWidth: 0, display: 'flex', gap: 14, overflowX: 'auto', padding: '6px 0' }}>
         {groups.map((g) => {
           const locked = !back && g.partIdx < s.partIdx;
           if (hideUpcoming && g.partIdx > s.partIdx) return null;

@@ -64,6 +64,6 @@ export const store = {
   deadline: (id: string) => read<string | null>(`${id}:deadline`, null),
   saveDeadline: (id: string, deadlineAt: string | null) => write(`${id}:deadline`, deadlineAt),
 
-  locale: () => read<'en' | 'uz' | null>('locale', null),
-  saveLocale: (l: 'en' | 'uz') => write('locale', l),
+  locale: () => read<'en' | 'uz' | 'ru' | null>('locale', null),
+  saveLocale: (l: 'en' | 'uz' | 'ru') => write('locale', l),
 };

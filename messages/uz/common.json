@@ -96,5 +96,12 @@
     "more": "Cookie siyosati",
     "ok": "Tushunarli",
     "label": "Cookie haqida xabar"
+  },
+  "cancelled": {
+    "chip": "Yopildi",
+    "title": "Bu urinish yopildi",
+    "body": "Texnik muammo sababli urinish to‘xtadi, shuning uchun natija yo‘q. Kreditingiz bir necha daqiqada hisobingizga qaytadi — emailga xabar yuboramiz.",
+    "bodyNoRefund": "Texnik muammo sababli urinish to‘xtadi, shuning uchun natija yo‘q.",
+    "cta": "Bosh sahifaga"
   }
 }

@@ -29,5 +29,13 @@
     "nav": "Use Next and Back or the numbers at the bottom to move between questions. Review marks a question so you can find it later.",
     "tech": "The timer does not stop for help. For a technical problem, write to support@eduvo.uz with test ID {id}.",
     "techNoId": "The timer does not stop for help. For a technical problem, write to support@eduvo.uz."
-  }
+  },
+  "done": {
+    "chip": "Submitted",
+    "title": "Section submitted",
+    "body": "Your score is ready.",
+    "bodyWriting": "Your essays are being graded by AI. Your result page will update in a few minutes.",
+    "cta": "See your result"
+  },
+  "candidate": "Candidate"
 }

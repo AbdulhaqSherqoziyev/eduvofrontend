@@ -25,7 +25,7 @@ export function Bi({ pair, size = 14, weight = 600, center, color }: { pair: [st
   return (
     <span style={{ display: 'flex', flexDirection: 'column', gap: 2, textAlign: center ? 'center' : undefined, alignItems: center ? 'center' : undefined }}>
       <span style={{ fontSize: size, fontWeight: weight, color: color ?? 'inherit', lineHeight: 1.45 }}>{pair[0]}</span>
-      <span style={{ fontSize: size - 2, fontWeight: 500, color: 'var(--x-muted)', lineHeight: 1.4 }}>{pair[1]}</span>
+      {pair[1] && <span style={{ fontSize: size - 2, fontWeight: 500, color: 'var(--x-muted)', lineHeight: 1.4 }}>{pair[1]}</span>}
     </span>
   );
 }

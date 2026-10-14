@@ -15,7 +15,7 @@ function Pair({ p, size = 14, weight = 600, color }: { p: [string, string]; size
   return (
     <div style={{ color: color ?? 'var(--x-ink)' }}>
       <div style={{ fontSize: size, fontWeight: weight }}>{p[0]}</div>
-      <div style={{ fontSize: size - 2, color: 'var(--x-muted)' }}>{p[1]}</div>
+      {p[1] && <div style={{ fontSize: size - 2, color: 'var(--x-muted)' }}>{p[1]}</div>}
     </div>
   );
 }

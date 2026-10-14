@@ -36,18 +36,19 @@ export function useTimerWarn(remaining: number | null, opts: { warn10?: boolean 
   return { pulse, tip };
 }
 
-export function TimerPill({ remaining, pulse, noWarn }: { remaining: number | null; pulse: boolean; noWarn?: boolean }) {
+/** `hideToggle:false` (B2C IELTS) drops the Hide timer button — the design has it on SAT only. */
+export function TimerPill({ remaining, pulse, noWarn, hideToggle = true }: { remaining: number | null; pulse: boolean; noWarn?: boolean; hideToggle?: boolean }) {
   const { s, setUi } = useExam();
   const { t } = useT();
   const warn5 = !noWarn && remaining != null && remaining <= 300 && remaining > 0;
   const zero = remaining != null && remaining <= 0;
-  const hidden = s.ui.timerHidden && !warn5 && !zero;
+  const hidden = hideToggle && s.ui.timerHidden && !warn5 && !zero;
   const fg = warn5 ? 'var(--x-err-fg)' : 'var(--x-ink)';
   const secs = Math.max(0, Math.ceil(remaining ?? 0));
   const aria = t('timer.aria', { min: Math.floor(secs / 60), sec: secs % 60 });
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, height: 38, padding: '0 14px 0 0', borderRadius: 19, background: warn5 ? 'var(--x-err-bg)' : 'var(--x-tile)', border: `1.5px solid ${warn5 ? 'var(--x-err-fg)' : 'transparent'}` }}
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, height: 38, padding: hideToggle ? '0 14px 0 0' : 0, borderRadius: 19, background: warn5 ? 'var(--x-err-bg)' : 'var(--x-tile)', border: `1.5px solid ${warn5 ? 'var(--x-err-fg)' : 'transparent'}` }}
       className={pulse ? 'x-timer-pulse' : undefined}>
       <div style={{ width: 132, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: fg }} aria-label={hidden ? t('chrome.timer_hidden') : aria}>
         {hidden ? (
@@ -61,12 +62,12 @@ export function TimerPill({ remaining, pulse, noWarn }: { remaining: number | nu
           </>
         )}
       </div>
-      <span style={{ width: 1, height: 16, background: 'var(--x-line)' }} />
-      <button type="button" onClick={() => setUi({ timerHidden: !s.ui.timerHidden })} disabled={warn5 || zero}
+      {hideToggle && <span style={{ width: 1, height: 16, background: 'var(--x-line)' }} />}
+      {hideToggle && <button type="button" onClick={() => setUi({ timerHidden: !s.ui.timerHidden })} disabled={warn5 || zero}
         title={warn5 ? t('chrome.timer_locked_tip') : undefined}
         style={{ background: 'none', border: 'none', padding: 0, fontSize: 12.5, fontWeight: 700, color: 'var(--x-link)', opacity: warn5 || zero ? 0.45 : 1, whiteSpace: 'nowrap' }}>
         {s.ui.timerHidden && !warn5 ? t('chrome.timer_show') : t('chrome.timer_hide')}
-      </button>
+      </button>}
     </div>
   );
 }
@@ -81,7 +82,7 @@ export function TimerTip({ tip }: { tip: WarnTip }) {
       style={{ position: 'absolute', top: 8, left: '50%', transform: 'translateX(-50%)', zIndex: 15, background: 'var(--x-panel)', border: '1px solid var(--x-line)', borderRadius: 10, padding: '8px 12px', boxShadow: 'var(--x-menu-shadow)', textAlign: 'center' }}>
       <span style={{ position: 'absolute', top: -6, left: '50%', marginLeft: -6, width: 12, height: 12, background: 'var(--x-panel)', borderLeft: '1px solid var(--x-line)', borderTop: '1px solid var(--x-line)', transform: 'rotate(45deg)' }} />
       <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--x-ink)' }}>{pair[0]}</div>
-      <div style={{ fontSize: 12, color: 'var(--x-muted)' }}>{pair[1]}</div>
+      {pair[1] && <div style={{ fontSize: 12, color: 'var(--x-muted)' }}>{pair[1]}</div>}
     </div>
   );
 }

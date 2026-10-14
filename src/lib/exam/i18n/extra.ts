@@ -71,4 +71,12 @@ export const EXTRA = {
   'x.strongest': ['Strongest', 'Eng kuchli'],
   'x.weakest': ['Needs more practice', "Ko'proq mashq kerak"],
   'x.evidence': ['Evidence', 'Dalil'],
+  // mock.eduvo.uz top bar / footer (Player.dc.html, host.b2c)
+  'x.notes_n': ['Notes · {n}', 'Eslatmalar · {n}'],
+  'x.notes_empty': ['No notes yet. Select passage text and choose Note.', "Hali eslatma yo'q. Matnni belgilab, Eslatma ni tanlang."],
+  'x.submit_section': ['Submit section', "Bo'limni topshirish"],
+  'x.back': ['Back', 'Orqaga'],
+  'x.review_flag': ['Review', "Ko'rib chiqish"],
+  // section intro: one part (SAT modules) → no "1 parts"
+  'x.content_questions_only': ['{n} questions', '{n} ta savol'],
 } satisfies Record<string, [string, string]>;

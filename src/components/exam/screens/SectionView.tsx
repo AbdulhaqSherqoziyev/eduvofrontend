@@ -16,6 +16,7 @@ import { SplitPane } from '../shell/SplitPane';
 import { TimerTip, useTimerWarn } from '../shell/TimerPill';
 import { TopBar } from '../shell/TopBar';
 import { WritingStage } from '../writing/WritingStage';
+import { useExamHost } from '../host';
 
 function useKeys() {
   const { s, dispatch } = useExam();
@@ -40,6 +41,7 @@ function useKeys() {
 
 export function SectionView() {
   const { s, stage, sectionCfg, stageCfg } = useExam();
+  const host = useExamHost();
   const { t } = useT();
   const now = useServerNow(250);
   const deadline = parseIso(stage?.deadlineAt);
@@ -61,7 +63,8 @@ export function SectionView() {
 
   return (
     <>
-      <TopBar sectionTitle={title} remaining={remaining} pulse={pulse} />
+      <TopBar sectionTitle={title} remaining={remaining} pulse={pulse}
+        notes={host.b2c && hl && !isWriting && !!part?.passageHtml} submit={host.b2c ? { disabled: chainOpen, hint: t('listening.finish_after_chain') } : undefined} />
       <Banners audioFailed={audioFailed} />
       <div style={{ position: 'relative', flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
         <TimerTip tip={tip} />

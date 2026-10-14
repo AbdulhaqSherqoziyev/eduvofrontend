@@ -8,7 +8,7 @@ import { Monitor } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { t, type Locale } from '@/lib/exam/i18n';
 
-export function MinWidthGate({ min = 1280, locale, midAttempt, children }: { min?: number; locale: Locale; midAttempt?: boolean; children: ReactNode }) {
+export function MinWidthGate({ min = 1280, locale, midAttempt, href = '/portal', children }: { min?: number; locale: Locale; midAttempt?: boolean; href?: string; children: ReactNode }) {
   const [w, setW] = useState<number | null>(null);
   useEffect(() => {
     const on = () => setW(window.innerWidth);
@@ -29,7 +29,7 @@ export function MinWidthGate({ min = 1280, locale, midAttempt, children }: { min
               {midAttempt ? t('gate.mid_attempt', locale) : t(w! < 1024 ? 'gate.body_mobile' : 'gate.body_narrow', locale)}
             </div>
             {!midAttempt && (
-              <a href="/portal" style={{ marginTop: 6, height: 44, padding: '0 20px', borderRadius: 12, background: 'var(--x-accent)', color: '#fff', fontWeight: 800, fontSize: 14, display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
+              <a href={href} style={{ marginTop: 6, height: 44, padding: '0 20px', borderRadius: 12, background: 'var(--x-accent)', color: '#fff', fontWeight: 800, fontSize: 14, display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
                 {t('chrome.back_to_eduvo', locale)}
               </a>
             )}

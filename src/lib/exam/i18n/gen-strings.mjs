@@ -1,3 +1,5 @@
+// Regenerate strings.json from Sevara's `_player-texts.md` (en | uz columns).
+// The Russian column lives in ru.json (same keys) — add a ru row there for every new key.
 // Regenerate strings.json from Sevara's `_player-texts.md`:
 //   node src/lib/exam/i18n/gen-strings.mjs ../.claude/specs/exams/_player-texts.md
 import { readFileSync, writeFileSync } from 'node:fs';

@@ -4,6 +4,7 @@ import { store, type LocalAnswers } from '../storage';
 import type { AttemptState } from '../types';
 import type { AnswerEntry, Phase, UiPrefs } from './state';
 import { DEFAULT_UI } from './state';
+import type { Locale } from '../i18n';
 
 export interface BootDecision {
   phase: Phase; stageKey: string | null; prevSubmitted: string | null; timeEnded: string | null;
@@ -23,11 +24,12 @@ export function mergeAnswers(d: AttemptState, local: LocalAnswers): Record<strin
   return out;
 }
 
-export function decideBoot(d: AttemptState): BootDecision {
+/** `initialLocale`: the host's default instruction language (mock.eduvo.uz: the learner's site language). */
+export function decideBoot(d: AttemptState, initialLocale?: Locale): BootDecision {
   const id = d.attempt.id;
   const answers = mergeAnswers(d, store.answers(id));
   const defLocale = d.config.ui?.ui_locale === 'uz' || d.config.family === 'HSK' ? 'uz' : 'en';
-  const ui: UiPrefs = { ...DEFAULT_UI, locale: store.locale() || defLocale, ...store.ui<Partial<UiPrefs>>(id, {}) };
+  const ui: UiPrefs = { ...DEFAULT_UI, locale: store.locale() || initialLocale || defLocale, ...store.ui<Partial<UiPrefs>>(id, {}) };
   const main = d.stages.filter((s) => !s.separateSitting);
   const cur = main.find((s) => s.status === 'IN_PROGRESS');
   const next = main.find((s) => s.status === 'PENDING');

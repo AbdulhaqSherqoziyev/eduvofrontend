@@ -96,5 +96,12 @@
     "more": "Cookie policy",
     "ok": "OK",
     "label": "Cookie notice"
+  },
+  "cancelled": {
+    "chip": "Closed",
+    "title": "This attempt was closed",
+    "body": "A technical problem stopped this attempt, so it has no result. Your credit comes back to your account within a few minutes — we will email you.",
+    "bodyNoRefund": "A technical problem stopped this attempt, so it has no result.",
+    "cta": "Go to dashboard"
   }
 }

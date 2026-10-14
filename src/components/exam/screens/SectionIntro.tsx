@@ -30,11 +30,15 @@ export function SectionIntro() {
   const main = s.stages.filter((x) => !x.separateSitting);
   const idx = main.findIndex((x) => x.stageKey === s.stageKey);
   // SAT counts sections, not stages (2 modules + a break per section would read "SECTION 4 OF 5")
-  const nm = isSat(s.config) ? sectionNo(s.config, sectionCfg.key) : { n: idx + 1, m: main.length };
+  // A single-section attempt (SAT R&W only) counts only the sections it has: no "SECTION 1 OF 2".
+  const attemptSecs = [...new Set(main.map((x) => x.sectionKey))];
+  const nm = isSat(s.config)
+    ? (attemptSecs.length < sectionNo(s.config, sectionCfg.key).m ? { n: Math.max(1, attemptSecs.indexOf(sectionCfg.key) + 1), m: attemptSecs.length } : sectionNo(s.config, sectionCfg.key))
+    : { n: idx + 1, m: main.length };
   const b = sectionCfg.brief ?? {};
   const minutes = b.durationSec ?? stageCfg?.timer.duration_sec;
   const ai = stageCfg?.kind === 'writing' || stageCfg?.kind === 'speaking';
-  const content = b.tasks || stageCfg?.tasks?.length ? t('intro.content_tasks', { n: b.tasks ?? stageCfg?.tasks?.length ?? 0 }) : b.questions ? t('intro.content_questions', { n: b.questions, parts: b.parts ?? 1 }) : '—';
+  const content = b.tasks || stageCfg?.tasks?.length ? t('intro.content_tasks', { n: b.tasks ?? stageCfg?.tasks?.length ?? 0 }) : b.questions ? ((b.parts ?? 1) > 1 ? t('intro.content_questions', { n: b.questions, parts: b.parts ?? 1 }) : t('x.content_questions_only', { n: b.questions })) : '—';
   const hasAudio = !!stageCfg?.audio;
   const loading = hasAudio && !media.ready && !media.error;
   const pct = Math.round(media.progress * 100);
@@ -55,7 +59,7 @@ export function SectionIntro() {
           </div>
         )}
         <div>
-          <Caps>{t('intro.section_n_of_m', nm)}</Caps>
+          {nm.m > 1 && <Caps>{t('intro.section_n_of_m', nm)}</Caps>}
           <div style={{ fontSize: 32, fontWeight: 800, letterSpacing: -0.7, marginTop: 8 }}>{sectionCfg.title}</div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0,1fr))', gap: 12 }}>

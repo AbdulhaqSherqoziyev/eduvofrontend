@@ -29,5 +29,13 @@
     "nav": "Savollar o‘rtasida o‘tish uchun Next va Back tugmalari yoki pastdagi raqamlardan foydalaning. Review savolni keyinroq topishingiz uchun belgilaydi.",
     "tech": "Yordam paytida taymer to‘xtamaydi. Texnik muammo bo‘lsa, support@eduvo.uz manziliga test ID {id} bilan yozing.",
     "techNoId": "Yordam paytida taymer to‘xtamaydi. Texnik muammo bo‘lsa, support@eduvo.uz manziliga yozing."
-  }
+  },
+  "done": {
+    "chip": "Topshirildi",
+    "title": "Bo‘lim topshirildi",
+    "body": "Natijangiz tayyor.",
+    "bodyWriting": "Insholaringizni AI baholamoqda. Natija sahifasi bir necha daqiqada yangilanadi.",
+    "cta": "Natijani ko‘rish"
+  },
+  "candidate": "Nomzod"
 }

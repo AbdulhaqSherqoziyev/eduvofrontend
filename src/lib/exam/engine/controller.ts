@@ -5,6 +5,7 @@ import { examApi } from '../api';
 import { store } from '../storage';
 import type { AnswerValue, StageStartResp } from '../types';
 import { useAutosave } from './autosave';
+import { useExamHost } from '@/components/exam/host';
 import { decideBoot } from './boot';
 import { serverNow, useClockSync } from './clock';
 import { requestFullscreen, useIntegrity } from './integrity';
@@ -15,6 +16,7 @@ import { initialState, type Highlight, type UiPrefs } from './state';
 
 export function useExamController(attemptId: string) {
   const [s, dispatch] = useReducer(reducer, attemptId, initialState);
+  const { initialLocale, onAttemptCancelled: onCancelled } = useExamHost();
   const live = useRef(s);
   live.current = s;
   const welcomeResp = useRef<StageStartResp | null>(null);
@@ -28,14 +30,14 @@ export function useExamController(attemptId: string) {
   const boot = useCallback(async () => {
     const r = await examApi.getAttempt(attemptId);
     if (!r.ok) { dispatch({ t: 'FAIL', kind: r.kind, code: r.code }); return; }
-    const d = decideBoot(r.data);
+    const d = decideBoot(r.data, initialLocale);
     welcomeResp.current = null;
     dispatch({ t: 'BOOTED', data: r.data, answers: d.answers, flags: store.flags(attemptId), ui: d.ui, phase: d.phase, stageKey: d.stageKey, prevSubmitted: d.prevSubmitted, timeEnded: d.timeEnded, resumeSaved: d.resumeSaved });
     if (d.phase === 'welcome' && !d.timeEnded && d.stageKey) {
       const st = await examApi.startStage(attemptId, d.stageKey); // idempotent: same deadline, fresh media URLs
       if (st.ok) { welcomeResp.current = st.data; dispatch({ t: 'PRELOAD', refs: st.data.media }); }
     }
-  }, [attemptId]);
+  }, [attemptId, initialLocale]);
   useEffect(() => { void boot(); }, [boot]);
 
   useClockSync(s.phase !== 'boot' && s.phase !== 'error' && s.phase !== 'auth');
@@ -179,8 +181,13 @@ export function useExamController(attemptId: string) {
     const started = await beginStage();
     const c = started.resp?.content;
     if (!started.ok || !started.resp || !c || !('parts' in c)) return;
-    for (const p of c.parts) if (p.audioAssetId && !blobUrlFor(p.audioAssetId)) await examApi.reportSkip(attemptId, started.resp.stage.stageKey, p.part);
-  }, [attemptId, beginStage]);
+    for (const p of c.parts) {
+      if (!p.audioAssetId || blobUrlFor(p.audioAssetId)) continue;
+      const r = await examApi.reportSkip(attemptId, started.resp.stage.stageKey, p.part);
+      // B2C: too many technical skips closes the attempt without a result (credit comes back)
+      if (!r.ok && r.code === 'TOO_MANY_SKIPS' && r.body?.attemptCancelled === true) { onCancelled?.(); return; }
+    }
+  }, [attemptId, beginStage, onCancelled]);
 
   return { s, dispatch, stage, sectionCfg, stageCfg, media, setAnswer, beginStage, submit, timeOut, setUi, reportSkip, integrity, boot, refreshMedia };
 }

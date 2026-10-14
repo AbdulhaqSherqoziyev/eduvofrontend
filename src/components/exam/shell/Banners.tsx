@@ -42,7 +42,7 @@ export function Banners({ audioFailed }: { audioFailed?: boolean }) {
       {kind === 'audio_failed' && <AlertTriangle size={16} aria-hidden />}
       <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <span style={{ fontSize: 13.5, fontWeight: 600 }}>{pair[0]}</span>
-        <span style={{ fontSize: 12, opacity: 0.8 }}>{pair[1]}</span>
+        {pair[1] && <span style={{ fontSize: 12, opacity: 0.8 }}>{pair[1]}</span>}
       </span>
       {kind === 'fullscreen_exited' && (
         <button type="button" onClick={requestFullscreen} style={{ background: 'none', border: 'none', color: 'var(--x-link)', fontSize: 13, fontWeight: 700, padding: 0 }}>{t('chrome.return_fullscreen')}</button>
@@ -65,7 +65,7 @@ export function TabToast() {
   return (
     <div role="status" className="x-fade-in" style={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)', zIndex: 25, minHeight: 40, borderRadius: 12, background: 'var(--x-panel)', border: '1px solid var(--x-line)', boxShadow: 'var(--x-menu-shadow)', padding: '6px 16px', textAlign: 'center' }}>
       <div style={{ fontSize: 13.5, fontWeight: 600 }}>{pair[0]}</div>
-      <div style={{ fontSize: 12, color: 'var(--x-muted)' }}>{pair[1]}</div>
+      {pair[1] && <div style={{ fontSize: 12, color: 'var(--x-muted)' }}>{pair[1]}</div>}
     </div>
   );
 }

@@ -15,10 +15,11 @@ import { BrandMark } from '../logo';
 
 const ctl = { height: 36, borderRadius: 9, border: '1.5px solid var(--x-line)', background: 'transparent', color: 'var(--x-ink)', fontSize: 12.5, fontWeight: 700 } as const;
 
-/** Instruction languages the player has copy for. Russian needs a `ru` column in lib/exam/i18n first. */
+/** Instruction languages (Player.dc.html select): the player strings have en / uz / ru columns. */
 const INSTR: Array<{ v: Locale; label: string }> = [
   { v: 'en', label: 'Instructions: English' },
   { v: 'uz', label: 'Ko‘rsatmalar: O‘zbekcha' },
+  { v: 'ru', label: 'Инструкции: Русский' },
 ];
 
 export function MockPlayerBrand() {
