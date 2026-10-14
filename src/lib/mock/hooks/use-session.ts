@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useSyncExternalStore } from 'react';
-import { getServerSession, getSession, hasSessionHint, markGuest, refreshSession, subscribeSession, type SessionState } from '../api/client';
+import { ensureSession, getServerSession, getSession, subscribeSession, type SessionState } from '../api/client';
 
 let booted = false;
 
@@ -8,7 +8,7 @@ let booted = false;
 export function useSession(): SessionState {
   const s = useSyncExternalStore(subscribeSession, getSession, getServerSession);
   useEffect(() => {
-    if (!booted) { booted = true; if (hasSessionHint()) void refreshSession(); else markGuest(); }
+    if (!booted) { booted = true; void ensureSession(); }
   }, []);
   return s;
 }

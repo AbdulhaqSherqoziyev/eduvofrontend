@@ -1,4 +1,5 @@
 'use client';
+import { useCallback } from 'react';
 import { useLocale } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { isLocale, type MockLocale } from '@/i18n/locales';
@@ -6,7 +7,8 @@ import { isLocale, type MockLocale } from '@/i18n/locales';
 /** Current locale + helper that prefixes app paths: `href('/pricing')` → `/uz/pricing`. */
 export function useLang() {
   const lang = useLocale() as MockLocale;
-  const href = (p: string) => `/${lang}${p}`;
+  // stable between renders: pages list `href` in effect/callback deps (an unstable one re-ran fetches in a loop)
+  const href = useCallback((p: string) => `/${lang}${p}`, [lang]);
   return { lang, href };
 }
 

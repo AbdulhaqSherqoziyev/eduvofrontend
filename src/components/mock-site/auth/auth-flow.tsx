@@ -4,6 +4,7 @@
  * `auth` / `verify` / `onb` (<520: app bar + sticky CTA). One state for both trees.
  * API: contract §1 (A1–A9) and §2 (P1/P2). Validation runs on submit (README §4).
  */
+import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -117,7 +118,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
       case 'EMAIL_TAKEN': {
         const providers = Array.isArray(e.body.providers) ? (e.body.providers as string[]) : [];
         if (providers.includes('google') && !providers.includes('password')) return t('err.emailTakenGoogle');
-        return t.rich('err.emailTaken', { login: (c) => <a href={href('/login')}>{c}</a> });
+        return t.rich('err.emailTaken', { login: (c) => <Link href={href('/login')}>{c}</Link> });
       }
       default: return tc('errors.server');
     }
@@ -192,6 +193,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
     setVerifyNote(''); setBusy(true);
     try {
       const s = await ensureSession();
+      if (s.status === 'offline') { setVerifyNote(tc('errors.network')); return; }
       if (s.status !== 'learner') { router.push(href(`/login${readNext(lang) ? `?next=${encodeURIComponent(readNext(lang)!)}` : ''}`)); return; }
       const me = await getMe();
       if (me.emailVerified) afterAuth(me); else setVerifyNote(t('verify.notYet'));
@@ -200,6 +202,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
   const resend = async () => {
     setVerifyNote('');
     const s = await ensureSession();
+    if (s.status === 'offline') { setVerifyNote(tc('errors.network')); return; }
     if (s.status !== 'learner') { setVerifyNote(t('verify.needLogin')); return; }
     try { await resendVerification(); setResent(true); } catch (e) {
       if (e instanceof MockApiError && e.code === 'ALREADY_VERIFIED') { afterAuth(s.learner); return; }
@@ -224,8 +227,8 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
     if (initial !== 'onboarding' || onbChecked.current) return;
     onbChecked.current = true;
     void ensureSession().then((s) => {
-      if (s.status !== 'learner') router.replace(href(`/login?next=${encodeURIComponent(href('/onboarding'))}`));
-      else if (s.learner.goal) { setExam(s.learner.goal.exam); setTarget(s.learner.goal.exam === 'ielts' ? s.learner.goal.targetScore.toFixed(1) : String(s.learner.goal.targetScore)); }
+      if (s.status === 'guest') router.replace(href(`/login?next=${encodeURIComponent(href('/onboarding'))}`));
+      else if (s.status === 'learner' && s.learner.goal) { setExam(s.learner.goal.exam); setTarget(s.learner.goal.exam === 'ielts' ? s.learner.goal.targetScore.toFixed(1) : String(s.learner.goal.targetScore)); }
     });
   }, [initial, href, router]);
   const pickExam = (e: OpenExamSlug) => { setExam(e); setTarget(e === 'ielts' ? '7.0' : '1450'); };
@@ -282,7 +285,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
   );
   const pwField = (phone: boolean) => (
     <label className="m-field">
-      <span style={sx('display:flex;justify-content:space-between')}>{t('password')}{isLogin && !phone && <a href={href('/forgot')} style={sx('font-size:13px')}>{t('login.forgot')}</a>}</span>
+      <span style={sx('display:flex;justify-content:space-between')}>{t('password')}{isLogin && !phone && <Link href={href('/forgot')} style={sx('font-size:13px')}>{t('login.forgot')}</Link>}</span>
       <input className="m-input" type="password" autoComplete={isLogin ? 'current-password' : 'new-password'} value={pw} placeholder={t('passwordPh')}
         onChange={(e) => { setPw(e.target.value); setFieldErr((f) => ({ ...f, password: undefined })); }} aria-invalid={!!pwErr}
         style={sx(phone ? 'height:54px;border-radius:16px;font-size:16px' : '')} />
@@ -306,8 +309,8 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
           {FormError}
           <button type="submit" className="m-btn m-btn--primary" disabled={busy} style={sx('height:52px;font-weight:700;font-size:16px;width:100%')}>{busy && <span className="m-spin" aria-hidden />}{t(`${copy}.cta`)}</button>
         </form>
-        <div style={sx('font-size:14px;color:var(--ink2);text-align:center')}>{t(`${copy}.switchText`)} <a href={href(isLogin ? '/signup' : '/login')} style={sx('font-weight:700')}>{t(`${copy}.switchLink`)}</a></div>
-        {isSignup && <div style={sx('font-size:12px;color:var(--mut);text-align:center;line-height:1.5')}>{t.rich('signup.terms', { terms: (c) => <a href={href('/terms')}>{c}</a>, privacy: (c) => <a href={href('/privacy')}>{c}</a> })}</div>}
+        <div style={sx('font-size:14px;color:var(--ink2);text-align:center')}>{t(`${copy}.switchText`)} <Link href={href(isLogin ? '/signup' : '/login')} style={sx('font-weight:700')}>{t(`${copy}.switchLink`)}</Link></div>
+        {isSignup && <div style={sx('font-size:12px;color:var(--mut);text-align:center;line-height:1.5')}>{t.rich('signup.terms', { terms: (c) => <Link href={href('/terms')}>{c}</Link>, privacy: (c) => <Link href={href('/privacy')}>{c}</Link> })}</div>}
       </>
     );
     if (mode === 'verify' || mode === 'sent') {
@@ -331,7 +334,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
           {FormError}
           {mode === 'verify'
             ? <button type="button" onClick={resend} style={sx('height:46px;border-radius:13px;border:0;background:transparent;color:var(--blue);font-weight:700;font-size:14px;cursor:pointer')}>{resent ? t('verify.resent') : t('verify.resend')}</button>
-            : <a href={href('/login')} style={sx('height:46px;display:grid;place-items:center;font-weight:700;font-size:14px')}>{t('sent.back')}</a>}
+            : <Link href={href('/login')} style={sx('height:46px;display:grid;place-items:center;font-weight:700;font-size:14px')}>{t('sent.back')}</Link>}
         </>
       );
     }
@@ -422,9 +425,9 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
         {!isForgot && <div style={sx('display:flex;align-items:center;gap:12px;color:var(--mut);font-size:12px;font-weight:700')}><span style={sx('flex:1;height:1px;background:var(--line)')} />{t('or')}<span style={sx('flex:1;height:1px;background:var(--line)')} /></div>}
         {emailField(true)}
         {!isForgot && pwField(true)}
-        {isLogin && <a href={href('/forgot')} style={sx('align-self:flex-end;color:var(--blue);font-weight:800;font-size:14px;padding:4px 0')}>{t('login.forgot')}</a>}
+        {isLogin && <Link href={href('/forgot')} style={sx('align-self:flex-end;color:var(--blue);font-weight:800;font-size:14px;padding:4px 0')}>{t('login.forgot')}</Link>}
         {FormError}
-        <a href={href(isLogin ? '/signup' : '/login')} style={sx('color:var(--ink2);font-size:14px;padding:8px 0;text-align:center')}>{isLogin ? t('login.switchTextPhone') : t(`${copy}.switchText`)} <b style={sx('color:var(--blue)')}>{t(`${copy}.switchLink`)}</b></a>
+        <Link href={href(isLogin ? '/signup' : '/login')} style={sx('color:var(--ink2);font-size:14px;padding:8px 0;text-align:center')}>{isLogin ? t('login.switchTextPhone') : t(`${copy}.switchText`)} <b style={sx('color:var(--blue)')}>{t(`${copy}.switchLink`)}</b></Link>
         {isSignup && <span style={sx('font-size:12px;color:var(--mut);text-align:center;line-height:1.5')}>{t('signup.termsPhone')}</span>}
       </form>
     );

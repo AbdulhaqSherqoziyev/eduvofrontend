@@ -10,10 +10,11 @@ export function useLearner() {
   const s = useSession();
   const router = useRouter();
   const { href } = useLang();
+  // only a decided guest goes to login; `offline` (server unreachable, 429) keeps the page and its banner
   useEffect(() => {
     void ensureSession().then((x) => {
-      if (x.status !== 'learner') router.replace(href(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`));
+      if (x.status === 'guest') router.replace(href(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`));
     });
-  }, [router, href]);
+  }, [router, href, s.status]);
   return s.status === 'learner' ? s.learner : null;
 }

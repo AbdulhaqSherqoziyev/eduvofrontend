@@ -12,6 +12,7 @@ import { ExamRoot } from '@/components/exam/screens/ExamRoot';
 import { configureExamTransport, setExamToken } from '@/lib/exam/api';
 import { currentAccessToken, ensureSession, refreshSession } from '@/lib/mock/api/client';
 import { useLang } from '@/lib/mock/hooks/use-lang';
+import { useSession } from '@/lib/mock/hooks/use-session';
 import { MockPlayerBrand, MockPlayerTools } from './mock-top-tools';
 import { SessionModal } from './session-modal';
 
@@ -21,17 +22,22 @@ export function MockPlayer({ attemptId }: { attemptId: string }) {
   const router = useRouter();
   const { lang, href } = useLang();
   const [state, setState] = useState<'boot' | 'ready' | 'guest'>('boot');
+  const session = useSession();
 
   useEffect(() => {
     configureExamTransport({
       base: BASE,
-      renewAuth: async () => { const ok = await refreshSession(); setExamToken(currentAccessToken()); return ok; },
+      renewAuth: async () => { const ok = await refreshSession(true); setExamToken(currentAccessToken()); return ok; },
     });
+  }, []);
+  useEffect(() => {
+    if (state !== 'boot') return;
     void ensureSession().then((s) => {
+      if (s.status !== 'learner' && s.status !== 'guest') return; // offline: wait for the session banner retry
       setExamToken(currentAccessToken());
       setState(s.status === 'learner' ? 'ready' : 'guest');
     });
-  }, []);
+  }, [state, session.status]);
 
   const host = useMemo<ExamHost>(() => ({
     renderAuthExpired: ({ retry }) => <SessionModal attemptId={attemptId} onBack={() => { setState('ready'); retry(); }} />,

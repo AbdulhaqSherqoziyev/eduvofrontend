@@ -5,6 +5,7 @@
  * S1 (GET /mock/start/:exam) decides the test, the charge and any block; nothing is reserved until
  * Start (S2). The system check is client-only (contract §6).
  */
+import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -13,6 +14,7 @@ import { createAttempt, emailStartLink, getCatalog, getCredits, getStart, resend
 import type { AttemptMode, Catalog, ExamCredits, OpenExamSlug, SectionKey, StartInfo } from '@/lib/mock/api/types';
 import { useDelayedFlag } from '@/lib/mock/hooks/use-delayed';
 import { useLang } from '@/lib/mock/hooks/use-lang';
+import { useSession } from '@/lib/mock/hooks/use-session';
 import { sx } from '@/lib/mock/sx';
 import { AppBar } from '../app-bar';
 import { Segmented } from '../segmented';
@@ -60,9 +62,11 @@ export function StartView({ examParam }: { examParam: string }) {
   const slow = useDelayedFlag(loading);
 
   /* guest → login; read ?mode/section */
+  const session = useSession();
   useEffect(() => {
     void ensureSession().then((s) => {
-      if (s.status !== 'learner') { router.replace(href(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`)); return; }
+      if (s.status === 'guest') { router.replace(href(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`)); return; }
+      if (s.status !== 'learner') return; // offline: the session banner retries, this effect runs again
       const q = new URLSearchParams(window.location.search);
       const m = q.get('mode') === 'section' ? 'section' : 'full';
       setMode(m);
@@ -70,7 +74,7 @@ export function StartView({ examParam }: { examParam: string }) {
       if (sec) setSection(sec);
       setReady(true);
     });
-  }, [href, router]);
+  }, [href, router, session.status]);
 
   /* catalog (section facts, free eligibility) + credits (free still available) */
   useEffect(() => {
@@ -176,8 +180,8 @@ export function StartView({ examParam }: { examParam: string }) {
     <div className="m-banner m-banner--warn" role="status" style={sx('align-items:center;flex-wrap:wrap')}>
       <span style={sx('flex:1;min-width:200px')}>{t(`blocked.${blocked.reason === 'DESKTOP_REQUIRED' ? 'COMING_SOON' : blocked.reason}`, { exam: ielts ? 'IELTS' : 'SAT' })}</span>
       {blocked.reason === 'EMAIL_NOT_VERIFIED' && <button type="button" className="m-btn m-btn--soft m-btn--sm" onClick={() => { void resendVerification().then(() => setResent(true)).catch(() => setResent(true)); }}>{resent ? t('resent') : t('blockedAct.EMAIL_NOT_VERIFIED')}</button>}
-      {blocked.reason === 'NO_CREDIT' && <a className="m-btn m-btn--soft m-btn--sm" href={href(`/pricing?exam=${exam}`)}>{t('blockedAct.NO_CREDIT')}</a>}
-      {blocked.reason === 'ACTIVE_ATTEMPT_EXISTS' && blocked.attemptId && <a className="m-btn m-btn--soft m-btn--sm" href={href(`/exam/${blocked.attemptId}`)}>{t('blockedAct.ACTIVE_ATTEMPT_EXISTS')}</a>}
+      {blocked.reason === 'NO_CREDIT' && <Link className="m-btn m-btn--soft m-btn--sm" href={href(`/pricing?exam=${exam}`)}>{t('blockedAct.NO_CREDIT')}</Link>}
+      {blocked.reason === 'ACTIVE_ATTEMPT_EXISTS' && blocked.attemptId && <Link className="m-btn m-btn--soft m-btn--sm" href={href(`/exam/${blocked.attemptId}`)}>{t('blockedAct.ACTIVE_ATTEMPT_EXISTS')}</Link>}
     </div>
   );
   const errBox = loadErr && (

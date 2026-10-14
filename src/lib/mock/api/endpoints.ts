@@ -23,7 +23,7 @@ export async function googleAuth(body: { idToken: string; locale: string; countr
   return s;
 }
 export async function logout(all = false) {
-  try { await api<void>('/mock/auth/logout', { method: 'POST', body: { all }, cookie: true }); } finally { clearSession(); }
+  try { await api<void>('/mock/auth/logout', { method: 'POST', body: { all }, cookie: true }); } finally { clearSession(true); }
 }
 export const verifyEmail = (token: string) =>
   api<{ emailVerified: true; learner: Learner | null }>('/mock/auth/verify-email', { method: 'POST', body: { token } });
