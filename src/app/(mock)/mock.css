@@ -272,8 +272,8 @@ select.m-input { padding: 0 14px; }
 .m-logo { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 800; font-size: 18px; letter-spacing: var(--ls-t); flex: none; }
 .m-logo:hover { color: var(--ink); filter: none; }
 .m-logo__mark {
-  width: 32px; height: 32px; border-radius: 10px; background: var(--grad); display: grid; place-items: center;
-  color: #fff; font-size: 17px; font-weight: 800; box-shadow: 0 6px 14px -6px rgba(46, 107, 230, .7); letter-spacing: 0;
+  width: 32px; height: 32px; border-radius: 8px; background: none; display: grid; place-items: center;
+  box-shadow: 0 6px 14px -6px rgba(61, 123, 240, .7);
   flex: none; overflow: hidden;
 }
 .m-logo__mark svg { display: block; }
@@ -354,7 +354,7 @@ select.m-input { padding: 0 14px; }
 .m-appbar__title { text-align: center; font-weight: 800; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .m-applogo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 17px; padding-inline-start: 4px; color: var(--ink); }
 .m-applogo:hover { color: var(--ink); filter: none; }
-.m-applogo__mark { width: 30px; height: 30px; border-radius: 9px; background: var(--grad); display: grid; place-items: center; color: #fff; font-size: 15px; flex: none; }
+.m-applogo__mark { width: 30px; height: 30px; flex: none; }
 @media (max-width: 339.98px) { .m-applogo__word { display: none; } }
 .m-back { width: 44px; height: 44px; border-radius: 14px; border: 0; background: transparent; cursor: pointer; display: grid; place-items: center; }
 .m-back::before {

@@ -27,10 +27,10 @@ export async function generateMetadata({ params: { lang } }: { params: { lang: s
     description: t('description'),
     applicationName: 'Eduvo Mock',
     icons: {
-      icon: [{ url: '/brand/favicon.svg', type: 'image/svg+xml' }, { url: '/brand/favicon.ico', sizes: '16x16 32x32 48x48' }],
-      apple: [{ url: '/brand/apple-touch-icon.png', sizes: '180x180' }],
+      icon: [{ url: '/brand/favicon.svg?v=2', type: 'image/svg+xml' }, { url: '/brand/favicon.ico?v=2', sizes: '16x16 32x32 48x48' }],
+      apple: [{ url: '/brand/apple-touch-icon.png?v=2', sizes: '180x180' }],
     },
-    manifest: '/brand/manifest.webmanifest',
+    manifest: '/brand/manifest.webmanifest?v=2',
     appleWebApp: { title: 'Eduvo Mock', statusBarStyle: 'default' },
     formatDetection: { telephone: false },
     // private pages inherit this card; public pages set their own (publicPageMeta)

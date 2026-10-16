@@ -12,7 +12,7 @@ import { createShare } from '@/lib/mock/api/endpoints';
 import { PHONE_QUERY, useMedia } from '@/lib/mock/hooks/use-media';
 import { sx } from '@/lib/mock/sx';
 import { BottomSheet } from '../bottom-sheet';
-import { E_PATH } from '../logo';
+import { BRAND_BLUE, MarkSvg } from '../logo';
 import { Modal } from '../modal';
 import { useToast } from '../toast';
 
@@ -23,8 +23,9 @@ export function ShareCardView({ v, footer }: { v: ShareView; footer: string }) {
   return (
     <div dir="ltr" style={sx('aspect-ratio:1/1;border-radius:20px;background:linear-gradient(160deg,#5B8DEF,#2E6BE6);color:#fff;padding:28px;display:flex;flex-direction:column;justify-content:space-between;text-align:start')}>
       <span style={sx('font-weight:800;font-size:15px;display:flex;gap:8px;align-items:center')}>
-        <span style={sx('width:26px;height:26px;border-radius:8px;background:#fff;display:grid;place-items:center')} aria-hidden>
-          <svg viewBox="0 0 32 32" width={26} height={26}><path fill="#2E6BE6" transform="matrix(0.0085 0 0 -0.0085 10.8367 20.59)" d={E_PATH} /></svg>
+        {/* the real Eduvo mark; a thin white ring keeps it apart from the blue card */}
+        <span style={sx('width:26px;height:26px;border-radius:6.5px;box-shadow:0 0 0 1.5px #fff;flex:none')} aria-hidden>
+          <MarkSvg size={26} />
         </span>Eduvo Mock
       </span>
       <div style={sx('display:flex;flex-direction:column;gap:4px')}>
@@ -50,14 +51,16 @@ async function drawCard(v: ShareView, footer: string): Promise<Blob | null> {
   grad.addColorStop(0, '#5B8DEF'); grad.addColorStop(1, '#2E6BE6');
   g.fillStyle = grad; g.fillRect(0, 0, S, S);
   const pad = 28 * k;
-  // logo tile + "e"
-  const tile = 26 * k;
+  // the Eduvo mark (64 grid: #3D7BF0 square rx 16 + white diamond 24 rx 7 at 45°) with a white ring
+  const tile = 26 * k, u = tile / 64, ring = 1.5 * k;
   g.fillStyle = '#fff';
-  g.beginPath(); g.roundRect(pad, pad, tile, tile, 8 * k); g.fill();
+  g.beginPath(); g.roundRect(pad - ring, pad - ring, tile + 2 * ring, tile + 2 * ring, 16 * u + ring); g.fill();
+  g.fillStyle = BRAND_BLUE;
+  g.beginPath(); g.roundRect(pad, pad, tile, tile, 16 * u); g.fill();
   g.save();
-  g.translate(pad, pad); g.scale(tile / 32, tile / 32);
-  g.transform(0.0085, 0, 0, -0.0085, 10.8367, 20.59);
-  g.fillStyle = '#2E6BE6'; g.fill(new Path2D(E_PATH));
+  g.translate(pad + 32 * u, pad + 32 * u); g.rotate(Math.PI / 4);
+  g.fillStyle = '#fff';
+  g.beginPath(); g.roundRect(-12 * u, -12 * u, 24 * u, 24 * u, 7 * u); g.fill();
   g.restore();
   g.fillStyle = '#fff'; g.textBaseline = 'middle';
   g.font = `800 ${15 * k}px ${family}`;

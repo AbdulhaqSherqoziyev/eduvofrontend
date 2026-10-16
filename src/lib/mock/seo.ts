@@ -29,7 +29,7 @@ export function pageMeta(lang: MockLocale, path: string): Pick<Metadata, 'metada
 const OG_LOCALE: Record<string, string> = { en: 'en_US', uz: 'uz_UZ', ru: 'ru_RU' };
 
 /** Share image (1200×630, public/brand/): localized for reviewed translations, English otherwise. */
-export const ogImageFor = (lang: string) => (isTranslated(lang) && lang !== 'en' ? `/brand/og-image-${lang}.png` : '/brand/og-image.png');
+export const ogImageFor = (lang: string) => (isTranslated(lang) && lang !== 'en' ? `/brand/og-image-${lang}.png?v=2` : '/brand/og-image.png?v=2');
 
 /**
  * Open Graph + Twitter card for a page. `title` is the page title without the " · Eduvo Mock"
