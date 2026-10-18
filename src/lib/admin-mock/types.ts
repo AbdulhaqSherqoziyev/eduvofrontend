@@ -122,7 +122,7 @@ export type AdminLearnerRow = OwnerLearner & {
 };
 export interface LotRow {
   id: string | null; source: 'order' | 'admin' | 'promo' | 'free';
-  ref: { type: 'order'; id: string; reference: string } | { type: 'admin_action'; id: string } | null;
+  ref: { type: 'order'; id: string; reference: string | null } | { type: 'admin_action'; id: string } | null;
   exam: AdminExam; kind: 'full' | 'section' | 'unlimited'; sectionKey: string | null;
   qty: number; remaining: number; expiresAt: string | null; expired: boolean;
 }
@@ -142,7 +142,7 @@ export interface LedgerRow {
 
 /* ---------- attempts §6 ---------- */
 export interface AdminAttemptRow {
-  id: string; shortId: string; exam: string; testId: string; testTitle: string; testCode: string;
+  id: string; shortId: string; exam: string; testId: string; testTitle: string | null; testCode: string | null;
   type: 'full' | 'section' | 'free_section'; sectionKey: string | null; status: AttemptStatus;
   score: { value: number; label: string | null } | null;
   startedAt: string; finishedAt: string | null; durationSec: number | null;
@@ -172,7 +172,8 @@ export interface ProductItem {
 export interface ProductsRes { items: ProductItem[]; paddleState: 'live' | 'sandbox' | 'not_configured' }
 export interface PriceChangeRes {
   product: ProductItem;
-  paddle: { synced: boolean; reason: 'NOT_CONFIGURED' | 'NO_PADDLE_PRICE' | 'NOT_SOLD_VIA_PADDLE' | 'UZS_ONLY' | null; newPriceId: string | null; archivePendingPriceId: string | null };
+  /** null on an idempotent replay */
+  paddle: { synced: boolean; reason: 'NOT_CONFIGURED' | 'NO_PADDLE_PRICE' | 'NOT_SOLD_VIA_PADDLE' | 'UZS_ONLY' | 'UNCHANGED' | null; newPriceId: string | null; archivePendingPriceId: string | null } | null;
 }
 
 /* ---------- promo §8 ---------- */

@@ -36,7 +36,7 @@ export function chargeLabel(a: AdminAttemptRow) {
   const base = c.source === 'free' ? 'Bepul' : c.source === 'unlimited' ? 'Cheksiz' : c.source === 'order' ? c.orderReference ?? 'Buyurtma' : c.source === 'admin' ? 'Admin' : c.source === 'promo' ? 'Promo' : '—';
   return c.refunded ? `${base} · qaytarilgan` : base;
 }
-const testText = (a: AdminAttemptRow) => (a.type !== 'full' && a.sectionKey ? `${a.testTitle} · ${sectionLabel(a.sectionKey)}` : a.testTitle);
+const testText = (a: AdminAttemptRow) => { const t = a.testTitle ?? a.testCode ?? '—'; return a.type !== 'full' && a.sectionKey ? `${t} · ${sectionLabel(a.sectionKey)}` : t; };
 
 export function AttemptsScreen() {
   const [f, setF] = useUrlState(DEFAULTS);
@@ -170,7 +170,7 @@ function AttemptDrawer({ id, onClose }: { id: string | null; onClose: () => void
   return (
     <Drawer open={!!id} onClose={onClose}
       eyebrow={a ? attemptNo(a.shortId) : undefined}
-      title={a ? a.testTitle : isNotFound(q.error) ? 'Urinish topilmadi' : q.isError ? "Yuklab bo'lmadi" : '…'}
+      title={a ? testText(a) : isNotFound(q.error) ? 'Urinish topilmadi' : q.isError ? "Yuklab bo'lmadi" : '…'}
       sub={a ? <>{a.learner.email ?? '—'} · {TYPE_LABEL[a.type] ?? a.type}{a.learner.id && <> · <Link href={`/learners/${a.learner.id}`}>profil</Link></>}</> : undefined}>
       {q.isError && !d && !isNotFound(q.error) && <ErrorState flat title="Yuklab bo'lmadi" onRetry={() => q.refetch()} retrying={q.isFetching} />}
       {!d && !q.isError && <><span className="ma-skel" style={{ height: 24, width: '50%' }} /><span className="ma-skel" style={{ height: 70 }} /><span className="ma-skel" style={{ height: 160 }} /></>}

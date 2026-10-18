@@ -202,7 +202,7 @@ function Balance({ d }: { d: LearnerDetailRes }) {
                 <tr key={r.id ?? `free${i}`}>
                   <td style={{ padding: '11px 16px' }}>
                     <span style={{ fontWeight: 700 }}>{SRC[r.source]}</span>{' '}
-                    {r.ref?.type === 'order' && <Link href={`/orders/${r.ref.id}`} style={{ fontWeight: 700 }}>{r.ref.reference}</Link>}
+                    {r.ref?.type === 'order' && <Link href={`/orders/${r.ref.id}`} style={{ fontWeight: 700 }}>{r.ref.reference ?? '—'}</Link>}
                     {r.ref?.type === 'admin_action' && <span className="ma-mono" style={{ fontWeight: 700, color: 'var(--ink2)' }}>AU-{r.ref.id.slice(0, 6).toUpperCase()}</span>}
                   </td>
                   <td style={{ padding: '11px 10px', color: 'var(--ink2)', fontWeight: 600 }}>{examLabel(r.exam)} · {r.source === 'free' ? sectionLabel(r.sectionKey) || 'Bepul' : KIND[r.kind] ?? r.kind}</td>
@@ -260,7 +260,7 @@ function Tabs({ id }: { id: string }) {
       }
       if (tab === 'attempts') {
         const r = await adminApi.learnerAttempts(id, p);
-        return { total: r.total, rows: r.items.map((x) => { const s = attemptStatus(x.status); return { key: x.id, a: dateTime(x.startedAt), b: x.score ? x.score.label ?? String(x.score.value) : '—', c: x.testTitle, d: s.t, dTone: s.tone, e: attemptNo(x.shortId), href: `/attempts?open=${x.id}` }; }) };
+        return { total: r.total, rows: r.items.map((x) => { const s = attemptStatus(x.status); return { key: x.id, a: dateTime(x.startedAt), b: x.score ? x.score.label ?? String(x.score.value) : '—', c: x.testTitle ?? '—', d: s.t, dTone: s.tone, e: attemptNo(x.shortId), href: `/attempts?open=${x.id}` }; }) };
       }
       const r = await adminApi.learnerTickets(id, p);
       return { total: r.total, rows: r.items.map((t) => ({ key: t.id, a: dateTime(t.createdAt), b: `T-${t.no}`, c: t.subject, d: t.status === 'OPEN' ? 'Ochiq' : 'Yopiq', dTone: t.status === 'OPEN' ? 'warn' : 'neutral', e: ticketNo(t.no).slice(1), href: `/tickets?open=${t.id}` })) };

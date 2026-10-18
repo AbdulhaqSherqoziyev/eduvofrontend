@@ -64,7 +64,7 @@ export function TestsScreen() {
   async function preview(t: TestItem) {
     const tab = window.open('about:blank', '_blank');
     try {
-      const r = await adminApi.testPreview(t.id) as { token: string; attemptId?: string; url?: string; playerUrl?: string };
+      const r = await adminApi.testPreview(t.id);
       const url = r.url ?? r.playerUrl ?? (r.attemptId ? `${PREVIEW_ORIGIN}/exam/${encodeURIComponent(r.attemptId)}?preview=${encodeURIComponent(r.token)}` : null);
       if (url && tab) tab.location.href = url;
       else tab?.close();

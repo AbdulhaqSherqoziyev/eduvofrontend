@@ -134,7 +134,7 @@ function PriceDialog({ edit, onClose, onSaved }: { edit: { p: ProductItem; cur: 
     setErr(null);
     try {
       const r = await adminApi.setPrice(edit.p.sku, { currency: cur, amountMinor: minor, expectedAmountMinor: old }, idem);
-      if (!r.paddle.synced && r.paddle.reason === 'NOT_CONFIGURED') toast({ tone: 'warn', title: 'Narx saqlandi', text: "Paddle sozlanmagan — narx faqat bazada o'zgardi." });
+      if (r.paddle && !r.paddle.synced && r.paddle.reason === 'NOT_CONFIGURED') toast({ tone: 'warn', title: 'Narx saqlandi', text: "Paddle sozlanmagan — narx faqat bazada o'zgardi." });
       else toast({ tone: 'ok', title: 'Narx saqlandi', text: `${examLabel(edit.p.exam)} · ${productTitle(edit.p)} · ${amount(cur, old)} → ${amount(cur, minor)}` });
       onSaved();
     } catch (e) {
