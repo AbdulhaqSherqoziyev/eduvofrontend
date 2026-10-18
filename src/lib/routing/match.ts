@@ -1,13 +1,16 @@
 /** Edge-safe route matching for src/middleware.ts (patterns come from scripts/gen-routes.mjs). */
-import { ERP_ROUTES, MOCK_ROUTES, PUBLIC_FILES } from './routes.generated';
+import { ADMIN_ROUTES, ERP_ROUTES, MOCK_ROUTES, PUBLIC_FILES } from './routes.generated';
 
 const erp = ERP_ROUTES.map((s) => new RegExp(s));
 const mock = MOCK_ROUTES.map((s) => new RegExp(s));
+const admin = ADMIN_ROUTES.map((s) => new RegExp(s));
 
 /** true when `pathname` is a real ERP page. */
 export const isErpRoute = (pathname: string) => erp.some((re) => re.test(pathname));
 /** `rest` = the path after `/{lang}` ('' for the locale home). */
 export const isMockRoute = (rest: string) => mock.some((re) => re.test(rest));
+/** true when `pathname` (as seen on the admin-mock host) is a real admin page. */
+export const isAdminRoute = (pathname: string) => admin.some((re) => re.test(pathname));
 
 const publicFiles = new Set(PUBLIC_FILES);
 /** true when `pathname` is a file Next serves as-is (public/, robots.txt, sitemap.xml). */

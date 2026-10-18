@@ -99,6 +99,23 @@ export const MOCK_ROUTES: readonly string[] = [
   "^/terms/?$",
   "^/verify/?$"
 ];
+/** Every admin-mock page (src/app/(mock-admin)/ma), as the public pathname on the admin host. */
+export const ADMIN_ROUTES: readonly string[] = [
+  "^/?$",
+  "^/attempts/?$",
+  "^/audit/?$",
+  "^/learners/?$",
+  "^/learners/[^/]+/?$",
+  "^/login/?$",
+  "^/orders/?$",
+  "^/orders/[^/]+/?$",
+  "^/prices/?$",
+  "^/promo/?$",
+  "^/settings/?$",
+  "^/stats/?$",
+  "^/tests/?$",
+  "^/tickets/?$"
+];
 /** Files served as-is (public/ and root route handlers): any other path with a file extension is a 404. */
 export const PUBLIC_FILES: readonly string[] = [
   "/brand/apple-touch-icon.png",

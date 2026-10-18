@@ -1,15 +1,17 @@
 /**
  * robots.txt per host. mock.eduvo.uz: public marketing pages only; other mock hosts (dev): nothing.
- * ERP hosts keep their old behaviour (no robots.txt → 404).
+ * admin-mock hosts: `Disallow: /`. ERP hosts keep their old behaviour (no robots.txt → 404).
  */
 import { headers } from 'next/headers';
 import { MOCK_ORIGIN, MOCK_PROD_HOST } from '@/lib/mock/seo';
-import { isMockHost } from '@/lib/routing/hosts';
+import { isAdminMockHost, isMockHost } from '@/lib/routing/hosts';
 
 export const dynamic = 'force-dynamic';
 
 export function GET() {
   const host = (headers().get('host') ?? '').toLowerCase().replace(/:\d+$/, '');
+  // admin-mock.*: never indexed (the middleware also sends X-Robots-Tag on every response)
+  if (isAdminMockHost(host)) return new Response('User-agent: *\nDisallow: /\n', { headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'public, max-age=3600' } });
   if (!isMockHost(host)) return new Response('Not found', { status: 404 });
   const body = host === MOCK_PROD_HOST
     ? [
