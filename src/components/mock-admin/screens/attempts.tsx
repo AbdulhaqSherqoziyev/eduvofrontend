@@ -89,7 +89,7 @@ export function AttemptsScreen() {
                 return (
                   <tr key={a.id} className={on ? 'is-selected' : undefined} style={{ cursor: 'pointer' }} onClick={() => setF({ open: a.id })}>
                     <td style={{ ...td, padding: '12px 10px 12px 16px', fontWeight: 700, color: 'var(--blue)' }} className="ma-mono">
-                      <button type="button" className="ma-linkbtn ma-mono" style={{ fontSize: 12 }} onClick={(e) => { e.stopPropagation(); setF({ open: a.id }); }}>{attemptNo(a.shortId)}</button>
+                      <button type="button" className="ma-linkbtn ma-mono" style={{ fontSize: 12, whiteSpace: 'nowrap' }} onClick={(e) => { e.stopPropagation(); setF({ open: a.id }); }}>{attemptNo(a.shortId)}</button>
                     </td>
                     <td style={{ ...td, fontWeight: 600, maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.learner.email ?? '—'}</td>
                     <td style={{ ...td, fontWeight: 600, whiteSpace: 'nowrap' }}>{testText(a)}</td>

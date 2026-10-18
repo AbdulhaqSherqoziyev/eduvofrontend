@@ -250,7 +250,7 @@ function Tabs({ id }: { id: string }) {
           bFg: x.delta > 0 ? 'var(--ok)' : x.delta < 0 ? 'var(--err)' : 'var(--mut)',
           c: [REASON[x.reason] ?? x.reason, x.note].filter(Boolean).join(' · '),
           d: x.reason === 'FREE_SECTION' ? 'Bepul' : KIND[x.kind] ?? x.kind, dTone: x.reason === 'FREE_SECTION' ? 'muted' : 'neutral',
-          e: x.ref ? (x.ref.type === 'attempt' ? attemptNo(x.ref.label) : x.ref.label) : '—',
+          e: x.ref ? (x.ref.type === 'attempt' ? attemptNo(x.ref.label) : x.ref.type === 'admin_action' ? `AU-${x.ref.label}` : x.ref.label) : '—',
           href: x.ref ? (x.ref.type === 'order' ? `/orders/${x.ref.id}` : x.ref.type === 'attempt' ? `/attempts?open=${x.ref.id}` : null) : null,
         })) };
       }
@@ -461,7 +461,7 @@ function BlockDialog({ open, d, onClose, onDone }: { open: boolean; d: LearnerDe
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   useEffect(() => { if (open) { setNote(''); setErr(null); } }, [open]);
-  const bal = d.adminCredits.filter((c) => c.fullMocks || c.sections).map((c) => `${examLabel(c.exam)} ${c.fullMocks} full · ${c.sections} bo'lim`).join(', ') || '0';
+  const bal = d.adminCredits.filter((c) => c.fullMocks || c.sections).map((c) => `${examLabel(c.exam)} ${c.fullMocks} full · ${c.sections} bo'lim`).join(', ');
   async function submit() {
     if (note.trim().length < 3) { setErr('Sababni yozing (kamida 3 belgi).'); return; }
     setBusy(true);
@@ -482,7 +482,7 @@ function BlockDialog({ open, d, onClose, onDone }: { open: boolean; d: LearnerDe
         <Button variant="danger-solid" size={42} onClick={submit} loading={busy}>Bloklash</Button>
       </>}>
       <span className="ma-dialog-effect">Hisobga kirish va testlar to&apos;xtatiladi</span>
-      <span style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.5 }}>Balans saqlanadi ({bal}). Davom etayotgan urinish yopiladi. Blokdan chiqarish mumkin.</span>
+      <span style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.5 }}>Balans saqlanadi{bal ? ` (${bal})` : ''}. Davom etayotgan urinish yopiladi. Blokdan chiqarish mumkin.</span>
       <textarea rows={2} className={`ma-textarea${err ? ' is-error' : ''}`} placeholder="Sabab (majburiy)" value={note} maxLength={300} onChange={(ev) => { setNote(ev.target.value); setErr(null); }} aria-label="Sabab (majburiy)" />
       {err && <span className="ma-field-error" role="alert">{err}</span>}
     </Dialog>

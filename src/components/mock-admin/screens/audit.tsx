@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { saveBlob } from '@/lib/admin-mock/http';
 import { errText, loadErrText } from '@/lib/admin-mock/errors';
-import { dateTime, dayLabel, tashkentDay } from '@/lib/admin-mock/format';
+import { amount, dateTime, dayLabel, tashkentDay } from '@/lib/admin-mock/format';
 import type { AuditItem } from '@/lib/admin-mock/types';
 import { useAdminShell } from '../shell/context';
 import { Button } from '../ui/button';
@@ -32,6 +32,14 @@ const ACTION_C: Record<string, [string, string]> = {
 };
 const th = { padding: '14px 10px', borderBottom: '1px solid var(--line)', fontWeight: 700 } as const;
 const td = { padding: '12px 10px', borderBottom: '1px solid var(--line)' } as const;
+
+/** note, or for a price change the design's "419 000 → 395 000 so'm" from meta */
+function noteOf(a: AuditItem): string | null {
+  if (a.note) return a.note;
+  const m = (a.meta ?? {}) as Record<string, unknown>;
+  if (typeof m.from === 'number' && typeof m.to === 'number' && typeof m.currency === 'string') return `${amount(m.currency, m.from)} → ${amount(m.currency, m.to)}`;
+  return null;
+}
 
 function linkOf(a: AuditItem): string | null {
   const { type, id } = a.link;
@@ -106,7 +114,7 @@ export function AuditScreen() {
                     <td style={{ ...td, fontWeight: 700, whiteSpace: 'nowrap' }}>{a.admin.id === 'system' ? 'Tizim' : a.admin.id === 'anonymous' ? "Noma'lum" : shortName(a.admin.fullName)}</td>
                     <td style={td}><span className="ma-mono" style={{ fontWeight: 700, padding: '3px 8px', borderRadius: 8, background: bg, color: fg, whiteSpace: 'nowrap' }}>{a.actionKey}</span></td>
                     <td style={{ ...td, fontWeight: 700, whiteSpace: 'nowrap' }}>{href ? <Link href={href}>{a.entityLabel ?? '—'}</Link> : a.entityLabel ?? '—'}</td>
-                    <td style={{ ...td, padding: '12px 16px 12px 10px', color: 'var(--ink2)' }}>{a.note ?? '—'}</td>
+                    <td style={{ ...td, padding: '12px 16px 12px 10px', color: 'var(--ink2)' }}>{noteOf(a) ?? '—'}</td>
                   </tr>
                 );
               })}

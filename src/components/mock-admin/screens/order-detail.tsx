@@ -295,7 +295,7 @@ function ReasonDialog({ kind, d, onClose, onDone }: { kind: 'fail' | 'refund' | 
   const cfg = kind === 'refund'
     ? {
         title: 'Buyurtmani qaytarish',
-        body: `${rp?.willRevoke ?? 0} ta ${e} ${unit} qaytarib olinadi. ${rp?.used ?? 0} tasi allaqachon ishlatilgan va qaytarilmaydi. O'quvchiga pulni o'zingiz qaytarasiz; holat "Qaytarilgan"ga o'tadi.`,
+        body: `${rp?.willRevoke ?? 0} ta ${e} ${unit} qaytarib olinadi.${rp?.used ? ` ${rp.used} tasi allaqachon ishlatilgan va qaytarilmaydi.` : ''} O'quvchiga pulni o'zingiz qaytarasiz; holat "Qaytarilgan"ga o'tadi.`,
         ph: "Masalan: o'quvchi talabi, ikki marta to'lagan",
         cta: `${rp?.willRevoke ?? 0} kreditni qaytarib olish`,
       }
@@ -386,9 +386,13 @@ function tlText(t: TimelineItem): string {
     case 'created': return 'Buyurtma yaratildi';
     case 'transfer_claimed': return m.hasFile ? "O'quvchi o'tkazma qildim deb belgiladi, chek biriktirdi" : "O'quvchi o'tkazma qildim deb belgiladi";
     case 'marked_paid': {
-      const g = m.granted as { fullMocks?: number; sections?: number; unlimitedDays?: number; exam?: string } | undefined;
-      const e = examLabel((g?.exam as string) ?? (m.exam as string) ?? '');
-      const part = g?.unlimitedDays ? `${e} cheksiz ${g.unlimitedDays} kun` : g?.fullMocks ? `${e} +${g.fullMocks} full` : g?.sections ? `${e} +${g.sections} bo'lim` : null;
+      // contract: meta.granted; backend v0.2 sends creditsBefore/creditsAfter + exam — both handled
+      type Snap = { fullMocks?: number; sections?: number; unlimitedUntil?: string | null };
+      const b = m.creditsBefore as Snap | undefined, af = m.creditsAfter as Snap | undefined;
+      const g = (m.granted as { fullMocks?: number; sections?: number; unlimitedDays?: number; exam?: string } | undefined)
+        ?? (b && af ? { fullMocks: (af.fullMocks ?? 0) - (b.fullMocks ?? 0), sections: (af.sections ?? 0) - (b.sections ?? 0), unlimitedDays: af.unlimitedUntil && af.unlimitedUntil !== b.unlimitedUntil ? 1 : 0 } : undefined);
+      const e = examLabel(((g as { exam?: string } | undefined)?.exam as string) ?? (m.exam as string) ?? '');
+      const part = g?.unlimitedDays ? `${e} cheksiz${g.unlimitedDays > 1 ? ` ${g.unlimitedDays} kun` : ''}` : g?.fullMocks ? `${e} +${g.fullMocks} full` : g?.sections ? `${e} +${g.sections} bo'lim` : null;
       return ['Tasdiqlandi', part, m.receiptNo ? 'kvitansiya yuborildi' : null].filter(Boolean).join(' · ');
     }
     case 'marked_failed': return `Muvaffaqiyatsiz deb belgilandi${m.note ? ` · "${m.note}"` : ''}`;

@@ -92,7 +92,7 @@ export function PromoScreen() {
                   <tr key={p.id}>
                     <td style={{ ...td, padding: '12px 10px 12px 16px', fontWeight: 800, fontSize: 13 }} className="ma-mono">
                       {p.code}
-                      {!p.paddle.synced && <span style={{ display: 'block', fontFamily: 'var(--ma-font)', fontSize: 11, fontWeight: 700, color: 'var(--warn)' }}>Paddle sinxronlanmagan</span>}
+                      {!p.paddle.synced && products.data?.paddleState !== 'not_configured' && <span style={{ display: 'block', fontFamily: 'var(--ma-font)', fontSize: 11, fontWeight: 700, color: 'var(--warn)' }}>Paddle sinxronlanmagan</span>}
                     </td>
                     <td style={{ ...td, textAlign: 'right', fontWeight: 800 }}>{p.percentOff}%</td>
                     <td style={{ ...td, color: 'var(--ink2)', fontWeight: 600 }}>{scopeText(p, products.data?.items ?? [])}</td>
