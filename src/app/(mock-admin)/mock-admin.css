@@ -361,3 +361,20 @@ a.ma-btn.v-secondary:hover { color: var(--ink); }
 .ma-btn.v-text:disabled:not([aria-busy=true]) { background: transparent; color: var(--blue); opacity: 1; cursor: default; }
 .ma-linkbtn { align-self: flex-start; padding: 0; border: 0; background: transparent; color: var(--blue); font-size: 13px; font-weight: 700; }
 .ma-linkbtn:hover { color: var(--blueH); }
+.ma-regrade { height: 32px; padding: 0 12px; border: 0; border-radius: 10px; background: var(--bg); box-shadow: var(--raise-sm); color: var(--ai); font-weight: 700; font-size: 12px; white-space: nowrap; }
+.ma-regrade:disabled { color: var(--mut); box-shadow: none; background: var(--hover); cursor: not-allowed; }
+.ma-regrade[aria-busy=true] { cursor: progress; }
+.ma-seg button:disabled { opacity: .45; cursor: not-allowed; }
+.ma-site button { padding: 0 16px; font-weight: 800; }
+.ma-site button.is-open[aria-pressed=true] { color: var(--ok); }
+.ma-site button.is-soon[aria-pressed=true] { color: var(--warn); }
+.ma-site button:disabled[aria-pressed=true] { opacity: 1; cursor: default; }
+.ma-price-btn { height: 36px; min-width: 120px; padding: 0 12px; border: 0; border-radius: 10px; background: var(--bg); box-shadow: var(--inset); color: var(--ink); font-weight: 800; font-size: 13px; text-align: left; white-space: nowrap; }
+.ma-price-btn:hover:not(:disabled) { box-shadow: var(--inset), 0 0 0 2px var(--blue); }
+.ma-price-btn:disabled { cursor: not-allowed; }
+.ma-toggle-sm { width: 44px; height: 26px; }
+.ma-toggle-sm > span { width: 20px; height: 20px; }
+.ma-ticket-item { border: 0; text-align: left; display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 14px; background: transparent; color: var(--ink); min-width: 0; }
+.ma-ticket-item:hover { background: var(--hover); }
+.ma-ticket-item[aria-current=true] { background: var(--bg); box-shadow: var(--inset); }
+.ma-seg button[aria-selected=true] { background: var(--bg); box-shadow: var(--raise-sm); color: var(--blue); }

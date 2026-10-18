@@ -92,7 +92,7 @@ export function dayLabel(day: string) {
   return `${d} ${MONTHS[m - 1]}`;
 }
 
-/** "6 daq oldin", "1 soat oldin", "kecha", "3 kun oldin", then "18 okt" */
+/** "6 daq oldin", "1 soat oldin", "kecha", "3 kun oldin", "2 hafta oldin", then "18 okt" */
 export function ago(iso: string | null | undefined, now: number = Date.now()) {
   if (!iso) return '—';
   const s = Math.max(0, (now - Date.parse(iso)) / 1000);
@@ -101,6 +101,7 @@ export function ago(iso: string | null | undefined, now: number = Date.now()) {
   if (s < 86400) return `${Math.floor(s / 3600)} soat oldin`;
   if (s < 2 * 86400) return 'kecha';
   if (s < 7 * 86400) return `${Math.floor(s / 86400)} kun oldin`;
+  if (s < 35 * 86400) return `${Math.floor(s / (7 * 86400))} hafta oldin`;
   return dayMonth(iso);
 }
 

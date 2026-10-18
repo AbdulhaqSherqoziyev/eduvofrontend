@@ -1,13 +1,16 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { AdminPage } from '@/components/mock-admin/shell/admin-page';
-import { PendingScreen } from '@/components/mock-admin/shell/pending';
+import { TicketsScreen } from '@/components/mock-admin/screens/tickets';
 
 export const metadata: Metadata = { title: 'Murojaatlar' };
 
 export default function Page() {
   return (
     <AdminPage active="tickets" title="Murojaatlar">
-      <PendingScreen />
+      <Suspense>
+        <TicketsScreen />
+      </Suspense>
     </AdminPage>
   );
 }

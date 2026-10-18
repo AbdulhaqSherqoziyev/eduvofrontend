@@ -12,7 +12,7 @@ export function Dialog({ open, onClose, title, width = 440, gap = 16, busy, chil
   open: boolean;
   onClose: () => void;
   title: React.ReactNode;
-  width?: 440 | 460 | 480 | 600;
+  width?: 440 | 460 | 480 | 500 | 600;
   /** 16 (default) or 14 (Learner Profile confirm) */
   gap?: 14 | 16;
   busy?: boolean;

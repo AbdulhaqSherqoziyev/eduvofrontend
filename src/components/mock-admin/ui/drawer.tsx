@@ -28,7 +28,7 @@ export function Drawer({ open, onClose, title, eyebrow, sub, children }: {
             <b id={titleId} style={{ fontSize: 18 }}>{title}</b>
             {sub && <span style={{ fontSize: 13, color: 'var(--ink2)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sub}</span>}
           </div>
-          <IconButton label="Yopish" size={36} onClick={onClose}>✕</IconButton>
+          <IconButton label="Yopish" size={36} onClick={onClose} data-autofocus>✕</IconButton>
         </div>
         {children}
       </aside>

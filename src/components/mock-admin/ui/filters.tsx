@@ -6,8 +6,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { groupNum } from '@/lib/admin-mock/format';
 
-export function FilterPill({ label, value, children, active }: {
-  label: string; value: string; active?: boolean;
+export function FilterPill({ label, value, children, active, align = 'left', ariaLabel }: {
+  label: string; value: string; active?: boolean; align?: 'left' | 'right'; ariaLabel?: string;
   /** menu body; gets `close` */
   children: (close: () => void) => React.ReactNode;
 }) {
@@ -23,10 +23,10 @@ export function FilterPill({ label, value, children, active }: {
   }, [open]);
   return (
     <div className="ma-filter" ref={wrap}>
-      <button type="button" className={`ma-filter-btn${active ? ' is-set' : ''}`} aria-expanded={open} aria-haspopup="true" onClick={() => setOpen((o) => !o)}>
-        <span className="ma-filter-k">{label}</span>{value}<span className="ma-filter-caret" aria-hidden="true">▾</span>
+      <button type="button" className={`ma-filter-btn${active ? ' is-set' : ''}`} aria-expanded={open} aria-haspopup="true" aria-label={ariaLabel} onClick={() => setOpen((o) => !o)}>
+        {label && <span className="ma-filter-k">{label}</span>}{value}{label && <span className="ma-filter-caret" aria-hidden="true">▾</span>}
       </button>
-      {open && <div className="ma-filter-menu">{children(() => setOpen(false))}</div>}
+      {open && <div className="ma-filter-menu" style={align === 'right' ? { left: 'auto', right: 0 } : undefined}>{children(() => setOpen(false))}</div>}
     </div>
   );
 }

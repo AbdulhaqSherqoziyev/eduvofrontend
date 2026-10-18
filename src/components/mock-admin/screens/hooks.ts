@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 /** < 760px — the design's phone layout (bottom nav, cards instead of tables). */
@@ -20,16 +20,18 @@ export function useUrlState<T extends Record<string, string>>(defaults: T) {
   const sp = useSearchParams();
   const router = useRouter();
   const path = usePathname();
-  const state = Object.fromEntries(Object.entries(defaults).map(([k, v]) => [k, sp.get(k) ?? v])) as T;
-  const set = (patch: Partial<T>) => {
+  const defs = useRef(defaults).current;
+  const key = sp.toString();
+  const state = useMemo(() => Object.fromEntries(Object.entries(defs).map(([k, v]) => [k, new URLSearchParams(key).get(k) ?? v])) as T, [key, defs]);
+  const set = useCallback((patch: Partial<T>) => {
     const p = new URLSearchParams(sp.toString());
     for (const [k, v] of Object.entries(patch)) {
-      if (v === undefined || v === '' || v === defaults[k]) p.delete(k);
+      if (v === undefined || v === '' || v === defs[k]) p.delete(k);
       else p.set(k, String(v));
     }
     const s = p.toString();
     router.replace(`${path}${s ? `?${s}` : ''}`, { scroll: false });
-  };
+  }, [sp, router, path, defs]);
   return [state, set] as const;
 }
 
