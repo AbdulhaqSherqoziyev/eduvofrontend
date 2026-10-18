@@ -104,6 +104,7 @@ export const ADMIN_ROUTES: readonly string[] = [
   "^/?$",
   "^/attempts/?$",
   "^/audit/?$",
+  "^/invite/?$",
   "^/learners/?$",
   "^/learners/[^/]+/?$",
   "^/login/?$",

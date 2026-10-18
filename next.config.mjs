@@ -15,6 +15,8 @@ const nextConfig = {
     return [
       { source: '/api/mock/:path*', destination: `${MOCK_API_PROXY}/mock/:path*` },
       { source: '/api/portal/exams/:path*', destination: `${MOCK_API_PROXY}/portal/exams/:path*` },
+      // admin-mock.eduvo.uz API (prod: nginx same-origin)
+      { source: '/api/platform/mock/:path*', destination: `${MOCK_API_PROXY}/platform/mock/:path*` },
     ];
   },
 };

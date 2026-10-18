@@ -7,12 +7,14 @@
 import Link from 'next/link';
 import { ADMIN_MOBILE_NAV, ADMIN_NAV, NavIcon, navItem, type AdminNavKey } from './nav';
 import { useAdminShell } from './context';
+import type { Perm } from '@/lib/admin-mock/types';
 import { toggleAdminTheme } from './theme';
 
 const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]!.toUpperCase()).join('');
 
 export function AdminSidebar({ active }: { active: AdminNavKey }) {
-  const { side, toggleSide, badges, user, logout } = useAdminShell();
+  const { side, toggleSide, badges, me, can, logout } = useAdminShell();
+  const user = me ? { name: me.user.fullName, role: me.roleLabel, initials: me.user.initials } : null;
   const cls = side === 'auto' ? 'is-auto' : side === 'open' ? 'is-open' : 'is-closed';
   return (
     <aside className={`ma-side ${cls}`} aria-label="Asosiy menyu">
@@ -28,7 +30,8 @@ export function AdminSidebar({ active }: { active: AdminNavKey }) {
         </button>
       </div>
       <nav className="ma-side-nav">
-        {ADMIN_NAV.map((it) => {
+        {!me && ADMIN_NAV.map((it) => <span key={it.key} className="ma-nav-item" aria-hidden="true"><span className="ma-skel" style={{ width: 18, height: 18, borderRadius: 6 }} /><span className="ma-skel ma-open-only" style={{ width: 90, height: 12 }} /></span>)}
+        {me && ADMIN_NAV.filter((it) => can(it.perm)).map((it) => {
           const on = it.key === active;
           const n = badges[it.key] ?? 0;
           return (
@@ -47,7 +50,7 @@ export function AdminSidebar({ active }: { active: AdminNavKey }) {
       </nav>
       <div className="ma-side-user">
         <div className="ma-side-who">
-          <div className="ma-avatar" aria-hidden="true">{user ? initials(user.name) : ''}</div>
+          <div className="ma-avatar" aria-hidden="true">{user ? user.initials || initials(user.name) : ''}</div>
           <div className="ma-side-who-text ma-open-only">
             {user ? (
               <>
@@ -77,11 +80,22 @@ export function AdminSidebar({ active }: { active: AdminNavKey }) {
   );
 }
 
+/** The design's 4 items the admin may open; a role without them (Kontent) gets its own screens instead. */
+function mobileItems(can: ((p: Perm) => boolean) | null) {
+  if (!can) return [];
+  const out = ADMIN_MOBILE_NAV.filter(({ key }) => can(navItem(key).perm));
+  for (const it of ADMIN_NAV) {
+    if (out.length >= 4) break;
+    if (can(it.perm) && !out.some((o) => o.key === it.key)) out.push({ key: it.key, label: it.label });
+  }
+  return out;
+}
+
 export function AdminMobileNav({ active }: { active: AdminNavKey }) {
-  const { badges } = useAdminShell();
+  const { badges, me, can } = useAdminShell();
   return (
     <nav className="ma-mnav" aria-label="Asosiy menyu">
-      {ADMIN_MOBILE_NAV.map(({ key, label }) => {
+      {mobileItems(me ? can : null).map(({ key, label }) => {
         const it = navItem(key);
         const on = key === active;
         const n = badges[key] ?? 0;

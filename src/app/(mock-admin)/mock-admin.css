@@ -315,3 +315,17 @@ button { cursor: pointer; }
 .ma-search input::-webkit-search-cancel-button, .ma-search input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
 .ma-main.gap-24 { gap: 24px; }
 .ma-main.w-1100 { max-width: 1100px; }
+/* search results (N2) — same surface as the notifications menu */
+.ma-search-wrap { position: relative; width: min(380px, 100%); }
+.ma-search-wrap .ma-search { width: 100%; }
+.ma-search-menu { left: 0; right: auto; width: 100%; min-width: min(340px, calc(100vw - 32px)); max-height: min(440px, 70vh); overflow-y: auto; }
+.ma-search-group { display: flex; flex-direction: column; gap: 2px; }
+.ma-search input:disabled { cursor: default; }
+.ma-bell:disabled { cursor: default; }
+/* 2FA enrollment (login-card style) */
+.ma-enroll { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 16px; border-radius: 18px; box-shadow: var(--inset); }
+.ma-enroll-qr { width: 184px; height: 184px; border-radius: 12px; background: #fff; padding: 8px; }
+.ma-enroll-secret { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+.ma-enroll-secret code { font-family: ui-monospace, Menlo, monospace; font-size: 14px; font-weight: 700; letter-spacing: .04em; word-break: break-all; color: var(--ink); }
+a.ma-btn.v-primary, a.ma-btn.v-primary:hover { color: #fff; }
+a.ma-btn.v-secondary:hover { color: var(--ink); }

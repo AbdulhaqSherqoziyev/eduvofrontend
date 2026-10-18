@@ -1,33 +1,31 @@
 'use client';
 /**
- * Shell state shared by every admin page: env pill, signed-in admin, sidebar badges, notifications,
- * sidebar collapse (kept across navigations — the provider lives in the (panel) layout).
- * Data comes in through props; the API wiring replaces the defaults once the contract lands.
+ * Shell state of every signed-in screen: the admin (A4 /auth/me), permissions, sidebar badges (N1,
+ * every 60 s), notifications (N3), sidebar collapse (kept across navigations — the provider lives
+ * in the (panel) layout).
  */
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { adminApi } from '@/lib/admin-mock/api';
+import { clearAdminToken } from '@/lib/admin-mock/session';
+import type { AdminMe, Badges, NotificationsRes, Perm } from '@/lib/admin-mock/types';
 import type { AdminNavBadges } from './nav';
 
 export type AdminEnv = 'PROD' | 'DEV';
-export interface AdminUser { name: string; /** shown as is: Owner / Operator / Kontent */ role: string }
-export interface AdminNotification { id: string; title: string; sub: string; tone: 'warn' | 'ok' | 'blue' | 'err'; href: string }
 
-export interface AdminShellData {
-  env: AdminEnv;
-  /** null while the session is loading */
-  user: AdminUser | null;
-  badges: AdminNavBadges;
-  /** undefined while loading */
-  notifications?: AdminNotification[];
-  onLogout?: () => void | Promise<void>;
-  /** topbar search submit (Enter) */
-  onSearch?: (q: string) => void;
-}
-
-/** `null` = automatic (open ≥ 1200px, collapsed below); a click on the toggle fixes it. */
+/** `auto` = open ≥ 1200px, collapsed below; a click on the toggle fixes it. */
 type SideMode = 'auto' | 'open' | 'closed';
 
-interface Ctx extends AdminShellData {
+interface Ctx {
+  env: AdminEnv;
+  me: AdminMe | null;
+  can: (p: Perm) => boolean;
+  badges: AdminNavBadges;
+  unread: number;
+  notifications: NotificationsRes | undefined;
+  notificationsError: boolean;
+  loadNotifications: () => void;
+  markSeen: () => void;
   side: SideMode;
   toggleSide: () => void;
   logout: () => void;
@@ -41,23 +39,80 @@ export function useAdminShell() {
   return c;
 }
 
-export function AdminShellProvider({ children, ...data }: AdminShellData & { children: React.ReactNode }) {
-  const router = useRouter();
+export const ME_KEY = ['am', 'me'] as const;
+
+export function AdminShellProvider({ env, me, children }: { env: AdminEnv; me: AdminMe | null; children: React.ReactNode }) {
+  const qc = useQueryClient();
   const [side, setSide] = useState<SideMode>('auto');
+  const [wantNotes, setWantNotes] = useState(false);
+  const perms = useMemo(() => new Set(me?.permissions ?? []), [me]);
+  const can = useCallback((p: Perm) => perms.has(p), [perms]);
+  const manage = perms.has('mock.manage');
+
+  const badgesQ = useQuery<Badges>({
+    queryKey: ['am', 'badges'],
+    queryFn: adminApi.badges,
+    enabled: manage,
+    refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
+    staleTime: 30_000,
+  });
+  const notesQ = useQuery<NotificationsRes>({
+    queryKey: ['am', 'notifications'],
+    queryFn: adminApi.notifications,
+    enabled: manage && wantNotes,
+    staleTime: 15_000,
+  });
+
   const toggleSide = useCallback(() => {
     setSide((s) => {
       const openNow = s === 'auto' ? window.matchMedia('(min-width: 1200px)').matches : s === 'open';
       return openNow ? 'closed' : 'open';
     });
   }, []);
-  const { onLogout } = data;
+
+  const loadNotifications = useCallback(() => {
+    setWantNotes(true);
+    if (wantNotes) void notesQ.refetch();
+  }, [wantNotes, notesQ]);
+
+  const markSeen = useCallback(() => {
+    const top = notesQ.data?.items[0];
+    if (!top || !(notesQ.data?.unreadCount || badgesQ.data?.unreadNotifications)) return;
+    adminApi.notificationsSeen(top.at).then(
+      ({ unreadCount }) => {
+        qc.setQueryData<Badges>(['am', 'badges'], (b) => (b ? { ...b, unreadNotifications: unreadCount } : b));
+        qc.setQueryData<NotificationsRes>(['am', 'notifications'], (n) => (n ? { ...n, unreadCount } : n));
+      },
+      () => undefined, // the dot simply stays; next poll corrects it
+    );
+  }, [notesQ.data, badgesQ.data, qc]);
+
   const logout = useCallback(async () => {
     try {
-      await onLogout?.();
-    } finally {
-      router.replace('/login');
+      await adminApi.logout();
+    } catch {
+      /* the token is dropped anyway (12 h TTL, contract A5) */
     }
-  }, [onLogout, router]);
-  const value = useMemo(() => ({ ...data, side, toggleSide, logout }), [data, side, toggleSide, logout]);
+    clearAdminToken();
+    qc.clear();
+    window.location.replace('/login');
+  }, [qc]);
+
+  const b = badgesQ.data;
+  const value: Ctx = {
+    env: me?.env ?? env,
+    me,
+    can,
+    badges: b ? { orders: b.pendingManualOrders, tickets: b.openTickets } : {},
+    unread: b?.unreadNotifications ?? notesQ.data?.unreadCount ?? 0,
+    notifications: notesQ.data,
+    notificationsError: notesQ.isError,
+    loadNotifications,
+    markSeen,
+    side,
+    toggleSide,
+    logout,
+  };
   return <ShellCtx.Provider value={value}>{children}</ShellCtx.Provider>;
 }

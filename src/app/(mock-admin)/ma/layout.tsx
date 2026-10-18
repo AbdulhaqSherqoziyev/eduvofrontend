@@ -7,6 +7,7 @@ import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import { ADMIN_THEME_SCRIPT } from '@/components/mock-admin/shell/theme';
 import { ToastProvider } from '@/components/mock-admin/ui/toast';
+import { QueryProvider } from '@/providers/query-provider';
 import '../mock-admin.css';
 
 const manrope = Manrope({ subsets: ['latin', 'cyrillic'], weight: ['400', '500', '600', '700', '800'], variable: '--ma-font', display: 'swap' });
@@ -37,7 +38,9 @@ export default function AdminMockRootLayout({ children }: { children: React.Reac
         <script dangerouslySetInnerHTML={{ __html: ADMIN_THEME_SCRIPT }} />
       </head>
       <body>
-        <ToastProvider>{children}</ToastProvider>
+        <QueryProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </QueryProvider>
       </body>
     </html>
   );
