@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { AdminApiError } from '@/lib/admin-mock/http';
-import { errText } from '@/lib/admin-mock/errors';
+import { errText, loadErrText } from '@/lib/admin-mock/errors';
 import { dayMonth, groupNum } from '@/lib/admin-mock/format';
 import type { ExamSlug, ImportStage, TestFamily, TestItem } from '@/lib/admin-mock/types';
 import { useAdminShell } from '../shell/context';
@@ -91,7 +91,7 @@ export function TestsScreen() {
     }
   }
 
-  if (fams.isError && !fams.data) return <ErrorState flat title="Yuklab bo'lmadi" text={errText(fams.error)} onRetry={() => fams.refetch()} retrying={fams.isFetching} />;
+  if (fams.isError && !fams.data) return <ErrorState flat title="Yuklab bo'lmadi" text={loadErrText(fams.error)} onRetry={() => fams.refetch()} retrying={fams.isFetching} />;
 
   const live = fam?.siteStatus === 'open';
   const items = tests.data?.items ?? [];
@@ -135,7 +135,7 @@ export function TestsScreen() {
       )}
 
       {tests.isError && !tests.data ? (
-        <ErrorState flat title="Yuklab bo'lmadi" text={errText(tests.error)} onRetry={() => tests.refetch()} retrying={tests.isFetching} />
+        <ErrorState flat title="Yuklab bo'lmadi" text={loadErrText(tests.error)} onRetry={() => tests.refetch()} retrying={tests.isFetching} />
       ) : tests.data && items.length === 0 ? (
         <div style={{ padding: '56px 24px', borderRadius: 20, background: 'var(--paper)', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
           <b style={{ fontSize: 16 }}>Hali test yo&apos;q</b>
@@ -196,7 +196,7 @@ export function TestsScreen() {
           <Button variant="danger-solid" size={42} onClick={() => setSite('coming_soon')} loading={busy === 'site'}>Tez kunda qilish</Button>
         </>}>
         <span className="ma-dialog-effect">Yangi urinish boshlab bo&apos;lmaydi</span>
-        <span style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.5 }}>O&apos;quvchi saytida imtihon «Tez kunda» bo&apos;ladi, mahsulotlar sotilmaydi. Ishlayotgan urinishlar davom etadi, kreditlar saqlanadi. B2B markazlarga ta&apos;sir qilmaydi.</span>
+        <span style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.5 }}>O&apos;quvchi saytida imtihon «Tez kunda» bo&apos;ladi, mahsulotlar sotilmaydi. Ishlayotgan urinishlar davom etadi, kreditlar saqlanadi. B2B markazlarga ta&apos;sir qilmaydi. Keyin qayta ochish mumkin.</span>
       </Dialog>
       {importing && fam && <ImportDialog fam={fam} onClose={() => setImporting(false)} onImported={() => { refresh(); }} />}
     </>

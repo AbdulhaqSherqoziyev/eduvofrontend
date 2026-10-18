@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { AdminApiError } from '@/lib/admin-mock/http';
-import { errText } from '@/lib/admin-mock/errors';
+import { errText, loadErrText } from '@/lib/admin-mock/errors';
 import { examLabel, groupNum, tashkentDay } from '@/lib/admin-mock/format';
 import type { AdminExam, AdminPromo, AdminPromoInput, ProductItem } from '@/lib/admin-mock/types';
 import { Button } from '../ui/button';
@@ -72,7 +72,7 @@ export function PromoScreen() {
         <Button size={40} onClick={() => setDlg('new')}>+ Yangi promo-kod</Button>
       </div>
       {q.isError && !q.data ? (
-        <ErrorState flat title="Yuklab bo'lmadi" text={errText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} />
+        <ErrorState flat title="Yuklab bo'lmadi" text={loadErrText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} />
       ) : q.data && items.length === 0 ? (
         <EmptyState title="Hali promo-kod yo'q" text="“+ Yangi promo-kod” bilan birinchisini yarating." />
       ) : (

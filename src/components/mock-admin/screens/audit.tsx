@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { saveBlob } from '@/lib/admin-mock/http';
-import { errText } from '@/lib/admin-mock/errors';
+import { errText, loadErrText } from '@/lib/admin-mock/errors';
 import { dateTime, dayLabel, tashkentDay } from '@/lib/admin-mock/format';
 import type { AuditItem } from '@/lib/admin-mock/types';
 import { useAdminShell } from '../shell/context';
@@ -21,7 +21,7 @@ import { DateRange } from './orders';
 const PAGE_SIZE = 50;
 const DEFAULTS = { adminId: '', group: '', from: '', to: '', page: '1' };
 const GROUPS = [
-  { value: '', label: 'Hammasi' }, { value: 'payments', label: "To'lovlar" }, { value: 'credits', label: 'Kreditlar' }, { value: 'learners', label: "O'quvchilar" },
+  { value: '', label: 'Hammasi' }, { value: 'payments', label: "To'lovlar" }, { value: 'credits', label: 'Kreditlar' }, { value: 'learners', label: "O'quvchilar" }, { value: 'attempts', label: 'Urinishlar' },
   { value: 'catalog', label: 'Narx va promo' }, { value: 'content', label: 'Testlar' }, { value: 'tickets', label: 'Murojaatlar' }, { value: 'settings', label: 'Sozlamalar' },
   { value: 'auth', label: 'Kirish' }, { value: 'alerts', label: 'Ogohlantirishlar' },
 ] as const;
@@ -84,7 +84,7 @@ export function AuditScreen() {
         <Button variant="secondary" size={38} style={{ color: 'var(--blue)', fontWeight: 800, padding: '0 16px' }} onClick={exportCsv} loading={exporting} disabled={!q.data}>↓ CSV eksport</Button>
       </div>
       {q.isError && !q.data ? (
-        <ErrorState flat title="Yuklab bo'lmadi" text={errText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} />
+        <ErrorState flat title="Yuklab bo'lmadi" text={loadErrText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} />
       ) : q.data && rows.length === 0 ? (
         <EmptyState icon={false} title="Hali yozuv yo'q" text="Filtrlarga mos amal topilmadi." />
       ) : (
@@ -103,7 +103,7 @@ export function AuditScreen() {
                 return (
                   <tr key={a.id}>
                     <td style={{ ...td, padding: '12px 10px 12px 16px', color: 'var(--ink2)', fontWeight: 600, whiteSpace: 'nowrap' }}>{dateTime(a.createdAt)}</td>
-                    <td style={{ ...td, fontWeight: 700, whiteSpace: 'nowrap' }}>{a.admin.id === 'system' ? 'Tizim' : shortName(a.admin.fullName)}</td>
+                    <td style={{ ...td, fontWeight: 700, whiteSpace: 'nowrap' }}>{a.admin.id === 'system' ? 'Tizim' : a.admin.id === 'anonymous' ? "Noma'lum" : shortName(a.admin.fullName)}</td>
                     <td style={td}><span className="ma-mono" style={{ fontWeight: 700, padding: '3px 8px', borderRadius: 8, background: bg, color: fg, whiteSpace: 'nowrap' }}>{a.actionKey}</span></td>
                     <td style={{ ...td, fontWeight: 700, whiteSpace: 'nowrap' }}>{href ? <Link href={href}>{a.entityLabel ?? '—'}</Link> : a.entityLabel ?? '—'}</td>
                     <td style={{ ...td, padding: '12px 16px 12px 10px', color: 'var(--ink2)' }}>{a.note ?? '—'}</td>

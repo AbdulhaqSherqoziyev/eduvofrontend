@@ -204,7 +204,7 @@ export function AdminLoginScreen({ handlers }: { handlers: AdminLoginHandlers })
         <form className="ma-login-step" onSubmit={onCode} noValidate>
           <div className="ma-login-head">
             <h1>2 bosqichli tasdiqni ulash</h1>
-            <span>Authenticator ilovasida QR kodni skanerlang yoki kalitni qo&apos;lda kiriting, so&apos;ng ilovadagi 6 xonali kodni yozing.</span>
+            <span>Google Authenticator (yoki shunga o&apos;xshash) ilovasida QR kodni skanerlang yoki kalitni qo&apos;lda kiriting, so&apos;ng ilovadagi 6 xonali kodni yozing.</span>
           </div>
           <div className="ma-enroll">
             {enroll ? (

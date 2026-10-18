@@ -112,14 +112,15 @@ export function AttemptsScreen() {
 }
 
 const ERR: Record<string, string> = {
-  TIMEOUT: 'model javob bermadi (timeout)', QUOTA: 'provayder limiti tugadi', AUTH: 'provayder kaliti ishlamadi', PROVIDER: 'provayder xatosi',
-  NO_AUDIO: 'audio yozilmagan', REFUSAL: 'model baholashdan bosh tortdi', OTHER: "noma'lum xato",
+  TIMEOUT: 'AI javob bermadi — qayta baholang', QUOTA: "AI limiti tugadi — Owner'ga xabar bering", AUTH: "AI ulanishida xato — Owner'ga xabar bering",
+  PROVIDER: 'AI xizmatida xato — qayta baholang', NO_AUDIO: 'audio yozilmagan — kreditni qaytarish mumkin', REFUSAL: 'AI baholamadi — qayta baholang yoki kreditni qaytaring',
+  OTHER: "noma'lum xato — qayta baholang",
 };
 const taskDur = (s: number | null) => (s === null ? '' : s < 60 ? `${Math.round(s)} s` : `${Math.floor(s / 60)} daq ${Math.round(s % 60)} s`);
 
 function taskLine(t: AttemptDetailRes['aiTasks'][number]): { t: string; fg: string } {
   if (t.status === 'DONE') return { t: ['Baholandi', t.score !== null ? String(t.score) : null, taskDur(t.durationSec) || null].filter(Boolean).join(' · '), fg: 'var(--ok)' };
-  if (t.status === 'FAILED' || t.status === 'NEEDS_HUMAN') return { t: `Xato: ${ERR[t.errorCode ?? 'OTHER'] ?? ERR.OTHER} · ${t.tries} urinish`, fg: 'var(--err)' };
+  if (t.status === 'FAILED' || t.status === 'NEEDS_HUMAN') return { t: `Xato: ${ERR[t.errorCode ?? 'OTHER'] ?? ERR.OTHER} · ${t.tries} marta urindi`, fg: 'var(--err)' };
   if (t.status === 'RUNNING') return { t: 'Baholanmoqda', fg: 'var(--ai)' };
   return { t: 'Navbatda kutmoqda', fg: 'var(--warn)' };
 }
@@ -202,8 +203,9 @@ function AttemptDrawer({ id, onClose }: { id: string | null; onClose: () => void
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1, minWidth: 0 }}>
                       <b style={{ fontSize: 13 }}>{t.label}</b>
                       <span style={{ fontSize: 12, color: line.fg, fontWeight: 700 }}>{line.t}</span>
+                      {!can && <span style={{ fontSize: 11, color: 'var(--mut)', fontWeight: 600 }}>{done ? 'Baholangan — qayta baholash bir xil natija beradi' : t.status === 'RUNNING' ? 'Hozir baholanmoqda — tugashini kuting' : 'Hozircha qayta baholab bo\'lmaydi'}</span>}
                     </div>
-                    <span title={done ? 'Baholangan — qayta baholash bir xil natija beradi' : undefined}>
+                    <span title={done ? 'Baholangan — qayta baholash bir xil natija beradi' : !can ? "Hozircha qayta baholab bo'lmaydi" : undefined}>
                       <button type="button" className="ma-regrade" disabled={!can || busy === t.taskKey} aria-busy={busy === t.taskKey || undefined} onClick={() => regrade(t.taskKey, t.label)}>Qayta baholash</button>
                     </span>
                   </div>

@@ -48,9 +48,9 @@ export const adminApi = {
   learnerAttempts: (id: string, q: Query) => req<Page<AdminAttemptRow>>(`/learners/${id}/attempts`, { query: q }),
   learnerTickets: (id: string, q: Query) => req<Page<AdminTicketRow>>(`/learners/${id}/tickets`, { query: q }),
   grant: (id: string, body: { exam: AdminExam; kind: MockCreditKind; qty: number; validityMonths?: number; unlimitedDays?: number; reason: string }, idem: string) =>
-    post<{ credits: AdminExamCredits }>(`/learners/${id}/grant`, body, idem),
+    post<{ replay: boolean; lot: { id: string; expiresAt: string } | null; actionId: string; adminCredits: AdminExamCredits }>(`/learners/${id}/grant`, body, idem),
   revoke: (id: string, body: { exam: AdminExam; kind: MockCreditKind; qty: number; reason: string }, idem: string) =>
-    post<{ revoked: number; credits: AdminExamCredits }>(`/learners/${id}/revoke`, body, idem),
+    post<{ replay: boolean; revoked: number; adminCredits: AdminExamCredits }>(`/learners/${id}/revoke`, body, idem),
   lock: (id: string, reason: string) => post<{ status: 'LOCKED'; cancelledAttempts: number }>(`/learners/${id}/lock`, { reason }),
   unlock: (id: string) => post<{ status: string }>(`/learners/${id}/unlock`, {}),
   sendReset: (id: string, idem: string) => post<{ sent: true; kind: 'reset_password' | 'reset_google_only' }>(`/learners/${id}/send-password-reset`, {}, idem),

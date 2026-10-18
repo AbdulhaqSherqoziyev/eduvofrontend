@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { AdminApiError } from '@/lib/admin-mock/http';
-import { errText } from '@/lib/admin-mock/errors';
+import { errText, loadErrText } from '@/lib/admin-mock/errors';
 import {
   addDays, ago, dayLabel, deltaPct, deltaPp, examLabel, flag, groupNum, money, pct, productName, tashkentDay, ticketNo,
 } from '@/lib/admin-mock/format';
@@ -134,7 +134,7 @@ function PendingSection({ q, mob }: { q: UseQueryResult<OrdersRes>; mob: boolean
       toast({ tone: 'ok', title: "To'lov tasdiqlandi", text: `${o.reference} · ${res}.${r.receiptMailQueued ? ' Kvitansiya emaili yuborildi.' : ''}` });
       void qc.invalidateQueries({ queryKey: ['am', 'badges'] });
     } catch (e) {
-      toast({ tone: 'err', title: 'Saqlanmadi', text: errText(e) });
+      toast({ tone: 'err', title: 'Tasdiqlanmadi', text: errText(e) });
       if (e instanceof AdminApiError && e.code === 'ORDER_NOT_PENDING') void q.refetch();
     } finally {
       setBusy(null);
@@ -154,7 +154,7 @@ function PendingSection({ q, mob }: { q: UseQueryResult<OrdersRes>; mob: boolean
         <Link href="/orders" style={{ fontSize: 13, fontWeight: 700 }}>Hammasi →</Link>
       </div>
       {q.isError && !q.data ? (
-        <ErrorState flat title="Buyurtmalarni yuklab bo'lmadi" text={errText(q.error, "So'rov vaqti tugadi. Qayta urinib ko'ring.")} onRetry={() => q.refetch()} retrying={q.isFetching} />
+        <ErrorState flat title="Buyurtmalarni yuklab bo'lmadi" text={loadErrText(q.error, "So'rov vaqti tugadi. Qayta urinib ko'ring.")} onRetry={() => q.refetch()} retrying={q.isFetching} />
       ) : !q.data ? (
         <div style={{ borderRadius: 16, background: 'var(--paper)', overflow: 'hidden' }}>
           {[70, 55, 82].map((w, i) => <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--line)' }}><span className="ma-skel" style={{ width: `${w}%` }} /></div>)}
@@ -311,7 +311,7 @@ const AI_STATE: Record<DashboardRes['aiQueue']['state'], { t: string; bg: string
 
 function AiQueue({ d }: { d: DashboardRes }) {
   const a = d.aiQueue;
-  const s = AI_STATE[a.state];
+  const s = AI_STATE[a.state] ?? AI_STATE.idle;
   const box = { padding: 12, borderRadius: 14, boxShadow: 'var(--inset)', display: 'flex', flexDirection: 'column', gap: 4 } as const;
   const lab = { fontSize: 11, fontWeight: 700, color: 'var(--mut)' } as const;
   return (

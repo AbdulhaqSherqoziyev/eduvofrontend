@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { AdminApiError, newIdemKey } from '@/lib/admin-mock/http';
-import { errText } from '@/lib/admin-mock/errors';
+import { errText, loadErrText } from '@/lib/admin-mock/errors';
 import { amount, examLabel, groupNum, toMajor, toMinor } from '@/lib/admin-mock/format';
 import type { AdminExam, ProductItem } from '@/lib/admin-mock/types';
 import { Button } from '../ui/button';
@@ -69,7 +69,7 @@ export function PricesScreen() {
         </span>
       </div>
       {q.isError && !q.data ? (
-        <ErrorState flat title="Yuklab bo'lmadi" text={errText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} />
+        <ErrorState flat title="Yuklab bo'lmadi" text={loadErrText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} />
       ) : (
         <div style={{ borderRadius: 20, background: 'var(--paper)', overflowX: 'auto' }}>
           <table className="ma-table" style={{ minWidth: 1120 }}>

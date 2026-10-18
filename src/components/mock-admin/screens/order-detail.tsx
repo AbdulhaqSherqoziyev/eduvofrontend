@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { AdminApiError } from '@/lib/admin-mock/http';
-import { errText, isNotFound } from '@/lib/admin-mock/errors';
+import { errText, loadErrText, isNotFound } from '@/lib/admin-mock/errors';
 import { amount, dateTime, dotDate, examLabel, flag, money, moneyList, productName, toMajor, toMinor, groupNum } from '@/lib/admin-mock/format';
 import type { AdminExamCredits, MarkPaidRes, OrderDetailRes, TimelineItem, TransferClaim } from '@/lib/admin-mock/types';
 import { AdminPage } from '../shell/admin-page';
@@ -52,7 +52,7 @@ export function OrderDetailScreen({ id }: { id: string }) {
       {isNotFound(q.error) ? (
         <NotFoundState title="Buyurtma topilmadi" text="Bu ID bo'yicha buyurtma yo'q." backHref="/orders" backLabel="← Ro'yxatga qaytish" />
       ) : q.isError && !q.data ? (
-        <ErrorState title="Ma'lumotlarni yuklab bo'lmadi" text={errText(q.error, "Internet aloqasini tekshiring yoki qayta urinib ko'ring.")} onRetry={() => q.refetch()} retrying={q.isFetching} />
+        <ErrorState title="Ma'lumotlarni yuklab bo'lmadi" text={loadErrText(q.error, "Internet aloqasini tekshiring yoki qayta urinib ko'ring.")} onRetry={() => q.refetch()} retrying={q.isFetching} />
       ) : !q.data ? (
         <><Skeleton height={110} /><div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,380px),1fr))', gap: 20 }}><Skeleton height={420} /><Skeleton height={320} /></div></>
       ) : (
@@ -399,7 +399,7 @@ function tlText(t: TimelineItem): string {
     case 'paddle_failed': return "Paddle to'lovi muvaffaqiyatsiz";
     case 'paddle_refunded': return 'Paddle orqali qaytarildi';
     case 'amount_mismatch': return 'Summa mos emas';
-    default: return t.kind;
+    default: return 'Hodisa';
   }
 }
 

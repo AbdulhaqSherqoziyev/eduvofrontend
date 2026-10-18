@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { newIdemKey } from '@/lib/admin-mock/http';
-import { errText, isNotFound } from '@/lib/admin-mock/errors';
+import { errText, loadErrText, isNotFound } from '@/lib/admin-mock/errors';
 import { addDays, ago, attemptNo, dateTime, dayLabel, dayMonth, dotDate, examLabel, flag, money, productName, tashkentDay, ticketNo } from '@/lib/admin-mock/format';
 import type { AdminExam, AdminExamCredits, LearnerDetailRes, LotRow } from '@/lib/admin-mock/types';
 import type { MockCreditKind } from '@/lib/types/owner-mock';
@@ -45,7 +45,7 @@ export function LearnerProfileScreen({ id }: { id: string }) {
       {isNotFound(q.error) ? (
         <NotFoundState title="O'quvchi topilmadi" text={`ID ${id} bo'yicha hisob yo'q yoki butunlay o'chirilgan.`} backHref="/learners" backLabel="← Ro'yxatga qaytish" />
       ) : q.isError && !d ? (
-        <ErrorState title="Ma'lumotlarni yuklab bo'lmadi" text={errText(q.error, "Internet aloqasini tekshiring yoki qayta urinib ko'ring.")} onRetry={() => q.refetch()} retrying={q.isFetching} />
+        <ErrorState title="Ma'lumotlarni yuklab bo'lmadi" text={loadErrText(q.error, "Internet aloqasini tekshiring yoki qayta urinib ko'ring.")} onRetry={() => q.refetch()} retrying={q.isFetching} />
       ) : !d ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }} aria-busy="true">
           <div style={{ height: 120, borderRadius: 24, ...SHIMMER }} />
@@ -274,7 +274,7 @@ function Tabs({ id }: { id: string }) {
         {TABS.map((t) => <button key={t.k} type="button" role="tab" aria-selected={t.k === tab} onClick={() => setTab(t.k)}>{t.label}</button>)}
       </div>
       {q.isError && !q.data ? (
-        <ErrorState flat title="Ro'yxatni yuklab bo'lmadi" text={errText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} />
+        <ErrorState flat title="Ro'yxatni yuklab bo'lmadi" text={loadErrText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} />
       ) : (
         <div style={{ borderRadius: 16, background: 'var(--paper)', overflowX: 'auto' }}>
           <table className="ma-table" style={{ minWidth: 640 }}>
@@ -334,11 +334,11 @@ function GrantDialog({ open, d, onClose, onDone }: { open: boolean; d: LearnerDe
   const preview = kind === 'full' ? `${e} ${c.fullMocks} → ${c.fullMocks + n} full`
     : kind === 'section' ? `${e} ${c.sections} → ${c.sections + n} bo'lim`
     : `${e} cheksiz · ${n * 10} kun (${dayLabel(base)} → ${dayLabel(addDays(base, n * 10))})`;
-  const noteErr = tried && !note.trim();
+  const noteErr = tried && note.trim().length < 3;
 
   async function submit() {
     setTried(true);
-    if (!note.trim()) return;
+    if (note.trim().length < 3) return;
     setBusy(true);
     setErr(null);
     try {
@@ -384,7 +384,7 @@ function GrantDialog({ open, d, onClose, onDone }: { open: boolean; d: LearnerDe
       </div>
       <label className="ma-field"><span className="ma-label">Izoh (majburiy)</span>
         <textarea rows={2} className={`ma-textarea${noteErr ? ' is-error' : ''}`} value={note} maxLength={300} onChange={(ev) => setNote(ev.target.value)} placeholder="Masalan: #T-1041 bo'yicha kompensatsiya" />
-        {noteErr && <span className="ma-field-error s-sm" role="alert">Izoh kiritilishi shart</span>}
+        {noteErr && <span className="ma-field-error s-sm" role="alert">{note.trim() ? 'Izoh kamida 3 belgi bo\'lsin' : 'Izoh kiritilishi shart'}</span>}
       </label>
       <div style={{ padding: '14px 16px', borderRadius: 14, background: 'var(--okBg)', display: 'flex', flexDirection: 'column', gap: 2 }}>
         <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--ok)' }}>Yangi balans</span>
@@ -414,7 +414,7 @@ function RevokeDialog({ open, d, onClose, onDone }: { open: boolean; d: LearnerD
   const after = have - n;
 
   async function submit() {
-    if (note.trim().length < 1) { setErr('Sababni yozing.'); return; }
+    if (note.trim().length < 3) { setErr('Sababni yozing (kamida 3 belgi).'); return; }
     setBusy(true);
     setErr(null);
     try {
@@ -463,7 +463,7 @@ function BlockDialog({ open, d, onClose, onDone }: { open: boolean; d: LearnerDe
   useEffect(() => { if (open) { setNote(''); setErr(null); } }, [open]);
   const bal = d.adminCredits.filter((c) => c.fullMocks || c.sections).map((c) => `${examLabel(c.exam)} ${c.fullMocks} full · ${c.sections} bo'lim`).join(', ') || '0';
   async function submit() {
-    if (!note.trim()) { setErr('Sababni yozing.'); return; }
+    if (note.trim().length < 3) { setErr('Sababni yozing (kamida 3 belgi).'); return; }
     setBusy(true);
     try {
       const r = await adminApi.lock(d.learner.id, note.trim());

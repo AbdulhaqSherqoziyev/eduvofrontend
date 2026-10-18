@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { newIdemKey } from '@/lib/admin-mock/http';
-import { errText, isNotFound } from '@/lib/admin-mock/errors';
+import { errText, loadErrText, isNotFound } from '@/lib/admin-mock/errors';
 import { ago, attemptNo, dateTime, examLabel, ticketNo } from '@/lib/admin-mock/format';
 import type { AdminTicketRow, TicketDetailRes } from '@/lib/admin-mock/types';
 import { Button } from '../ui/button';
@@ -37,7 +37,7 @@ export function TicketsScreen() {
           </button>
           <button type="button" role="tab" style={{ flex: 1, justifyContent: 'center' }} aria-selected={f.status === 'CLOSED'} onClick={() => setF({ status: 'CLOSED', open: '', page: '1' })}>Yopiq</button>
         </div>
-        {list.isError && !list.data && <ErrorState flat title="Yuklab bo'lmadi" text={errText(list.error)} onRetry={() => list.refetch()} retrying={list.isFetching} />}
+        {list.isError && !list.data && <ErrorState flat title="Yuklab bo'lmadi" text={loadErrText(list.error)} onRetry={() => list.refetch()} retrying={list.isFetching} />}
         {!list.data && !list.isError && [1, 2, 3, 4].map((i) => <span key={i} className="ma-skel" style={{ height: 70, borderRadius: 14 }} />)}
         {list.data && items.length === 0 && <span style={{ padding: 12, fontSize: 13, color: 'var(--ink2)', textAlign: 'center' }}>{f.status === 'OPEN' ? "Ochiq murojaat yo'q." : "Yopiq murojaat yo'q."}</span>}
         {items.map((t) => (
@@ -98,7 +98,7 @@ function Thread({ id }: { id: string | null }) {
 
   if (!id) return <section style={{ ...card, padding: 20, gridColumn: 'span 2' }}><span style={{ fontSize: 13, color: 'var(--ink2)' }}>Murojaat tanlang.</span></section>;
   if (isNotFound(q.error)) return <section style={{ ...card, padding: 20 }}><b>Murojaat topilmadi</b></section>;
-  if (q.isError && !q.data) return <section style={{ ...card, padding: 20 }}><ErrorState flat title="Yuklab bo'lmadi" text={errText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} /></section>;
+  if (q.isError && !q.data) return <section style={{ ...card, padding: 20 }}><ErrorState flat title="Yuklab bo'lmadi" text={loadErrText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} /></section>;
   if (!q.data) return <><span className="ma-skel" style={{ height: 360, borderRadius: 24 }} /><span className="ma-skel" style={{ height: 300, borderRadius: 24 }} /></>;
   const { ticket: t, messages, context } = q.data;
   const open = t.status === 'OPEN';

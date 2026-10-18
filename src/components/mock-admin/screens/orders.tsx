@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { saveBlob } from '@/lib/admin-mock/http';
-import { errText } from '@/lib/admin-mock/errors';
+import { errText, loadErrText } from '@/lib/admin-mock/errors';
 import { dateTime, dayLabel, flag, money, productName, tashkentDay } from '@/lib/admin-mock/format';
 import type { OrderTab } from '@/lib/admin-mock/types';
 import { Button } from '../ui/button';
@@ -107,7 +107,7 @@ export function OrdersScreen() {
       )}
 
       {q.isError && !q.data ? (
-        <ErrorState flat title="Buyurtmalarni yuklab bo'lmadi" text={errText(q.error, "So'rov vaqti tugadi. Qayta urinib ko'ring.")} onRetry={() => q.refetch()} retrying={q.isFetching} />
+        <ErrorState flat title="Buyurtmalarni yuklab bo'lmadi" text={loadErrText(q.error, "So'rov vaqti tugadi. Qayta urinib ko'ring.")} onRetry={() => q.refetch()} retrying={q.isFetching} />
       ) : q.data && rows.length === 0 ? (
         <EmptyState title="Hali buyurtma yo'q" text="Filtrlarga mos buyurtma topilmadi." />
       ) : mob ? (

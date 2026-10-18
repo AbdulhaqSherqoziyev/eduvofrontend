@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
-import { errText } from '@/lib/admin-mock/errors';
+import { errText, loadErrText } from '@/lib/admin-mock/errors';
 import { dayLabel, groupNum } from '@/lib/admin-mock/format';
 import type { InsightsRes } from '@/lib/admin-mock/types';
 import { niceMax } from '../ui/chart';
@@ -19,7 +19,7 @@ const pct0 = (x: number) => `${Math.round(x * 100)}%`;
 export function StatsScreen() {
   const [scoreExam, setScoreExam] = useState<'ielts' | 'sat'>('ielts');
   const q = useQuery({ queryKey: ['am', 'insights', scoreExam], queryFn: () => adminApi.insights(scoreExam), placeholderData: (p) => p });
-  if (q.isError && !q.data) return <ErrorState title="Ma'lumotlarni yuklab bo'lmadi" text={errText(q.error, "Internet aloqasini tekshiring yoki qayta urinib ko'ring.")} onRetry={() => q.refetch()} retrying={q.isFetching} />;
+  if (q.isError && !q.data) return <ErrorState title="Ma'lumotlarni yuklab bo'lmadi" text={loadErrText(q.error, "Internet aloqasini tekshiring yoki qayta urinib ko'ring.")} onRetry={() => q.refetch()} retrying={q.isFetching} />;
   const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,460px),1fr))', gap: 20 } as const;
   if (!q.data) return <div style={grid} aria-busy="true">{[260, 260, 240, 260].map((h, i) => <span key={i} className="ma-skel on-bg" style={{ height: h, borderRadius: 24 }} />)}<span className="ma-skel on-bg" style={{ height: 240, borderRadius: 24, gridColumn: '1/-1' }} /></div>;
   const d = q.data;

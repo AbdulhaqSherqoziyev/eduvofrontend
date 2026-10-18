@@ -150,7 +150,7 @@ function Search({ disabled }: { disabled: boolean }) {
 const DOT: Record<string, string> = { warn: 'var(--warn)', ok: 'var(--ok)', blue: 'var(--blue)', err: 'var(--err)' };
 
 const KIND_TITLE: Record<string, string> = {
-  transfer_claimed: "Yangi o'tkazma da'vosi",
+  transfer_claimed: "O'quvchi to'ladim dedi — tekshiring",
   manual_order_pending: "Yangi o'tkazma buyurtmasi",
   order_paid: "To'langan buyurtma",
   support_ticket: 'Yangi murojaat',
@@ -158,7 +158,7 @@ const KIND_TITLE: Record<string, string> = {
   provider_price_mismatch: 'Paddle narxi mos emas',
   refund_credits_used: 'Qaytarish: kreditlar ishlatilgan',
   refund_partial: 'Qisman qaytarish',
-  refund_unexpected_status: 'Qaytarish: kutilmagan holat',
+  refund_unexpected_status: 'Qaytarish: tekshirish kerak',
   paid_unknown_order: "Noma'lum buyurtmaga to'lov",
   order_refunded: 'Buyurtma qaytarildi',
   paddle_sync_failed: 'Paddle sinxroni xatosi',
@@ -166,7 +166,7 @@ const KIND_TITLE: Record<string, string> = {
 
 function noteView(n: NotificationItem): { title: string; sub: string; href: string } {
   const when = ago(n.at);
-  const base = KIND_TITLE[n.kind] ?? n.kind;
+  const base = KIND_TITLE[n.kind] ?? 'Yangi hodisa';
   const href = n.href.type === 'order' ? `/orders/${n.href.id}` : n.href.type === 'ticket' ? `/tickets?open=${n.href.id}` : '/audit';
   if (n.ticket) return { title: `${base} ${ticketNo(n.ticket.no)}`, sub: `"${n.ticket.subject}" · ${when}`, href };
   if (n.order) {

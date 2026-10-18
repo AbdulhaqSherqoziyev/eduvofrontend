@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { AdminApiError, newIdemKey } from '@/lib/admin-mock/http';
-import { errText } from '@/lib/admin-mock/errors';
+import { errText, loadErrText } from '@/lib/admin-mock/errors';
 import { ago, dayMonth } from '@/lib/admin-mock/format';
 import type { AdminMember, MockRole, SettingsRes } from '@/lib/admin-mock/types';
 import { useAdminShell } from '../shell/context';
@@ -36,7 +36,7 @@ export function SettingsScreen() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       <Admins />
       {s.isError && !s.data ? (
-        <ErrorState flat title="Sozlamalarni yuklab bo'lmadi" text={errText(s.error)} onRetry={() => s.refetch()} retrying={s.isFetching} />
+        <ErrorState flat title="Sozlamalarni yuklab bo'lmadi" text={loadErrText(s.error)} onRetry={() => s.refetch()} retrying={s.isFetching} />
       ) : !s.data ? (
         <><span className="ma-skel on-bg" style={{ height: 300, borderRadius: 24 }} /><span className="ma-skel on-bg" style={{ height: 160, borderRadius: 24 }} /></>
       ) : (
@@ -98,7 +98,7 @@ function Admins() {
       </form>
       {err && <span className="ma-field-error" role="alert" style={{ marginTop: -6 }}>{err}</span>}
       {q.isError && !q.data ? (
-        <ErrorState flat title="Yuklab bo'lmadi" text={errText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} />
+        <ErrorState flat title="Yuklab bo'lmadi" text={loadErrText(q.error)} onRetry={() => q.refetch()} retrying={q.isFetching} />
       ) : (
         <div style={{ borderRadius: 16, background: 'var(--paper)', overflowX: 'auto' }}>
           <table className="ma-table" style={{ minWidth: 680 }}>
@@ -166,7 +166,7 @@ function AdminActionDialog({ p, onClose }: { p: Pending | null; onClose: () => v
   if (!p) return null;
   const who = p.a.fullName ?? p.a.email;
   const cfg = {
-    role: { title: 'Rolni o\'zgartirish', effect: p.kind === 'role' ? `${who} — ${ROLE[p.role].t}` : '', body: "Joriy sessiyalari darhol yopiladi — qayta kirishi kerak bo'ladi.", cta: "O'zgartirish", danger: false },
+    role: { title: 'Rolni o\'zgartirish', effect: p.kind === 'role' ? `${who} — ${ROLE[p.role].t}` : '', body: p.kind === 'role' && p.role === 'owner' ? "Owner hamma narsaga — narxlar, to'lov rekvizitlari, adminlarga — ruxsat oladi. Joriy sessiyalari darhol yopiladi." : "Joriy sessiyalari darhol yopiladi — qayta kirishi kerak bo'ladi.", cta: "O'zgartirish", danger: false },
     disable: { title: 'Adminni o\'chirish', effect: `${who} kira olmaydi`, body: 'Barcha sessiyalari darhol yopiladi. Keyin qayta faollashtirish mumkin.', cta: "O'chirish", danger: true },
     enable: { title: 'Faollashtirish', effect: `${who} yana kira oladi`, body: 'Kirishda parol va 2FA so\'raladi.', cta: 'Faollashtirish', danger: false },
     reset2fa: { title: '2FA\'ni qayta o\'rnatish', effect: `${who} 2FA'ni qaytadan ulaydi`, body: "Eski authenticator kodi ishlamay qoladi, sessiyalari yopiladi. Keyingi kirishda QR kod ko'rsatiladi.", cta: 'Qayta o\'rnatish', danger: true },
@@ -235,14 +235,20 @@ function Payments({ s }: { s: SettingsRes }) {
     const e: Record<string, string> = {};
     if (digits && (digits.length < 16 || digits.length > 19 || !luhn(digits))) e.card = "Karta raqami noto'g'ri.";
     if (holder.trim().length > 80) e.holder = '80 belgidan oshmasin.';
-    if (tg.trim() && !/^@[A-Za-z0-9_]{4,31}$/.test(tg.trim())) e.tg = 'Telegram: @ bilan, 5–32 belgi.';
+    if (tg.trim() && !/^@?[A-Za-z0-9_]{5,32}$/.test(tg.trim())) e.tg = 'Telegram: 5–32 belgi (lotin harf, raqam, _).';
     setErrs(e);
     if (Object.keys(e).length) return;
     setBusy(true);
     try {
-      const r = await adminApi.saveSettings({ manualTransfer: { cardNumber: digits || null, cardHolder: holder.trim() || null, telegram: tg.trim() || null } });
+      // only changed keys: "" removes a channel, untouched keys keep their source (DB or env) — contract §20.7
+      const mt: Record<string, string> = {};
+      if (digits !== (m.cardNumber ?? '').replace(/\D/g, '')) mt.cardNumber = digits;
+      if (holder.trim() !== (m.cardHolder ?? '')) mt.cardHolder = holder.trim();
+      if (tg.trim() !== (m.telegram ?? '')) mt.telegram = tg.trim();
+      const r = await adminApi.saveSettings({ manualTransfer: mt });
       qc.setQueryData(['am', 'settings'], r);
-      toast({ tone: r.manualTransfer.configured ? 'ok' : 'warn', title: 'Rekvizitlar saqlandi', text: r.manualTransfer.configured ? undefined : "Karta va Telegram bo'sh — mahalliy o'tkazma o'quvchilarga ko'rinmaydi." });
+      const last4 = (r.manualTransfer.cardNumber ?? '').replace(/\D/g, '').slice(-4);
+      toast({ tone: r.manualTransfer.configured ? 'ok' : 'warn', title: last4 ? `Rekvizitlar saqlandi · ${(r.manualTransfer.cardNumber ?? '').replace(/\D/g, '').slice(0, 4)} •••• ${last4}` : 'Rekvizitlar saqlandi', text: r.manualTransfer.configured ? undefined : "Karta va Telegram bo'sh — mahalliy o'tkazma o'quvchilarga ko'rinmaydi." });
     } catch (e2) {
       const fields = e2 instanceof AdminApiError ? (e2.data.fields as Array<{ field: string }> | undefined) : undefined;
       if (fields?.length) setErrs(Object.fromEntries(fields.map((f) => [f.field.includes('card') ? 'card' : f.field.includes('telegram') ? 'tg' : 'holder', "Qiymat noto'g'ri."])));
