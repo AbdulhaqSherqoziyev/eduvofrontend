@@ -11,7 +11,8 @@ export default function OwnerLayout({ children }: { children: React.ReactNode })
         <div className="flex h-screen flex-col gap-3 overflow-hidden p-3 md:flex-row md:gap-[22px] md:p-[22px]">
           <OwnerMobileBar />
           <OwnerSidebar />
-          <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden pr-1 md:pr-1.5">{children}</main>
+          {/* Mobile (<md): hide the 10px global scrollbar — it read as a vertical line on card edges. Scroll still works. */}
+          <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden max-md:[scrollbar-width:none] md:pr-1.5 max-md:[&::-webkit-scrollbar]:hidden">{children}</main>
         </div>
       </MobileNavProvider>
     </OwnerGuard>
