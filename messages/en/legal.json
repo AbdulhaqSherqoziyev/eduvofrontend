@@ -172,7 +172,8 @@
             "Profile: your country, interface language, target exam, target score and exam date, if you give them.",
             "Tests: your answers, essays, flags and timing, and the results we calculate from them.",
             "Orders: what you bought, the price, currency, country and the order status. We do not receive or store your card number.",
-            "Technical: your IP address, browser and device type, and logs we need to keep the service secure and working."
+            "Technical: your IP address, browser and device type, and logs we need to keep the service secure and working.",
+            "Visit statistics, without cookies: the pages you view, where you came from (a link or UTM tag), your device and browser type, and the country and city worked out from your IP address. We do not store your IP address; visits are counted with an anonymous identifier that changes every day. Raw records are kept for 90 days, after that only totals. We do not use them for advertising and do not sell them."
           ]
         ]
       },
@@ -377,7 +378,7 @@
         "id": "none",
         "h": "3. What we do not use",
         "body": [
-          "We do not use analytics, advertising or tracking cookies, and we do not let advertisers place cookies on our site."
+          "We do not use analytics, advertising or tracking cookies, and we do not let advertisers place cookies on our site. We do count visits, but without cookies: see the [Privacy policy](/privacy)."
         ]
       },
       {

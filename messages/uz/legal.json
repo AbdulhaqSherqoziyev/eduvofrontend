@@ -172,7 +172,8 @@
             "Profil: mamlakatingiz, interfeys tili, maqsadli imtihon, maqsadli ball va imtihon sanasi (agar kiritsangiz).",
             "Testlar: javoblaringiz, insholaringiz, belgilar va vaqt, hamda ulardan hisoblangan natijalar.",
             "Buyurtmalar: nima sotib olganingiz, narx, valyuta, mamlakat va buyurtma holati. Karta raqamingizni olmaymiz va saqlamaymiz.",
-            "Texnik: IP manzilingiz, brauzer va qurilma turi, xizmat xavfsiz va to‘g‘ri ishlashi uchun kerakli loglar."
+            "Texnik: IP manzilingiz, brauzer va qurilma turi, xizmat xavfsiz va to‘g‘ri ishlashi uchun kerakli loglar.",
+            "Tashrif statistikasi, cookie’siz: ko‘rilgan sahifalar, qayerdan kelganingiz (havola yoki UTM belgisi), qurilma va brauzer turi, IP manzildan aniqlangan mamlakat va shahar. IP manzilingizni saqlamaymiz; tashriflar har kuni almashadigan anonim identifikator bilan sanaladi. Xom yozuvlar 90 kun saqlanadi, keyin faqat umumiy sonlar qoladi. Ular reklama uchun ishlatilmaydi va sotilmaydi."
           ]
         ]
       },
@@ -377,7 +378,7 @@
         "id": "none",
         "h": "3. Nimalardan foydalanmaymiz",
         "body": [
-          "Analitika, reklama yoki kuzatuv cookie’laridan foydalanmaymiz va reklama beruvchilarga saytimizda cookie o‘rnatishga ruxsat bermaymiz."
+          "Analitika, reklama yoki kuzatuv cookie’laridan foydalanmaymiz va reklama beruvchilarga saytimizda cookie o‘rnatishga ruxsat bermaymiz. Tashriflarni sanaymiz, lekin cookie’siz: batafsil — [Maxfiylik siyosati](/privacy)."
         ]
       },
       {
