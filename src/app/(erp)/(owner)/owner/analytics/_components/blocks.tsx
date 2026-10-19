@@ -30,7 +30,7 @@ export const Pill = ({ children }: { children: React.ReactNode }) => (
 /** Ghost sm link button ("Hammasini ko'rish", "Batafsil"). */
 export function GhostLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <NmButton asChild variant="ghost" size="sm" className="h-auto px-0 py-1">
+    <NmButton asChild variant="ghost" size="sm" className="h-auto flex-shrink-0 whitespace-nowrap px-0 py-1">
       <Link href={href} scroll={false}>{children}</Link>
     </NmButton>
   );

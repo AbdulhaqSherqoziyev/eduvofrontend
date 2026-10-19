@@ -24,8 +24,8 @@ export function errKind(e: unknown): ErrKind {
 
 export function ForbiddenState({ compact }: { compact?: boolean }) {
   return (
-    <div className={compact ? '[&>div]:py-8' : ''}>
-      <EmptyState icon={<ShieldOff className="size-6" />} title="Ruxsat yo'q" hint="mock.eduvo.uz ma'lumotlari uchun mock.manage huquqi kerak." />
+    <div className={compact ? '[&>div]:py-8' : ''} title="mock.manage">
+      <EmptyState icon={<ShieldOff className="size-6" />} title="Ruxsat yo'q" hint="Bu bo'limni ko'rishga ruxsatingiz yo'q. Egasidan «Mock» ruxsatini so'rang." />
     </div>
   );
 }

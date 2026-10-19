@@ -4,7 +4,7 @@ import { RowsSkeleton } from '@/components/shared/skeleton';
 import { Section } from '@/components/owner/section';
 import type { ModuleRow } from '@/lib/api/owner-analytics.types';
 import { useAnalyticsModules } from '@/lib/hooks/use-owner-analytics';
-import { fmtInt } from './format';
+import { fmtAvg, fmtInt } from './format';
 import { ErrorsPill } from './pages-tab';
 import { BlockError, NoRows, NotTrackingState, fading } from './states';
 import { TopTable } from './top-table';
@@ -29,7 +29,7 @@ export function ModulesTab() {
               { key: 'n', label: 'Modul', render: (r) => <span className="font-semibold">{r.label}</span> },
               { key: 'o', label: 'Ochishlar', num: true, render: (r) => fmtInt(r.opens) },
               { key: 'c', label: 'Markazlar', num: true, render: (r) => fmtInt(r.centers) },
-              { key: 'u', label: 'Kunlik foydalanuvchilar', num: true, render: (r) => r.avgDailyUsers.toFixed(1).replace('.', ',') },
+              { key: 'u', label: 'Kunlik foydalanuvchilar', num: true, render: (r) => fmtAvg(r.avgDailyUsers) },
               { key: 'e', label: 'Xatolar', num: true, render: (r) => <ErrorsPill n={r.errors} /> },
             ]} />
         ) : <NoRows period={d.period} />}

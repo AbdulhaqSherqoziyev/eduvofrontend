@@ -34,7 +34,7 @@ export function AnalyticsShell({ children }: { children: React.ReactNode }) {
         <p className="text-[14px] text-muted">Saytlarga kim, qayerdan va nima uchun keladi</p>
       </div>
       {!allowed ? (
-        <EmptyState icon={<ShieldOff className="size-6" />} title="Ruxsat yo'q" hint="Bu bo'lim uchun analytics.read huquqi kerak." />
+        <div title="analytics.read"><EmptyState icon={<ShieldOff className="size-6" />} title="Ruxsat yo'q" hint="Bu bo'limni ko'rishga ruxsatingiz yo'q. Egasidan «Analitika» ruxsatini so'rang." /></div>
       ) : (
         <>
           <div className="flex flex-col gap-3 xl:flex-row xl:flex-wrap xl:items-end xl:gap-4">

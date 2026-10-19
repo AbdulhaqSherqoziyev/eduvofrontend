@@ -1,6 +1,6 @@
 import { ArrowDownRight, ArrowUpRight, Minus, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
-import { MINUS, fmtInt } from './format';
+import { MINUS, fmtAvg } from './format';
 
 export type DeltaTone = 'up-good' | 'up-bad' | 'neutral';
 
@@ -27,7 +27,7 @@ export function DeltaText({ cur, prev, tone, today }: { cur: number | null; prev
   let text: string | null = null;
   const diff = cur - prev;
   if (prev === 0 || diff === 0) text = null;
-  else if (prev < 20) text = `${diff > 0 ? '+' : MINUS}${fmtInt(Math.abs(diff))}`;
+  else if (prev < 20) text = `${diff > 0 ? '+' : MINUS}${fmtAvg(Math.abs(diff))}`;
   else {
     const pct = (diff / prev) * 100;
     text = Math.abs(pct) < 1 ? null : `${pct > 0 ? '+' : MINUS}${Math.round(Math.abs(pct))}%`;

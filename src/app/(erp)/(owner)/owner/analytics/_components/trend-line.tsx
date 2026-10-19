@@ -150,7 +150,7 @@ export function Sparkline({ values, labels, caption }: { values: V[]; labels: st
   const gid = useId().replace(/:/g, '');
   const H = 64, P = 4;
   const nums = values.filter((v): v is number => v !== null);
-  const lo = nums.length ? Math.min(...nums) : 0;
+  const lo = 0; // baseline is zero (Sevara): a min–max scale exaggerated small dips
   const hi = nums.length ? Math.max(...nums) : 0;
   const n = values.length;
   const x = (i: number) => P + (n <= 1 ? (width - 2 * P) / 2 : (i * (width - 2 * P)) / (n - 1));

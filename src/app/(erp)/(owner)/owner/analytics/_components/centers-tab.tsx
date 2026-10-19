@@ -8,7 +8,7 @@ import { Section } from '@/components/owner/section';
 import { NmSegmented } from '@/components/ui/nm-segmented';
 import type { CenterRow, CentersFilter, CentersSort } from '@/lib/api/owner-analytics.types';
 import { useAnalyticsCenters } from '@/lib/hooks/use-owner-analytics';
-import { fmtDayAgo, fmtInt } from './format';
+import { fmtAvg, fmtDayAgo, fmtInt } from './format';
 import { ErrorsPill } from './pages-tab';
 import { MoreButton } from './sources-tab';
 import { BlockError, NoRows, NotTrackingState, fading } from './states';
@@ -59,7 +59,7 @@ export function CentersTab() {
             cols={[
               { key: 'n', label: 'Markaz', sortKey: 'name', render: (r) => <span className="font-semibold" title={r.name}>{r.name}</span> },
               { key: 'd', label: 'Faol kunlar', num: true, sortKey: 'activeDays', render: (r) => `${r.activeDays} / ${r.days}` },
-              { key: 'u', label: 'Kunlik foydalanuvchilar', num: true, sortKey: 'avgDailyUsers', render: (r) => r.avgDailyUsers.toFixed(1).replace('.', ',') },
+              { key: 'u', label: 'Kunlik foydalanuvchilar', num: true, sortKey: 'avgDailyUsers', render: (r) => fmtAvg(r.avgDailyUsers) },
               { key: 'p', label: 'Sahifa ochishlar', num: true, sortKey: 'pageviews', render: (r) => fmtInt(r.pageviews) },
               { key: 'e', label: 'Xatolar', num: true, sortKey: 'errors', render: (r) => <ErrorsPill n={r.errors} /> },
               { key: 'l', label: 'Oxirgi faollik', num: true, sortKey: 'lastActiveDay', render: (r) => (r.lastActiveDay ? fmtDayAgo(r.lastActiveDay, first.period.today) : '—') },

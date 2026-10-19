@@ -41,7 +41,7 @@ export function TopTable<T>({ cols, rows, rowKey, share, minW, sort }: TopTableP
                 <th key={c.key} scope="col" title={c.title}
                   aria-sort={c.sortKey && sort ? (active ? (sort.order === 'asc' ? 'ascending' : 'descending') : 'none') : undefined}
                   className={cn('px-3 pb-2.5 pt-1 font-bold', c.num ? 'text-right' : 'text-left',
-                    i === 0 ? cn('sticky left-0 z-[1] bg-background', minW ? '' : 'w-[55%]') : '')}>
+                    i === 0 ? cn('sticky left-0 z-[1] bg-background', minW ? '' : 'w-[44%] sm:w-[55%]') : '')}>
                   {c.sortKey && sort ? (
                     <button type="button" onClick={() => sort.onSort(c.sortKey!)}
                       className={cn('inline-flex items-center gap-1 uppercase tracking-[0.8px] hover:text-primary', active ? 'text-primary' : '')}>

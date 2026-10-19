@@ -9,7 +9,7 @@ import type {
 } from '@/lib/api/owner-analytics.types';
 import { useAnalyticsOverview, useAnalyticsTrend } from '@/lib/hooks/use-owner-analytics';
 import { GhostLink, KpiFooter, Pill, SourceName } from './blocks';
-import { addDays, fmtDM, fmtDayUz, fmtHour, fmtInt, fmtMetric, fmtPct, fmtWeekdayDay, nullTitle } from './format';
+import { addDays, fmtAvgMetric, fmtDM, fmtDayUz, fmtHour, fmtInt, fmtMetric, fmtPct, fmtWeekdayDay, nullTitle } from './format';
 import { FunnelCompact } from './funnel-steps';
 import { pageName, TAB_HREF } from './labels';
 import { SiteSummaryGrid } from './site-summary';
@@ -188,9 +188,11 @@ function OverviewErpView() {
       {ts === 'before' ? <BeforeTrackingNote since={d.trackingSince} /> : null}
       <div className={KPI_GRID}>
         <StatCard compact label="Faol markazlar" icon={<Building2 className="size-5" />} {...val(k.erpActiveCenters)}
+          // contract v0.3 §12: a multi-day period ending today counts centers over finished days only
+          sublabel={d.period.partialToday && d.period.days > 1 ? 'kechagacha' : undefined}
           footer={<KpiFooter m={k.erpActiveCenters} tone="up-good" today={today} partialSince={partial}
             extra={d.erpTotalCenters !== null ? `jami ${fmtInt(d.erpTotalCenters)} ta markazdan` : undefined} />} />
-        <StatCard compact label="Faol foydalanuvchilar" icon={<Users className="size-5" />} {...val(k.erpActiveUsersAvg)}
+        <StatCard compact label="Faol foydalanuvchilar" icon={<Users className="size-5" />} {...val(k.erpActiveUsersAvg)} value={fmtAvgMetric(k.erpActiveUsersAvg.cur)}
           hint="Kunlik o'rtacha. Har kuni alohida sanaladi."
           footer={<KpiFooter m={k.erpActiveUsersAvg} tone="up-good" today={today} partialSince={partial} />} />
         <StatCard compact label="Sahifa ochishlar" icon={<MousePointerClick className="size-5" />} {...val(k.erpPageviews)}

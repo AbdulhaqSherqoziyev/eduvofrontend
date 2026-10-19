@@ -8,12 +8,12 @@ import { ErrorCard } from '@/components/shared/error-card';
 import { Skeleton } from '@/components/shared/skeleton';
 import { NmButton } from '@/components/ui/nm-button';
 import { NmCard } from '@/components/ui/nm-card';
-import type { AnalyticsSite, Metric, OverviewAll, SiteColumn, SparkPoint } from '@/lib/api/owner-analytics.types';
+import type { AnalyticsSite, Metric, OverviewAll, PeriodInfo, SiteColumn, SparkPoint } from '@/lib/api/owner-analytics.types';
 import { useAnalyticsOverview } from '@/lib/hooks/use-owner-analytics';
 import { DeltaText } from './delta-text';
-import { addDays, fmtAgo, fmtDM, fmtMetric } from './format';
+import { addDays, fmtAgo, fmtAvgMetric, fmtDM, fmtMetric } from './format';
 import { SITE_LABEL, SITES } from './labels';
-import { BlockError, ForbiddenState, NotTrackingState, fading } from './states';
+import { BlockError, ForbiddenState, NotTrackingState, fading, sinceText, trackingState } from './states';
 import { Sparkline } from './trend-line';
 import { useAnalyticsFilters } from './use-analytics-filters';
 
@@ -37,7 +37,7 @@ export function SiteSummaryGrid() {
   return (
     <div className={`grid gap-4 lg:grid-cols-3 ${fading(q.isFetching, q.isPlaceholderData)}`}>
       {SITES.map((s) => (
-        <SiteSummaryCard key={s} site={s} col={d.columns[s]} today={today}
+        <SiteSummaryCard key={s} site={s} col={d.columns[s]} today={today} period={d.period}
           spark={sparkOf(w?.columns[s])} sparkLoading={today && week.isLoading}
           onRetry={() => q.refetch()} />
       ))}
@@ -49,17 +49,17 @@ function sparkOf(c: SiteColumn | undefined): SparkPoint[] | null {
   return c && c.state === 'ok' ? c.spark : null;
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({ label, value, note }: { label: string; value: string; note?: string }) {
   return (
     <div className="flex items-baseline justify-between gap-3 text-[13px]">
-      <span className="font-medium text-muted">{label}</span>
+      <span className="font-medium text-muted">{label}{note ? <span className="ml-1.5 text-[11px]">{note}</span> : null}</span>
       <span className="font-bold tabular-nums text-foreground">{value}</span>
     </div>
   );
 }
 
-function SiteSummaryCard({ site, col, today, spark, sparkLoading, onRetry }: {
-  site: AnalyticsSite; col: SiteColumn; today: boolean; spark: SparkPoint[] | null; sparkLoading: boolean; onRetry: () => void;
+function SiteSummaryCard({ site, col, today, period, spark, sparkLoading, onRetry }: {
+  site: AnalyticsSite; col: SiteColumn; today: boolean; period: PeriodInfo; spark: SparkPoint[] | null; sparkLoading: boolean; onRetry: () => void;
 }) {
   const { setSite } = useAnalyticsFilters();
   const head = <h2 className="text-[15px] font-extrabold text-foreground">{SITE_LABEL[site]}</h2>;
@@ -69,6 +69,8 @@ function SiteSummaryCard({ site, col, today, spark, sparkLoading, onRetry }: {
   if (col.state === 'not_tracking') return <div className="flex flex-col gap-3">{head}<NotTrackingState site={site} compact /></div>;
 
   let bigLabel: string, big: Metric, rows: Array<[string, string]>, caption: string;
+  // contract v0.3 §12: ERP centers over finished days only when a multi-day period ends today
+  const centersNote = period.partialToday && period.days > 1 ? 'kechagacha' : undefined;
   if (col.site === 'erp') {
     bigLabel = 'Faol foydalanuvchilar'; big = col.erpActiveUsersAvg; caption = "Faol foydalanuvchilar, kunlar bo'yicha";
     rows = [['Faol markazlar', dash(col.erpActiveCenters)], ['Sahifa ochishlar', dash(col.erpPageviews)], ['Xatolar', dash(col.erpErrors)]];
@@ -93,12 +95,15 @@ function SiteSummaryCard({ site, col, today, spark, sparkLoading, onRetry }: {
       <div className="flex flex-col gap-1.5">
         <span className="text-[11px] font-bold uppercase tracking-[0.7px] text-muted">{bigLabel}</span>
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span className="text-[34px] font-extrabold leading-none tracking-[-1px] tabular-nums text-foreground">{fmtMetric(big.cur)}</span>
-          <DeltaText cur={big.cur} prev={big.prev} tone="up-good" today={today} />
+          <span className="text-[34px] font-extrabold leading-none tracking-[-1px] tabular-nums text-foreground">{site === 'erp' ? fmtAvgMetric(big.cur) : fmtMetric(big.cur)}</span>
+          {/* tracking started inside the period: same line as the single-site cards (spec §3.3) */}
+          {trackingState(col.trackingSince, period) === 'partial'
+            ? <span className="text-[12px] font-medium text-muted">{sinceText(col.trackingSince)}</span>
+            : <DeltaText cur={big.cur} prev={big.prev} tone="up-good" today={today} />}
         </div>
         {site === 'erp' ? <span className="text-[12px] font-medium text-muted">kunlik o&apos;rtacha</span> : null}
       </div>
-      <div className="flex flex-col gap-2">{rows.map(([l, v]) => <Row key={l} label={l} value={v} />)}</div>
+      <div className="flex flex-col gap-2">{rows.map(([l, v]) => <Row key={l} label={l} value={v} note={site === 'erp' && l === 'Faol markazlar' ? centersNote : undefined} />)}</div>
       <div className="flex flex-col gap-1">
         {sparkLoading ? <Skeleton className="h-[64px] w-full" /> : spark && spark.length ? (
           <Sparkline values={spark.map((p) => p.v)} labels={spark.map((p) => fmtDM(p.d))} caption={caption} />

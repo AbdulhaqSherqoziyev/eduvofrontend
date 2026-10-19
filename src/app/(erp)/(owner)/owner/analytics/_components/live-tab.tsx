@@ -27,7 +27,7 @@ function Updated({ at, failed }: { at: string; failed: boolean }) {
   return <span>Yangilandi: {fmtHMS(at)}</span>;
 }
 
-function BigCounter({ title, value, sub, at, failed }: { title: string; value: number; sub: string; at: string; failed: boolean }) {
+function BigCounter({ title, value, sub, at, failed, emptyText }: { title: string; value: number; sub: string; at: string; failed: boolean; emptyText: string }) {
   return (
     <NmCard className="flex flex-col gap-2 p-5">
       <span className="text-[11px] font-bold uppercase tracking-[0.7px] text-muted">{title}</span>
@@ -35,15 +35,16 @@ function BigCounter({ title, value, sub, at, failed }: { title: string; value: n
       <span className="flex flex-wrap items-center gap-x-1.5 text-[12.5px] font-medium text-muted">
         <span>{sub}</span><span aria-hidden>·</span><Updated at={at} failed={failed} />
       </span>
-      {value === 0 ? <span className="text-[13px] font-medium text-muted">Hozir saytda hech kim yo&apos;q</span> : null}
+      {value === 0 ? <span className="text-[13px] font-medium text-muted">{emptyText}</span> : null}
     </NmCard>
   );
 }
 
 const rowsOf = (rows: LiveRow[], name: (r: LiveRow) => string) => rows.map((r) => ({ key: r.key, name: name(r), count: r.count }));
 
-/** "Telegram" → "Telegram'dan"; the direct bucket already reads as a phrase. */
-const fromSource = (label: string) => (label.startsWith("To'g'ridan") ? label : `${label}'dan`);
+/** "Telegram" → "Telegram'dan", "UTM: x" → "UTM: x orqali"; the direct bucket already reads as a phrase. */
+const fromSource = (label: string) =>
+  label.startsWith("To'g'ridan") ? label : label.startsWith('UTM:') ? `${label} orqali` : `${label}'dan`;
 
 function RecentList({ site, rows }: { site: AnalyticsSite; rows: RecentHit[] }) {
   return (
@@ -71,7 +72,7 @@ const Empty = () => <p className="text-[13px] font-medium text-muted">Kimdir kir
 function LiveWebView({ d, failed }: { d: LiveWeb; failed: boolean }) {
   return (
     <div className="flex flex-col gap-4">
-      <BigCounter title="Hozir saytda" value={d.liveNow} sub="oxirgi 5 daqiqada" at={d.updatedAt} failed={failed} />
+      <BigCounter title="Hozir saytda" value={d.liveNow} sub="oxirgi 5 daqiqada" at={d.updatedAt} failed={failed} emptyText="Hozir saytda hech kim yo'q" />
       {d.liveNow === 0 ? <Empty /> : (
         <div className="grid gap-4 lg:grid-cols-3">
           <Section title="Qaysi sahifada"><CountList rows={rowsOf(d.pages, (r) => r.label ?? pageName(d.site, r.key) ?? r.key)} /></Section>
@@ -87,7 +88,7 @@ function LiveWebView({ d, failed }: { d: LiveWeb; failed: boolean }) {
 function LiveErpView({ d, failed }: { d: LiveErp; failed: boolean }) {
   return (
     <div className="flex flex-col gap-4">
-      <BigCounter title="Hozir ERP'da" value={d.liveNow} sub={`${fmtInt(d.centersCount)} ta markazdan · oxirgi 5 daqiqada`} at={d.updatedAt} failed={failed} />
+      <BigCounter title="Hozir ERP'da" value={d.liveNow} sub={`${fmtInt(d.centersCount)} ta markazdan · oxirgi 5 daqiqada`} at={d.updatedAt} failed={failed} emptyText="Hozir ERP'da hech kim yo'q" />
       {d.liveNow === 0 ? <Empty /> : (
         <div className="grid gap-4 lg:grid-cols-2">
           <Section title="Qaysi modulda"><CountList rows={rowsOf(d.modules, (r) => r.label ?? r.key)} /></Section>

@@ -22,6 +22,15 @@ export function fmtInt(n: number): string {
   return n < 0 ? `${MINUS}${s}` : s;
 }
 
+/** Averages (users per day): ≥ 10 → whole number; below → one decimal with a comma ("0,3"), ",0" dropped. */
+export function fmtAvg(n: number): string {
+  if (Math.abs(n) >= 10) return fmtInt(n);
+  const one = Math.round(Math.abs(n) * 10) / 10;
+  const s = (Number.isInteger(one) ? String(one) : one.toFixed(1).replace('.', ','));
+  return n < 0 && one !== 0 ? `${MINUS}${s}` : s;
+}
+export const fmtAvgMetric = (v: number | null | undefined) => (v === null || v === undefined ? '—' : fmtAvg(v));
+
 /** Rate 0..1 → "34%", "4,2%", "0%". */
 export function fmtPct(rate: number): string {
   const p = rate * 100;

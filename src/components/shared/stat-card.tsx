@@ -67,9 +67,14 @@ export function StatCard({ label, value, unit, icon, accent, footer, hint, subla
   const describedBy = hint ? hintId : undefined;
   return (
     <NmCard className={compact ? 'p-4 sm:p-[22px]' : 'p-[22px]'}>
-      <div className={cn('flex items-start justify-between', compact ? 'mb-3 sm:mb-[18px]' : 'mb-[18px]')}>
+      <div className={cn('flex items-start justify-between',
+        // compact on phones: icon above the label so long labels get the full card width (never cut)
+        compact ? 'mb-3 flex-col-reverse gap-2 sm:mb-[18px] sm:flex-row sm:gap-0' : 'mb-[18px]')}>
         <div className="min-w-0">
-          <div className={cn(hint ? 'max-w-[170px]' : 'max-w-[120px]', 'text-[11px] font-bold uppercase leading-[1.4] tracking-[0.7px] text-muted')} aria-describedby={describedBy}>
+          <div className={cn('text-[11px] font-bold uppercase leading-[1.4] text-muted',
+            // compact (phone grids): never cut the label — tighter tracking, break anywhere
+            compact ? 'tracking-[0.3px] [overflow-wrap:anywhere] sm:tracking-[0.7px]' : cn('tracking-[0.7px]', hint ? 'max-w-[170px]' : 'max-w-[120px]'))}
+            aria-describedby={describedBy}>
             {label}
             {hint ? <StatHint text={hint} id={hintId} /> : null}
           </div>
