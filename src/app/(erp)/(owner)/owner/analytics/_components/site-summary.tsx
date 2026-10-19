@@ -49,10 +49,10 @@ function sparkOf(c: SiteColumn | undefined): SparkPoint[] | null {
   return c && c.state === 'ok' ? c.spark : null;
 }
 
-function Row({ label, value, note }: { label: string; value: string; note?: string }) {
+function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline justify-between gap-3 text-[13px]">
-      <span className="font-medium text-muted">{label}{note ? <span className="ml-1.5 text-[11px]">{note}</span> : null}</span>
+      <span className="font-medium text-muted">{label}</span>
       <span className="font-bold tabular-nums text-foreground">{value}</span>
     </div>
   );
@@ -69,8 +69,6 @@ function SiteSummaryCard({ site, col, today, period, spark, sparkLoading, onRetr
   if (col.state === 'not_tracking') return <div className="flex flex-col gap-3">{head}<NotTrackingState site={site} compact /></div>;
 
   let bigLabel: string, big: Metric, rows: Array<[string, string]>, caption: string;
-  // contract v0.3 §12: ERP centers over finished days only when a multi-day period ends today
-  const centersNote = period.partialToday && period.days > 1 ? 'kechagacha' : undefined;
   if (col.site === 'erp') {
     bigLabel = 'Faol foydalanuvchilar'; big = col.erpActiveUsersAvg; caption = "Faol foydalanuvchilar, kunlar bo'yicha";
     rows = [['Faol markazlar', dash(col.erpActiveCenters)], ['Sahifa ochishlar', dash(col.erpPageviews)], ['Xatolar', dash(col.erpErrors)]];
@@ -103,7 +101,7 @@ function SiteSummaryCard({ site, col, today, period, spark, sparkLoading, onRetr
         </div>
         {site === 'erp' ? <span className="text-[12px] font-medium text-muted">kunlik o&apos;rtacha</span> : null}
       </div>
-      <div className="flex flex-col gap-2">{rows.map(([l, v]) => <Row key={l} label={l} value={v} note={site === 'erp' && l === 'Faol markazlar' ? centersNote : undefined} />)}</div>
+      <div className="flex flex-col gap-2">{rows.map(([l, v]) => <Row key={l} label={l} value={v} />)}</div>
       <div className="flex flex-col gap-1">
         {sparkLoading ? <Skeleton className="h-[64px] w-full" /> : spark && spark.length ? (
           <Sparkline values={spark.map((p) => p.v)} labels={spark.map((p) => fmtDM(p.d))} caption={caption} />

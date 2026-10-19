@@ -13,7 +13,8 @@ export function KpiFooter({ m, tone, today, partialSince, extra }: { m: Metric; 
   let main: React.ReactNode;
   if (m.cur === null && m.curReason === 'db_error') main = <span className="text-[12px] font-medium text-muted">Bazadan olib bo&apos;lmadi</span>;
   else if (partialSince) main = <span className="text-[12px] font-medium text-muted">{sinceText(partialSince)}</span>;
-  else main = <DeltaText cur={m.cur} prev={m.prev} tone={tone} today={today} />;
+  // contract v0.4 §13: the delta may compare finished days only (compareCur); the big number stays `cur`
+  else main = <DeltaText cur={m.cur === null ? null : m.compareCur ?? m.cur} prev={m.prev} tone={tone} today={today} />;
   return (
     <div className="flex flex-col gap-1">
       {main}

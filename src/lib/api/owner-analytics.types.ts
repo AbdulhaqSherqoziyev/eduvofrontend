@@ -1,6 +1,6 @@
 /**
  * Owner analytics — API types. Copied verbatim from the API contract §1
- * (.claude/specs/analytics/api-contract.md, v0.2); backend twin: backend/src/modules/analytics/analytics.types.ts.
+ * (.claude/specs/analytics/api-contract.md, v0.4); backend twin: backend/src/modules/analytics/analytics.types.ts.
  * Keep in sync with the contract — do not edit shapes here alone.
  */
 // ================================================================ asosiy
@@ -17,6 +17,9 @@ export interface Metric {
   prev: number | null;
   curReason?: NullReason;   // faqat cur === null bo'lsa
   prevReason?: NullReason;  // faqat prev === null bo'lsa
+  /** v0.4: when present, the delta is computed as compareCur vs prev (NOT cur vs prev).
+   *  Only erpActiveCenters sets it, for ranges > 1 day ending today: completed days only (from … yesterday). */
+  compareCur?: number | null;
 }
 
 export interface PeriodInfo {
