@@ -1,6 +1,6 @@
 /**
  * Inline links inside help/legal copy, so translators keep plain strings:
- * `[label](/path)` → link under the current locale; `support@eduvo.uz` → mailto; `paddle.net` → https link.
+ * `[label](/path)` → link under the current locale; `eduvo.erp@gmail.com` → mailto; `paddle.net` → https link.
  */
 import Link from 'next/link';
 import { Fragment } from 'react';

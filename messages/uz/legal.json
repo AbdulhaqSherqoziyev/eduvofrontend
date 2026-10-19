@@ -20,7 +20,7 @@
   "updated": "Oxirgi yangilanish: {date}",
   "toc": "Ushbu sahifada",
   "other": "Boshqa hujjatlar",
-  "questions": "Bu sahifa bo‘yicha savolingiz bormi? support@eduvo.uz manziliga yozing.",
+  "questions": "Bu sahifa bo‘yicha savolingiz bormi? eduvo.erp@gmail.com manziliga yozing.",
   "terms": {
     "title": "Foydalanish shartlari",
     "intro": "Bu shartlar mock.eduvo.uz saytidagi Eduvo Mock’dan foydalanganingizda amal qiladi. Akkaunt ochish yoki kredit sotib olishdan oldin ularni o‘qib chiqing.",
@@ -58,7 +58,7 @@
           [
             "Ro‘yxatdan o‘tishda to‘g‘ri ma’lumot bering va email manzilingizni dolzarb saqlang.",
             "Parolingizni hech kimga bermang. Har bir akkaunt faqat bitta odam uchun.",
-            "Akkauntingizdan boshqa birov foydalangan deb o‘ylasangiz, support@eduvo.uz manziliga xabar bering."
+            "Akkauntingizdan boshqa birov foydalangan deb o‘ylasangiz, eduvo.erp@gmail.com manziliga xabar bering."
           ]
         ]
       },
@@ -131,7 +131,7 @@
         "id": "ending",
         "h": "12. Akkauntni yopish",
         "body": [
-          "Akkauntingizni istalgan vaqtda akkaunt sozlamalaridan yoki support@eduvo.uz manziliga yozib o‘chirishingiz mumkin. O‘chirish 14 kundan keyin yakuniy bo‘ladi — [Maxfiylik siyosati](/privacy)da yozilganidek.",
+          "Akkauntingizni istalgan vaqtda akkaunt sozlamalaridan yoki eduvo.erp@gmail.com manziliga yozib o‘chirishingiz mumkin. O‘chirish 14 kundan keyin yakuniy bo‘ladi — [Maxfiylik siyosati](/privacy)da yozilganidek.",
           "Akkaunt o‘chirilganda ishlatilmagan kreditlar yo‘qoladi, agar ular hali [Pulni qaytarish siyosati](/refunds) bo‘yicha qaytarilishi mumkin bo‘lmasa. Pulni qaytarishni akkauntni o‘chirishdan oldin so‘rang."
         ]
       },
@@ -146,8 +146,8 @@
         "id": "contact",
         "h": "14. Aloqa",
         "body": [
-          "Ushbu shartlar bo‘yicha savollar: support@eduvo.uz.",
-          "Paddle orqali to‘langan buyurtma, kvitansiya yoki pulni qaytarish bo‘yicha savollar: support@eduvo.uz yoki paddle.net’dagi Paddle xaridorlarni qo‘llab-quvvatlash xizmati."
+          "Ushbu shartlar bo‘yicha savollar: eduvo.erp@gmail.com.",
+          "Paddle orqali to‘langan buyurtma, kvitansiya yoki pulni qaytarish bo‘yicha savollar: eduvo.erp@gmail.com yoki paddle.net’dagi Paddle xaridorlarni qo‘llab-quvvatlash xizmati."
         ]
       }
     ]
@@ -160,7 +160,7 @@
         "id": "who",
         "h": "1. Biz kimmiz",
         "body": [
-          "Eduvo Mock (mock.eduvo.uz) — Eduvo (eduvo.uz) mahsuloti. Eduvo Mock’da shaxsiy ma’lumotlaringizdan qanday foydalanishni biz belgilaymiz va buning uchun javobgarmiz. Biz bilan support@eduvo.uz orqali bog‘lanishingiz mumkin."
+          "Eduvo Mock (mock.eduvo.uz) — Eduvo (eduvo.uz) mahsuloti. Eduvo Mock’da shaxsiy ma’lumotlaringizdan qanday foydalanishni biz belgilaymiz va buning uchun javobgarmiz. Biz bilan eduvo.erp@gmail.com orqali bog‘lanishingiz mumkin."
         ]
       },
       {
@@ -246,7 +246,7 @@
         "h": "9. Sizning huquqlaringiz",
         "body": [
           "Shaxsiy ma’lumotlaringizni ko‘rish, nusxasini olish, tuzatish yoki o‘chirishni so‘rashingiz, ayrim foydalanishlarga e’tiroz bildirishingiz yoki ularni cheklashni so‘rashingiz mumkin. Profil ma’lumotlarining ko‘pini akkaunt sozlamalarida o‘zingiz o‘zgartirasiz.",
-          "Akkauntni o‘chirish: akkaunt sozlamalarida \"Akkauntni o‘chirish\"ni tanlang yoki akkauntingizdagi emaildan support@eduvo.uz manziliga yozing. Akkaunt 14 kundan keyin butunlay o‘chiriladi. Shu vaqtgacha o‘chirishni bekor qilishni so‘rashingiz mumkin.",
+          "Akkauntni o‘chirish: akkaunt sozlamalarida \"Akkauntni o‘chirish\"ni tanlang yoki akkauntingizdagi emaildan eduvo.erp@gmail.com manziliga yozing. Akkaunt 14 kundan keyin butunlay o‘chiriladi. Shu vaqtgacha o‘chirishni bekor qilishni so‘rashingiz mumkin.",
           "Agar YeI yoki Buyuk Britaniyada bo‘lsangiz va ma’lumotlaringiz noto‘g‘ri qayta ishlangan deb hisoblasangiz, mahalliy ma’lumotlarni himoya qilish organiga ham shikoyat qilishingiz mumkin."
         ]
       },
@@ -276,7 +276,7 @@
         "h": "13. O‘zgarishlar va aloqa",
         "body": [
           "Bu siyosatni yangilashimiz mumkin. Tepadagi sana oxirgi versiyani ko‘rsatadi, muhim o‘zgarishlar haqida emailda xabar beramiz.",
-          "Ma’lumotlaringiz bo‘yicha savol yoki so‘rovlar: support@eduvo.uz."
+          "Ma’lumotlaringiz bo‘yicha savol yoki so‘rovlar: eduvo.erp@gmail.com."
         ]
       }
     ]
@@ -330,7 +330,7 @@
         "id": "how",
         "h": "6. Pulni qaytarishni qanday so‘rash mumkin",
         "body": [
-          "Akkauntingizdagi email manzildan support@eduvo.uz ga yozing. Kvitansiya raqamini (EM- bilan boshlanadi) yoki xarid sanasini ko‘rsating.",
+          "Akkauntingizdagi email manzildan eduvo.erp@gmail.com ga yozing. Kvitansiya raqamini (EM- bilan boshlanadi) yoki xarid sanasini ko‘rsating.",
           "Shuningdek, kvitansiya emailidagi ma’lumotlar bilan paddle.net’dagi Paddle xaridorlarni qo‘llab-quvvatlash xizmatiga murojaat qilishingiz mumkin.",
           "Qaytarish tasdiqlangach, Paddle pulni siz to‘lagan usulga qaytaradi. Bankingizda ko‘rinishi bir necha ish kuni olishi mumkin."
         ]
@@ -404,7 +404,7 @@
         "id": "contact",
         "h": "6. Aloqa",
         "body": [
-          "Cookie’lar bo‘yicha savollar: support@eduvo.uz. Ma’lumotlardan qanday foydalanishimiz haqida batafsil: [Maxfiylik siyosati](/privacy)."
+          "Cookie’lar bo‘yicha savollar: eduvo.erp@gmail.com. Ma’lumotlardan qanday foydalanishimiz haqida batafsil: [Maxfiylik siyosati](/privacy)."
         ]
       }
     ]
