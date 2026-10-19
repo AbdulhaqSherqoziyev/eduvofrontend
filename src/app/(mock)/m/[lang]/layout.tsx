@@ -9,6 +9,7 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { LOCALES, RTL_LOCALES, dirOf, htmlLang, isLocale, isTranslated, type MockLocale } from '@/i18n/locales';
 import { CookieNotice } from '@/components/mock-site/cookie-notice';
 import { SessionBanner } from '@/components/mock-site/session-banner';
+import { MockTracker } from '@/components/analytics/mock-tracker';
 import { fontVarsFor } from '@/lib/mock/fonts';
 import { MOCK_ORIGIN, socialMeta } from '@/lib/mock/seo';
 import '../../mock.css';
@@ -66,6 +67,8 @@ export default async function MockRootLayout({ children, params: { lang } }: { c
       <body>
         {/* only `common` goes to every client bundle; pages add their own namespaces where needed */}
         <NextIntlClientProvider locale={locale} messages={{ common: messages.common }}>{children}<SessionBanner /><CookieNotice /></NextIntlClientProvider>
+        {/* cookie-less analytics; inactive in the exam player */}
+        <MockTracker />
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { Building2, BadgeDollarSign, Boxes, ArrowLeftRight, Users, FileText, LogOut, ClipboardList, GraduationCap } from 'lucide-react';
+import { BarChart3, Building2, BadgeDollarSign, Boxes, ArrowLeftRight, Users, FileText, LogOut, ClipboardList, GraduationCap } from 'lucide-react';
 import { Brand } from '@/components/layout/brand';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { NavItemLink } from '@/components/layout/nav-item';
@@ -9,9 +9,14 @@ import { useMobileNav } from '@/components/layout/mobile-nav';
 import { useAuth } from '@/providers/auth-provider';
 import { cn } from '@/lib/utils/cn';
 import { canManageMock } from '@/lib/auth/can-mock';
+import type { SessionUser } from '@/lib/auth/types';
+
+const canReadAnalytics = (u: SessionUser | null) => !!u?.isPlatform && (!!u.isOwner || (u.permissions ?? []).includes('analytics.read'));
 
 const ITEMS = [
   { href: '/owner', label: 'Markazlar', icon: Building2 },
+  // traffic of eduvo.uz / mock.eduvo.uz / ERP — platform permission `analytics.read`
+  { href: '/owner/analytics', label: 'Analitika', icon: BarChart3, analytics: true },
   { href: '/owner/transactions', label: 'Tranzaksiyalar', icon: ArrowLeftRight },
   { href: '/owner/users', label: 'Foydalanuvchilar', icon: Users },
   { href: '/owner/plans', label: 'Tariflar', icon: BadgeDollarSign },
@@ -48,7 +53,7 @@ export function OwnerSidebar() {
         <div className="mb-6 px-1"><Brand /></div>
         <div className="mb-3.5 px-2.5 text-[10px] font-bold tracking-[1px] text-[#9aa6b8]">PLATFORMA — OWNER</div>
         <nav className="flex flex-col">
-          {ITEMS.filter((i) => !('mock' in i) || canManageMock(user)).map((i) => (
+          {ITEMS.filter((i) => (!('mock' in i) || canManageMock(user)) && (!('analytics' in i) || canReadAnalytics(user))).map((i) => (
             <NavItemLink key={i.href} href={i.href} label={i.label} icon={i.icon}
               active={pathname === i.href || (i.href !== '/owner' && pathname.startsWith(i.href))}
               onClick={() => setOpen(false)} />

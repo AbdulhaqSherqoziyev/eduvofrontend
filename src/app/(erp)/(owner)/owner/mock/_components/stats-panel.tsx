@@ -9,6 +9,7 @@ import { StatCard } from '@/components/shared/stat-card';
 import { useMockAlerts, useMockStats } from '@/lib/hooks/use-owner-mock';
 import { EXAM, fmtDate, fmtDateTime, fmtMoneyList } from './format';
 import { actionLabel } from './records';
+import { TashkentTimeNote } from '@/components/owner/tashkent-time-note';
 import { KV, KeysetList, Muted, Section } from './ui';
 
 const iso = (d: Date) => d.toISOString().slice(0, 10);
@@ -28,6 +29,8 @@ export function StatsPanel() {
         <div className="w-[170px]"><FieldLabel htmlFor="st-from">Dan</FieldLabel><NmInput id="st-from" type="date" value={from} max={to} onChange={(e) => setFrom(e.target.value)} /></div>
         <div className="w-[170px]"><FieldLabel htmlFor="st-to">Gacha</FieldLabel><NmInput id="st-to" type="date" value={to} min={from} onChange={(e) => setTo(e.target.value)} /></div>
         {!valid ? <span className="pb-3 text-[12px] font-semibold text-danger">Sanalar oralig&apos;i noto&apos;g&apos;ri</span> : null}
+        {/* backend days are Asia/Tashkent (spec analytics §1.3.1) */}
+        <TashkentTimeNote className="pb-3" />
       </div>
       <QueryBoundary query={query} loading={<CardGridSkeleton count={4} />}>
         {(s) => (

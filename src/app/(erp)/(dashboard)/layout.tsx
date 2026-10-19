@@ -6,6 +6,7 @@ import { ImpersonationBanner } from '@/components/owner/impersonation-banner';
 import { MobileNavProvider } from '@/components/layout/mobile-nav';
 import { ModuleGateSync } from '@/components/layout/module-gate-sync';
 import { ModuleRouteGuard } from '@/components/layout/module-route-guard';
+import { ErpTracker } from '@/components/analytics/erp-tracker';
 
 /** Dashboard shell: protected, with the floating top bar + sidebar (drawer on mobile). */
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -13,6 +14,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <AuthGuard>
       <MobileNavProvider>
         <ModuleGateSync />
+        {/* analytics: staff panel only (spec analytics §1.7) */}
+        <ErpTracker />
         <div className="flex h-screen flex-col overflow-hidden">
           <ImpersonationBanner />
           <div className="flex min-h-0 flex-1 flex-col gap-3.5 p-3 md:gap-5 md:p-[22px]">
