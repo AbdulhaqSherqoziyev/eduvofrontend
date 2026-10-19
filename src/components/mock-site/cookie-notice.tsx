@@ -10,7 +10,8 @@ import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useLang, usePathRest } from '@/lib/mock/hooks/use-lang';
 
-const KEY = 'eduvo_mock_cookie_notice';
+// -v2 (2026-10-20): notice text changed (cookie-less visit statistics disclosed) — show it once to everyone again
+const KEY = 'eduvo_mock_cookie_notice-v2';
 
 export function CookieNotice() {
   const t = useTranslations('common.cookieNotice');
