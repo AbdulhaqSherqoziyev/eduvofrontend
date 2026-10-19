@@ -11,14 +11,15 @@ import { EXAM, fmtDate, fmtDateTime, fmtMoneyList } from './format';
 import { actionLabel } from './records';
 import { TashkentTimeNote } from '@/components/owner/tashkent-time-note';
 import { KV, KeysetList, Muted, Section } from './ui';
+import { addDays, tashToday } from '../../analytics/_components/format';
 
-const iso = (d: Date) => d.toISOString().slice(0, 10);
 const REFUND: Record<string, string> = { cancelled: 'Natijasiz yopilgan', grading_failed: 'Writing baholanmadi', other: 'Boshqa' };
 
 /** Totals, daily table, attempts per exam, bank, mail health, and the owner alert feed. */
 export function StatsPanel() {
-  const [to, setTo] = useState(() => iso(new Date()));
-  const [from, setFrom] = useState(() => iso(new Date(Date.now() - 29 * 86_400_000)));
+  // backend days are Asia/Tashkent: a UTC "today" would be yesterday between 00:00 and 05:00 Tashkent
+  const [to, setTo] = useState(() => tashToday());
+  const [from, setFrom] = useState(() => addDays(tashToday(), -29));
   const valid = !!from && !!to && from <= to;
   const query = useMockStats(valid ? from : '', valid ? to : '');
   const alerts = useMockAlerts();
