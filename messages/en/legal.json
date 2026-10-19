@@ -173,7 +173,7 @@
             "Tests: your answers, essays, flags and timing, and the results we calculate from them.",
             "Orders: what you bought, the price, currency, country and the order status. We do not receive or store your card number.",
             "Technical: your IP address, browser and device type, and logs we need to keep the service secure and working.",
-            "Visit statistics, without cookies: the pages you view, where you came from (a link or UTM tag), your device and browser type, and the country and city worked out from your IP address. We do not store your IP address; visits are counted with an anonymous identifier that changes every day. Raw records are kept for 90 days, after that only totals. We do not use them for advertising and do not sell them."
+            "Visit statistics, without cookies: the pages you view, where you came from (a link or UTM tag), your device and browser type, browser language, how long you stay on a page, and the country and city worked out from your IP address. We do not store your IP address; visits are counted with an anonymous identifier that changes every day. Raw records are kept for 90 days, after that only totals. We do not use them for advertising and do not sell them."
           ]
         ]
       },
