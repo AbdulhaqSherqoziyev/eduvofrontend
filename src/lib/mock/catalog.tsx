@@ -1,6 +1,6 @@
 'use client';
 /** Catalog context: server-fetched catalog if available, else one client fetch (skeleton after 300 ms, error state). */
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { getCatalog } from './api/endpoints';
 import type { Catalog, Currency, OpenExamSlug, Product, ProductKind } from './api/types';
 
@@ -26,24 +26,61 @@ export function CatalogProvider({ initial, children }: { initial: Catalog | null
     getCatalog(ac.signal).then((data) => setState({ status: 'ready', data })).catch(() => undefined);
     return () => ac.abort();
   }, [initial, load]);
-  return <Ctx.Provider value={state}>{children}</Ctx.Provider>;
+
+  // Currency: the server render (and the first client render) use the catalog default, so there is no
+  // hydration mismatch; ?cur= / the saved choice are applied after mount, and only if still on the public list.
+  const data = state.status === 'ready' ? state.data : null;
+  const allowed = useMemo(() => publicCurrencies(data), [data]);
+  const allowedKey = allowed.join(',');
+  const suggested = data?.suggestedCurrency;
+  const [picked, setPicked] = useState<Currency | null>(null);
+  useEffect(() => {
+    if (data) setPicked(readCurrency(allowed, suggested));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allowedKey, suggested, !!data]);
+  const cur: CurrencyState = useMemo(() => ({
+    currency: picked && allowed.includes(picked) ? picked : defaultCurrency(allowed, suggested),
+    currencies: allowed,
+    ready: !!data,
+    setCurrency: (c: Currency) => { if (allowed.includes(c)) { setPicked(c); saveCurrency(c); } },
+  }), [picked, allowed, suggested, data]);
+  return <Ctx.Provider value={state}><CurCtx.Provider value={cur}>{children}</CurCtx.Provider></Ctx.Provider>;
 }
 
 export function findProduct(c: Catalog, exam: OpenExamSlug, kind: ProductKind, qty = 1): Product | undefined {
   return c.products.find((p) => p.exam === exam && p.kind === kind && (kind !== 'bundle' || p.qty === qty));
 }
 
-/** Currency preference: ?cur= → saved → catalog suggestion (time zone / country) → UZS (as on the landing). */
+/**
+ * Currency (owner 10-20: the public site sells only in the catalog's `currencies`, prod = ['USD']).
+ * Preference: ?cur= → saved → catalog suggestion → first public currency; anything off the list
+ * (an old `?cur=UZS` link, a saved "UZS") is ignored. The list always comes from the catalog.
+ */
 const CUR_KEY = 'eduvo_mock_currency';
-export function readCurrency(suggested?: Currency): Currency {
+/** Only until the catalog arrives — no price is drawn before that (skeleton), so this never reaches a learner as a price. */
+const PRE_CATALOG: Currency = 'USD';
+export function publicCurrencies(c: Catalog | null | undefined): Currency[] {
+  if (!c) return [PRE_CATALOG];
+  return c.currencies?.length ? c.currencies : [c.suggestedCurrency];
+}
+export function defaultCurrency(allowed: readonly Currency[], suggested?: Currency): Currency {
+  return suggested && allowed.includes(suggested) ? suggested : allowed[0] ?? PRE_CATALOG;
+}
+export function readCurrency(allowed: readonly Currency[], suggested?: Currency): Currency {
+  const ok = (v: string | null): v is Currency => !!v && (allowed as readonly string[]).includes(v);
   try {
     const q = new URLSearchParams(window.location.search).get('cur');
-    if (q === 'UZS' || q === 'USD' || q === 'EUR') return q;
+    if (ok(q)) return q;
     const s = localStorage.getItem(CUR_KEY);
-    if (s === 'UZS' || s === 'USD' || s === 'EUR') return s;
+    if (ok(s)) return s;
   } catch { /* ignore */ }
-  return suggested ?? 'UZS';
+  return defaultCurrency(allowed, suggested);
 }
 export function saveCurrency(c: Currency) {
   try { localStorage.setItem(CUR_KEY, c); } catch { /* ignore */ }
 }
+
+interface CurrencyState { currency: Currency; currencies: Currency[]; ready: boolean; setCurrency: (c: Currency) => void }
+const CurCtx = createContext<CurrencyState>({ currency: PRE_CATALOG, currencies: [PRE_CATALOG], ready: false, setCurrency: () => undefined });
+/** Selected public currency + the public list (inside <CatalogProvider>). */
+export const useCurrency = () => useContext(CurCtx);

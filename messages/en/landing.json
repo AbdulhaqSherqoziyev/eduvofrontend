@@ -134,7 +134,7 @@
     "q4": "Will I get the same test twice?",
     "a4": "No. Every mock you start is one you have not taken before.",
     "q5": "Which currencies can I pay in?",
-    "a5": "UZS, USD and EUR. Prices include taxes.",
+    "a5": "US dollars (USD). Prices include taxes.",
     "q6": "What if my internet drops?",
     "a6": "Your answers are saved as you go. The timer keeps running, as in the real exam; when the connection returns, you continue where you stopped."
   },
@@ -216,7 +216,7 @@
     "fq4": "Will I get the same test twice?",
     "fa4": "No. Every mock you start is new to you.",
     "fq5": "Which currencies?",
-    "fa5": "UZS, USD and EUR. Prices include taxes.",
+    "fa5": "US dollars (USD). Prices include taxes.",
     "startFree": "Start free",
     "sample": "Sample"
   }

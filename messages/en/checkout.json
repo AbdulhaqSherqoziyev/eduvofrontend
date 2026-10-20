@@ -126,7 +126,7 @@
     "walletNote": "Apple Pay and Google Pay appear in the secure Paddle window when your device supports them.",
     "pay": "Pay {total}",
     "opening": "Opening the payment window…",
-    "usdOnly": "Card and wallet payments are in USD or EUR.",
+    "usdOnly": "Card and wallet payments are in USD.",
     "switchUsd": "Switch to USD",
     "uzsOnly": "Local methods are in UZS only.",
     "loadErr": "The payment window didn't open. Check your connection or turn off ad blockers for this page, then try again.",

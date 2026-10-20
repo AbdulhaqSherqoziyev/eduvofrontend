@@ -1,6 +1,6 @@
 'use client';
 /** A catalog price (C1) — skeleton while loading (after 300 ms), "—" if the catalog failed. Never a hard-coded price. */
-import { useCatalog, findProduct } from '@/lib/mock/catalog';
+import { useCatalog, useCurrency, findProduct } from '@/lib/mock/catalog';
 import { fmtMoney, moneyParts } from '@/lib/mock/format';
 import { useDelayedFlag } from '@/lib/mock/hooks/use-delayed';
 import type { Currency, OpenExamSlug, ProductKind } from '@/lib/mock/api/types';
@@ -10,6 +10,7 @@ interface Props {
   kind: ProductKind | 'examFull';
   qty?: number;
   field?: 'price' | 'perMock';
+  /** defaults to the visitor's public currency (catalog `currencies` / suggestion) */
   currency?: Currency;
   /** `79 000 <small>UZS</small>` (landing pricing teaser) */
   splitUnit?: boolean;
@@ -17,8 +18,10 @@ interface Props {
   skelWidth?: number;
 }
 
-export function Price({ exam, kind, qty = 1, field = 'price', currency = 'UZS', splitUnit, unitStyle, skelWidth = 96 }: Props) {
+export function Price({ exam, kind, qty = 1, field = 'price', currency: currencyProp, splitUnit, unitStyle, skelWidth = 96 }: Props) {
   const c = useCatalog();
+  const { currency: selected } = useCurrency();
+  const currency = currencyProp ?? selected;
   const slow = useDelayedFlag(c.status === 'loading');
   if (c.status !== 'ready') {
     if (c.status === 'loading' && !slow) return <span style={{ display: 'inline-block', width: skelWidth, height: '0.9em' }} aria-hidden />;

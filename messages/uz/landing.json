@@ -134,7 +134,7 @@
     "q4": "Bir xil test ikki marta tushadimi?",
     "a4": "Yo‘q. Har bir boshlagan mockingiz siz hali topshirmagan test bo‘ladi.",
     "q5": "Qaysi valyutalarda to‘lash mumkin?",
-    "a5": "UZS, USD va EUR. Narxlarga soliqlar kiritilgan.",
+    "a5": "AQSh dollarida (USD). Narxlarga soliqlar kiritilgan.",
     "q6": "Internet uzilib qolsa-chi?",
     "a6": "Javoblaringiz yozish davomida saqlanib boradi. Taymer haqiqiy imtihondagidek to‘xtamaydi; aloqa tiklangach, to‘xtagan joyingizdan davom etasiz."
   },
@@ -216,7 +216,7 @@
     "fq4": "Bir xil test ikki marta tushadimi?",
     "fa4": "Yo‘q. Har bir boshlagan mockingiz siz uchun yangi.",
     "fq5": "Qaysi valyutalarda?",
-    "fa5": "UZS, USD va EUR. Narxlarga soliqlar kiritilgan.",
+    "fa5": "AQSh dollarida (USD). Narxlarga soliqlar kiritilgan.",
     "startFree": "Bepul boshlash",
     "sample": "Namuna"
   }

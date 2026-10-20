@@ -7,7 +7,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { findProduct, readCurrency, saveCurrency, useCatalog } from '@/lib/mock/catalog';
+import { findProduct, useCatalog, useCurrency } from '@/lib/mock/catalog';
 import { fmtMoney, fmtPrice } from '@/lib/mock/format';
 import { useDelayedFlag } from '@/lib/mock/hooks/use-delayed';
 import { useLang } from '@/lib/mock/hooks/use-lang';
@@ -19,7 +19,6 @@ import { StickyCta } from '../sticky-cta';
 
 type Model = 'per' | 'unl';
 type PlanKey = 'section' | 'full' | 'b3' | 'b5' | 'b10' | 'unl';
-const CURS: Currency[] = ['UZS', 'USD', 'EUR'];
 
 function productFor(products: Product[] | undefined, exam: OpenExamSlug, k: PlanKey): Product | undefined {
   if (!products) return undefined;
@@ -40,7 +39,9 @@ export function PricingView() {
   const slow = useDelayedFlag(cat.status === 'loading');
   const [exam, setExam] = useState<OpenExamSlug>('ielts');
   const [model, setModel] = useState<Model>('per');
-  const [cur, setCur] = useState<Currency>('UZS');
+  const { currency: cur, currencies, setCurrency: pickCur } = useCurrency();
+  /** one public currency (prod: USD) → no switcher at all */
+  const showCur = currencies.length > 1;
   const [bundle, setBundle] = useState<3 | 5 | 10>(5);
   const [plan, setPlan] = useState<PlanKey>('b5');
 
@@ -51,9 +52,6 @@ export function PricingView() {
     if (q.get('model') === 'unl') setModel('unl');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const suggested = cat.status === 'ready' ? cat.data.suggestedCurrency : undefined;
-  useEffect(() => { setCur(readCurrency(suggested)); }, [suggested]);
-  const pickCur = (c: Currency) => { setCur(c); saveCurrency(c); };
 
   const products = cat.status === 'ready' ? cat.data.products : undefined;
   const p = useMemo(() => ({
@@ -114,8 +112,10 @@ export function PricingView() {
             items={[{ key: 'ielts', label: t('exam.ielts') }, { key: 'sat', label: t('exam.sat') }]} btnStyle={sx('padding:0 18px;font-weight:800')} />
           <Segmented label={t('model.per')} value={model} onChange={setModel}
             items={[{ key: 'per', label: t('model.per') }, { key: 'unl', label: t('model.unl'), pill: cat.status === 'ready' && !unlAvailable ? soonPill : undefined }]} />
-          <Segmented label={t('phone.currency')} value={cur} onChange={pickCur} style={sx('margin-inline-start:auto')}
-            items={CURS.map((c) => ({ key: c, label: c }))} btnStyle={sx('padding:0 14px;font-weight:800;font-size:13px')} />
+          {showCur && (
+            <Segmented label={t('phone.currency')} value={cur} onChange={pickCur} style={sx('margin-inline-start:auto')}
+              items={currencies.map((c) => ({ key: c, label: c }))} btnStyle={sx('padding:0 14px;font-weight:800;font-size:13px')} />
+          )}
         </div>
 
         <div style={sx('border-radius:20px;padding:16px 20px;background:var(--okBg);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center')}>
@@ -234,10 +234,12 @@ export function PricingView() {
           <Segmented grid label={t('model.per')} value={model} onChange={setModel} style={sx('flex:1;padding:4px')}
             items={[{ key: 'per', label: t('model.per') }, { key: 'unl', label: t('model.unlShort'), pill: cat.status === 'ready' && !unlAvailable ? soonPill : undefined }]}
             btnStyle={sx('height:36px;padding:0 6px;font-size:12px')} />
-          <select value={cur} onChange={(e) => pickCur(e.target.value as Currency)} aria-label={t('phone.currency')}
-            style={sx('height:44px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;font-size:13px;padding:0 10px')}>
-            {CURS.map((c) => <option key={c}>{c}</option>)}
-          </select>
+          {showCur && (
+            <select value={cur} onChange={(e) => pickCur(e.target.value as Currency)} aria-label={t('phone.currency')}
+              style={sx('height:44px;border-radius:14px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--ink);font-weight:800;font-size:13px;padding:0 10px')}>
+              {currencies.map((c) => <option key={c}>{c}</option>)}
+            </select>
+          )}
         </div>
         <div style={sx('border-radius:16px;padding:14px 16px;background:var(--okBg);display:flex;align-items:center;gap:10px')}>
           <span style={sx('flex:1;font-size:13px;font-weight:700;line-height:1.4')}>{t.rich('phone.freeShort', { exam: examName, b: (c) => <b style={sx('color:var(--ok)')}>{c}</b> })}</span>

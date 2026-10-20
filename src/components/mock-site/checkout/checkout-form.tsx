@@ -12,6 +12,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { MockApiError } from '@/lib/mock/api/client';
+import { useCatalog, useCurrency } from '@/lib/mock/catalog';
 import { cancelOrder, createOrder, getMethods, getOrder, getQuote, resendVerification } from '@/lib/mock/api/endpoints';
 import type { CheckoutMethods, Currency, MethodReason, Order, PaymentMethodGroup, Quote } from '@/lib/mock/api/types';
 import { fmtMoney } from '@/lib/mock/format';
@@ -43,12 +44,19 @@ export function CheckoutForm() {
   const { lang, href } = useLang();
   const learner = useLearner();
   const [sku, setSku] = useState<string | null>(null);
-  const [cur, setCur] = useState<Currency>('UZS');
+  const catalog = useCatalog();
+  const { currency: cur, currencies, ready: curReady, setCurrency: setCur } = useCurrency();
+  /** wait for the catalog (public currency list) before quoting; if it failed, go on with the default — the server re-checks */
+  const curKnown = curReady || catalog.status === 'error';
+  /** Local methods (manual transfer) are UZS only — gone while UZS is off the public list (owner 10-20) */
+  const localOn = currencies.includes('UZS');
+  /** currencies Paddle can take here (the "USD · EUR" hint on a disabled card row) */
+  const paddleCurs = currencies.filter((c) => c !== 'UZS').join(' · ');
   const [quote, setQuote] = useState<Quote | null>(null);
   const [quoteErr, setQuoteErr] = useState(false);
   const [methods, setMethods] = useState<CheckoutMethods | null>(null);
   const [methodsErr, setMethodsErr] = useState(false);
-  const [group, setGroup] = useState<PaymentMethodGroup>('local');
+  const [group, setGroup] = useState<PaymentMethodGroup>('card');
   const [soonNote, setSoonNote] = useState(false);
   const [phoneWallet, setPhoneWallet] = useState<'wallet' | 'wallet2'>('wallet');
   const [promo, setPromo] = useState('');
@@ -85,8 +93,7 @@ export function CheckoutForm() {
     if (!s) { router.replace(href('/pricing')); return; }
     if (/_unlimited_/.test(s)) { /* unlimited may be unavailable: the quote decides */ }
     setSku(s);
-    const c = q.get('cur');
-    if (c === 'USD' || c === 'EUR' || c === 'UZS') setCur(c);
+    // ?cur= is read by the catalog provider (and ignored when it is not a public currency)
     setExpired(q.get('expired') === '1');
   }, [href, router]);
 
@@ -100,34 +107,40 @@ export function CheckoutForm() {
       if (e instanceof MockApiError && e.code === 'PROMO_INVALID') { setPromoErr(true); return; }
       if (e instanceof MockApiError && e.code === 'NOT_ENOUGH_TESTS') { setBanner({ kind: 'warn', text: t('notEnoughTests', { n: typeof e.body.available === 'number' ? e.body.available : 0 }) }); return; }
       if (e instanceof MockApiError && (e.code === 'PRODUCT_UNAVAILABLE' || e.code === 'PRODUCT_NOT_FOUND')) { router.replace(href('/pricing?model=unl')); return; }
+      // the server's public list moved past ours (stale tab): take its first currency we also know, else the plain error
+      if (e instanceof MockApiError && e.code === 'CURRENCY_NOT_SUPPORTED' && Array.isArray(e.body.currencies)) {
+        const next = (e.body.currencies as string[]).find((c): c is Currency => c !== cur && (currencies as string[]).includes(c));
+        if (next) { setCur(next); return; }
+      }
       setQuoteErr(true);
     }
-  }, [sku, cur, router, href, t]);
+  }, [sku, cur, currencies, setCur, router, href, t]);
   useEffect(() => {
-    if (learner && sku) void loadQuote(applied);
+    if (learner && sku && curKnown) void loadQuote(applied);
     // re-quote when the product or currency changes; promo changes go through Apply
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [learner, sku, cur]);
+  }, [learner, sku, cur, curKnown]);
 
   useEffect(() => {
-    if (!learner) return;
+    if (!learner || !curKnown) return;
     setMethodsErr(false);
     getMethods(cur).then((m) => {
       setMethods(m);
-      const first = m.methods.find((x) => x.enabled);
-      setGroup((g) => (m.methods.find((x) => x.group === g)?.enabled ? g : first?.group ?? (cur === 'UZS' ? 'local' : 'card')));
+      const shown = (g: PaymentMethodGroup) => g !== 'local' || localOn;
+      const first = m.methods.find((x) => x.enabled && shown(x.group));
+      setGroup((g) => (shown(g) && m.methods.find((x) => x.group === g)?.enabled ? g : first?.group ?? (cur === 'UZS' && localOn ? 'local' : 'card')));
     }).catch(() => setMethodsErr(true));
-  }, [learner, cur]);
+  }, [learner, cur, curKnown, localOn]);
 
   const slow = useDelayedFlag(!quote && !quoteErr);
-  const enabled = (g: PaymentMethodGroup) => !!methods?.methods.find((m) => m.group === g && m.enabled);
+  const enabled = (g: PaymentMethodGroup) => (g !== 'local' || localOn) && !!methods?.methods.find((m) => m.group === g && m.enabled);
   const reason = (g: PaymentMethodGroup): MethodReason => methods?.methods.find((m) => m.group === g)?.reason ?? null;
   /** not offered at all yet (server not configured) → "Soon"; offered in another currency → switch */
   const soon = (g: PaymentMethodGroup) => !!methods && !enabled(g) && reason(g) !== 'CURRENCY_NOT_SUPPORTED';
   const paddleOn = enabled('card') || enabled('wallet');
   const paddleGroup = group === 'card' || group === 'wallet';
   const localProviders = methods?.methods.find((m) => m.group === 'local')?.providers ?? [];
-  const anyEnabled = !!methods?.methods.some((m) => m.enabled);
+  const anyEnabled = !!methods?.methods.some((m) => m.enabled && (m.group !== 'local' || localOn));
   const nonUzs = cur !== 'UZS';
   const total = quote ? fmtMoney(quote.total) : '';
   const free = !!quote && quote.total.amountMinor === 0;
@@ -218,10 +231,12 @@ export function CheckoutForm() {
     </div>
   );
   // USD/EUR without Paddle: the MVP banner; with Paddle: only Local needs UZS; UZS + card/wallet: needs USD
+  // a switch is offered only to a currency on the public list (USD-only → no UZS banners at all)
+  const can = (c: Currency) => currencies.includes(c) && cur !== c;
   const currencyBanner = !methods ? null
-    : nonUzs && !paddleOn ? switchBanner(t('currencySoon'), 'UZS', t('switchUzs'))
-    : nonUzs && group === 'local' ? switchBanner(t('paddle.uzsOnly'), 'UZS', t('switchUzs'))
-    : !nonUzs && paddleGroup && reason(group) === 'CURRENCY_NOT_SUPPORTED' ? switchBanner(t('paddle.usdOnly'), 'USD', t('paddle.switchUsd'))
+    : nonUzs && !paddleOn ? (can('UZS') ? switchBanner(t('currencySoon'), 'UZS', t('switchUzs')) : null)
+    : nonUzs && group === 'local' ? (can('UZS') ? switchBanner(t('paddle.uzsOnly'), 'UZS', t('switchUzs')) : null)
+    : !nonUzs && paddleGroup && reason(group) === 'CURRENCY_NOT_SUPPORTED' && can('USD') ? switchBanner(t('paddle.usdOnly'), 'USD', t('paddle.switchUsd'))
     : null;
   const paddleNote = paddleGroup && enabled(group) && (
     <div style={sx('padding:12px 14px;border-radius:14px;box-shadow:var(--inset);font-size:13px;line-height:1.55;color:var(--ink2)')}>{group === 'card' ? t('paddle.cardNote') : t('paddle.walletNote')}</div>
@@ -243,7 +258,7 @@ export function CheckoutForm() {
               <div style={sx('font-weight:800;font-size:17px')}>{t('method')}</div>
               {!methods && !methodsErr ? <div className="m-skel" style={sx('height:52px;border-radius:14px')} /> : (
                 <Segmented grid label={t('method')} value={group} onChange={pickGroup} style={sx('gap:8px')} btnStyle={sx('height:42px;font-size:13px;padding:0 8px')}
-                  items={(['card', 'wallet', 'local'] as const).map((g) => ({ key: g, label: t(g), pill: soon(g) && g !== 'local' ? soonPill : undefined, disabled: !enabled(g) }))} />
+                  items={(localOn ? ['card', 'wallet', 'local'] as const : ['card', 'wallet'] as const).map((g) => ({ key: g, label: t(g), pill: soon(g) && g !== 'local' ? soonPill : undefined, disabled: !enabled(g) }))} />
               )}
               {soonNote && <div role="status" style={sx('padding:10px 14px;border-radius:12px;background:var(--hover);font-size:13px;font-weight:600;color:var(--ink2)')}>{t('cardSoonNote')}</div>}
               {methodsState}
@@ -320,11 +335,11 @@ export function CheckoutForm() {
                 style={sx('width:100%;min-height:58px;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:0 16px;display:flex;align-items:center;gap:12px;text-align:start')}>
                 <PayIcon kind={g} dim={!on} />
                 <span style={{ ...sx('flex:1;display:flex;flex-direction:column;gap:1px'), opacity: on ? 1 : 0.55 }}><b style={sx('font-size:15px')}>{name}</b>{note && <span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{note}</span>}</span>
-                {soon(g) ? soonPill : on ? <span className={`m-radio${checked ? ' is-on' : ''}`} /> : <span style={sx('font-size:12px;font-weight:700;color:var(--mut)')}>USD · EUR</span>}
+                {soon(g) ? soonPill : on ? <span className={`m-radio${checked ? ' is-on' : ''}`} /> : paddleCurs ? <span style={sx('font-size:12px;font-weight:700;color:var(--mut)')}>{paddleCurs}</span> : null}
               </button>
             );
           })}
-          {(localProviders.length ? localProviders : [{ code: 'manual', name: '' }]).map((p) => (
+          {localOn && (localProviders.length ? localProviders : [{ code: 'manual', name: '' }]).map((p) => (
             <button key={p.code} type="button" role="radio" aria-checked={group === 'local' && enabled('local')} aria-disabled={!enabled('local') || undefined}
               onClick={() => { if (enabled('local')) setGroup('local'); else if (reason('local') === 'CURRENCY_NOT_SUPPORTED') toast(t('paddle.uzsOnly')); }}
               style={sx('width:100%;min-height:58px;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:0 16px;display:flex;align-items:center;gap:12px;text-align:start')}>
@@ -336,7 +351,7 @@ export function CheckoutForm() {
         </div>
         {paddleNote}
         {bannerEl}
-        {group === 'local' && <span style={sx('font-size:12px;color:var(--mut);line-height:1.5')}>{t('phone.nextStep')}</span>}
+        {group === 'local' && localOn && <span style={sx('font-size:12px;color:var(--mut);line-height:1.5')}>{t('phone.nextStep')}</span>}
       </main>
       <StickyCta primary={{ label: busy ? t('creating') : paddle.state === 'opening' ? t('paddle.opening') : free ? t('getCredits') : paddleGroup && enabled(group) ? t('paddle.phoneCta', { total }) : t('continueMobile', { total }), onClick: () => void pay(), disabled: !canPay, busy: busy || paddle.state === 'opening' }} />
     </>

@@ -126,7 +126,7 @@
     "walletNote": "Qurilmangiz qo‘llasa, Apple Pay va Google Pay xavfsiz Paddle oynasida chiqadi.",
     "pay": "{total} to‘lash",
     "opening": "To‘lov oynasi ochilmoqda…",
-    "usdOnly": "Karta va hamyon orqali to‘lov USD yoki EUR’da.",
+    "usdOnly": "Karta va hamyon orqali to‘lov USD’da.",
     "switchUsd": "USD’ga o‘tish",
     "uzsOnly": "Mahalliy usullar faqat UZS’da.",
     "loadErr": "To‘lov oynasi ochilmadi. Internetni tekshiring yoki bu sahifa uchun reklama bloklagichni o‘chiring va qayta urinib ko‘ring.",

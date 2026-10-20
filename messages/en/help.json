@@ -45,7 +45,7 @@
     "payments": [
       {
         "q": "Who processes my payment?",
-        "a": "Card payments in USD and EUR are processed by Paddle.com, our Merchant of Record. Paddle's name appears on your receipt and bank statement."
+        "a": "Card payments in USD are processed by Paddle.com, our Merchant of Record. Paddle's name appears on your receipt and bank statement."
       },
       {
         "q": "How long are credits valid?",

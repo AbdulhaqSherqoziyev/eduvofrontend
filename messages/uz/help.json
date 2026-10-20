@@ -45,7 +45,7 @@
     "payments": [
       {
         "q": "To‘lovimni kim qayta ishlaydi?",
-        "a": "USD va EUR’dagi karta to‘lovlarini Merchant of Record — Paddle.com qayta ishlaydi. Kvitansiya va bank ko‘chirmasida Paddle nomi ko‘rinadi."
+        "a": "USD’dagi karta to‘lovlarini Merchant of Record — Paddle.com qayta ishlaydi. Kvitansiya va bank ko‘chirmasida Paddle nomi ko‘rinadi."
       },
       {
         "q": "Kreditlar qancha amal qiladi?",
