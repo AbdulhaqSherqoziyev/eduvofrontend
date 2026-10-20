@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "test:unit": "rm -rf node_modules/.cache/unit-test && tsc --outDir node_modules/.cache/unit-test --module commonjs --target es2021 --moduleResolution node --esModuleInterop --skipLibCheck --types node src/lib/exam/sat/spr.ts src/lib/exam/sat/spr.test.ts && node --test node_modules/.cache/unit-test/",
     "i18n:check": "node scripts/i18n-check.mjs"
   },
   "dependencies": {

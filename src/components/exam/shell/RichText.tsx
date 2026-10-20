@@ -1,7 +1,7 @@
 'use client';
 /**
  * Section intro / Directions text from the exam config (`sections[].intro`):
- * a small HTML subset (<p>, <ul>/<ol>, <strong>, <em>, <u>, <br>, <table>)
+ * a small HTML subset (<p>, <ul>/<ol>, <strong>, <em>, <u>, <br>, <table>; a <br> inside a cell is a line break)
  * parsed into React nodes — nothing from the config is injected as HTML.
  */
 import { useMemo, type CSSProperties } from 'react';
@@ -27,7 +27,7 @@ export function RichText({ html, style: st }: { html: string | null | undefined;
           return (
             <table key={i} style={{ borderCollapse: 'collapse' }}>
               <tbody>{b.rows.map((row, ri) => (
-                <tr key={ri}>{row.cells.map((c, ci) => { const Cell = row.head ? 'th' : 'td'; return <Cell key={ci} style={{ border: '1px solid var(--x-line)', padding: '4px 8px', textAlign: 'left' }}><Runs runs={c} /></Cell>; })}</tr>
+                <tr key={ri}>{row.cells.map((c, ci) => { const Cell = row.head ? 'th' : 'td'; return <Cell key={ci} style={{ border: '1px solid var(--x-line)', padding: '4px 8px', textAlign: 'left', verticalAlign: 'top', whiteSpace: 'pre-line' }}><Runs runs={c} /></Cell>; })}</tr>
               ))}</tbody>
             </table>
           );

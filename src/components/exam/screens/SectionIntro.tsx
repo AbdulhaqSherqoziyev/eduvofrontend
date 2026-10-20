@@ -3,11 +3,13 @@
  * Section intro (design A10/G3): "✓ Listening submitted" (no "locked"), SECTION n OF m,
  * TIME/CONTENT/SCORING tiles, no route/variant label. Timer does not run here.
  * Audio must be 100 % preloaded; failures → Retry, after 3 → Report & skip (T20).
+ * SAT Math without a break before it: the SPR "how to enter" examples sit here (no timer yet).
  */
 import { Check } from 'lucide-react';
 import { useState } from 'react';
 import { useExam, useT } from '@/lib/exam/engine/context';
 import { isSat, sectionNo } from '@/lib/exam/sat/flow';
+import { SprExamples } from '../sat/SprExamples';
 import { RichText } from '../shell/RichText';
 import { Bi, Btn, Caps, Centered, Spinner } from '../shell/ui';
 
@@ -68,6 +70,11 @@ export function SectionIntro() {
           <Tile k={t('intro.tile_scoring')} v={t(ai ? 'intro.scoring_ai' : 'intro.scoring_auto')} />
         </div>
         {sectionCfg.intro && <div style={{ fontSize: 14.5, color: 'var(--x-sub)', lineHeight: 1.6, textAlign: 'left' }}><RichText html={sectionCfg.intro} /></div>}
+        {isSat(s.config) && sectionCfg.key === 'math' && (
+          <section aria-labelledby="spr-intro-card-h" style={{ background: 'var(--x-tile)', borderRadius: 14, padding: '16px 18px' }}>
+            <SprExamples title={t('sat.spr_card_title')} headingId="spr-intro-card-h" />
+          </section>
+        )}
         {hasAudio && <div style={{ fontSize: 13, color: 'var(--x-muted)', fontWeight: 600 }}>{t((stageCfg?.audio?.play_count ?? 1) > 1 ? 'intro.plays_twice' : 'intro.plays_once')}</div>}
         <div style={{ fontSize: 13, color: 'var(--x-muted)' }}>{t('intro.timer_note')}</div>
         {media.error && hasAudio && (
