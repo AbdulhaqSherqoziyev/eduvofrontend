@@ -13,7 +13,7 @@ import { Tex } from './MathText';
 
 /** Answer (TeX) | accepted entries | entries that get no credit. */
 export const SPR_EXAMPLES: { tex: string; ok: string[]; bad: string[] }[] = [
-  { tex: '3\\dfrac{1}{2}', ok: ['7/2', '3.5'], bad: ['3 1/2'] },
+  { tex: '3\\dfrac{1}{2}', ok: ['7/2', '3.5'], bad: ['31/2', '3 1/2'] },
   { tex: '\\dfrac{2}{3}', ok: ['2/3', '.6666', '.6667', '0.666', '0.667'], bad: ['.66', '.67', '0.66', '.666'] },
   { tex: '-\\dfrac{1}{3}', ok: ['-1/3', '-.3333', '-0.333'], bad: ['-.33', '-0.33'] },
   { tex: '\\dfrac{3}{4}', ok: ['3/4', '.75', '0.75'], bad: [] },
