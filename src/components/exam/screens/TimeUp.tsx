@@ -25,6 +25,7 @@ export function TimeUp() {
         <Bi pair={bi('timeup.title')} size={24} weight={800} center />
         <Bi pair={bi('timeup.body')} size={15} weight={500} center />
         {tu?.writing && <Bi pair={bi('timeup.writing_saved')} size={14} weight={500} center />}
+        {tu?.speaking && <Bi pair={bi('speaking.timeup_note')} size={14} weight={500} center />}
         {tu?.next ? <Bi pair={bi('timeup.next', { section: tu.next.title, min: tu.next.minutes })} size={14} weight={700} center /> : acked && <Bi pair={bi('timeup.last')} size={14} weight={500} center />}
         <div style={{ height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 6 }}>
           {!acked ? (

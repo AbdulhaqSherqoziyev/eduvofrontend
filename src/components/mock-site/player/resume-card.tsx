@@ -15,6 +15,7 @@ import { fmtClock, parseIso } from '@/lib/exam/format';
 import { prevLocked } from '@/lib/exam/sat/flow';
 import { sx } from '@/lib/mock/sx';
 import { BrandMark } from '../logo';
+import { MockSpeakingFacts } from './speaking-facts';
 
 export function MockResumeCard() {
   const { s, stage, sectionCfg, stageCfg, media, beginStage, dispatch } = useExam();
@@ -24,7 +25,8 @@ export function MockResumeCard() {
   const welcome = s.phase === 'welcome';
   const dl = parseIso(stage?.deadlineAt);
   const left = dl != null ? Math.max(0, (dl - now) / 1000) : 0;
-  const hasAudio = welcome && !!stageCfg?.audio;
+  const speaking = stageCfg?.kind === 'speaking';
+  const hasAudio = welcome && (!!stageCfg?.audio || speaking);
   const loading = welcome && !s.timeEnded && hasAudio && !media.ready;
   const examName = s.config?.name ?? '';
 
@@ -50,6 +52,11 @@ export function MockResumeCard() {
           <div style={sx('font-size:15px;line-height:1.6;color:var(--ink2)')}>
             {prevLocked(s.stages, s.stageKey)?.kind === 'break' ? t('sat.break_ended_away') : t('resume.time_ended', { section: s.timeEnded })}
           </div>
+        ) : welcome && speaking ? (
+          <>
+            <div style={sx('font-size:15px;line-height:1.6;color:var(--ink2)')}>{t('resume.body')}</div>
+            <MockSpeakingFacts fact={fact} />
+          </>
         ) : welcome ? (
           <>
             <div style={sx('font-size:15px;line-height:1.6;color:var(--ink2)')}>{t('resume.body')}</div>
@@ -58,7 +65,7 @@ export function MockResumeCard() {
               <div style={fact}><Save size={17} style={{ marginTop: 3, color: 'var(--ink2)' }} aria-hidden /><span>{t('resume.saved', { n: s.resumeSaved })}</span></div>
             </div>
             <div style={{ ...fact, ...sx('font-size:13px;font-weight:600;color:var(--mut)') }}><Clock size={15} style={{ marginTop: 2 }} aria-hidden /><span>{t('resume.timer_note')}</span></div>
-            {hasAudio && <div style={sx('font-size:13px;font-weight:600;color:var(--mut);line-height:1.5')}>{t('resume.audio_note')}</div>}
+            {!!stageCfg?.audio && <div style={sx('font-size:13px;font-weight:600;color:var(--mut);line-height:1.5')}>{t('resume.audio_note')}</div>}
           </>
         ) : (
           <div style={sx('font-size:15px;line-height:1.6;color:var(--ink2)')}>{t('precheck.nothing_started')}</div>

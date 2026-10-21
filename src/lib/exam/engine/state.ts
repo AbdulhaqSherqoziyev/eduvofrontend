@@ -32,7 +32,7 @@ export interface ExamState {
   /** Last stage-submit failure (shown by the preview finish modal); cleared on the next submit. */
   submitError: { status?: number; code?: string; message?: string } | null;
   prevSubmitted: string | null;
-  timeup: { next: { title: string; minutes: number } | null; writing: boolean; acked: boolean } | null;
+  timeup: { next: { title: string; minutes: number } | null; writing: boolean; speaking?: boolean; acked: boolean } | null;
   /** Resume: the stage's time ran out while the student was away (G8). */
   timeEnded: string | null;
   /** Answers already saved for the stage being resumed (G8). */
@@ -44,6 +44,9 @@ export interface ExamState {
   lastSyncAt: number | null;
   fsExited: boolean;
   tabNotedAt: number | null;
+  /** Speaking resume (contract §3/§4a): items with an uploaded recording, and items that used their restart. */
+  spRecorded: string[];
+  spRestarted: string[];
 }
 
 export const DEFAULT_UI: UiPrefs = { theme: 'standard', font: 'm', timerHidden: false, split: 50, locale: 'en', audioOnly: false, volume: 0.8 };
@@ -53,6 +56,6 @@ export function initialState(attemptId: string): ExamState {
     phase: 'boot', attemptId, error: null, attempt: null, config: null, stages: [], stageKey: null, content: null,
     media: [], preload: [], answers: {}, flags: {}, partIdx: 0, currentQ: null, highlights: [], ui: DEFAULT_UI,
     modal: null, submitError: null, prevSubmitted: null, timeup: null, timeEnded: null, resumeSaved: 0, submitting: false,
-    syncFailSince: null, backOnlineAt: null, lastSyncAt: null, fsExited: false, tabNotedAt: null,
+    syncFailSince: null, backOnlineAt: null, lastSyncAt: null, fsExited: false, tabNotedAt: null, spRecorded: [], spRestarted: [],
   };
 }

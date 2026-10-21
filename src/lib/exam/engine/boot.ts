@@ -33,8 +33,10 @@ export function decideBoot(d: AttemptState, initialLocale?: Locale): BootDecisio
   // B2C host: every (re)open starts in the learner's site language; the select changes it for this visit
   if (initialLocale) ui.locale = initialLocale;
   const main = d.stages.filter((s) => !s.separateSitting);
-  const cur = main.find((s) => s.status === 'IN_PROGRESS');
-  const next = main.find((s) => s.status === 'PENDING');
+  // A separate-sitting stage (IELTS Speaking taken later — speaking contract §4) resumes once the main ones are done.
+  const later = d.stages.filter((s) => s.separateSitting);
+  const cur = main.find((s) => s.status === 'IN_PROGRESS') ?? later.find((s) => s.status === 'IN_PROGRESS');
+  const next = main.find((s) => s.status === 'PENDING') ?? (main.some((s) => s.status === 'IN_PROGRESS') ? undefined : later.find((s) => s.status === 'PENDING'));
   const locked = main.filter((s) => s.status === 'LOCKED');
   const lastLocked = locked[locked.length - 1];
   const resumeSaved = cur ? Object.entries(answers).filter(([qid, a]) => isAnswered(a.v) && (d.answers.find((x) => x.questionId === qid)?.stageKey ?? cur.stageKey) === cur.stageKey).length : 0;

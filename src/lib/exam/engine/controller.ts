@@ -21,6 +21,9 @@ export function useExamController(attemptId: string) {
   live.current = s;
   const welcomeResp = useRef<StageStartResp | null>(null);
   const timingOut = useRef(false);
+  // Speaking: while the microphone is disconnected the stage clock is held (spec §1.6 — the server extends it on restart)
+  const deadlineHold = useRef(false);
+  const holdDeadline = useCallback((on: boolean) => { deadlineHold.current = on; }, []);
 
   const stage = s.stages.find((x) => x.stageKey === s.stageKey) ?? null;
   const sectionCfg = s.config?.sections.find((x) => x.key === stage?.sectionKey) ?? null;
@@ -160,7 +163,7 @@ export function useExamController(attemptId: string) {
   const timeOut = useCallback(async () => {
     if (timingOut.current) return;
     timingOut.current = true;
-    dispatch({ t: 'TIMEUP_START', next: nextInfo(), writing: live.current.content?.kind === 'writing' });
+    dispatch({ t: 'TIMEUP_START', next: nextInfo(), writing: live.current.content?.kind === 'writing', speaking: live.current.content?.kind === 'speaking' });
     while (!(await submit('timeout'))) await new Promise((r) => setTimeout(r, 3000));
     timingOut.current = false;
   }, [nextInfo, submit]);
@@ -168,7 +171,7 @@ export function useExamController(attemptId: string) {
   useEffect(() => {
     if (!sectionActive || !stage?.deadlineAt) return;
     const dl = Date.parse(stage.deadlineAt);
-    const iv = window.setInterval(() => { if (serverNow() >= dl) void timeOut(); }, 250);
+    const iv = window.setInterval(() => { if (!deadlineHold.current && serverNow() >= dl) void timeOut(); }, 250);
     return () => window.clearInterval(iv);
   }, [sectionActive, stage?.deadlineAt, timeOut]);
 
@@ -189,7 +192,9 @@ export function useExamController(attemptId: string) {
     }
   }, [attemptId, beginStage, onCancelled]);
 
-  return { s, dispatch, stage, sectionCfg, stageCfg, media, setAnswer, beginStage, submit, timeOut, setUi, reportSkip, integrity, boot, refreshMedia };
+  return { s, dispatch, stage, sectionCfg, stageCfg, media, setAnswer, beginStage, submit, timeOut, setUi, reportSkip, integrity, boot, refreshMedia, holdDeadline,
+    /** Content of the stage being resumed (fetched during boot) — Speaking's Welcome back reads its question count. */
+    welcomeContent: () => welcomeResp.current?.content ?? null };
 }
 
 export type ExamCtl = ReturnType<typeof useExamController>;

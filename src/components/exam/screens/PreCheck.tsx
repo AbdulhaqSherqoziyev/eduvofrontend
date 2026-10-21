@@ -4,10 +4,11 @@
  * by config: Headphones, Microphone (Speaking only), Connection (real), Fullscreen,
  * Try the interface, Settings (interface language), Rules. Start = fullscreen + intro.
  */
-import { PlayCircle } from 'lucide-react';
+import { Clock, PlayCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useExam, useT } from '@/lib/exam/engine/context';
 import { requestFullscreen } from '@/lib/exam/engine/integrity';
+import { setSpeakingLater, speakingLater } from '@/lib/exam/speaking/local';
 import type { TextKey } from '@/lib/exam/i18n';
 import { useExamHost } from '../host';
 import { LangSwitch } from '../shell/SettingsMenu';
@@ -27,7 +28,10 @@ export function PreCheck() {
   const main = s.stages.filter((x) => !x.separateSitting);
   const sections = cfg.sections.filter((sec) => main.some((x) => x.sectionKey === sec.key));
   const needAudio = sections.some((sec) => sec.stages.some((st) => st.audio)) || !!cfg.precheck?.includes('audio');
-  const needMic = sections.some((sec) => sec.stages.some((st) => st.kind === 'speaking'));
+  // "Take Speaking later" (spec §1.1-e): full mock + separate sitting allowed (B2C always) → no mic needed today
+  const [later, setLater] = useState(() => speakingLater(s.attemptId));
+  const canLater = (sec: { separate_sitting?: boolean }) => s.attempt?.mode === 'full' && (!!host.b2c || !!sec.separate_sitting);
+  const needMic = sections.some((sec) => sec.stages.some((st) => st.kind === 'speaking') && !(later && canLater(sec)));
   const [hp, setHp] = useState<CheckStatus>('not_checked');
   const [mic, setMic] = useState<CheckStatus>('not_checked');
   const [conn, setConn] = useState<Conn>('measuring');
@@ -80,6 +84,10 @@ export function PreCheck() {
               <div key={sec.key} style={{ display: 'flex', alignItems: 'center', gap: 10, height: 40, padding: '0 14px', borderRadius: 10, background: 'var(--x-tile)', fontSize: 13, fontWeight: 700 }}>
                 <span>{sec.title}</span>{min != null && <span style={{ color: 'var(--x-muted)' }}>{t('intro.time_value', { min })}</span>}
                 <span style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: 0.4, borderRadius: 6, padding: '3px 7px', color: ai ? '#5B3FD1' : 'var(--x-ok-fg)', background: ai ? '#EEE9FF' : 'var(--x-ok-bg)' }}>{t(ai ? 'x.ai_badge' : 'x.auto_badge')}</span>
+                {st?.kind === 'speaking' && later && canLater(sec) && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11.5, fontWeight: 700, borderRadius: 6, padding: '3px 7px', background: 'var(--x-tile)', color: 'var(--x-muted)' }}><Clock size={12} aria-hidden />{t('speaking.later_chip')}</span>}
+                {st?.kind === 'speaking' && canLater(sec) && (
+                  <button type="button" onClick={() => { setSpeakingLater(s.attemptId, !later); setLater(!later); }} style={{ background: 'none', border: 'none', padding: 0, fontSize: 12.5, fontWeight: 700, color: 'var(--x-link)', cursor: 'pointer' }}>{t(later ? 'speaking.do_now' : 'speaking.do_later')}</button>
+                )}
               </div>
             );
           })}

@@ -1,80 +1,82 @@
 'use client';
 /**
- * Microphone (design G6, T3): the only place the browser asks for mic access.
- * Record 5 s with a 32-bar level meter → Play back → "I can hear my voice".
- * Shown only when the attempt has Speaking (v1 L/R/W attempts never show it).
+ * Microphone (design G6 q.47–58 + speaking-design §1.1): our own explanation BEFORE the browser prompt
+ * (only when permission is still "prompt"), Record 5 s with the exam constraints and a 32-bar meter
+ * (accent — red is reserved for the Speaking "Recording" dot), then a level check: ok → Play back +
+ * "I can hear my voice"; quiet / distorted → warn tile + Record again. Three room tips at the bottom.
+ * Shown only when the attempt has Speaking.
  */
-import { useEffect, useRef, useState } from 'react';
+import { BellOff, DoorClosed, Headphones } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useT } from '@/lib/exam/engine/context';
-import type { TextKey } from '@/lib/exam/i18n';
+import { micPermission } from '@/lib/exam/speaking/recorder';
+import { useLevelTest } from '@/lib/exam/speaking/use-level-test';
 import { Bi, Btn } from '../../shell/ui';
 import { CheckCard, hint, type CheckStatus } from './CheckCard';
+import { MicPermissionHint } from './MicPermissionHint';
+
+const TIPS = [[DoorClosed, 'speaking.tip_door'], [Headphones, 'speaking.tip_headset'], [BellOff, 'speaking.tip_phone']] as const;
 
 export function MicCard({ status, onStatus }: { status: CheckStatus; onStatus: (s: CheckStatus) => void }) {
   const { t, bi } = useT();
-  const [bars, setBars] = useState<number[]>(() => Array(32).fill(0));
-  const [left, setLeft] = useState(0);
-  const [clip, setClip] = useState<string | null>(null);
-  const [err, setErr] = useState<TextKey | null>(null);
-  const stop = useRef<(() => void) | null>(null);
-  useEffect(() => () => stop.current?.(), []);
+  const lt = useLevelTest(5, 32);
+  const [ask, setAsk] = useState(false);
+  useEffect(() => {
+    if (lt.err) onStatus('attention');
+    else if (lt.verdict === 'quiet' || lt.verdict === 'loud') onStatus('attention');
+    else if (lt.verdict === 'ok') onStatus('checking');
+  }, [lt.err, lt.verdict]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const record = async () => {
-    setErr(null);
-    if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') { setErr('errors.browser_unsupported'); onStatus('attention'); return; }
+    setAsk(false);
     onStatus('checking');
-    let stream: MediaStream;
-    try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e) {
-      setErr((e as DOMException)?.name === 'NotFoundError' ? 'errors.mic_not_found' : 'errors.mic_denied');
-      onStatus('attention');
-      return;
-    }
-    const ctx = new AudioContext();
-    const an = ctx.createAnalyser();
-    an.fftSize = 64;
-    ctx.createMediaStreamSource(stream).connect(an);
-    const rec = new MediaRecorder(stream);
-    const chunks: Blob[] = [];
-    rec.ondataavailable = (e) => chunks.push(e.data);
-    rec.onstop = () => setClip(URL.createObjectURL(new Blob(chunks, { type: rec.mimeType })));
-    const buf = new Uint8Array(an.frequencyBinCount);
-    let raf = 0;
-    const loop = () => { an.getByteFrequencyData(buf); setBars(Array.from({ length: 32 }, (_, i) => buf[i % buf.length] / 255)); raf = requestAnimationFrame(loop); };
-    loop();
-    rec.start();
-    let n = 5;
-    setLeft(n);
-    const iv = window.setInterval(() => { n -= 1; setLeft(n); if (n <= 0) stop.current?.(); }, 1000);
-    stop.current = () => {
-      window.clearInterval(iv);
-      cancelAnimationFrame(raf);
-      if (rec.state !== 'inactive') rec.stop();
-      stream.getTracks().forEach((tr) => tr.stop());
-      void ctx.close();
-      setLeft(0);
-      stop.current = null;
-    };
+    await lt.start();
   };
+  const onRecordClick = async () => {
+    if ((await micPermission()) === 'prompt') { setAsk(true); return; }
+    void record();
+  };
+  const bad = lt.verdict === 'quiet' || lt.verdict === 'loud';
 
   return (
     <CheckCard title={t('precheck.mic_title')} status={status}>
       <div style={hint}>{t('precheck.mic_body')}</div>
-      <div style={{ fontSize: 12.5, color: 'var(--x-muted)' }}>{t('precheck.mic_permission')}</div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <Btn h={38} style={{ fontSize: 13 }} disabled={left > 0} onClick={() => void record()}>{left > 0 ? t('precheck.mic_recording', { s: left }) : t('chrome.record_5s')}</Btn>
-        <div aria-hidden style={{ flex: 1, height: 28, display: 'flex', alignItems: 'center', gap: 3 }}>
-          {bars.map((b, i) => <div key={i} style={{ flex: 1, borderRadius: 2, height: 4 + Math.round(b * 22), background: left > 0 ? 'var(--x-rec)' : status === 'ready' ? 'var(--x-accent)' : 'var(--x-line)' }} />)}
+      {!ask && <div style={{ fontSize: 12.5, color: 'var(--x-muted)' }}>{t('precheck.mic_permission')}</div>}
+      {ask ? (
+        <div style={{ background: 'var(--x-tile)', borderRadius: 12, padding: 14, display: 'flex', gap: 14, alignItems: 'center' }}>
+          <MicPermissionHint />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'flex-start' }}>
+            <div style={{ fontSize: 13.5, fontWeight: 600 }}>{t('precheck.mic_permission_where')}</div>
+            <Btn h={38} autoFocus onClick={() => void record()} style={{ fontSize: 13 }}>{t('precheck.mic_permission_cta')}</Btn>
+          </div>
         </div>
-      </div>
-      {clip && left === 0 && status !== 'ready' && (
+      ) : (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <Btn h={38} style={{ fontSize: 13 }} disabled={lt.recording} onClick={() => void onRecordClick()}>{lt.recording ? t('precheck.mic_recording', { s: lt.left }) : t('chrome.record_5s')}</Btn>
+          <div aria-hidden style={{ flex: 1, height: 28, display: 'flex', alignItems: 'center', gap: 3 }}>
+            {lt.bars.map((b, i) => <div key={i} style={{ flex: 1, borderRadius: 2, height: 4 + Math.round(b * 22), background: lt.recording || status === 'ready' ? 'var(--x-accent)' : 'var(--x-line)' }} />)}
+          </div>
+        </div>
+      )}
+      {lt.verdict === 'ok' && !lt.recording && status !== 'ready' && (
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-          <Btn h={38} style={{ fontSize: 13 }} onClick={() => void new Audio(clip).play()}>{t('chrome.play_back')}</Btn>
+          <Btn h={38} style={{ fontSize: 13 }} onClick={lt.play}>{t('chrome.play_back')}</Btn>
           <Btn h={38} variant="accent" style={{ fontSize: 13 }} onClick={() => onStatus('ready')}>{t('precheck.mic_yes')}</Btn>
         </div>
       )}
-      {err && <div style={{ background: 'var(--x-warn-bg)', borderRadius: 10, padding: '8px 12px' }}><Bi pair={bi(err)} size={13} color="var(--x-warn-fg)" /></div>}
-      {err && <Btn h={36} style={{ alignSelf: 'flex-start', fontSize: 13 }} onClick={() => void record()}>{t('chrome.check_again')}</Btn>}
-      <div style={{ fontSize: 12.5, color: 'var(--x-muted)' }}>{t('precheck.mic_quiet_room')}</div>
+      {bad && !lt.recording && (
+        <div style={{ background: 'var(--x-warn-bg)', borderRadius: 10, padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-start' }}>
+          <Bi pair={bi(lt.verdict === 'loud' ? 'speaking.level_loud' : 'speaking.level_quiet')} size={13} color="var(--x-warn-fg)" />
+          <Btn h={36} variant="accent" style={{ fontSize: 13 }} onClick={() => void record()}>{t('speaking.record_again')}</Btn>
+        </div>
+      )}
+      {lt.err && <div style={{ background: 'var(--x-warn-bg)', borderRadius: 10, padding: '8px 12px' }}><Bi pair={bi(lt.err)} size={13} color="var(--x-warn-fg)" /></div>}
+      {lt.err && lt.err !== 'errors.browser_unsupported' && <Btn h={36} style={{ alignSelf: 'flex-start', fontSize: 13 }} onClick={() => void record()}>{t('chrome.check_again')}</Btn>}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {TIPS.map(([Icon, k]) => (
+          <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--x-sub)' }}><Icon size={14} color="var(--x-muted)" aria-hidden />{t(k)}</div>
+        ))}
+      </div>
     </CheckCard>
   );
 }

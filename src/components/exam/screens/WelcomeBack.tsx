@@ -12,6 +12,7 @@ import { requestFullscreen } from '@/lib/exam/engine/integrity';
 import { fmtClock, parseIso } from '@/lib/exam/format';
 import { prevLocked } from '@/lib/exam/sat/flow';
 import { Bi, Btn, Centered, Spinner } from '../shell/ui';
+import { SpeakingResumeFacts } from '../speaking/ResumeFacts';
 
 export function WelcomeBack() {
   const { s, stage, sectionCfg, stageCfg, media, beginStage, dispatch } = useExam();
@@ -20,7 +21,8 @@ export function WelcomeBack() {
   const [busy, setBusy] = useState(false);
   const dl = parseIso(stage?.deadlineAt);
   const left = dl != null ? Math.max(0, (dl - now) / 1000) : 0;
-  const hasAudio = !!stageCfg?.audio;
+  const speaking = stageCfg?.kind === 'speaking';
+  const hasAudio = !!stageCfg?.audio || speaking;
   const loading = !s.timeEnded && hasAudio && !media.ready;
   const fact = { display: 'flex', gap: 10, alignItems: 'flex-start' } as const;
 
@@ -40,6 +42,8 @@ export function WelcomeBack() {
         {s.timeEnded ? (
           // SAT: the stage that ended while away may be the break — then it is Math that starts, nothing was "submitted"
           <Bi pair={prevLocked(s.stages, s.stageKey)?.kind === 'break' ? bi('sat.break_ended_away') : bi('resume.time_ended', { section: s.timeEnded })} size={15} />
+        ) : speaking ? (
+          <><Bi pair={bi('resume.body')} size={15} weight={500} /><SpeakingResumeFacts /></>
         ) : (
           <>
             <Bi pair={bi('resume.body')} size={15} weight={500} />

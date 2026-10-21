@@ -19,7 +19,7 @@ export type Action =
   | { t: 'SUBMITTING'; on: boolean }
   | { t: 'SUBMIT_FAIL'; error: ExamState['submitError'] }
   | { t: 'SUBMITTED'; resp: SubmitResp; reason: 'user' | 'timeout'; title: string; next: { title: string; minutes: number } | null; writing: boolean }
-  | { t: 'TIMEUP_START'; next: { title: string; minutes: number } | null; writing: boolean }
+  | { t: 'TIMEUP_START'; next: { title: string; minutes: number } | null; writing: boolean; speaking?: boolean }
   | { t: 'TIMEUP_ACK' }
   | { t: 'PRELOAD'; refs: MediaRef[] }
   | { t: 'MEDIA'; stageKey: string; refs: MediaRef[] }
@@ -32,6 +32,7 @@ export function reducer(s: ExamState, a: Action): ExamState {
       return {
         ...s, attempt: a.data.attempt, config: a.data.config, stages: a.data.stages, answers: a.answers, flags: a.flags, ui: a.ui,
         phase: a.phase, stageKey: a.stageKey, prevSubmitted: a.prevSubmitted, timeEnded: a.timeEnded, resumeSaved: a.resumeSaved, preload: a.data.preload ?? [], error: null,
+        spRecorded: (a.data.recordings ?? []).filter((r) => r.status === 'UPLOADED').map((r) => r.itemKey), spRestarted: (a.data.itemRestarts ?? []).map((r) => r.itemKey),
       };
     case 'FAIL':
       return { ...s, phase: a.kind === 'auth' ? 'auth' : 'error', error: { kind: a.kind, code: a.code } };
@@ -79,14 +80,14 @@ export function reducer(s: ExamState, a: Action): ExamState {
       const phase: Phase = a.reason === 'timeout' ? 'timeup' : r.nextStageKey ? 'intro' : 'complete';
       return {
         ...s, stages, stageKey: r.nextStageKey, content: null, media: [], preload: r.preload, highlights: [], flags: {}, modal: null, submitting: false, submitError: null,
-        prevSubmitted: a.title, phase, timeup: a.reason === 'timeout' ? { next: a.next, writing: a.writing, acked: true } : null, partIdx: 0, currentQ: null,
+        prevSubmitted: a.title, phase, timeup: a.reason === 'timeout' ? { next: a.next, writing: a.writing, speaking: s.timeup?.speaking, acked: true } : null, partIdx: 0, currentQ: null,
         // the server just answered — a SYNC_FAIL left over from a failed submit try must not
         // greet the next section with a stale "Reconnecting…" banner
         syncFailSince: null, backOnlineAt: s.syncFailSince != null ? Date.now() : s.backOnlineAt,
       };
     }
     case 'TIMEUP_START':
-      return { ...s, phase: 'timeup', modal: null, timeup: { next: a.next, writing: a.writing, acked: false } };
+      return { ...s, phase: 'timeup', modal: null, timeup: { next: a.next, writing: a.writing, speaking: a.speaking, acked: false } };
     case 'TIMEUP_ACK':
       return { ...s, phase: s.stageKey ? 'intro' : 'complete', timeup: null };
     case 'PRELOAD':

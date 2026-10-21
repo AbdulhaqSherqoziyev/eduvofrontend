@@ -19,6 +19,10 @@ import { TryInterface } from './tryout/TryInterface';
 
 // SAT module screen (KaTeX, Desmos loader, tools) ships in its own chunk — IELTS/CEFR never download it.
 const SatStage = dynamic(() => import('../sat/SatSection').then((m) => m.SatStage), { loading: () => <Centered><Spinner size={22} /></Centered> });
+
+// static (a dynamic() chunk stayed in its loading state when resumed from Welcome back in dev — kept simple)
+import { SpeakingStage } from '../speaking/SpeakingStage';
+import { SpeakingIntro } from '../speaking/intro/SpeakingIntro';
 import { WelcomeBack } from './WelcomeBack';
 import { useExamHost } from '../host';
 
@@ -66,8 +70,8 @@ function Player({ attemptId, onComplete }: { attemptId: string; onComplete: () =
     case 'precheck': body = skipPre.current ? <Centered><Spinner size={22} /></Centered> : host.ResumeScreen ? <host.ResumeScreen /> : <PreCheck />; break;
     case 'tryout': body = <TryInterface />; break;
     case 'welcome': body = host.ResumeScreen ? <host.ResumeScreen /> : <WelcomeBack />; break;
-    case 'intro': body = handoff ? <SatHandoff /> : <SectionIntro />; break;
-    case 'section': body = sat ? <SatStage /> : <SectionView />; break;
+    case 'intro': body = handoff ? <SatHandoff /> : ctl.stageCfg?.kind === 'speaking' ? <SpeakingIntro /> : <SectionIntro />; break;
+    case 'section': body = sat ? <SatStage /> : s.content?.kind === 'speaking' ? <SpeakingStage content={s.content} /> : <SectionView />; break;
     case 'timeup': body = handoff ? <SatHandoff /> : <TimeUp />; break;
   }
   return (

@@ -18,12 +18,14 @@ import { Btn } from './ui';
 const FONTS: FontKey[] = ['s', 'm', 'l'];
 const btn = { height: 36, padding: '0 12px', borderRadius: 9, border: '1.5px solid var(--x-line)', background: 'transparent', color: 'var(--x-ink)', fontSize: 12.5, fontWeight: 700 } as const;
 
-export function TopBar({ sectionTitle, remaining, pulse, short, noWarn, extra, notes, submit }: {
+export function TopBar({ sectionTitle, remaining, pulse, short, noWarn, extra, notes, submit, pill }: {
   sectionTitle: string; remaining: number | null; pulse: boolean; short?: string; noWarn?: boolean; extra?: ReactNode;
   /** B2C only: "Notes · N" button (IELTS Reading) */
   notes?: boolean;
   /** B2C only: "Submit section" in the top bar (IELTS) */
   submit?: { disabled?: boolean; hint?: string };
+  /** Replaces the timer pill (IELTS Speaking: "Part 1", no clock — speaking-design §1.3 D-3). */
+  pill?: ReactNode;
 }) {
   const { s, setUi, sectionCfg, dispatch } = useExam();
   const { t } = useT();
@@ -62,7 +64,7 @@ export function TopBar({ sectionTitle, remaining, pulse, short, noWarn, extra, n
           </div>
           {sat && dirBtn}
         </div>
-        <TimerPill remaining={remaining} pulse={pulse} noWarn={noWarn} hideToggle={sat} />
+        {pill ?? <TimerPill remaining={remaining} pulse={pulse} noWarn={noWarn} hideToggle={sat} />}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8, minWidth: 0 }}>
           {!sat && dirBtn}
           {extra}
@@ -85,7 +87,7 @@ export function TopBar({ sectionTitle, remaining, pulse, short, noWarn, extra, n
         <span style={{ fontSize: 14.5, fontWeight: 600, color: 'var(--x-sub)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{sectionTitle}</span>
         {sat && dirBtn}
       </div>
-      <TimerPill remaining={remaining} pulse={pulse} noWarn={noWarn} />
+      {pill ?? <TimerPill remaining={remaining} pulse={pulse} noWarn={noWarn} />}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8 }}>
         {cand && <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--x-sub)', marginRight: 6, whiteSpace: 'nowrap' }}>{cand.name}{cand.code ? ` · ${cand.code}` : ''}</span>}
         {!sat && dirBtn}
