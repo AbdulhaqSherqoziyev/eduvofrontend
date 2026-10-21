@@ -1,4 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { SpeakingOverrideBody } from '@/lib/exam/speaking-types';
 import {
   centerExamsApi, type AssignmentStatusFilter, type CreateAssignmentInput, type PatchAssignmentInput, type ResultsQuery,
 } from '../api/center-exams';
@@ -99,4 +100,21 @@ export function useExamPreview() {
     });
   };
   return { open, isPending: m.isPending, error: m.error, reset: m.reset };
+}
+
+/** Speaking override / revert (contract §7, §7a): not optimistic — the result is re-read on success. */
+export function useSpeakingOverride(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (b: SpeakingOverrideBody) => centerExamsApi.overrideSpeaking(id, b),
+    onSuccess: () => qc.invalidateQueries({ queryKey: [KEY, 'attempt-result', id] }),
+  });
+}
+
+export function useSpeakingRevert(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => centerExamsApi.revertSpeaking(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: [KEY, 'attempt-result', id] }),
+  });
 }

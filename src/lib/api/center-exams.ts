@@ -1,3 +1,4 @@
+import type { SpeakingOverrideBody, SpeakingOverrideResp } from '@/lib/exam/speaking-types';
 import { api } from './client';
 import { cleanParams } from './http';
 import type { CatalogFamily, CatalogKpis, ResultKpis, ResultRowV3 } from './center-exams-v3';
@@ -90,6 +91,11 @@ export const centerExamsApi = {
     api.get<Results>('/exams/results', { params: cleanParams({ ...q, includePreview: q.includePreview ? 1 : undefined }) }).then((r) => r.data),
   /** Staff full result (2026-10-12): the student's §1.10 result + essay text, student, assignment, integrity, timing. */
   attemptResult: (id: string) => api.get<StaffAttemptResult>(`/exams/attempts/${id}/result`).then((r) => r.data),
+  /** Speaking contract §7: staff override of the AI Speaking score (exam.grade). */
+  overrideSpeaking: (id: string, body: SpeakingOverrideBody) =>
+    api.patch<SpeakingOverrideResp>(`/exams/attempts/${id}/speaking`, body).then((r) => r.data),
+  /** Speaking contract §7a: back to the AI score. */
+  revertSpeaking: (id: string) => api.delete<SpeakingOverrideResp>(`/exams/attempts/${id}/speaking/review`).then((r) => r.data),
   preview: (testId: string, sectionKey?: string) =>
     api.post<PreviewSession>('/exams/attempts/preview', cleanParams({ testId, sectionKey })).then((r) => r.data),
   accessCodes: (assignmentId: string, studentIds?: string[]) =>

@@ -36,7 +36,7 @@ export function GradingStrip({ r }: { r: ResultResp }) {
   return (
     <div className="flex flex-col gap-3 rounded-[24px] bg-background p-5 shadow-nm md:flex-row md:items-center md:gap-5">
       <div className="min-w-0 flex-1">
-        <div className="text-[14px] font-extrabold text-foreground">{ht('results.grading_writing')}</div>
+        <div className="text-[14px] font-extrabold text-foreground">{ht(r.sections.some((s) => s.key === 'writing' && s.status === 'GRADING') ? 'results.grading_writing' : 'results.grading_speaking')}</div>
         <div className="mt-0.5 text-[13px] font-medium text-[#5b6b82]">{ht('results.can_leave')}</div>
       </div>
       <ol className="flex flex-wrap items-center gap-2 text-[12px] font-bold">

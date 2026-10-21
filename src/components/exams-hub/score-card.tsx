@@ -47,9 +47,11 @@ interface Props {
   cert: ResultResp['certificate'];
   selected: boolean;
   onSelect: () => void;
+  /** speaking contract §4 status — the card shows "—" + a line while Speaking is pending. */
+  speakingStatus?: string;
 }
 
-export function ScoreCard({ s, family, cert, selected, onSelect }: Props) {
+export function ScoreCard({ s, family, cert, selected, onSelect, speakingStatus }: Props) {
   const ready = s.status === 'READY' && s.label != null;
   const grading = s.status === 'GRADING' || s.status === 'NEEDS_HUMAN';
   return (
@@ -72,6 +74,7 @@ export function ScoreCard({ s, family, cert, selected, onSelect }: Props) {
       )}
       {ready ? <Distance s={s} family={family} cert={cert} /> : null}
       {grading ? <Pending s={s} /> : null}
+      {s.key === 'speaking' && speakingStatus === 'pending' ? <div className="text-[12.5px] font-semibold text-muted">{ht('results.speaking_not_taken')}</div> : null}
     </button>
   );
 }

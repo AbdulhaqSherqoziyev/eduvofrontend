@@ -3,7 +3,9 @@
  * Content is the design's own illustrative result (IA-0142, band 6.5) and is always labelled "Sample"
  * on the page — it is never mixed with a learner's data.
  */
+import { speakingLive } from '@/lib/mock/speaking-live';
 import type { FullResult } from './results-view';
+import { SAMPLE_SPEAKING } from './sample-speaking';
 
 const RD: Array<[number, string, string, string, string, string, string, string]> = [
   [1, 'Urban orchards were common in European cities before the 1960s.', 'tfng', 'TRUE', 'TRUE', 'A', 'a practice largely abandoned in the 1960s', '“Abandoned in the 1960s” means the practice existed before then.'],
@@ -141,6 +143,21 @@ const SAMPLE_FB: Record<'uz' | 'ru', [WFb, WFb]> = {
 
 /** SAMPLE_RESULT with the Writing feedback in `lang` (en/uz/ru; other languages keep English). */
 export function sampleResultFor(lang: string): FullResult {
+  return withSpeaking(writingFor(lang));
+}
+
+/** IELTS Speaking launch (§4.5): Speaking 6.5 joins the sample; (7.0 + 6.5 + 6.0 + 6.5) / 4 keeps the overall at 6.5. */
+function withSpeaking(r: FullResult): FullResult {
+  if (!speakingLive()) return r;
+  const card = { key: 'speaking' as const, score: 6.5, label: '6.5', correct: null, total: null, aiGraded: true, status: 'READY' as const };
+  return {
+    ...r, speaking: SAMPLE_SPEAKING,
+    overallBand: { value: 6.5, label: '6.5', level: 'B2', basis: ['listening', 'reading', 'writing', 'speaking'], missing: [], pending: false },
+    mock: { ...r.mock, sectionCards: [...r.mock.sectionCards, card] },
+  };
+}
+
+function writingFor(lang: string): FullResult {
   if (lang !== 'uz' && lang !== 'ru') return SAMPLE_RESULT;
   const fb = SAMPLE_FB[lang];
   const writing = SAMPLE_RESULT.mock.writing.map((w, i) => ({

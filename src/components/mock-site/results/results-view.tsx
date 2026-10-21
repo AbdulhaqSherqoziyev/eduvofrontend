@@ -24,6 +24,7 @@ import { StickyCta } from '../sticky-cta';
 import { useToast } from '../toast';
 import { CancelledCard } from '../cancelled-card';
 import { ShareModal } from './share-modal';
+import { B2cSpeaking } from './speaking-section';
 
 export type FullResult = ResultResp & { mock: MockResultExt };
 const POLL_MS = 10_000;
@@ -51,7 +52,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
   const [filter, setFilter] = useState<'all' | 'wrong'>('all');
   const [open, setOpen] = useState<Record<string, boolean>>({});
   const [ev, setEv] = useState<Record<string, boolean>>({});
-  const [ptab, setPtab] = useState<'overview' | 'writing' | 'review'>('overview');
+  const [ptab, setPtab] = useState<'overview' | 'writing' | 'speaking' | 'review'>('overview');
   const [essayOpen, setEssayOpen] = useState(false);
   const [sheetQ, setSheetQ] = useState<number | null>(null);
   const wasGrading = useRef(false);
@@ -69,7 +70,8 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
   }, [attemptId, router, href]);
   useEffect(() => { if (!sample) void load(); }, [load, sample]);
 
-  const grading = !!res && (res.mock.writing.some((w) => w.status === 'GRADING') || !!res.overallBand?.pending);
+  const spGrading = ['received', 'transcribing', 'scoring'].includes(res?.speaking?.status ?? '');
+  const grading = !!res && (res.mock.writing.some((w) => w.status === 'GRADING') || !!res.overallBand?.pending || spGrading);
   useEffect(() => {
     if (sample || !grading) {
       if (wasGrading.current && !grading && res) toast(t('toastGraded'));
@@ -87,7 +89,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
   const m = res?.mock;
   const exam: OpenExamSlug = m?.exam ?? 'ielts';
   const ielts = exam === 'ielts';
-  const SEC: Record<string, string> = { listening: 'Listening', reading: 'Reading', writing: 'Writing', reading_writing: 'Reading and Writing', math: 'Math' };
+  const SEC: Record<string, string> = { listening: 'Listening', reading: 'Reading', writing: 'Writing', speaking: 'Speaking', reading_writing: 'Reading and Writing', math: 'Math' };
   const sName = (k: string) => SEC[k.replace(/_m\d+$/, '')] ?? k;
   const typeLabel = (k: string) => (tq.has(`types.${k}`) ? tq(`types.${k}`) : k.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase()));
   const recText = (r: Recommendation) => {
@@ -164,10 +166,11 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
   }
 
   const acc = m.accuracyByType;
+  const speaking = res.speaking ?? null;
   const sectionCards = m.sectionCards;
   const sectionCard = (s: MockResultExt['sectionCards'][number], phone = false) => {
     const pct = s.correct != null && s.total ? Math.round((s.correct / s.total) * 100) : s.score != null ? Math.round((s.score / (ielts ? 9 : 800)) * 100) : 0;
-    const detail = s.aiGraded ? writingDetail() : s.correct != null && s.total != null ? t('correctOf', { correct: s.correct, total: s.total }) : '';
+    const detail = s.key === 'speaking' ? '' : s.aiGraded ? writingDetail() : s.correct != null && s.total != null ? t('correctOf', { correct: s.correct, total: s.total }) : '';
     const name = <span style={sx(`font-size:${phone ? 11 : 14}px;font-weight:700;color:var(--ink2);display:flex;gap:${phone ? 4 : 6}px;align-items:center`)}>{sName(s.key)}{s.aiGraded && <span className="m-ai" style={sx(phone ? '' : 'padding:2px 7px;border-radius:6px;font-size:11px')}>{tc('chips.ai')}</span>}</span>;
     if (phone) {
       return (
@@ -311,6 +314,8 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
           </section>
         )}
 
+        {speaking && <B2cSpeaking sp={speaking} attemptId={attemptId} sample={!!sample} notGraded={m.notGraded} onChanged={() => void load()} />}
+
         <section className="m-card" style={sx('padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:18px')}>
           <div style={sx('display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap')}>
             <span style={sx('font-weight:800;font-size:20px')}>{t('review')}</span>
@@ -361,11 +366,11 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
           <div style={sx('display:flex;justify-content:space-between;align-items:center;gap:8px')}><span className="m-eyebrow" style={{ ...sx('letter-spacing:.05em'), color: `var(--${exam})` }} lang="en">{ielts ? 'IELTS ACADEMIC' : 'DIGITAL SAT'}</span>{m.cefr && <span className="m-pill m-pill--ok">CEFR {m.cefr}</span>}{sample && <span className="m-pill m-pill--warn">{t('sampleBadge')}</span>}</div>
           <div style={sx('display:flex;align-items:baseline;gap:10px')}><span style={sx('font-size:76px;font-weight:800;letter-spacing:var(--ls-score-xl);line-height:.95')}><bdi dir="ltr">{overallShown}</bdi></span><span style={sx('font-size:14px;color:var(--mut);font-weight:700')}>{full ? (ielts ? t('phone.overallBand') : t('totalScore').toLowerCase()) : overallLabel}</span></div>
           <span style={sx('font-size:13px;color:var(--ink2);font-weight:600')}>{t.rich('phone.metaLine', { mode: modeStr, date: dateStr, code: () => <bdi dir="ltr">{m.testCode}</bdi> })}{m.target ? t('phone.targetShort', { v: fmtScore(m.target.value, exam) }) : ''}</span>
-          {full && <div style={{ ...sx('display:grid;gap:8px'), gridTemplateColumns: `repeat(${sectionCards.length},1fr)` }}>{sectionCards.map((s) => sectionCard(s, true))}</div>}
+          {full && <div style={{ ...sx('display:grid;gap:8px'), gridTemplateColumns: sectionCards.length > 3 ? 'repeat(2,minmax(0,1fr))' : `repeat(${sectionCards.length},1fr)` }}>{sectionCards.map((s) => sectionCard(s, true))}</div>}
         </div>
         <div style={sx('position:sticky;top:52px;z-index:3;background:var(--bg);padding:8px 0')}>
-          <Segmented grid label={t('title')} value={ptab} onChange={setPtab} style={sx('border-radius:16px')} btnStyle={sx('height:40px;border-radius:12px;font-weight:800;font-size:13px')}
-            items={[{ key: 'overview', label: t('phone.overview') }, ...(writing.length ? [{ key: 'writing' as const, label: t('writing') }] : []), { key: 'review', label: t('phone.review') }]} />
+          <Segmented grid label={t('title')} value={ptab} onChange={setPtab} style={sx('border-radius:16px')} btnStyle={sx(`height:40px;border-radius:12px;font-weight:800;font-size:${writing.length && speaking ? '12px;padding:0 4px;min-width:0' : '13px'}`)}
+            items={[{ key: 'overview', label: t('phone.overview') }, ...(writing.length ? [{ key: 'writing' as const, label: t('writing') }] : []), ...(speaking ? [{ key: 'speaking' as const, label: t('speaking') }] : []), { key: 'review', label: t('phone.review') }]} />
         </div>
         {ptab === 'overview' && (
           <div style={sx('display:flex;flex-direction:column;gap:16px;padding-bottom:24px')}>
@@ -407,6 +412,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
             ) : essayBlock}
           </div>
         )}
+        {ptab === 'speaking' && speaking && <B2cSpeaking phone sp={speaking} attemptId={attemptId} sample={!!sample} notGraded={m.notGraded} onChanged={() => void load()} />}
         {ptab === 'review' && (
           <div style={sx('display:flex;flex-direction:column;gap:12px;padding-bottom:24px')}>
             <div style={sx('display:flex;gap:6px;flex-wrap:wrap')}>

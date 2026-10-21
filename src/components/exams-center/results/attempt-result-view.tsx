@@ -28,6 +28,7 @@ import { examErrorCode } from '../exam-errors';
 import { dateTimeLabel } from '../exam-meta';
 import { SH } from '../tokens';
 import { Caps, Card, ChipButton, ChipTrack, SoftButton } from '../ui';
+import { SpeakingStaffSection } from './speaking/staff-speaking-section';
 import { durationText, essaysFor, eventLabel, integrityOf, timingOf, type StageTime } from './staff-result';
 
 const familyOf = (code: string): ExamFamily =>
@@ -85,7 +86,7 @@ export function AttemptResultView({ id }: { id: string }) {
 
 function Detail({ r }: { r: StaffAttemptResult }) {
   const family = familyOf(r.examCode);
-  const sections = r.sections.filter((s) => s.status !== 'NOT_TAKEN');
+  const sections = r.sections.filter((s) => s.status !== 'NOT_TAKEN' || (s.key === 'speaking' && !!r.speaking));
   const summary = useMemo(() => buildSummary(r), [r]);
   const timing = useMemo(() => timingOf(r), [r]);
   const events = useMemo(() => integrityOf(r), [r]);
@@ -137,7 +138,9 @@ function Detail({ r }: { r: StaffAttemptResult }) {
         <Card className="print-card p-6 max-md:p-4"><ResultSummary data={summary} locale="uz" /></Card>
       ) : null}
 
-      {sections.map((s) => (isAi(s.key) ? (
+      {sections.map((s) => (s.key === 'speaking' && r.speaking ? (
+        <SpeakingStaffSection key={s.key} id={r.attemptId} sp={r.speaking} who={[name, r.test?.title ?? r.examName ?? r.examCode].filter(Boolean).join(' · ')} time={timeFor(s)} />
+      ) : isAi(s.key) ? (
         <AiSection key={s.key} r={r} s={s} family={family} time={timeFor(s)} />
       ) : (
         <ObjectiveSection key={s.key} r={r} s={s} time={timeFor(s)} onPassage={r.passages?.length ? (a) => setAnchor({ a, s: s.key }) : undefined} />

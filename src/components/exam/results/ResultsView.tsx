@@ -16,6 +16,7 @@ import { t, type Locale, type TextKey } from '@/lib/exam/i18n';
 import type { ResultResp, ResultSection } from '@/lib/exam/types';
 import { buildSummary } from '@/lib/exam/result-summary';
 import { AiTaskPanel } from './AiTaskPanel';
+import { SpeakingResultPanel } from './speaking/SpeakingResultPanel';
 import { OverallBlock } from './OverallBlock';
 import { ResultSummary } from './ResultSummary';
 import { PassageModal } from './PassageModal';
@@ -25,7 +26,8 @@ const POLL_MS = 15_000;
 const CONSOLE_URL = '/exams/catalog';
 const isAiSection = (key: string) => key === 'writing' || key === 'speaking';
 
-function sub(sec: ResultSection, locale: Locale, family: string): string {
+function sub(sec: ResultSection, locale: Locale, family: string, spStatus?: string): string {
+  if (sec.key === 'speaking' && spStatus === 'pending') return t('results.speaking_not_taken', locale);
   if (sec.status === 'GRADING' || sec.status === 'PENDING') return t('results.ws_in_progress', locale);
   if (sec.status === 'NEEDS_HUMAN') return t('results.human_review', locale);
   if (sec.status === 'NOT_TAKEN') return '—';
@@ -69,7 +71,8 @@ export function ResultsView({ attemptId, locale, isPreview = false }: { attemptI
     );
   }
   const family: ExamFamily = r.examCode.startsWith('CEFR') ? 'CEFR' : r.examCode.startsWith('SAT') ? 'SAT' : r.examCode.startsWith('TOEFL') ? 'TOEFL' : r.examCode.startsWith('HSK') ? 'HSK' : 'IELTS';
-  const sections = r.sections.filter((s) => s.status !== 'NOT_TAKEN');
+  // Speaking stays visible while it is pending / not scored (speaking contract §4: `speaking` block decides)
+  const sections = r.sections.filter((s) => s.status !== 'NOT_TAKEN' || (s.key === 'speaking' && !!r.speaking));
   const det = sections[Math.min(sel, sections.length - 1)];
   // SAT `no` restarts per module: with `stageKey` (contract v1.4) rows read "M1·4" (rowNo); only an old result without it is numbered by position
   const sat = family === 'SAT';
@@ -115,9 +118,9 @@ export function ResultsView({ attemptId, locale, isPreview = false }: { attemptI
                 <button key={s.key} type="button" onClick={() => setSel(i)} aria-pressed={i === sel} style={{ ...card, textAlign: 'left', padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 8, border: `2px solid ${i === sel ? '#2E6BE6' : 'transparent'}`, cursor: 'pointer' }}>
                   <span style={{ fontSize: 13, fontWeight: 800, color: '#4A586C' }}>{s.title}</span>
                   <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: -0.6, color: '#1E2A3A', display: 'flex', alignItems: 'center', gap: 8, fontVariantNumeric: 'tabular-nums' }}>
-                    {s.label ?? '…'}{ai && <span style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: 0.4, borderRadius: 6, padding: '3px 7px', color: '#5B3FD1', background: '#EEE9FF' }}>{t('x.ai_badge', locale)}</span>}
+                    {s.label ?? (s.status === 'NOT_TAKEN' ? '—' : '…')}{ai && <span style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: 0.4, borderRadius: 6, padding: '3px 7px', color: '#5B3FD1', background: '#EEE9FF' }}>{t('x.ai_badge', locale)}</span>}
                   </span>
-                  <span style={{ fontSize: 12, color: '#7A8699', fontWeight: 600 }}>{sub(s, locale, family)}{s.level ? ` · ${s.level}` : ''}</span>
+                  <span style={{ fontSize: 12, color: '#7A8699', fontWeight: 600 }}>{sub(s, locale, family, r.speaking?.status)}{s.level ? ` · ${s.level}` : ''}</span>
                 </button>
               );
             })}
@@ -126,7 +129,7 @@ export function ResultsView({ attemptId, locale, isPreview = false }: { attemptI
       )}
       {grading && (
         <div className="xr-strip" style={{ ...card, borderRadius: 16, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16 }} role="status" aria-live="polite">
-          <span style={{ fontSize: 14, fontWeight: 800 }}>{t('results.grading_writing', locale)}</span>
+          <span style={{ fontSize: 14, fontWeight: 800 }}>{t(sections.some((x) => x.key === 'writing' && x.status === 'GRADING') ? 'results.grading_writing' : 'results.grading_speaking', locale)}</span>
           <span style={{ flex: 1, fontSize: 13, color: '#7A8699' }}>{isPreview ? `${t('x.preview_result_note', locale)} ${t('x.auto_refresh', locale)}` : t('results.can_leave', locale)}</span>
           <span style={{ fontSize: 12.5, fontWeight: 700, color: '#5B3FD1', background: '#EEE9FF', borderRadius: 8, padding: '4px 10px' }}>{t('results.strip_received', locale)}</span>
         </div>
@@ -139,10 +142,12 @@ export function ResultsView({ attemptId, locale, isPreview = false }: { attemptI
       {det && (
         <div style={{ ...card, padding: '24px 26px', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-            <div style={{ fontSize: 18, fontWeight: 800 }}>{det.title}</div>
+            {det.key !== 'speaking' || !r.speaking ? <div style={{ fontSize: 18, fontWeight: 800 }}>{det.title}</div> : null}
             {det.status === 'READY' && !isAiSection(det.key) && <span style={{ fontSize: 12, fontWeight: 700, color: '#7A8699', maxWidth: 620, textAlign: 'right' }}>{t('x.auto_how', locale)}</span>}
           </div>
-          {isAiSection(det.key) ? (
+          {det.key === 'speaking' && r.speaking ? (
+            <SpeakingResultPanel sp={r.speaking} skin="flat" mode="preview" tx={(k, v) => t(k, locale, v)} />
+          ) : isAiSection(det.key) ? (
             <AiTaskPanel r={r} family={family} locale={locale} />
           ) : det.status === 'GRADING' || det.status === 'PENDING' ? (
             <div style={{ fontSize: 14, color: '#7A8699', fontWeight: 600, padding: '20px 0' }}>{t('results.grading_writing', locale)} {t('results.others_ready', locale)}</div>

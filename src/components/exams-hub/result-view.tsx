@@ -17,6 +17,7 @@ import { useExamDetail, useHubNow, useResult } from '@/lib/exam/use-hub';
 import { assignmentPhase } from '@/lib/exam/hub-derive';
 import { playerUrl } from '@/lib/exam/use-start-attempt';
 import { AiTaskPanel } from './ai-task-panel';
+import { HubSpeaking } from './hub-speaking';
 import { Delayed, HubError, SkeletonBlock } from './hub-states';
 import { GradingStrip, ResultHero } from './result-hero';
 import { ReviewPanel } from './review-panel';
@@ -57,7 +58,7 @@ export function ResultView({ id }: { id: string }) {
   const facts = resultFacts(r, d, family);
   const att = d?.attempts.find((a) => a.id === id);
   const variant = att ? d?.tests.find((t) => t.id === att.testId)?.title : null;
-  const sections = r.sections.filter((s) => s.status !== 'NOT_TAKEN');
+  const sections = r.sections.filter((s) => s.status !== 'NOT_TAKEN' || (s.key === 'speaking' && !!r.speaking));
   const summary = buildSummary(r);
   const cur = sections.find((s) => s.key === (sel ?? typeSection)) ?? sections[0];
   const name = examTitle(r.examName ?? r.examCode);
@@ -94,7 +95,7 @@ export function ResultView({ id }: { id: string }) {
         <ResultHero r={r} facts={facts} />
         <div className="grid gap-3 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
           {sections.map((s) => (
-            <ScoreCard key={s.key} s={s} family={family} cert={r.certificate} selected={s.key === cur?.key} onSelect={() => setSel(s.key)} />
+            <ScoreCard key={s.key} s={s} family={family} cert={r.certificate} selected={s.key === cur?.key} onSelect={() => setSel(s.key)} speakingStatus={r.speaking?.status} />
           ))}
         </div>
       </div>
@@ -108,7 +109,8 @@ export function ResultView({ id }: { id: string }) {
           <NmSegmented size="sm" className="min-w-[360px] md:w-[420px]" value={cur?.key ?? ''} onValueChange={setSel} items={sections.map((s) => ({ value: s.key, label: s.title }))} />
         </div>
       ) : null}
-      {cur && (cur.key === 'writing' || cur.key === 'speaking') ? <AiTaskPanel r={r} family={family} /> : null}
+      {cur?.key === 'speaking' && r.speaking ? <HubSpeaking id={id} sp={r.speaking} onChanged={() => void q.refetch()} /> : null}
+      {cur && (cur.key === 'writing' || (cur.key === 'speaking' && !r.speaking)) ? <AiTaskPanel r={r} family={family} /> : null}
       {cur && cur.key !== 'writing' && cur.key !== 'speaking' ? (
         cur.status === 'READY' ? <ReviewPanel r={r} s={cur} /> : <NmCard className="p-6 text-[14px] font-semibold text-muted">—</NmCard>
       ) : null}

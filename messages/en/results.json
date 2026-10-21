@@ -121,5 +121,10 @@
     "total": "Total score",
     "section": "{section} score",
     "taken": "Taken {date}"
-  }
+  },
+  "speaking": "Speaking",
+  "speakingPendingBody": "Listening, Reading and Writing are ready. Speaking is usually scored in 5–15 minutes — you can leave, we'll email you.",
+  "speakingNotGraded": "We couldn't score this Speaking. The credit for it was returned to your account.",
+  "speakingRefunded": "The credit was returned to your account.",
+  "sampleNoAudio": "No audio in the sample"
 }
