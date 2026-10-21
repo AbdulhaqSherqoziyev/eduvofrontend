@@ -218,6 +218,27 @@
     "fq5": "Qaysi valyutalarda?",
     "fa5": "AQSh dollarida (USD). Narxlarga soliqlar kiritilgan.",
     "startFree": "Bepul boshlash",
-    "sample": "Namuna"
+    "sample": "Namuna",
+    "live": "IELTS va SAT · haqiqiy format",
+    "h1a": "Mock imtihon natijangiz",
+    "h1b": "bir necha daqiqada.",
+    "satBadge": "Eng yaxshi bo‘lim: Math",
+    "of": "{max} dan",
+    "tipIelts": "Matching headings — eng zaif savol turingiz. Siz uchun ikkita qisqa mashq tayyor.",
+    "tipSat": "2-modulda eng ko‘p ballni chiziqli tenglamalar oldi. Shulardan boshlang.",
+    "perk1v": "1",
+    "perk1": "har imtihonda bepul bo‘lim",
+    "perk2v": "~5 daq",
+    "perk2": "AI Writing tahlili",
+    "perk3v": "40",
+    "perk3": "interfeys tili",
+    "swipe": "Suring",
+    "laptopT": "Imtihon noutbukda topshiriladi",
+    "laptopB": "Ro‘yxatdan o‘tish, to‘lov va natijalar telefonda. Imtihonning o‘zi haqiqiy testdagidek noutbuk yoki kompyuterda ochiladi. Havolani emailga yuboramiz.",
+    "popular": "Ommabop",
+    "tryFree": "Bepul bo‘limni sinash",
+    "noCard": "Kartasiz",
+    "themeDark": "Qorong‘i mavzu",
+    "themeLight": "Yorug‘ mavzu"
   }
 }

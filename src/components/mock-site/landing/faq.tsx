@@ -22,6 +22,24 @@ export function FaqDesktop({ items, initial = 0 }: { items: FaqItem[]; initial?:
   );
 }
 
+/** Phone landing (Mobile Landing.dc.html): separate raised cards, the open one pressed in. */
+export function FaqCards({ items, initial = 0 }: { items: FaqItem[]; initial?: number }) {
+  const [open, setOpen] = useState(initial);
+  return (
+    <div style={sx('display:flex;flex-direction:column;gap:10px')}>
+      {items.map((f, i) => (
+        <div key={i} style={{ ...sx('border-radius:16px'), boxShadow: open === i ? 'var(--inset)' : 'var(--raise-sm)' }}>
+          <button type="button" aria-expanded={open === i} onClick={() => setOpen(open === i ? -1 : i)}
+            style={sx('width:100%;min-height:54px;border:0;background:transparent;cursor:pointer;color:var(--ink);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:start;font-size:15px;font-weight:700;font-family:inherit')}>
+            <span>{f.q}</span><span style={sx('font-size:20px;color:var(--blue);flex:none;line-height:1')} aria-hidden>{open === i ? '−' : '+'}</span>
+          </button>
+          {open === i && <div style={sx('padding:0 16px 16px;font-size:14px;line-height:1.6;color:var(--ink2)')}>{f.a}</div>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function FaqPhone({ items, initial = 0 }: { items: FaqItem[]; initial?: number }) {
   const [open, setOpen] = useState(initial);
   return (

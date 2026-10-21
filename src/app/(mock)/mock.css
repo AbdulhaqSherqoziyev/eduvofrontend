@@ -382,6 +382,8 @@ select.m-input { padding: 0 14px; }
 .m-cta__btn--soft:hover { color: var(--ink); }
 .m-cta__btn--grow { flex: 1; }
 .m-with-cta { padding-bottom: calc(78px + env(safe-area-inset-bottom)); }
+.m-fwd { transform: rotate(45deg); }
+[dir='rtl'] .m-fwd { transform: rotate(-135deg); }
 .m-tabbar {
   position: fixed; inset-inline: 0; bottom: 0; z-index: 50; display: grid; grid-template-columns: repeat(4, 1fr);
   padding: 6px 6px max(6px, env(safe-area-inset-bottom)); background: var(--bar); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-top: 1px solid var(--line);

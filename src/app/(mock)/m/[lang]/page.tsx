@@ -34,7 +34,10 @@ export default async function LandingPage({ params: { lang } }: { params: { lang
           <LandingPhone />
         </main>
         <SiteFooter />
-        <StickyCta primary={{ label: t('startFree'), href: `/${lang}/signup?next=free` }} secondary={{ label: t('sample'), href: `/${lang}/sample-result` }} />
+        <StickyCta primary={{
+          label: <>{t('tryFree')}<span style={{ padding: '3px 8px', borderRadius: 999, background: 'rgba(255,255,255,.22)', fontSize: 11, fontWeight: 800 }}>{t('noCard')}</span></>,
+          href: `/${lang}/signup?next=free`,
+        }} />
       </CatalogProvider>
     </PageShell>
   );

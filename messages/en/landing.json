@@ -218,6 +218,27 @@
     "fq5": "Which currencies?",
     "fa5": "US dollars (USD). Prices include taxes.",
     "startFree": "Start free",
-    "sample": "Sample"
+    "sample": "Sample",
+    "live": "IELTS & SAT · real exam format",
+    "h1a": "Your mock exam score,",
+    "h1b": "in minutes.",
+    "satBadge": "Top section: Math",
+    "of": "of {max}",
+    "tipIelts": "Matching headings is your weakest type. Two short drills are queued for you.",
+    "tipSat": "Linear equations cost you the most points in Module 2. Start there.",
+    "perk1v": "1",
+    "perk1": "free section per exam",
+    "perk2v": "~5 min",
+    "perk2": "AI Writing feedback",
+    "perk3v": "40",
+    "perk3": "interface languages",
+    "swipe": "Swipe",
+    "laptopT": "Sit the exam on a laptop",
+    "laptopB": "Sign up, pay and read results on your phone. The exam itself opens on a laptop or desktop, like the real test. We email you the link.",
+    "popular": "Popular",
+    "tryFree": "Try a free section",
+    "noCard": "No card",
+    "themeDark": "Dark theme",
+    "themeLight": "Light theme"
   }
 }
