@@ -2,6 +2,7 @@
  * In-browser mock of contract §1 (NEXT_PUBLIC_EXAM_API_MOCK=1). Attempt ids
  * `demo-ielts*` / `demo-cefr*`; `?short=1` at first open gives short timers,
  * `?reset=1` starts over. State lives in localStorage so reload = resume.
+ * `demo-ielts-sp*` = Speaking-only attempt (section mode); see mock/speaking-result.ts for result variants.
  * The server clock runs 1.5 s ahead of the device on purpose (offset logic).
  */
 import type { ExamApi, ExamResult } from './api';
@@ -10,16 +11,22 @@ import type { AnswerValue, AttemptState, StageBrief } from './types';
 import { mockTest, stageMedia, type MockTest } from './mock/tests';
 import { synthWav, throttledResponse } from './mock/audio';
 import { scoreAttempt } from './mock/scoring';
+import { mockRestart, mockSpeakingAttempt, mockUpload } from './mock/speaking-api';
+import { mockSpeakingResult } from './mock/speaking-result';
 
 const SKEW = 1500;
 const KEY = 'eduvo_exam_mock:';
-interface MockState { id: string; code: 'ielts' | 'cefr'; short: boolean; startedAt: string; stages: StageBrief[]; answers: Record<string, { value: AnswerValue; seq: number; stageKey: string }> }
+export interface MockState {
+  id: string; code: 'ielts' | 'cefr'; short: boolean; startedAt: string; stages: StageBrief[]; answers: Record<string, { value: AnswerValue; seq: number; stageKey: string }>;
+  /** Speaking: uploaded itemKey → durationMs, and items that used their one restart. */
+  recs?: Record<string, number>; restarts?: string[];
+}
 
-const now = () => Date.now() + SKEW;
-const iso = (t: number) => new Date(t).toISOString();
+export const now = () => Date.now() + SKEW;
+export const iso = (t: number) => new Date(t).toISOString();
 const testOf = (s: MockState): MockTest => mockTest(s.code, s.short);
 
-function load(id: string): MockState {
+export function load(id: string): MockState {
   const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
   try {
     if (params?.get('reset') === '1' && !(window as unknown as { __mockReset?: boolean }).__mockReset) {
@@ -35,19 +42,19 @@ function load(id: string): MockState {
   const t = mockTest(code, short);
   const st: MockState = {
     id, code, short, startedAt: iso(now()), answers: {},
-    stages: t.stages.map((s, i) => ({ sectionKey: s.sectionKey, stageKey: s.stageKey, kind: s.kind, order: i + 1, status: 'PENDING', startedAt: null, deadlineAt: null, lockedAt: null, audioStartedAt: null, separateSitting: false })),
+    stages: t.stages.filter((s) => !mockSpeakingAttempt(id) || s.kind === 'speaking').map((s, i) => ({ sectionKey: s.sectionKey, stageKey: s.stageKey, kind: s.kind, order: i + 1, status: 'PENDING', startedAt: null, deadlineAt: null, lockedAt: null, audioStartedAt: null, separateSitting: false })),
   };
   save(st);
   return st;
 }
-function save(s: MockState) { try { window.localStorage.setItem(KEY + s.id, JSON.stringify(s)); } catch { /* ignore */ } }
+export function save(s: MockState) { try { window.localStorage.setItem(KEY + s.id, JSON.stringify(s)); } catch { /* ignore */ } }
 
 /** Lazy lock, like the server's GET: deadline + 3 s grace. */
 function lazyLock(s: MockState) {
   for (const st of s.stages) if (st.status === 'IN_PROGRESS' && st.deadlineAt && now() > Date.parse(st.deadlineAt) + 3000) { st.status = 'LOCKED'; st.lockedAt = st.deadlineAt; }
 }
 
-async function respond<T>(fn: () => ExamResult<T>): Promise<ExamResult<T>> {
+export async function respond<T>(fn: () => ExamResult<T>): Promise<ExamResult<T>> {
   const offline = (typeof navigator !== 'undefined' && navigator.onLine === false) || (window as unknown as { __examMockOffline?: boolean }).__examMockOffline;
   const t0 = performance.now();
   await new Promise((r) => setTimeout(r, 60 + Math.random() * 120));
@@ -56,7 +63,7 @@ async function respond<T>(fn: () => ExamResult<T>): Promise<ExamResult<T>> {
   if (r.ok) reportSample(t0, performance.now(), r.data);
   return r;
 }
-const fail = <T,>(status: number, code: string, body?: Record<string, unknown>): ExamResult<T> => ({ ok: false, kind: status >= 500 ? 'server' : 'client', status, code, body: { ...body, serverNow: iso(now()) } });
+export const fail = <T,>(status: number, code: string, body?: Record<string, unknown>): ExamResult<T> => ({ ok: false, kind: status >= 500 ? 'server' : 'client', status, code, body: { ...body, serverNow: iso(now()) } });
 
 export function createMockApi(): ExamApi {
   return {
@@ -67,11 +74,12 @@ export function createMockApi(): ExamApi {
       const next = s.stages.find((x) => x.status === 'PENDING');
       const nextStage = next ? t.stages.find((x) => x.stageKey === next.stageKey) : null;
       const data: AttemptState = {
-        attempt: { id, examCode: t.config.code, testId: `test-${s.code}`, mode: 'full', sectionKey: null, status: s.stages.every((x) => x.status === 'LOCKED') ? 'COMPLETED' : 'ACTIVE',
+        attempt: { id, examCode: t.config.code, testId: `test-${s.code}`, mode: mockSpeakingAttempt(id) ? 'section' : 'full', sectionKey: mockSpeakingAttempt(id) ? 'speaking' : null, status: s.stages.every((x) => x.status === 'LOCKED') ? 'COMPLETED' : 'ACTIVE',
           isPreview: false, currentStageKey: cur?.stageKey ?? next?.stageKey ?? null, startedAt: s.startedAt, finishedAt: null, candidate: { name: 'Aziza Karimova', code: '204118' } },
         config: t.config, stages: s.stages,
         answers: Object.entries(s.answers).map(([questionId, a]) => ({ questionId, stageKey: a.stageKey, value: a.value, uiState: null, clientSeq: a.seq })),
-        recordings: [], audioOffsetMs: cur?.audioStartedAt ? now() - Date.parse(cur.audioStartedAt) : null,
+        recordings: Object.entries(s.recs ?? {}).map(([itemKey, durationMs]) => ({ itemKey, stageKey: 'speaking', status: 'UPLOADED', durationMs, deleted: false })),
+        itemRestarts: (s.restarts ?? []).map((itemKey) => ({ stageKey: 'speaking', itemKey })), audioOffsetMs: cur?.audioStartedAt ? now() - Date.parse(cur.audioStartedAt) : null,
         preload: nextStage ? stageMedia(t, nextStage).filter((m) => m.kind === 'audio') : [], serverNow: iso(now()),
       };
       return { ok: true, data };
@@ -95,7 +103,7 @@ export function createMockApi(): ExamApi {
         Object.assign(st, { status: 'IN_PROGRESS', startedAt: iso(start), deadlineAt: iso(start + dur), audioStartedAt: ms.built?.audio.length ? iso(start) : null });
       }
       save(s);
-      const content = ms.kind === 'writing' ? { kind: 'writing' as const, tasks: ms.tasks ?? [] } : { kind: 'questions' as const, parts: ms.built!.parts };
+      const content = ms.kind === 'speaking' ? ms.speaking! : ms.kind === 'writing' ? { kind: 'writing' as const, tasks: ms.tasks ?? [] } : { kind: 'questions' as const, parts: ms.built!.parts };
       return { ok: true, data: { stage: st, content, media: stageMedia(t, ms), serverNow: iso(now()) } };
     }),
     saveAnswers: (id, body) => respond(() => {
@@ -132,7 +140,12 @@ export function createMockApi(): ExamApi {
       const s = load(id); lazyLock(s);
       const locked = new Set(s.stages.filter((x) => x.status === 'LOCKED').map((x) => x.stageKey));
       if (!locked.size) return fail(409, 'ATTEMPT_NOT_FINISHED');
-      return { ok: true, data: { ...scoreAttempt(testOf(s), s.answers, locked, iso(now()), Object.fromEntries(s.stages.map((x) => [x.stageKey, x.lockedAt]))), attemptId: id } };
+      const t = testOf(s);
+      const spStage = t.stages.find((x) => x.kind === 'speaking');
+      const spBrief = s.stages.find((x) => x.stageKey === 'speaking');
+      const speaking = spStage?.speaking && spBrief ? mockSpeakingResult(id, spStage.speaking, spBrief.lockedAt, iso(now()), s.recs ?? {}) : null;
+      const r = scoreAttempt(t, s.answers, locked, iso(now()), Object.fromEntries(s.stages.map((x) => [x.stageKey, x.lockedAt])), speaking);
+      return { ok: true, data: { ...r, attemptId: id, mode: mockSpeakingAttempt(id) ? 'section' : r.mode, sections: r.sections.filter((x) => s.stages.some((b) => b.sectionKey === x.key)) } };
     }),
     time: () => respond(() => ({ ok: true, data: { serverNow: iso(now()) } })),
     saveOnExit: () => undefined, // mock saves synchronously through saveAnswers
@@ -141,5 +154,7 @@ export function createMockApi(): ExamApi {
       const ms = Number(new URL(url.replace('mock://', 'http://x/')).searchParams.get('ms')) || 10000;
       return throttledResponse(synthWav(ms, url.length % 7), 420_000, signal);
     },
+    uploadRecording: (id, b) => mockUpload(id, b),
+    restartItem: (id, k, item) => mockRestart(id, k, item),
   };
 }

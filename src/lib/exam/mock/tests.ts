@@ -4,8 +4,10 @@ import { buildStage, svgData, type BuiltStage, type MockPart } from './build';
 import { ieltsListening, MAP_SVG } from './ielts-listening';
 import { ieltsReading } from './ielts-reading';
 import { cefrListening, cefrReading } from './cefr';
+import { ieltsSpeaking, speakingDurationMs } from './ielts-speaking';
+import type { SpeakingStageContent } from '../speaking-types';
 
-export interface MockStage { sectionKey: string; stageKey: string; kind: 'questions' | 'writing'; built?: BuiltStage; tasks?: WritingTask[] }
+export interface MockStage { sectionKey: string; stageKey: string; kind: 'questions' | 'writing' | 'speaking'; built?: BuiltStage; tasks?: WritingTask[]; speaking?: SpeakingStageContent }
 export interface MockTest { name: string; config: ExamConfig; stages: MockStage[]; images: Record<string, string> }
 
 const CHART_SVG = svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 240" font-family="sans-serif" font-size="11">
@@ -51,6 +53,8 @@ export function mockTest(code: 'ielts' | 'cefr', short: boolean): MockTest {
       ],
     };
   }
+  const sp = ieltsSpeaking(short);
+  const spItems = sp.items.filter((i) => i.records).length;
   return {
     name: 'IELTS Academic (mock)',
     images: { 'img-map-1': MAP_SVG, 'img-chart-1': CHART_SVG },
@@ -63,6 +67,9 @@ export function mockTest(code: 'ielts' | 'cefr', short: boolean): MockTest {
           stages: [{ key: 'reading', kind: 'questions', layout: 'split_passage', timer: { mode: 'fixed', duration_sec: short ? 150 : 3600 }, nav: { back: true, flag: true, early_finish: true }, tools: { highlight_notes: true } }] },
         { key: 'writing', title: 'Writing', order: 3, brief: { durationSec: 3600, tasks: 2 }, intro: 'Two tasks. Spend about 20 minutes on Task 1 and 40 minutes on Task 2. Word count is shown live.',
           stages: [{ key: 'writing', kind: 'writing', timer: { mode: 'fixed', duration_sec: short ? 150 : 3600 }, can_switch_tasks: true, nav: { back: true, early_finish: true } }] },
+        { key: 'speaking', title: 'Speaking', order: 4, separate_sitting: true, brief: { durationSec: Math.round(speakingDurationMs(sp) / 1000), questions: spItems, parts: 3 },
+          intro: 'Questions appear one at a time. After the preparation time, recording starts automatically. Answers cannot be re-recorded.',
+          stages: [{ key: 'speaking', kind: 'speaking', timer: { mode: 'scripted', duration_sec: Math.round(speakingDurationMs(sp) / 1000) }, auto_advance: true }] },
       ] },
     stages: [
       stage('listening', ieltsListening(aSec)),
@@ -71,13 +78,15 @@ export function mockTest(code: 'ielts' | 'cefr', short: boolean): MockTest {
         task('task1', 'Task 1', 'about 20 minutes', 'The chart below shows the share of household energy use by source in three countries in 2024.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.', 150, null, 'img-chart-1'),
         task('task2', 'Task 2', 'about 40 minutes', 'Some people believe that public transport should be free for everyone. Others think passengers should pay the full cost.\nDiscuss both views and give your own opinion.', 250, null),
       ] },
+      { sectionKey: 'speaking', stageKey: 'speaking', kind: 'speaking', speaking: sp },
     ],
   };
 }
 
 /** media[] for a stage: audio as mock:// URLs (synthesized on fetch), images as data URLs. */
 export function stageMedia(t: MockTest, s: MockStage): MediaRef[] {
-  const audio: MediaRef[] = (s.built?.audio ?? []).map((a) => ({ assetId: a.assetId, url: `mock://audio/${a.assetId}?ms=${a.durationMs}`, kind: 'audio', bytes: Math.round(a.durationMs * 16), durationMs: a.durationMs }));
+  const spAudio = (s.speaking?.items ?? []).filter((i) => i.promptAudioAssetId).map((i) => ({ assetId: i.promptAudioAssetId!, durationMs: i.promptAudioDurationMs ?? 3000 }));
+  const audio: MediaRef[] = [...(s.built?.audio ?? []), ...spAudio].map((a) => ({ assetId: a.assetId, url: `mock://audio/${a.assetId}?ms=${a.durationMs}`, kind: 'audio', bytes: Math.round(a.durationMs * 16), durationMs: a.durationMs }));
   const imgIds = new Set<string>();
   s.built?.parts.forEach((p) => p.groups.forEach((g) => g.content?.imageAssetId && imgIds.add(g.content.imageAssetId)));
   s.tasks?.forEach((tk) => tk.imageAssetId && imgIds.add(tk.imageAssetId));

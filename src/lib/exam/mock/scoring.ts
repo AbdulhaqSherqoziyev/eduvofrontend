@@ -1,6 +1,7 @@
 /** Mock-only scoring (the real one is Bekzod's strategy registry). */
 import type { AnswerValue, ResultResp, ResultSection, ReviewRow } from '../types';
 import type { MockTest } from './tests';
+import type { SpeakingResult } from '../speaking-types';
 
 const norm = (s: string) => s.toLowerCase().replace(/[.,!?'"’]/g, '').replace(/\s+/g, ' ').trim();
 
@@ -17,7 +18,7 @@ const MOCK_CRITERIA = [
   { name: 'Grammatical Range and Accuracy', score: 5.5, max: 9, note: '"it have" kabi moslashuv xatolari.' },
 ];
 
-export function scoreAttempt(test: MockTest, answers: Record<string, { value: AnswerValue }>, locked: Set<string>, serverNow: string, lockedAt: Record<string, string | null> = {}): ResultResp {
+export function scoreAttempt(test: MockTest, answers: Record<string, { value: AnswerValue }>, locked: Set<string>, serverNow: string, lockedAt: Record<string, string | null> = {}, speaking: SpeakingResult | null = null): ResultResp {
   const graded = (stageKey: string) => { const at = lockedAt[stageKey]; return !!at && Date.parse(serverNow) - Date.parse(at) >= MOCK_GRADE_MS; };
   const isCefr = test.config.family === 'CEFR';
   const review: ReviewRow[] = [];
@@ -26,6 +27,12 @@ export function scoreAttempt(test: MockTest, answers: Record<string, { value: An
     const st = test.stages.find((s) => s.sectionKey === sec.key);
     const base = { key: sec.key, title: sec.title, techSkippedParts: [], techSkippedQuestions: 0, nextLevel: null, level: null };
     if (!st || !locked.has(st.stageKey)) { sections.push({ ...base, status: 'NOT_TAKEN', raw: null, max: null, scaled: null, label: null, estimated: false }); continue; }
+    if (st.kind === 'speaking') {
+      const sp = speaking;
+      const status = !sp || sp.status === 'pending' ? 'NOT_TAKEN' : sp.status === 'ready' ? 'READY' : sp.status === 'needs_review' ? 'NEEDS_HUMAN' : sp.status === 'no_response' || sp.status === 'too_short' || sp.status === 'not_graded' ? 'NOT_TAKEN' : 'GRADING';
+      sections.push({ ...base, status, raw: null, max: null, scaled: sp?.band ?? null, label: sp?.label ?? null, estimated: false });
+      continue;
+    }
     if (st.kind === 'writing') { sections.push(graded(st.stageKey) ? { ...base, status: 'READY', raw: null, max: null, scaled: 6, label: '6.0', estimated: true } : { ...base, status: 'GRADING', raw: null, max: null, scaled: null, label: null, estimated: true }); continue; }
     const keys = st.built!.keys;
     const groupHits: Record<string, number> = {};
@@ -61,13 +68,16 @@ export function scoreAttempt(test: MockTest, answers: Record<string, { value: An
     }
   }
   const passages = test.stages.flatMap((s) => (s.built?.parts ?? []).filter((p) => p.passageHtml).map((p) => ({ sectionKey: s.sectionKey, part: p.part, title: p.title, passageHtml: p.passageHtml! })));
-  const anyGrading = sections.some((s) => s.status === 'GRADING');
+  const anyGrading = sections.some((s) => s.status === 'GRADING') || speaking?.status === 'pending';
+  const ready = sections.filter((s) => s.status === 'READY' && s.scaled != null);
+  const ov = ready.length === sections.length && ready.length ? Math.round((ready.reduce((a, s) => a + s.scaled!, 0) / ready.length) * 2) / 2 : null;
+  const overallBand = isCefr ? null : { value: ov, label: ov != null ? ov.toFixed(1) : null, basis: ready.map((s) => s.key), missing: sections.filter((s) => s.status !== 'READY').map((s) => s.key), pending: anyGrading };
   return {
     attemptId: '', examCode: test.config.code, mode: 'full', status: anyGrading ? 'PARTIAL' : 'FINAL', sections,
     overall: null, // no Speaking in v1 → no overall (Aziza; _shared-decisions.md)
     certificate: isCefr ? { level: 'B1', min: 38, scaleMax: 75 } : null,
     reviewAvailableAt: serverNow, review,
     ai: test.stages.filter((s) => s.kind === 'writing' && locked.has(s.stageKey)).flatMap((s) => (s.tasks ?? []).map((tk) => (graded(s.stageKey) ? { taskKey: tk.key, status: 'READY' as const, scoreMin: 6, scoreMax: 6.5, score: 6, criteria: MOCK_CRITERIA, feedback: MOCK_FEEDBACK } : { taskKey: tk.key, status: 'GRADING' as const, scoreMin: null, scoreMax: null, score: null }))),
-    examName: test.name, passages, serverNow,
+    examName: test.name, passages, serverNow, speaking, overallBand,
   };
 }

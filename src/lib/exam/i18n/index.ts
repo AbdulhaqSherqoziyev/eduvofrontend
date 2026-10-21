@@ -9,14 +9,16 @@ import strings from './strings.json';
 import ru from './ru.json';
 import { EXTRA } from './extra';
 import { SAT_TEXT } from './sat';
+import { SPEAKING_RU, SPEAKING_TEXT } from './speaking';
+import { SPEAKING_RESULT_RU, SPEAKING_RESULT_TEXT } from './speaking-results';
 
 export type Locale = 'en' | 'uz' | 'ru';
 export const isPlayerLocale = (v: unknown): v is Locale => v === 'en' || v === 'uz' || v === 'ru';
-const RU = ru as Record<string, string>;
-export type TextKey = keyof typeof strings | keyof typeof EXTRA | keyof typeof SAT_TEXT;
+const RU = { ...(ru as Record<string, string>), ...SPEAKING_RU, ...SPEAKING_RESULT_RU } as Record<string, string>;
+export type TextKey = keyof typeof strings | keyof typeof EXTRA | keyof typeof SAT_TEXT | keyof typeof SPEAKING_TEXT | keyof typeof SPEAKING_RESULT_TEXT;
 type Vars = Record<string, string | number>;
 
-const ALL: Record<string, string[]> = { ...(strings as Record<string, string[]>), ...EXTRA, ...SAT_TEXT };
+const ALL: Record<string, string[]> = { ...(strings as Record<string, string[]>), ...EXTRA, ...SAT_TEXT, ...SPEAKING_TEXT, ...SPEAKING_RESULT_TEXT };
 
 function fill(s: string, vars?: Vars): string {
   if (!vars) return s;

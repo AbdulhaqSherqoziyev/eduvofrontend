@@ -4,6 +4,7 @@
  * frontend report and are optional so the player works without them.
  */
 import type { GroupContent, QuestionContent } from './content-types';
+import type { ResumeRecording, SpeakingResult, SpeakingStageContent } from './speaking-types';
 
 export type Iso = string;
 export type AttemptStatus = 'ACTIVE' | 'COMPLETED' | 'EXPIRED' | 'CANCELLED';
@@ -104,7 +105,9 @@ export interface AttemptState {
   config: ExamConfig;
   stages: StageBrief[];
   answers: ServerAnswer[];
-  recordings: { itemKey: string; stageKey: string; status: string }[];
+  recordings: ResumeRecording[];
+  /** speaking contract §4a: items that already used their one technical restart. */
+  itemRestarts?: { stageKey: string; itemKey: string }[];
   audioOffsetMs: number | null;
   preload?: MediaRef[]; // req: next PENDING stage media, so the first section's audio loads before its timer (T20)
   serverNow: Iso;
@@ -125,7 +128,7 @@ export interface WritingTask {
 export type StageContent =
   | { kind: 'questions' | 'break' | 'read_only'; parts: Part[] }
   | { kind: 'writing'; tasks: WritingTask[] }
-  | { kind: 'speaking'; items: unknown[] };
+  | SpeakingStageContent;
 
 export interface StageStartResp { stage: StageBrief; content: StageContent; media: MediaRef[]; serverNow: Iso }
 export interface SaveResp { accepted: string[]; rejected: { questionId: string; reason: string }[]; deadlineAt: Iso; serverNow: Iso }
@@ -173,5 +176,7 @@ export interface ResultResp {
   /** pre-v1.8 working name of `overallBand` (tolerated). */
   estimatedOverall?: EstimatedOverall | null;
   summary?: { sections?: ResultSummarySection[]; nextSteps?: string[] } | null;
+  /** speaking contract §4: the Speaking block (null when the attempt has no Speaking). */
+  speaking?: SpeakingResult | null;
   serverNow: Iso;
 }

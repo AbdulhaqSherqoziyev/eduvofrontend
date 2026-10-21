@@ -7,6 +7,7 @@
 import type {
   AttemptState, IntegrityEvent, ResultResp, SaveResp, ServerAnswer, StageStartResp, SubmitResp,
 } from './types';
+import type { RecordingUploadResp, RestartReason, RestartResp } from './speaking-types';
 import { createMockApi } from './api.mock';
 
 export const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
@@ -34,6 +35,10 @@ export interface ExamApi {
   saveOnExit(id: string, body: SaveBody): void;
   /** Media bytes for preload; the mock serves synthesized audio. */
   fetchMedia(url: string, signal?: AbortSignal): Promise<Response>;
+  /** Speaking contract §2: one recording per item (multipart). */
+  uploadRecording(id: string, b: { file: Blob; stageKey: string; itemKey: string; durationMs: number }): Promise<ExamResult<RecordingUploadResp>>;
+  /** Speaking contract §4a: restart an item once after a technical interruption. */
+  restartItem(id: string, stageKey: string, itemKey: string, b: { reason: RestartReason; interruptedAt?: string }): Promise<ExamResult<RestartResp>>;
 }
 
 // ── clock samples: every response with serverNow feeds the offset estimator ──
@@ -74,7 +79,8 @@ async function send<T>(path: string, method = 'GET', body?: unknown): Promise<Ex
   // VPN / Wi-Fi hand-over) and would silence autosave, heartbeat and integrity together. A truly
   // offline fetch rejects at once anyway.
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+  // recordings (≤ 5 MB) get a longer budget than JSON calls — slow uplinks must not abort them
+  const timer = setTimeout(() => ctrl.abort(), body instanceof FormData ? 60_000 : TIMEOUT_MS);
   const t0 = performance.now();
   try {
     const r = await fetch(`${transport.base}${path}`, {
@@ -82,9 +88,9 @@ async function send<T>(path: string, method = 'GET', body?: unknown): Promise<Ex
       signal: ctrl.signal,
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+        ...(body !== undefined && !(body instanceof FormData) ? { 'Content-Type': 'application/json' } : {}),
       },
-      ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+      ...(body !== undefined ? { body: body instanceof FormData ? body : JSON.stringify(body) } : {}),
     });
     const text = await r.text();
     let data: Record<string, unknown> | null = null;
@@ -126,6 +132,16 @@ const realApi: ExamApi = {
     }
   },
   fetchMedia: (url, signal) => fetch(absMedia(url), { signal }),
+  uploadRecording: (id, b) => {
+    const f = new FormData();
+    const ext = b.file.type.includes('mp4') ? 'm4a' : b.file.type.includes('ogg') ? 'ogg' : 'webm';
+    f.append('file', b.file, `${b.itemKey}.${ext}`);
+    f.append('stageKey', b.stageKey);
+    f.append('itemKey', b.itemKey);
+    f.append('durationMs', String(Math.round(b.durationMs)));
+    return req(`${A(id)}/recordings`, 'POST', f);
+  },
+  restartItem: (id, k, item, b) => req(`${A(id)}/stages/${encodeURIComponent(k)}/items/${encodeURIComponent(item)}/restart`, 'POST', b),
 };
 
 export const examApi: ExamApi = IS_MOCK ? createMockApi() : realApi;

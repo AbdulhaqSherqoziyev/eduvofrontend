@@ -77,6 +77,9 @@ export const hubApi = {
   progress: () => call<ProgressResp>('/portal/exams/progress'),
   attempt: (id: string) => call<AttemptState>(`/portal/exams/attempts/${enc(id)}`),
   result: (id: string) => call<ResultResp>(`/portal/exams/attempts/${enc(id)}/result`),
+  /** Speaking contract §6: delete the learner's own recordings (all, or one item). */
+  deleteRecordings: (id: string, itemKey?: string) =>
+    call<{ deleted: number; serverNow: string }>(`/portal/exams/attempts/${enc(id)}/recordings${itemKey ? `?itemKey=${enc(itemKey)}` : ''}`, 'DELETE'),
   createAttempt: (b: CreateAttemptBody) => call<CreateAttemptResp>('/portal/exams/attempts', 'POST', b),
   /** Header name for portal sessions (PIN sessions carry the name in the login answer). */
   me: () => call<{ student: { fullName: string } }>('/portal/overview'),
