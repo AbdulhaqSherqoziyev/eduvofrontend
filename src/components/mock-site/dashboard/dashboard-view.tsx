@@ -13,6 +13,7 @@ import { fmtDate, fmtDateLong, fmtDayMonthLong, fmtScore } from '@/lib/mock/form
 import { useDelayedFlag } from '@/lib/mock/hooks/use-delayed';
 import { useLang } from '@/lib/mock/hooks/use-lang';
 import { useLearner } from '@/lib/mock/hooks/use-learner';
+import { useSpeakingLive } from '@/lib/mock/hooks/use-speaking-live';
 import { sx } from '@/lib/mock/sx';
 import { BarChart, LineChart } from '../charts';
 import { Segmented } from '../segmented';
@@ -31,6 +32,7 @@ export function DashboardView() {
   const tc = useTranslations('common');
   const { lang, href } = useLang();
   const learner = useLearner();
+  const spLive = useSpeakingLive();
   const [data, setData] = useState<Dashboard | null>(null);
   const [err, setErr] = useState(false);
   const [sec, setSec] = useState<SeriesKey>('overall');
@@ -54,7 +56,7 @@ export function DashboardView() {
   const secName = (k: SectionKey | 'overall') => t(`tab.${k}`);
 
   const series = data?.progress;
-  const seriesKeys: SeriesKey[] = series?.exam === 'sat' ? ['overall', 'reading_writing', 'math'] : ['overall', 'listening', 'reading', 'writing'];
+  const seriesKeys: SeriesKey[] = series?.exam === 'sat' ? ['overall', 'reading_writing', 'math'] : ['overall', 'listening', 'reading', 'writing', ...(spLive && series?.series.speaking?.length ? ['speaking' as const] : [])];
   const pts = useMemo(() => (series?.series[sec] ?? []).slice(-8).map((p) => ({ at: p.at, value: p.value })), [series, sec]);
 
   /* ---------- loading / error ---------- */
@@ -94,6 +96,11 @@ export function DashboardView() {
   const next = (() => {
     switch (ns.kind) {
       case 'resume': {
+        // spec §4.4: Speaking left for later (L/R/W done) — its own card; days come from `availableUntil` when the API sends it
+        if (spLive && ns.sectionKey === 'speaking' && ns.availableUntil) {
+          const days = Math.max(1, Math.ceil((Date.parse(ns.availableUntil) - Date.now()) / 864e5));
+          return { title: t('speakingPending'), sub: t('speakingPendingSub', { n: days }), phoneSub: t('speakingPendingSub', { n: days }), cta: t('speakingStart'), href: href(`/exam/${ns.attemptId}`), progress: null as number | null };
+        }
         const mins = ns.remainingSec != null ? Math.max(1, Math.round(ns.remainingSec / 60)) : null;
         const done = ns.doneSections.filter((x) => x.score != null).map((x) => t('doneItem', { section: secName(x.key), score: fmtScore(x.score, ns.exam) })).join('');
         return {

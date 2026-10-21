@@ -10,12 +10,14 @@ import { useTranslations } from 'next-intl';
 import { findProduct, useCatalog, useCurrency } from '@/lib/mock/catalog';
 import { fmtMoney, fmtPrice } from '@/lib/mock/format';
 import { useDelayedFlag } from '@/lib/mock/hooks/use-delayed';
+import { useIeltsSpeaking } from '@/lib/mock/hooks/use-speaking-live';
 import { useLang } from '@/lib/mock/hooks/use-lang';
 import type { Currency, OpenExamSlug, Product } from '@/lib/mock/api/types';
 import { sx } from '@/lib/mock/sx';
 import { WaitlistForm } from '../landing/waitlist';
 import { Segmented } from '../segmented';
 import { StickyCta } from '../sticky-cta';
+import { BuyFoot, MicNeeded } from './mic-needed';
 
 type Model = 'per' | 'unl';
 type PlanKey = 'section' | 'full' | 'b3' | 'b5' | 'b10' | 'unl';
@@ -73,6 +75,9 @@ export function PricingView() {
   const bundleProd = p[`b${bundle}` as PlanKey];
   const checkoutHref = (prod: Product | undefined) => (prod && prod.available ? href(`/checkout?sku=${encodeURIComponent(prod.sku)}&cur=${cur}`) : undefined);
   const ielts = exam === 'ielts';
+  /** IELTS Speaking on sale (flag + catalog): new card texts and the microphone line (spec §4.1) */
+  const spOn = useIeltsSpeaking();
+  const sp = ielts && spOn;
   /** v0.5: products the bank cannot serve yet (more credits than unseen tests) */
   const notEnough = (prod: Product | undefined) => cat.status === 'ready' && prod && !prod.available && prod.unavailableReason === 'NOT_ENOUGH_TESTS'
     ? <span role="note" style={sx('font-size:13px;font-weight:700;color:var(--warn);line-height:1.5')}>{t('notEnoughTests')}</span> : null;
@@ -84,7 +89,7 @@ export function PricingView() {
   const planName = (k: PlanKey) => k === 'section' ? t('phone.planSection') : k === 'full' ? t('phone.planFull') : k === 'unl' ? t('phone.planUnl') : t('phone.planBundle', { n: Number(k.slice(1)) });
   const planNote = (k: PlanKey) => {
     if (cat.status === 'ready' && p[k] && !p[k]!.available && p[k]!.unavailableReason === 'NOT_ENOUGH_TESTS') return t('notEnoughTests');
-    if (k === 'section') return t(ielts ? 'phone.noteSectionIelts' : 'phone.noteSectionSat');
+    if (k === 'section') return t(ielts ? (sp ? 'phone.noteSectionIeltsSp' : 'phone.noteSectionIelts') : 'phone.noteSectionSat');
     if (k === 'full') return t('phone.noteFull');
     if (k === 'unl') return unlAvailable ? t('phone.noteUnl') : t('unlSoonBody');
     return t.rich('phone.noteBundle', { per: () => priceNode(p[k], 'perMock', 60) });
@@ -130,9 +135,9 @@ export function PricingView() {
             <div className="m-card" style={sx('padding:28px;display:flex;flex-direction:column;gap:16px')}>
               <span style={sx('font-weight:800;font-size:17px')}>{t('section')}</span>
               <span style={sx('font-size:36px;font-weight:800;letter-spacing:var(--ls-h)')}>{priceNode(p.section)}</span>
-              <span style={sx('color:var(--ink2);font-size:14px;line-height:1.55')}>{t(ielts ? 'sectionDescIelts' : 'sectionDescSat')}</span>
+              <span style={sx('color:var(--ink2);font-size:14px;line-height:1.55')}>{t(ielts ? (sp ? 'sectionDescIeltsSp' : 'sectionDescIelts') : 'sectionDescSat')}</span>
               {notEnough(p.section)}
-              <BuyLink href={checkoutHref(p.section)} soft label={t('buySection')} />
+              <BuyFoot mic={sp}><BuyLink href={checkoutHref(p.section)} soft label={t('buySection')} /></BuyFoot>
             </div>
             <div className="m-card" style={sx('padding:28px;display:flex;flex-direction:column;gap:16px;outline:2px solid var(--blue);outline-offset:-2px')}>
               <div style={sx('display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap')}>
@@ -140,9 +145,9 @@ export function PricingView() {
                 {(p.full?.badge === 'most_chosen' || !p.full) && <span className="m-pill m-pill--blue">{tc('chips.mostChosen')}</span>}
               </div>
               <span style={sx('font-size:36px;font-weight:800;letter-spacing:var(--ls-h)')}>{priceNode(p.full)}</span>
-              <span style={sx('color:var(--ink2);font-size:14px;line-height:1.55')}>{t(ielts ? 'fullDescIelts' : 'fullDescSat')}</span>
+              <span style={sx('color:var(--ink2);font-size:14px;line-height:1.55')}>{t(ielts ? (sp ? 'fullDescIeltsSp' : 'fullDescIelts') : 'fullDescSat')}</span>
               {notEnough(p.full)}
-              <BuyLink href={checkoutHref(p.full)} label={t('buyFull')} />
+              <BuyFoot mic={sp}><BuyLink href={checkoutHref(p.full)} label={t('buyFull')} /></BuyFoot>
             </div>
             <div className="m-card" style={sx('padding:28px;display:flex;flex-direction:column;gap:16px')}>
               <span style={sx('font-weight:800;font-size:17px')}>{t('bundle')}</span>
@@ -153,7 +158,7 @@ export function PricingView() {
                 {t.rich('bundleDesc', { per: () => priceNode(bundleProd, 'perMock', 70), pct: bundleProd?.savingPct ?? 0, months: bundleProd?.validityMonths ?? 12 })}
               </span>
               {notEnough(bundleProd)}
-              <BuyLink href={checkoutHref(bundleProd)} soft label={t('buyBundle', { n: bundle })} />
+              <BuyFoot mic={sp}><BuyLink href={checkoutHref(bundleProd)} soft label={t('buyBundle', { n: bundle })} /></BuyFoot>
             </div>
           </div>
         )}
@@ -166,7 +171,7 @@ export function PricingView() {
                   <div style={sx('display:flex;justify-content:space-between;align-items:center;gap:8px')}><span style={sx('font-weight:800;font-size:18px')}>{t('unlTitle', { exam: examName })}</span><span className="m-pill m-pill--blue">{t('monthly')}</span></div>
                   <div style={sx('display:flex;align-items:baseline;gap:8px;flex-wrap:wrap')}><span style={sx('font-size:44px;font-weight:800;letter-spacing:var(--ls-h)')}>{priceNode(p.unl)}</span><span style={sx('color:var(--mut);font-weight:700')}>{t('perMonth')}</span></div>
                   <span style={sx('color:var(--ink2);font-size:15px;line-height:var(--lh-body)')}>{t('unlBody')}</span>
-                  <BuyLink href={checkoutHref(p.unl)} label={t('subscribe')} grid />
+                  <BuyFoot mic={sp}><BuyLink href={checkoutHref(p.unl)} label={t('subscribe')} grid /></BuyFoot>
                 </div>
                 <div style={sx('border-radius:24px;box-shadow:var(--inset);padding:32px;display:flex;flex-direction:column;gap:12px;justify-content:center')}>
                   <span style={sx('font-weight:800;font-size:16px')}>{t('paysOffTitle')}</span>
@@ -216,7 +221,7 @@ export function PricingView() {
               <tr><td>{t('row.sections')}</td><td>{t('cell.oneOnce')}</td><td>{t('cell.one')}</td><td>{t('cell.all')}</td><td>{t('cell.all')}</td><td>{t('cell.allNoLimit')}</td></tr>
               <tr><td>{t('row.instant')}</td>{[0, 1, 2, 3, 4].map((i) => <td key={i}>{t('cell.yes')}</td>)}</tr>
               {/* Free never includes Writing (TL decision Q6) → "—" instead of the design's "If Writing" */}
-              <tr><td>{t('row.ai')}</td><td>{t('cell.dash')}</td><td>{ielts ? t('cell.ifWriting') : t('cell.dash')}</td>{[0, 1, 2].map((i) => <td key={i}>{ielts ? t('cell.yes') : t('cell.dash')}</td>)}</tr>
+              <tr><td>{t('row.ai')}</td><td>{t('cell.dash')}</td><td>{ielts ? t(sp ? 'cell.ifWritingSpeaking' : 'cell.ifWriting') : t('cell.dash')}</td>{[0, 1, 2].map((i) => <td key={i}>{ielts ? t('cell.yes') : t('cell.dash')}</td>)}</tr>
               <tr><td>{t('row.review')}</td>{[0, 1, 2, 3, 4].map((i) => <td key={i}>{t('cell.yes')}</td>)}</tr>
               <tr><td>{t('row.progress')}</td>{[0, 1, 2, 3, 4].map((i) => <td key={i}>{t('cell.yes')}</td>)}</tr>
               <tr><td>{t('row.validity')}</td><td>{t('cell.dash')}</td>{[0, 1, 2].map((i) => <td key={i}>{t('cell.months', { n: 12 })}</td>)}<td>{t('cell.whileSub')}</td></tr>
@@ -264,6 +269,7 @@ export function PricingView() {
             );
           })}
         </div>
+        {sp && <MicNeeded size={12.5} />}
         {model === 'unl' && cat.status === 'ready' && !unlAvailable && (
           <div style={sx('border-radius:20px;box-shadow:var(--inset);padding:16px;display:flex;flex-direction:column;gap:8px')}>
             <b style={sx('font-size:14px')}>{t('untilTitle')}</b>
@@ -274,7 +280,7 @@ export function PricingView() {
         <div style={sx('border-radius:20px;box-shadow:var(--inset);padding:16px;display:flex;flex-direction:column;gap:10px')}>
           <b style={sx('font-size:14px')}>{t('phone.includes')}</b>
           {(['inc1', 'inc2', 'inc3', 'inc4', 'inc5'] as const).map((k) => (
-            <span key={k} style={sx('display:flex;gap:10px;font-size:14px;color:var(--ink2)')}><span style={sx('width:6px;height:6px;border-radius:50%;background:var(--blue);margin-top:7px;flex:none')} />{t(`phone.${k}`)}</span>
+            <span key={k} style={sx('display:flex;gap:10px;font-size:14px;color:var(--ink2)')}><span style={sx('width:6px;height:6px;border-radius:50%;background:var(--blue);margin-top:7px;flex:none')} />{t(`phone.${k === 'inc4' && sp ? 'inc4Sp' : k}`)}</span>
           ))}
         </div>
         <span style={sx('font-size:12px;color:var(--mut);line-height:1.5')}>{t('phone.taxNote')}</span>

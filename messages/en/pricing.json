@@ -70,7 +70,8 @@
     "ifWriting": "If Writing",
     "months": "{n} months",
     "whileSub": "While subscribed",
-    "perMo": "<p></p> / mo"
+    "perMo": "<p></p> / mo",
+    "ifWritingSpeaking": "If Writing or Speaking"
   },
   "note": "Prices shown in {cur} include VAT and local taxes. Credits from bundles are valid for 12 months. See the <a>refund policy</a>.",
   "loadError": "Prices didn't load. Check your connection and try again.",
@@ -99,7 +100,12 @@
     "inc5": "Progress tracking",
     "taxNote": "Prices include taxes. Credits are valid for 12 months.",
     "cta": "Continue · {price}",
-    "currency": "Currency"
+    "currency": "Currency",
+    "noteSectionIeltsSp": "Listening, Reading, Writing or Speaking",
+    "inc4Sp": "AI feedback on Writing and Speaking (IELTS)"
   },
-  "notEnoughTests": "Not available yet: this plan has more mocks than new tests in our bank. Choose a smaller plan."
+  "notEnoughTests": "Not available yet: this plan has more mocks than new tests in our bank. Choose a smaller plan.",
+  "micNeeded": "Speaking needs a laptop or computer with a microphone",
+  "sectionDescIeltsSp": "Listening, Reading, Writing or Speaking. Writing and Speaking are scored by AI.",
+  "fullDescIeltsSp": "Listening, Reading, Writing and Speaking — with an overall band and CEFR level. You can take Speaking separately within 7 days."
 }

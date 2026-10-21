@@ -20,6 +20,7 @@ import { AppBar } from '../app-bar';
 import { Segmented } from '../segmented';
 import { StickyCta } from '../sticky-cta';
 import { useToast } from '../toast';
+import { MicCheckRow, markSpeakingLater, useMicCheck } from './mic-check';
 
 type CheckKey = 'audio' | 'headphones' | 'fullscreen' | 'internet';
 const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`);
@@ -59,6 +60,7 @@ export function StartView({ examParam }: { examParam: string }) {
   const [copied, setCopied] = useState(false);
   const [resent, setResent] = useState(false);
   const idem = useRef(uuid());
+  const mic = useMicCheck();
   const slow = useDelayedFlag(loading);
 
   /* guest → login; read ?mode/section */
@@ -132,8 +134,10 @@ export function StartView({ examParam }: { examParam: string }) {
   // audio checks only when Listening is part of the attempt (a Reading/Writing section has no audio); SAT: fullscreen + internet
   const hasListening = ielts && (mode === 'full' || section === 'listening');
   const required: CheckKey[] = (info?.systemCheck ?? ['audio', 'headphones', 'fullscreen', 'internet'])
-    .filter((k) => hasListening || (k !== 'audio' && k !== 'headphones'));
-  const allReady = required.every((k) => checks[k] === 'ok');
+    .filter((k): k is CheckKey => k !== 'microphone' && (hasListening || (k !== 'audio' && k !== 'headphones')));
+  // Speaking in this attempt (catalog/start are already flag-filtered): microphone row, required unless "later" (spec §4.3)
+  const hasSpeaking = ielts && !!info?.sections.some((x) => x.key === 'speaking') && (mode === 'full' || section === 'speaking');
+  const allReady = required.every((k) => checks[k] === 'ok') && (!hasSpeaking || mic.done);
   const blocked = info?.blocked ?? null;
   const canStart = !!info && !blocked && !!info.charge && allReady && !starting;
 
@@ -142,6 +146,7 @@ export function StartView({ examParam }: { examParam: string }) {
     setStarting(true); setStartErr('');
     try {
       const r = await createAttempt({ exam, mode, sectionKey: mode === 'section' ? section! : undefined, testId: info.test?.id, idempotencyKey: idem.current });
+      if (hasSpeaking) markSpeakingLater(r.attemptId, mode === 'full' && mic.later);
       router.push(href(`/exam/${r.attemptId}`));
     } catch (e) {
       setStarting(false);
@@ -202,11 +207,13 @@ export function StartView({ examParam }: { examParam: string }) {
     { k: 'internet', name: t('net'), note: checks.internet === 'ok' ? t('netOk') : checks.internet === 'busy' ? t('netChecking') : t('netBad'), act: checks.internet === 'bad' ? t('netAct') : undefined, run: checkNet },
   ];
 
+  const micNote = <span style={sx('font-size:13px;color:var(--ink2);font-weight:600;line-height:1.5')}>{t('micPhoneNote')}</span>;
   const computerCard = (
     <div className="m-card" style={sx('padding:24px;display:flex;flex-direction:column;gap:16px')}>
       <div style={sx('width:56px;height:40px;border-radius:8px;border:3px solid var(--ink2);border-bottom-width:8px')} aria-hidden />
       <div style={sx('font-weight:800;font-size:20px')}>{t('computer')}</div>
       <div style={sx('color:var(--ink2);font-size:14px;line-height:var(--lh-body)')}>{t('computerBody')}</div>
+      {hasSpeaking && micNote}
       <button type="button" className="m-btn m-btn--primary" onClick={() => void emailLink()} style={sx('height:52px;font-weight:700;font-size:16px')}>{emailed ? t('emailed') : t('emailLink')}</button>
       <button type="button" className="m-btn m-btn--soft" onClick={() => void copyLink()} style={sx('height:50px;font-size:15px')}>{copied ? t('copied') : t('copyLink')}</button>
       <div dir="ltr" style={sx('padding:12px 14px;border-radius:12px;box-shadow:var(--inset);font-size:13px;color:var(--ink2);font-weight:600;word-break:break-all;text-align:start')}>{shortUrl}</div>
@@ -257,7 +264,7 @@ export function StartView({ examParam }: { examParam: string }) {
             </div>
             <div className="m-card" style={sx('padding:24px;display:flex;flex-direction:column;gap:14px')}>
               <div style={sx('font-weight:800;font-size:17px')}>{t('rules')}</div>
-              {[ielts ? t('ruleIelts1') : t('ruleSat1'), ielts ? t('ruleIelts2') : t('ruleSat2'), t('rule3'), t('rule4'), t('rule5')].map((r, i) => (
+              {[ielts ? t('ruleIelts1') : t('ruleSat1'), ielts ? t(catSections.some((x) => x.key === 'speaking') ? 'ruleIelts2Sp' : 'ruleIelts2') : t('ruleSat2'), t('rule3'), t('rule4'), t('rule5')].map((r, i) => (
                 <div key={i} style={sx('display:flex;gap:12px;font-size:14px;line-height:1.55;color:var(--ink2)')}><span style={sx('width:6px;height:6px;border-radius:50%;background:var(--blue);margin-top:8px;flex:none')} /><span>{r}</span></div>
               ))}
             </div>
@@ -274,6 +281,7 @@ export function StartView({ examParam }: { examParam: string }) {
                     {c.act && <button type="button" onClick={c.run} style={sx('height:38px;padding:0 14px;border-radius:11px;border:0;background:var(--bg);box-shadow:var(--raise-sm);color:var(--blue);font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap')}>{c.act}</button>}
                   </div>
                 ))}
+                {hasSpeaking && <MicCheckRow mic={mic} allowLater={mode === 'full'} />}
               </div>
               <div className="m-card" style={sx('padding:24px;display:flex;flex-direction:column;gap:14px')}>
                 <div style={sx('display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--ink2);font-weight:600')}>
@@ -321,6 +329,7 @@ export function StartView({ examParam }: { examParam: string }) {
           <div style={sx('display:flex;flex-direction:column;align-items:center')} aria-hidden><span style={sx('width:96px;height:62px;border-radius:8px;border:4px solid var(--ink2)')} /><span style={sx('width:124px;height:8px;border-radius:0 0 8px 8px;background:var(--ink2)')} /></div>
           <b style={sx('font-size:19px;margin-top:6px')}>{t('computer')}</b>
           <span style={sx('font-size:14px;color:var(--ink2);line-height:1.55')}>{t('computerBodyPhone')}</span>
+          {hasSpeaking && micNote}
           <span dir="ltr" style={sx('padding:10px 12px;border-radius:12px;background:var(--bg);box-shadow:var(--raise-sm);font-size:13px;font-weight:700;color:var(--ink2);word-break:break-all')}>{shortUrl}</span>
         </div>
       </main>

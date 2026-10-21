@@ -70,7 +70,8 @@
     "ifWriting": "Writing bo‘lsa",
     "months": "{n} oy",
     "whileSub": "Obuna davomida",
-    "perMo": "<p></p> / oy"
+    "perMo": "<p></p> / oy",
+    "ifWritingSpeaking": "Writing yoki Speaking bo‘lsa"
   },
   "note": "{cur} narxlarga QQS va mahalliy soliqlar kiritilgan. To‘plam kreditlari 12 oy amal qiladi. <a>Pulni qaytarish shartlari</a>.",
   "loadError": "Narxlar yuklanmadi. Internetni tekshirib, qayta urinib ko‘ring.",
@@ -99,7 +100,12 @@
     "inc5": "O‘sishni kuzatish",
     "taxNote": "Narxlarga soliqlar kiritilgan. Kreditlar 12 oy amal qiladi.",
     "cta": "Davom etish · {price}",
-    "currency": "Valyuta"
+    "currency": "Valyuta",
+    "noteSectionIeltsSp": "Listening, Reading, Writing yoki Speaking",
+    "inc4Sp": "Writing va Speaking bo‘yicha AI izohi (IELTS)"
   },
-  "notEnoughTests": "Hozircha mavjud emas: bu rejadagi mocklar bankimizdagi yangi testlardan ko‘p. Kichikroq rejani tanlang."
+  "notEnoughTests": "Hozircha mavjud emas: bu rejadagi mocklar bankimizdagi yangi testlardan ko‘p. Kichikroq rejani tanlang.",
+  "micNeeded": "Speaking uchun mikrofonli noutbuk yoki kompyuter kerak",
+  "sectionDescIeltsSp": "Listening, Reading, Writing yoki Speaking. Writing va Speaking AI tomonidan baholanadi.",
+  "fullDescIeltsSp": "Listening, Reading, Writing va Speaking — umumiy ball va CEFR darajasi bilan. Speaking’ni 7 kun ichida alohida topshirish mumkin."
 }

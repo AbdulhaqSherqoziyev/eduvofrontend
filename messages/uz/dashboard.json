@@ -65,7 +65,8 @@
     "reading": "Reading",
     "writing": "Writing",
     "reading_writing": "Reading and Writing",
-    "math": "Math"
+    "math": "Math",
+    "speaking": "Speaking"
   },
   "weak": "Eng zaif savol turlari",
   "weakBasis": "Oxirgi {n} ta {exam} mockingiz bo‘yicha.",
@@ -128,5 +129,8 @@
   "noFreshSub": "Kreditlaringiz saqlanadi. Yangi testlar qo‘shilganda ishlatasiz.",
   "noFreshCta": "Natijalarni ko‘rish",
   "creditsKept": "{n} ta {exam} krediti yangi testlarni kutmoqda",
-  "correctOf": "{total} tadan {correct} ta to‘g‘ri"
+  "correctOf": "{total} tadan {correct} ta to‘g‘ri",
+  "speakingPending": "IELTS · Speaking kutmoqda",
+  "speakingPendingSub": "{n} kun qoldi · 14 daqiqa · kompyuterda",
+  "speakingStart": "Speaking’ni boshlash"
 }

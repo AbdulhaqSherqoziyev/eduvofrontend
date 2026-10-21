@@ -70,7 +70,8 @@
     "ifWriting": "Если Writing",
     "months": "{n} месяцев",
     "whileSub": "Пока действует подписка",
-    "perMo": "<p></p> / мес."
+    "perMo": "<p></p> / мес.",
+    "ifWritingSpeaking": "Если Writing или Speaking"
   },
   "note": "Цены в {cur} включают НДС и местные налоги. Кредиты из пакетов действуют 12 месяцев. См. <a>условия возврата</a>.",
   "loadError": "Цены не загрузились. Проверьте интернет и попробуйте снова.",
@@ -99,7 +100,12 @@
     "inc5": "Отслеживание прогресса",
     "taxNote": "Налоги включены. Кредиты действуют 12 месяцев.",
     "cta": "Продолжить · {price}",
-    "currency": "Валюта"
+    "currency": "Валюта",
+    "noteSectionIeltsSp": "Listening, Reading, Writing или Speaking",
+    "inc4Sp": "ИИ-отзыв по Writing и Speaking (IELTS)"
   },
-  "notEnoughTests": "Пока недоступно: в этом плане больше моков, чем новых тестов в нашем банке. Выберите план поменьше."
+  "notEnoughTests": "Пока недоступно: в этом плане больше моков, чем новых тестов в нашем банке. Выберите план поменьше.",
+  "micNeeded": "Для Speaking нужен ноутбук или компьютер с микрофоном",
+  "sectionDescIeltsSp": "Listening, Reading, Writing или Speaking. Writing и Speaking оценивает ИИ.",
+  "fullDescIeltsSp": "Listening, Reading, Writing и Speaking — с общим баллом и уровнем CEFR. Speaking можно сдать отдельно в течение 7 дней."
 }

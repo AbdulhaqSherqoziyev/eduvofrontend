@@ -65,7 +65,8 @@
     "reading": "Reading",
     "writing": "Writing",
     "reading_writing": "Reading and Writing",
-    "math": "Math"
+    "math": "Math",
+    "speaking": "Speaking"
   },
   "weak": "Самые слабые типы вопросов",
   "weakBasis": "По последним мокам {exam}: {n}.",
@@ -128,5 +129,8 @@
   "noFreshSub": "Ваши кредиты сохраняются. Вы сможете использовать их, когда появятся новые тесты.",
   "noFreshCta": "Смотреть прогресс",
   "creditsKept": "{exam}: кредитов в ожидании новых тестов — {n}",
-  "correctOf": "Верно: {correct} из {total}"
+  "correctOf": "Верно: {correct} из {total}",
+  "speakingPending": "IELTS · Speaking ждёт",
+  "speakingPendingSub": "Осталось дней: {n} · 14 мин · на компьютере",
+  "speakingStart": "Начать Speaking"
 }

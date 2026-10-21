@@ -15,8 +15,12 @@
       "q3": "Umumiy ball qanday hisoblanadi?",
       "a3": "Har bir bo‘lim 0–9 shkalada 0.5 qadam bilan baholanadi. Umumiy ball — Listening, Reading va Writing ballaringiz o‘rtachasi.",
       "q4": "Faqat bitta bo‘limni topshirsa bo‘ladimi?",
-      "a4": "Ha. Bitta bo‘lim sotib oling yoki bepul Listening yoki Reading bo‘limidan foydalaning. Writing pullik, chunki uni AI baholaydi."
-    }
+      "a4": "Ha. Bitta bo‘lim sotib oling yoki bepul Listening yoki Reading bo‘limidan foydalaning. Writing pullik, chunki uni AI baholaydi.",
+      "a1Sp": "Ha. Speaking 3 qismdan iborat (11–14 daqiqa): savollarni sun’iy British ovozli imtihonchi beradi, javoblaringiz yozib olinadi va AI 4 mezon bo‘yicha baholaydi. Mikrofonli noutbuk yoki kompyuter kerak. To‘liq mock ichida Speaking’ni 7 kun ichida alohida kuni topshirishingiz mumkin.",
+      "a3Sp": "Har bir bo‘lim 0–9 shkalada 0.5 qadam bilan baholanadi. Umumiy ball — to‘rtala bo‘lim (Listening, Reading, Writing, Speaking) o‘rtachasi; Speaking topshirilmaguncha umumiy ball chiqmaydi.",
+      "a4Sp": "Ha. Bitta bo‘lim sotib oling yoki bepul Listening yoki Reading bo‘limidan foydalaning. Writing va Speaking pullik, chunki ularni AI baholaydi."
+    },
+    "subSp": "Rasmiy vaqt va savol turlari bilan Listening, Reading, Writing va Speaking. Listening va Reading topshirilganda baholanadi; Writing va Speaking AI tomonidan to‘rtta mezon bo‘yicha baholanadi."
   },
   "sat": {
     "meta": {
@@ -69,7 +73,10 @@
       "writing": "Writing",
       "writingTime": "60 daq",
       "writingQ": "2 topshiriq",
-      "score": "0–9 ball, 0.5 qadam bilan"
+      "score": "0–9 ball, 0.5 qadam bilan",
+      "speaking": "Speaking",
+      "speakingTime": "11–14 daq",
+      "speakingQ": "3 qism · imtihonchi ovozi bilan"
     },
     "sat": {
       "rw": "Reading and Writing",

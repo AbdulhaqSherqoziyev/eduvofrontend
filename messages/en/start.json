@@ -26,21 +26,24 @@
     "reading": "Reading",
     "writing": "Writing",
     "reading_writing": "Reading and Writing",
-    "math": "Math"
+    "math": "Math",
+    "speaking": "Speaking"
   },
   "meta2": {
     "listening": "4 parts · 40 questions · audio plays once",
     "reading": "3 passages · 40 questions",
     "writing": "Task 1 report + Task 2 essay · AI-graded",
     "reading_writing": "2 adaptive modules · 54 questions",
-    "math": "2 adaptive modules · 44 questions · Desmos"
+    "math": "2 adaptive modules · 44 questions · Desmos",
+    "speaking": "3 parts · answers are recorded · scored by AI"
   },
   "metaPhone": {
     "listening": "4 parts · audio plays once",
     "reading": "3 passages · 40 questions",
     "writing": "2 tasks · AI-graded",
     "reading_writing": "2 modules · 54 questions",
-    "math": "2 modules · 44 questions"
+    "math": "2 modules · 44 questions",
+    "speaking": "3 parts · scored by AI"
   },
   "time": {
     "min": "{n} min",
@@ -108,5 +111,18 @@
   "copied": "Link copied",
   "loadError": "We couldn't load this test. Check your connection and try again.",
   "retry": "Try again",
-  "chooseExam": "Choose an exam"
+  "chooseExam": "Choose an exam",
+  "ruleIelts2Sp": "Sections run in order: Listening, Reading, Writing, Speaking. You can take Speaking later, within 7 days.",
+  "mic": "Microphone",
+  "micTodo": "Your browser will ask for access — click \"Allow\"",
+  "micOk": "Microphone works",
+  "micDenied": "Access is off. Lock icon in the address bar → Microphone → Allow",
+  "micNone": "No microphone found — plug in headphones with a mic",
+  "micAct": "Allow access",
+  "micWhere": "A small window will appear next to the address bar — click \"Allow\"",
+  "micGo": "OK — ask for access",
+  "micLater": "I'll take Speaking later",
+  "micNow": "I'll take Speaking now",
+  "micLaterNote": "Speaking later — within 7 days",
+  "micPhoneNote": "Speaking needs a microphone — a laptop's built-in one is fine."
 }

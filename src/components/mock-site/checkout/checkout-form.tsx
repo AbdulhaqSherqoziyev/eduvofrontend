@@ -20,12 +20,14 @@ import { useDelayedFlag } from '@/lib/mock/hooks/use-delayed';
 import { useLang } from '@/lib/mock/hooks/use-lang';
 import { useLearner } from '@/lib/mock/hooks/use-learner';
 import { usePaddle } from '@/lib/mock/hooks/use-paddle';
+import { useIeltsSpeaking } from '@/lib/mock/hooks/use-speaking-live';
 import { sx } from '@/lib/mock/sx';
 import { AppBar } from '../app-bar';
 import { Segmented } from '../segmented';
 import { StickyCta } from '../sticky-cta';
 import { useToast } from '../toast';
 import { PayIcon } from './pay-icons';
+import { MicNeeded } from '../pricing/mic-needed';
 
 const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`);
 type Banner = { kind: 'warn' | 'err' | 'info'; text: React.ReactNode } | null;
@@ -45,6 +47,7 @@ export function CheckoutForm() {
   const learner = useLearner();
   const [sku, setSku] = useState<string | null>(null);
   const catalog = useCatalog();
+  const spOn = useIeltsSpeaking();
   const { currency: cur, currencies, ready: curReady, setCurrency: setCur } = useCurrency();
   /** wait for the catalog (public currency list) before quoting; if it failed, go on with the default — the server re-checks */
   const curKnown = curReady || catalog.status === 'error';
@@ -203,6 +206,8 @@ export function CheckoutForm() {
   };
 
   const product = quote?.product;
+  /** spec §4.1 (M16): any IELTS credit can be spent on Speaking → microphone line under the total */
+  const micLine = spOn && product?.exam === 'ielts';
   const examTag = product ? (product.exam === 'ielts' ? 'IELTS ACADEMIC' : 'DIGITAL SAT') : '';
   const planName = product ? (product.kind === 'bundle' ? t('plan.bundle', { n: product.qty }) : t(`plan.${product.kind}`)) : '';
   const planNote = product ? (product.kind === 'bundle' ? t('planNote.bundle', { n: product.qty, months: product.validityMonths ?? 12 }) : t(`planNote.${product.kind}`, { months: product.validityMonths ?? 12 })) : '';
@@ -300,6 +305,7 @@ export function CheckoutForm() {
               <div style={sx('display:flex;justify-content:space-between')}><span>{t('taxes')}</span><span>{t('included')}</span></div>
             </div>
             <div style={sx('display:flex;justify-content:space-between;align-items:baseline;padding:14px 16px;border-radius:16px;box-shadow:var(--inset)')}><span style={sx('font-weight:800')}>{t('total')}</span><span style={sx('font-size:24px;font-weight:800')}>{quote ? <bdi dir="ltr">{total}</bdi> : sk('100px', 22)}</span></div>
+            {micLine && <MicNeeded inset />}
             <Link href={href(`/pricing${product ? `?exam=${product.exam}` : ''}`)} style={sx('font-size:13px;font-weight:700')}>{t('changePlan')}</Link>
           </div>
         </div>
@@ -320,6 +326,7 @@ export function CheckoutForm() {
           {promoForm(true)}
           {quote && quote.discount.amountMinor > 0 && <div style={sx('display:flex;justify-content:space-between;font-size:13px;color:var(--ink2)')}><span>{t('discount')}</span><span style={sx('color:var(--ok);font-weight:700')}><bdi dir="ltr">−{fmtMoney(quote.discount)}</bdi></span></div>}
           <div style={sx('display:flex;justify-content:space-between;font-size:13px;color:var(--ink2)')}><span>{t('taxes')}</span><span>{t('included')}</span></div>
+          {micLine && <MicNeeded inset size={12.5} />}
         </div>
         <b style={sx('font-size:16px')}>{t('phone.payWith')}</b>
         {currencyBanner}

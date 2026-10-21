@@ -26,21 +26,24 @@
     "reading": "Reading",
     "writing": "Writing",
     "reading_writing": "Reading and Writing",
-    "math": "Math"
+    "math": "Math",
+    "speaking": "Speaking"
   },
   "meta2": {
     "listening": "4 qism · 40 savol · audio bir marta",
     "reading": "3 matn · 40 savol",
     "writing": "1-topshiriq hisobot + 2-topshiriq insho · AI baholaydi",
     "reading_writing": "2 adaptiv modul · 54 savol",
-    "math": "2 adaptiv modul · 44 savol · Desmos"
+    "math": "2 adaptiv modul · 44 savol · Desmos",
+    "speaking": "3 qism · javoblar yoziladi · AI baholaydi"
   },
   "metaPhone": {
     "listening": "4 qism · audio bir marta",
     "reading": "3 matn · 40 savol",
     "writing": "2 topshiriq · AI baholaydi",
     "reading_writing": "2 modul · 54 savol",
-    "math": "2 modul · 44 savol"
+    "math": "2 modul · 44 savol",
+    "speaking": "3 qism · AI baholaydi"
   },
   "time": {
     "min": "{n} daq",
@@ -108,5 +111,18 @@
   "copied": "Havola nusxalandi",
   "loadError": "Testni yuklab bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.",
   "retry": "Qayta urinish",
-  "chooseExam": "Imtihonni tanlang"
+  "chooseExam": "Imtihonni tanlang",
+  "ruleIelts2Sp": "Bo‘limlar tartib bilan: Listening, Reading, Writing, Speaking. Speaking’ni 7 kun ichida keyinroq topshirish mumkin.",
+  "mic": "Mikrofon",
+  "micTodo": "Brauzer ruxsat so‘raydi — \"Allow\"ni bosing",
+  "micOk": "Mikrofon ishlayapti",
+  "micDenied": "Ruxsat berilmagan. Manzil qatoridagi qulf → Mikrofon → Ruxsat berish",
+  "micNone": "Mikrofon topilmadi — mikrofonli naushnik ulang",
+  "micAct": "Ruxsat berish",
+  "micWhere": "Manzil qatori yonida kichik oyna chiqadi — \"Allow\"ni bosing",
+  "micGo": "Tushunarli — ruxsat so‘rash",
+  "micLater": "Speaking’ni keyinroq topshiraman",
+  "micNow": "Speaking’ni hozir topshiraman",
+  "micLaterNote": "Speaking keyinroq — 7 kun ichida",
+  "micPhoneNote": "Speaking uchun mikrofon kerak — noutbukning o‘z mikrofoni ham bo‘ladi."
 }

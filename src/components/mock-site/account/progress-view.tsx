@@ -13,6 +13,7 @@ import { fmtDate, fmtMonthShort, fmtScore } from '@/lib/mock/format';
 import { useDelayedFlag } from '@/lib/mock/hooks/use-delayed';
 import { useLang } from '@/lib/mock/hooks/use-lang';
 import { useLearner } from '@/lib/mock/hooks/use-learner';
+import { speakingLive } from '@/lib/mock/speaking-live';
 import { sx } from '@/lib/mock/sx';
 import { BarChart, LineChart } from '../charts';
 import { Segmented } from '../segmented';
@@ -40,7 +41,7 @@ export function ProgressView() {
   }, [learner, exam, reload]);
   const slow = useDelayedFlag(!data && !err);
 
-  const keys: SeriesKey[] = exam === 'sat' ? ['overall', 'reading_writing', 'math'] : ['overall', 'listening', 'reading', 'writing'];
+  const keys: SeriesKey[] = exam === 'sat' ? ['overall', 'reading_writing', 'math'] : ['overall', 'listening', 'reading', 'writing', ...(speakingLive() && data?.series.series.speaking?.length ? ['speaking' as const] : [])];
   const pts = (data?.series.series[sec] ?? []).map((p) => ({ at: p.at, value: p.value }));
   const last = pts[pts.length - 1]; const first = pts[0];
   const delta = last && first && pts.length > 1 ? last.value - first.value : null;

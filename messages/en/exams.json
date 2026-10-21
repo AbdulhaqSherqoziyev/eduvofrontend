@@ -15,8 +15,12 @@
       "q3": "How is the overall band worked out?",
       "a3": "Each section is scored on the 0–9 band scale in 0.5 steps. The overall band is the average of your Listening, Reading and Writing bands.",
       "q4": "Can I take only one section?",
-      "a4": "Yes. Buy one section, or use your free Listening or Reading section. Writing is a paid section because it is graded by AI."
-    }
+      "a4": "Yes. Buy one section, or use your free Listening or Reading section. Writing is a paid section because it is graded by AI.",
+      "a1Sp": "Yes. Speaking has 3 parts (11–14 minutes): a computer-generated British examiner voice asks the questions, your answers are recorded and AI scores them on 4 criteria. You need a laptop or computer with a microphone. In a full mock you can take Speaking on a separate day within 7 days.",
+      "a3Sp": "Each section is scored 0–9 in steps of 0.5. The overall band is the average of all four sections (Listening, Reading, Writing, Speaking); it appears once Speaking is done.",
+      "a4Sp": "Yes. Buy one section or use the free Listening or Reading section. Writing and Speaking are paid because AI scores them."
+    },
+    "subSp": "Listening, Reading, Writing and Speaking with official timing and question types. Listening and Reading are scored on submit; Writing and Speaking are scored by AI on four criteria."
   },
   "sat": {
     "meta": {
@@ -69,7 +73,10 @@
       "writing": "Writing",
       "writingTime": "60 min",
       "writingQ": "2 tasks",
-      "score": "Band 0–9 in 0.5 steps"
+      "score": "Band 0–9 in 0.5 steps",
+      "speaking": "Speaking",
+      "speakingTime": "11–14 min",
+      "speakingQ": "3 parts · with an examiner voice"
     },
     "sat": {
       "rw": "Reading and Writing",

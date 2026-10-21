@@ -87,7 +87,8 @@
     "f8": "Topshirishingiz bilan ball",
     "f9": "Har bir savol bo‘yicha tushuntirish",
     "f10": "Writing bo‘yicha har bir rasmiy mezon uchun izoh",
-    "f11": "Vaqt o‘tishi bilan bo‘limlar bo‘yicha o‘sish"
+    "f11": "Vaqt o‘tishi bilan bo‘limlar bo‘yicha o‘sish",
+    "f12": "Speaking: British ovozli imtihonchi, 4 mezon bo‘yicha izoh va yozuvingizni qayta eshitish"
   },
   "sample": {
     "title": "Amal qilsa bo‘ladigan natija",
@@ -186,7 +187,8 @@
     },
     "how3": {
       "title": "Natija darhol",
-      "text": "Writing daqiqalar ichida AI tomonidan baholanadi."
+      "text": "Writing daqiqalar ichida AI tomonidan baholanadi.",
+      "textSp": "Writing va Speaking daqiqalar ichida AI tomonidan baholanadi."
     },
     "how4": {
       "title": "Nimani mashq qilishni biling",
@@ -239,6 +241,8 @@
     "tryFree": "Bepul bo‘limni sinash",
     "noCard": "Kartasiz",
     "themeDark": "Qorong‘i mavzu",
-    "themeLight": "Yorug‘ mavzu"
+    "themeLight": "Yorug‘ mavzu",
+    "f8Sp": "Writing va Speaking bo‘yicha har mezonga izoh",
+    "speak": "Speaking"
   }
 }

@@ -6,6 +6,7 @@
 import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import type { OpenExamSlug } from '@/lib/mock/api/types';
+import { speakingLive } from '@/lib/mock/speaking-live';
 import { sx } from '@/lib/mock/sx';
 import { CatalogError } from './catalog-error';
 import { FaqDesktop, FaqPhone } from './landing/faq';
@@ -80,13 +81,15 @@ export async function ExamPageDesktop({ exam }: { exam: OpenExamSlug }) {
   const lang = await getLocale();
   const h = (p: string) => `/${lang}${p}`;
   const f = `format.${exam}`;
+  /** IELTS Speaking launch (spec §4.2): format row, "what's included" tile, FAQ/sub texts — only with the flag on */
+  const sp = exam === 'ielts' && speakingLive();
   const rows: Array<[string, string, string]> = exam === 'ielts'
-    ? [['listening', 'listeningTime', 'listeningQ'], ['reading', 'readingTime', 'readingQ'], ['writing', 'writingTime', 'writingQ']]
+    ? [['listening', 'listeningTime', 'listeningQ'], ['reading', 'readingTime', 'readingQ'], ['writing', 'writingTime', 'writingQ'], ...(sp ? [['speaking', 'speakingTime', 'speakingQ'] as [string, string, string]] : [])]
     : [['rw', 'rwTime', 'rwQ'], ['break', 'breakTime', ''], ['math', 'mathTime', 'mathQ']];
   const features: Array<[string, string, string]> = exam === 'ielts'
-    ? [['tagIelts', 'f1', 'var(--ielts)'], ['tagIelts', 'f2', 'var(--ielts)'], ['tagIelts', 'f3', 'var(--ielts)'], ['tagBoth', 'f7', 'var(--blue)'], ['tagBoth', 'f8', 'var(--blue)'], ['tagBoth', 'f9', 'var(--blue)'], ['tagAi', 'f10', 'var(--ai)'], ['tagBoth', 'f11', 'var(--blue)']]
+    ? [['tagIelts', 'f1', 'var(--ielts)'], ['tagIelts', 'f2', 'var(--ielts)'], ['tagIelts', 'f3', 'var(--ielts)'], ['tagBoth', 'f7', 'var(--blue)'], ['tagBoth', 'f8', 'var(--blue)'], ['tagBoth', 'f9', 'var(--blue)'], ['tagAi', 'f10', 'var(--ai)'], ...(sp ? [['tagAi', 'f12', 'var(--ai)'] as [string, string, string]] : []), ['tagBoth', 'f11', 'var(--blue)']]
     : [['tagSat', 'f4', 'var(--sat)'], ['tagSat', 'f5', 'var(--sat)'], ['tagSat', 'f6', 'var(--sat)'], ['tagBoth', 'f7', 'var(--blue)'], ['tagBoth', 'f8', 'var(--blue)'], ['tagBoth', 'f9', 'var(--blue)'], ['tagBoth', 'f11', 'var(--blue)']];
-  const faq = ([1, 2, 3, 4] as const).map((i) => ({ q: t(`${exam}.faq.q${i}`), a: t(`${exam}.faq.a${i}`) }));
+  const faq = ([1, 2, 3, 4] as const).map((i) => ({ q: t(`${exam}.faq.q${i}`), a: t(`${exam}.faq.a${i}${sp && i !== 2 ? 'Sp' : ''}`) }));
 
   return (
     <>
@@ -95,7 +98,7 @@ export async function ExamPageDesktop({ exam }: { exam: OpenExamSlug }) {
           <div style={sx('display:flex;flex-direction:column;gap:22px;min-width:0')}>
             <span className="m-eyebrow" style={{ ...sx('font-size:13px'), color: `var(--${exam})` }} lang="en">{t(`${exam}.eyebrow`)}</span>
             <h1 className="m-hero-h1 m-hyph" style={sx('font-size:clamp(32px,4vw,52px)')}>{t(`${exam}.h1`)}</h1>
-            <p style={sx('margin:0;font-size:clamp(16px,1.4vw,19px);line-height:var(--lh-body);color:var(--ink2);max-width:560px')}>{t(`${exam}.sub`)}</p>
+            <p style={sx('margin:0;font-size:clamp(16px,1.4vw,19px);line-height:var(--lh-body);color:var(--ink2);max-width:560px')}>{t(`${exam}.${sp ? 'subSp' : 'sub'}`)}</p>
             <span style={sx('font-size:15px;color:var(--ink2)')}>{t.rich('common.fullMockPrice', { b: (c) => <b style={sx('color:var(--ink);font-size:20px')}>{c}</b>, price: () => <Price exam={exam} kind="full" skelWidth={120} /> })}</span>
             <div style={sx('display:flex;gap:12px;flex-wrap:wrap')}>
               <Link className="m-btn m-btn--primary" href={h(`/start/${exam}?mode=full`)} style={sx('height:54px;padding:0 26px;font-weight:700;font-size:16px')}>{t('common.startFull')}</Link>
@@ -157,7 +160,7 @@ export async function ExamPageDesktop({ exam }: { exam: OpenExamSlug }) {
         <div style={sx('display:flex;flex-direction:column;gap:12px')}>
           <span className="m-eyebrow" style={{ color: `var(--${exam})` }} lang="en">{t(`${exam}.eyebrow`)}</span>
           <h1 className="m-hyph" style={sx('margin:0;font-size:var(--hero-size-m);line-height:var(--lh-hero-m);letter-spacing:var(--ls-h);font-weight:800')}>{t(`${exam}.h1`)}</h1>
-          <p style={sx('margin:0;font-size:15px;line-height:1.55;color:var(--ink2)')}>{t(`${exam}.sub`)}</p>
+          <p style={sx('margin:0;font-size:15px;line-height:1.55;color:var(--ink2)')}>{t(`${exam}.${sp ? 'subSp' : 'sub'}`)}</p>
           <span style={sx('font-size:14px;color:var(--ink2);font-weight:600')}>{t.rich('common.fullMockPrice', { b: (c) => <b style={sx('color:var(--ink)')}>{c}</b>, price: () => <Price exam={exam} kind="full" skelWidth={90} /> })}</span>
           <CatalogError text={t('common.priceLoadError')} retry={tl('pricing.retry')} />
         </div>

@@ -65,7 +65,8 @@
     "reading": "Reading",
     "writing": "Writing",
     "reading_writing": "Reading and Writing",
-    "math": "Math"
+    "math": "Math",
+    "speaking": "Speaking"
   },
   "weak": "Weakest question types",
   "weakBasis": "Across your last {n, plural, one {{exam} mock} other {# {exam} mocks}}.",
@@ -128,5 +129,8 @@
   "noFreshSub": "Your credits are kept. You can use them when new tests are added.",
   "noFreshCta": "See progress",
   "creditsKept": "{n} {exam} credits wait for new tests",
-  "correctOf": "{correct} of {total} correct"
+  "correctOf": "{correct} of {total} correct",
+  "speakingPending": "IELTS · Speaking waiting",
+  "speakingPendingSub": "{n} days left · 14 min · on a computer",
+  "speakingStart": "Start Speaking"
 }

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { getSession } from '@/lib/mock/api/client';
 import { patchMe } from '@/lib/mock/api/endpoints';
+import { useSpeakingLive } from '@/lib/mock/hooks/use-speaking-live';
 import { applyTheme, currentTheme } from '@/lib/mock/theme';
 import { sx } from '@/lib/mock/sx';
 
@@ -25,7 +26,10 @@ export function PhoneSample() {
     const id = setInterval(() => setExam((e) => (e === 'ielts' ? 'sat' : 'ielts')), 4500);
     return () => clearInterval(id);
   }, [picked]);
-  const h = HERO[exam];
+  const live = useSpeakingLive();
+  const base = HERO[exam];
+  // spec §4.5: with Speaking live the IELTS sample has all 4 skills — (7.0+6.5+6.0+6.5)/4 = 6.5, overall unchanged
+  const h = exam === 'ielts' && live ? { ...base, rows: [...base.rows, { name: t('speak'), v: '6.5', p: 6.5 / 9, ai: true }] } : base;
   const color = `var(--${exam})`;
   const tab = (e: Exam, label: string) => (
     <button type="button" role="tab" aria-selected={exam === e} onClick={() => { setExam(e); setPicked(true); }} lang="en"

@@ -1,4 +1,5 @@
 /** Contract endpoints (`_api-contract.md` section numbers in brackets). */
+import { applySpeakingFlag, applySpeakingFlagStart } from '../speaking-live';
 import { api, clearSession, currentAccessToken, getSession, refreshSession, setAuthSession, setLearner } from './client';
 import type {
   AttemptListItem, AttemptMode, AuthSession, Catalog, CheckoutMethods, CreatedAttempt, Currency, Dashboard, ExamCredits,
@@ -59,7 +60,7 @@ export const getCatalog = (signal?: AbortSignal) => {
   const s = getSession();
   if (s.status === 'learner' && s.learner.country) q.set('country', s.learner.country);
   const qs = q.toString();
-  return api<Catalog>(`/mock/catalog${qs ? `?${qs}` : ''}`, { auth: !!currentAccessToken(), signal });
+  return api<Catalog>(`/mock/catalog${qs ? `?${qs}` : ''}`, { auth: !!currentAccessToken(), signal }).then(applySpeakingFlag);
 };
 export const joinWaitlist = (body: { exam: WaitlistTopic; email?: string; locale: string; turnstile?: string }) =>
   api<{ subscribed: true }>('/mock/waitlist', { method: 'POST', body });
@@ -75,7 +76,7 @@ export const getAttempts = (q: { status?: 'in_progress' | 'completed'; exam?: Op
 /* ---- §6 start ---- */
 export const getStart = (exam: OpenExamSlug, q: { mode: AttemptMode; section?: SectionKey; test?: string }, signal?: AbortSignal) => {
   const p = new URLSearchParams({ mode: q.mode, ...(q.section ? { section: q.section } : {}), ...(q.test ? { test: q.test } : {}) });
-  return api<StartInfo>(`/mock/start/${exam}?${p}`, { signal });
+  return api<StartInfo>(`/mock/start/${exam}?${p}`, { signal }).then(applySpeakingFlagStart);
 };
 export const createAttempt = (body: { exam: OpenExamSlug; mode: AttemptMode; sectionKey?: SectionKey; testId?: string; charge?: 'auto'; idempotencyKey: string }) =>
   api<CreatedAttempt>('/mock/attempts', { method: 'POST', body });
@@ -86,6 +87,9 @@ export const emailStartLink = (body: { exam: OpenExamSlug; mode: AttemptMode; se
 /** EXAM §1.10 body is typed loosely here; the results page reads only what it renders. */
 export type MockResult = Record<string, unknown> & { status?: string; mock: MockResultExt; serverNow: string };
 export const getResult = (attemptId: string, signal?: AbortSignal) => api<MockResult>(`/mock/attempts/${encodeURIComponent(attemptId)}/result`, { signal });
+/** Speaking contract §6 (B2C learner token is accepted on the portal route). */
+export const deleteRecordings = (attemptId: string) =>
+  api<{ deleted: number; serverNow: string }>(`/portal/exams/attempts/${encodeURIComponent(attemptId)}/recordings`, { method: 'DELETE' });
 export const getSharedCard = (token: string) => api<{ card: ShareCard; serverNow: string }>(`/mock/share/${encodeURIComponent(token)}`, { auth: false });
 export const createShare = (attemptId: string) =>
   api<{ token: string; url: string; card: ShareCard }>(`/mock/attempts/${encodeURIComponent(attemptId)}/share`, { method: 'POST' });

@@ -1,6 +1,7 @@
 /** Landing <520px — Mobile Landing.dc.html (app bar + sticky CTA are rendered by the page). */
 import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
+import { speakingLive } from '@/lib/mock/speaking-live';
 import { sx } from '@/lib/mock/sx';
 import { CatalogError } from '../catalog-error';
 import { Price } from '../price';
@@ -15,9 +16,10 @@ export async function LandingPhone() {
   const tc = await getTranslations('common');
   const lang = await getLocale();
   const h = (p: string) => `/${lang}${p}`;
+  const sp = speakingLive(); // IELTS Speaking launch: Writing + Speaking texts (spec §4.5)
   const features: Array<[string, string]> = [
     ['f1', 'var(--ielts)'], ['f2', 'var(--ielts)'], ['f3', 'var(--ielts)'], ['f4', 'var(--sat)'],
-    ['f5', 'var(--sat)'], ['f6', 'var(--blue)'], ['f7', 'var(--blue)'], ['f8', 'var(--ai)'],
+    ['f5', 'var(--sat)'], ['f6', 'var(--blue)'], ['f7', 'var(--blue)'], [sp ? 'f8Sp' : 'f8', 'var(--ai)'],
   ];
   const PRICE = sx('border-radius:18px;box-shadow:var(--raise-sm);padding:14px 16px;display:flex;align-items:center;gap:12px;color:var(--ink)');
   const NOTE = sx('font-size:12px;color:var(--mut);font-weight:600');
@@ -78,7 +80,7 @@ export async function LandingPhone() {
 
       <section style={sx('padding:36px 18px 0;display:flex;flex-direction:column;gap:12px')}>
         <h2 style={H}>{t('how.title')}</h2>
-        <PhoneHow items={(['how1', 'how2', 'how3', 'how4'] as const).map((k) => ({ title: t(`phone.${k}.title`), text: t(`phone.${k}.text`) }))} />
+        <PhoneHow items={(['how1', 'how2', 'how3', 'how4'] as const).map((k) => ({ title: t(`phone.${k}.title`), text: t(`phone.${k}.${sp && k === 'how3' ? 'textSp' : 'text'}`) }))} />
       </section>
 
       <section style={sx('padding:28px 18px 0')}>

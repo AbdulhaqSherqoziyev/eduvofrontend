@@ -87,7 +87,8 @@
     "f8": "Band or score the moment you submit",
     "f9": "Per-question review with explanations",
     "f10": "Writing feedback on each official criterion",
-    "f11": "Progress over time, by section"
+    "f11": "Progress over time, by section",
+    "f12": "Speaking: British examiner voice, feedback on 4 criteria and replay of your answers"
   },
   "sample": {
     "title": "A result you can act on",
@@ -186,7 +187,8 @@
     },
     "how3": {
       "title": "Scores right away",
-      "text": "Writing graded by AI within minutes."
+      "text": "Writing graded by AI within minutes.",
+      "textSp": "Writing and Speaking are scored by AI within minutes."
     },
     "how4": {
       "title": "Know what to practise",
@@ -239,6 +241,8 @@
     "tryFree": "Try a free section",
     "noCard": "No card",
     "themeDark": "Dark theme",
-    "themeLight": "Light theme"
+    "themeLight": "Light theme",
+    "f8Sp": "Feedback on every Writing and Speaking criterion",
+    "speak": "Speaking"
   }
 }

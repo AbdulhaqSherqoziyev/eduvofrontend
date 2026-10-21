@@ -4,6 +4,7 @@
  * the price skeleton and the client fetches `/api/mock/catalog` itself — never placeholder prices.
  */
 import type { Catalog } from './api/types';
+import { applySpeakingFlag } from './speaking-live';
 
 export const CATALOG_REVALIDATE = 300;
 
@@ -13,7 +14,7 @@ export async function fetchCatalogServer(): Promise<Catalog | null> {
   try {
     const res = await fetch(`${base}/mock/catalog`, { next: { revalidate: CATALOG_REVALIDATE }, signal: AbortSignal.timeout(3000) });
     if (!res.ok) return null;
-    return (await res.json()) as Catalog;
+    return applySpeakingFlag((await res.json()) as Catalog);
   } catch {
     return null;
   }

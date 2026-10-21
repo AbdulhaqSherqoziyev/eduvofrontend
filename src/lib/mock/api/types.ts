@@ -9,7 +9,7 @@ export type Theme = 'light' | 'dark' | 'system';
 export type ExamSlug = 'ielts' | 'sat' | 'cefr' | 'toefl' | 'hsk';
 export type OpenExamSlug = 'ielts' | 'sat';
 export type AttemptMode = 'full' | 'section';
-export type SectionKey = 'listening' | 'reading' | 'writing' | 'reading_writing' | 'math';
+export type SectionKey = 'listening' | 'reading' | 'writing' | 'speaking' | 'reading_writing' | 'math';
 
 export interface Money { currency: Currency; amountMinor: number }
 export interface PriceSet { UZS: number; USD: number; EUR: number }
@@ -110,7 +110,9 @@ export interface ExamCredits {
 
 /* ---- §5 dashboard ---- */
 export type NextStep =
-  | { kind: 'resume'; attemptId: string; exam: OpenExamSlug; mode: AttemptMode; testCode: string; sectionKey: SectionKey; remainingSec: number | null; doneSections: Array<{ key: SectionKey; score: number | null }> }
+  | { kind: 'resume'; attemptId: string; exam: OpenExamSlug; mode: AttemptMode; testCode: string; sectionKey: SectionKey; remainingSec: number | null; doneSections: Array<{ key: SectionKey; score: number | null }>;
+      /** req (speaking-design §4.4, not in contract yet): Speaking left for later — take it until this time (7-day window) */
+      availableUntil?: string | null }
   | { kind: 'verify_email' }
   | { kind: 'free_section'; exams: OpenExamSlug[] }
   | { kind: 'writing_grading'; attemptId: string; exam: OpenExamSlug }
@@ -165,7 +167,7 @@ export type Charge =
   | { source: 'unlimited'; until: string }
   | { source: 'section_credit'; remainingAfter: number }
   | { source: 'full_credit'; remainingAfter: number };
-export type SystemCheckKey = 'audio' | 'headphones' | 'fullscreen' | 'internet';
+export type SystemCheckKey = 'audio' | 'headphones' | 'fullscreen' | 'internet' | 'microphone';
 export interface StartInfo {
   exam: OpenExamSlug; examCode: string;
   test: { id: string; code: string; isNew: true } | null;
