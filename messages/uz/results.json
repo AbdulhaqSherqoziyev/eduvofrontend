@@ -126,5 +126,6 @@
   "speakingPendingBody": "Listening, Reading va Writing natijalari tayyor. Speaking odatda 5–15 daqiqada baholanadi — chiqib ketishingiz mumkin, emailga xabar keladi.",
   "speakingNotGraded": "Bu Speaking'ni baholay olmadik. Shu bo'lim uchun kredit hisobingizga qaytarildi.",
   "speakingRefunded": "Kredit hisobingizga qaytarildi.",
-  "sampleNoAudio": "Namunada audio yo'q"
+  "sampleNoAudio": "Namunada audio yo'q",
+  "speakingComputer": "Testni topshirish uchun kompyuterda oching"
 }

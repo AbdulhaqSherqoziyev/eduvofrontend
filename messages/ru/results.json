@@ -126,5 +126,6 @@
   "speakingPendingBody": "Listening, Reading и Writing готовы. Speaking обычно оценивается за 5–15 минут — можно уйти, мы пришлём письмо.",
   "speakingNotGraded": "Не удалось оценить этот Speaking. Кредит за него возвращён на счёт.",
   "speakingRefunded": "Кредит возвращён на счёт.",
-  "sampleNoAudio": "В примере нет аудио"
+  "sampleNoAudio": "В примере нет аудио",
+  "speakingComputer": "Откройте на компьютере, чтобы сдать тест"
 }

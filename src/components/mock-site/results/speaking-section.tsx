@@ -21,7 +21,6 @@ export function B2cSpeaking({ sp, attemptId, sample, notGraded, onChanged, phone
   sp: SpeakingResult; attemptId?: string; sample?: boolean; notGraded: MockResultExt['notGraded']; onChanged: () => void; phone?: boolean;
 }) {
   const t = useTranslations('results');
-  const ts = useTranslations('start');
   const toast = useToast();
   const { lang, href } = useLang();
   const loc: Locale = lang === 'uz' || lang === 'ru' ? lang : 'en';
@@ -32,7 +31,7 @@ export function B2cSpeaking({ sp, attemptId, sample, notGraded, onChanged, phone
       sp={sp} skin="b2c" mode="b2c" tx={tx} onToast={toast}
       onDelete={sample || !attemptId ? undefined : async () => { await deleteRecordings(attemptId); onChanged(); }}
       takeHref={!sample && attemptId && sp.status === 'pending' ? href(`/exam/${attemptId}`) : null}
-      phoneNote={<div style={sx('padding:12px 14px;border-radius:14px;box-shadow:var(--inset);font-size:14px;font-weight:700;color:var(--ink2)')}>{ts('computer')}</div>}
+      phoneNote={<div style={sx('padding:12px 14px;border-radius:14px;box-shadow:var(--inset);font-size:14px;font-weight:700;color:var(--ink2)')}>{t('speakingComputer')}</div>}
       noAudioNote={sample ? t('sampleNoAudio') : undefined}
       gradingNote={t('speakingPendingBody')}
       b2c={{ unfairHref: attemptId ? href(`/help/contact?topic=speaking_result&attempt=${encodeURIComponent(attemptId)}`) : undefined, refundedText: refunded ? t('speakingRefunded') : null, notGradedText: t('speakingNotGraded') }}
