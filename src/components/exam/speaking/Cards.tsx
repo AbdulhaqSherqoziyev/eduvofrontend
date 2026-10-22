@@ -31,6 +31,8 @@ export function MicLostCard({ st, onReconnect }: { st: LostState; onReconnect: (
       <MicOff size={32} color="var(--x-muted)" aria-hidden />
       <Bi pair={bi('speaking.mic_lost_title')} size={22} weight={800} center />
       <Bi pair={bi(st.used ? 'speaking.mic_lost_body_used' : 'speaking.mic_lost_body')} size={15} weight={500} center />
+      {st.used && st.partial && <Bi pair={bi('speaking.partial_saved')} size={14} weight={500} center />}
+      {st.unstable && <Bi pair={bi('speaking.mic_unstable')} size={14} weight={500} center />}
       {st.err && (
         <div style={{ background: 'var(--x-warn-bg)', borderRadius: 10, padding: '8px 12px', alignSelf: 'stretch' }}>
           <Bi pair={bi(st.err)} size={13} color="var(--x-warn-fg)" />

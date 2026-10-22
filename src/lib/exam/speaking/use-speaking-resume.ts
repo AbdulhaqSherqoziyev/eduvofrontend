@@ -18,9 +18,13 @@ export function useSpeakingResume() {
     void resumePoint(s.attemptId, c, s.spRecorded, s.spRestarted).then((r) => { if (!dead) setRp(r); });
     return () => { dead = true; };
   }, [ready]); // eslint-disable-line react-hooks/exhaustive-deps
-  if (!rp) return { rp: null, ask, n: 0, allDone: false };
+  if (!rp) return { rp: null, ask, n: 0, allDone: false, saved: 0, partialSaved: false };
   // all answers saved: nothing to "continue from"; a used restart moves on to the next question
   const allDone = rp.saved >= rp.total;
   const n = rp.next ? Math.min(rp.total, rp.questionNo + 1) : rp.questionNo;
-  return { rp, ask, n, allDone };
+  // Sevara 10-22: answers on this device (queued, not uploaded yet) count too — the interrupted item's partial
+  // becomes its answer when the test moves on; 0 → the line is not shown
+  const partialSaved = rp.next && !!rp.partial && rp.partial.chunks.length > 0;
+  const saved = rp.saved + (partialSaved ? 1 : 0);
+  return { rp, ask, n, allDone, saved, partialSaved };
 }

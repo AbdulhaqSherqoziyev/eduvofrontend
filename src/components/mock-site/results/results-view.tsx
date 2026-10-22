@@ -166,6 +166,9 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
   }
 
   const acc = m.accuracyByType;
+  // Speaking-only attempt (Sevara final review): no question-type accuracy, no question review, no "review your mistakes" step
+  const spOnly = !full && m.sectionKey === 'speaking';
+  const steps = spOnly ? m.nextSteps.filter((x) => x.code !== 'review_mistakes' && x.code !== 'generic' && tq.has(`rec.${x.code}`)) : m.nextSteps;
   const speaking = res.speaking ?? null;
   const sectionCards = m.sectionCards;
   const sectionCard = (s: MockResultExt['sectionCards'][number], phone = false) => {
@@ -285,10 +288,12 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
         </div>
 
         <div style={sx('display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px')}>
-          <div className="m-card" style={sx('padding:28px;display:flex;flex-direction:column;gap:14px')}>
-            <div style={sx('font-weight:800;font-size:18px')}>{t('byType')}</div>
-            {acc.length ? accRows : <span style={sx('font-size:14px;color:var(--ink2)')}>{t('noTypes')}</span>}
-          </div>
+          {!spOnly && (
+            <div className="m-card" style={sx('padding:28px;display:flex;flex-direction:column;gap:14px')}>
+              <div style={sx('font-weight:800;font-size:18px')}>{t('byType')}</div>
+              {acc.length ? accRows : <span style={sx('font-size:14px;color:var(--ink2)')}>{t('noTypes')}</span>}
+            </div>
+          )}
           <div className="m-card" style={sx('padding:28px;display:flex;flex-direction:column;gap:18px')}>
             {(m.strongest.length > 0 || m.weakest.length > 0) && (
               <div style={sx('display:grid;grid-template-columns:1fr 1fr;gap:12px')}>
@@ -297,7 +302,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
               </div>
             )}
             <div style={sx('font-weight:800;font-size:18px')}>{t('next')}</div>
-            {m.nextSteps.map((s, i) => (
+            {steps.map((s, i) => (
               <div key={i} style={sx('display:flex;gap:14px;align-items:flex-start')}><span style={sx('width:28px;height:28px;border-radius:9px;box-shadow:var(--inset);display:grid;place-items:center;color:var(--blue);font-weight:800;font-size:13px;flex:none')}>{i + 1}</span><span style={sx('font-size:15px;line-height:1.55;padding-top:3px')}>{recText(s)}</span></div>
             ))}
           </div>
@@ -316,6 +321,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
 
         {speaking && <B2cSpeaking sp={speaking} attemptId={attemptId} sample={!!sample} onChanged={() => void load()} />}
 
+        {!spOnly && (
         <section className="m-card" style={sx('padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:18px')}>
           <div style={sx('display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap')}>
             <span style={sx('font-weight:800;font-size:20px')}>{t('review')}</span>
@@ -357,6 +363,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
             })}
           </div>
         </section>
+        )}
         <div style={sx('font-size:12px;color:var(--mut);line-height:1.5;text-align:center')}>{tc('legalLine')}</div>
       </main>
 
@@ -370,7 +377,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
         </div>
         <div style={sx('position:sticky;top:52px;z-index:3;background:var(--bg);padding:8px 0')}>
           <Segmented grid label={t('title')} value={ptab} onChange={setPtab} style={sx('border-radius:16px')} btnStyle={sx(`height:40px;border-radius:12px;font-weight:800;font-size:${writing.length && speaking ? '12px;padding:0 4px;min-width:0' : '13px'}`)}
-            items={[{ key: 'overview', label: t('phone.overview') }, ...(writing.length ? [{ key: 'writing' as const, label: t('writing') }] : []), ...(speaking ? [{ key: 'speaking' as const, label: t('speaking') }] : []), { key: 'review', label: t('phone.review') }]} />
+            items={[{ key: 'overview', label: t('phone.overview') }, ...(writing.length ? [{ key: 'writing' as const, label: t('writing') }] : []), ...(speaking ? [{ key: 'speaking' as const, label: t('speaking') }] : []), ...(spOnly ? [] : [{ key: 'review' as const, label: t('phone.review') }])]} />
         </div>
         {ptab === 'overview' && (
           <div style={sx('display:flex;flex-direction:column;gap:16px;padding-bottom:24px')}>
@@ -380,11 +387,11 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
                 <div style={sx('padding:14px;border-radius:16px;background:var(--warnBg);display:flex;flex-direction:column;gap:4px')}><span className="m-eyebrow" style={sx('font-size:11px;color:var(--warn)')}>{t('phone.needs')}</span><b style={sx('font-size:14px;line-height:1.3')}>{m.weakest.map(typeLabel).join(', ') || '—'}</b></div>
               </div>
             )}
-            {acc.length > 0 && <div className="m-card" style={sx('border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px')}><b style={sx('font-size:15px')}>{t('byType')}</b>{accRows}</div>}
-            {m.nextSteps.length > 0 && (
+            {acc.length > 0 && !spOnly && <div className="m-card" style={sx('border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px')}><b style={sx('font-size:15px')}>{t('byType')}</b>{accRows}</div>}
+            {steps.length > 0 && (
               <div className="m-card" style={sx('border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px')}>
                 <b style={sx('font-size:15px')}>{t('next')}</b>
-                {m.nextSteps.map((s, i) => <div key={i} style={sx('display:flex;gap:12px')}><span style={sx('width:26px;height:26px;border-radius:8px;box-shadow:var(--inset);display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--blue);flex:none')}>{i + 1}</span><span style={sx('font-size:14px;line-height:1.5')}>{recText(s)}</span></div>)}
+                {steps.map((s, i) => <div key={i} style={sx('display:flex;gap:12px')}><span style={sx('width:26px;height:26px;border-radius:8px;box-shadow:var(--inset);display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--blue);flex:none')}>{i + 1}</span><span style={sx('font-size:14px;line-height:1.5')}>{recText(s)}</span></div>)}
               </div>
             )}
             <div style={sx('font-size:11px;color:var(--mut);line-height:1.5;text-align:center')}>{tc('legalLine')}</div>

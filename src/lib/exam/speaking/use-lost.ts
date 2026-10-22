@@ -19,7 +19,11 @@ import type { MicError } from './recorder';
 import type { ResumePoint } from './resume';
 import type { SpPhase } from './use-speaking-flow';
 
-export interface LostState { used: boolean; initial: boolean; err: MicError | null; offline: boolean; busy: boolean }
+export interface LostState {
+  used: boolean; initial: boolean; err: MicError | null; offline: boolean; busy: boolean;
+  /** something of this question was recorded (→ "what you recorded is saved"); unstable = restarts used up */
+  partial?: boolean; unstable?: boolean;
+}
 
 interface Deps {
   phase: SpPhase; item: SpeakingItem | null; idx: number; stageKey: string;
@@ -39,7 +43,7 @@ export function useLost() {
   // v1.5: one restart per item AND at most 2 per stage (MAX_STAGE_RESTARTS) — past that the item ends with its partial
   const isUsed = (k: string) => restartedAll().has(k) || restartedAll().size >= MAX_STAGE_RESTARTS;
   /** "You'll continue from the next question" note after a refused restart (RESTART_LIMIT), ms */
-  const [notice, setNotice] = useState<number | null>(null);
+  const [notice, setNotice] = useState<{ at: number; partial: boolean } | null>(null);
   const markDone = (k: string) => patchSpeakingLocal(id, { done: [...speakingLocal(id).done, k] });
   const submitRow = async (row: RecRow) => { const fin = { ...row, id: recId(id, row.itemKey), backup: false, state: 'final' as const, updatedAt: Date.now() }; await putRec(fin); queueFor(id).add(fin); markDone(row.itemKey); };
 
@@ -71,8 +75,9 @@ export function useLost() {
     // the item's restart only counts when a recording was running (lost-rules.ts)
     const used = !!d.item?.records && recording.current && isUsed(d.item.itemKey);
     d.rec.current = null;
+    let partial = false;
     if (r && !done.current) {
-      if (used) await submitRow(await r.stop('final'));
+      if (used) { const row = await r.stop('final'); partial = row.chunks.length > 0; await submitRow(row); }
       else {
         // v1.5 §4a: pause → (after reconnect) the partial as `kind=backup` → restart. Only a PARTIAL take is a
         // backup (shorter than the answer time); a take that already reached it is the answer itself.
@@ -82,7 +87,7 @@ export function useLost() {
         else if (b.chunks.length) queueFor(id).add(b); // held until resume
       }
     }
-    setState({ used, initial: false, err: null, offline: false, busy: false });
+    setState({ used, initial: false, err: null, offline: false, busy: false, partial, unstable: used && restartedAll().size >= MAX_STAGE_RESTARTS });
     d.setPhase('mic_lost');
   }, [state, holdDeadline, id]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -105,7 +110,7 @@ export function useLost() {
       // stage limit (2) or budget spent: the partial is this item's answer, the test goes on — blameless note
       const keep = await getRec(recId(id, item.itemKey, true));
       if (keep && keep.chunks.length) await submitRow(keep);
-      setNotice(Date.now());
+      setNotice({ at: Date.now(), partial: !!keep && keep.chunks.length > 0 });
       return idx + 1;
     }
     if (r.code === 'ALREADY_RECORDED') return idx + 1;

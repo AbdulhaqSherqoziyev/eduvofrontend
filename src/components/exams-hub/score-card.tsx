@@ -53,6 +53,8 @@ interface Props {
 
 export function ScoreCard({ s, family, cert, selected, onSelect, speakingStatus }: Props) {
   const ready = s.status === 'READY' && s.label != null;
+  // IELTS bands always read with one decimal ("7.0") — the backend label (v1.4); an older integer label is padded
+  const label = family === 'IELTS' && s.label && /^\d+$/.test(s.label) ? `${s.label}.0` : s.label;
   const grading = s.status === 'GRADING' || s.status === 'NEEDS_HUMAN';
   return (
     <button
@@ -64,7 +66,7 @@ export function ScoreCard({ s, family, cert, selected, onSelect, speakingStatus 
       <span className="text-[13px] font-extrabold text-foreground">{s.title}</span>
       {ready ? (
         <span className="flex flex-wrap items-center gap-2">
-          <span className="text-[44px] font-extrabold leading-none tracking-[-1px] text-[#1E2A3A] tabular-nums max-md:text-[36px]">{s.label}</span>
+          <span className="text-[44px] font-extrabold leading-none tracking-[-1px] text-[#1E2A3A] tabular-nums max-md:text-[36px]">{label}</span>
           {isAi(s) ? <span className="rounded-[7px] bg-[#EEE9FF] px-2 py-0.5 text-[10.5px] font-extrabold text-[#5B3FD1]">{ht('x.ai_badge')}</span> : null}
         </span>
       ) : grading ? (
