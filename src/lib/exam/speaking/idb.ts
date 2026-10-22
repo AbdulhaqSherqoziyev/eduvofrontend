@@ -60,9 +60,10 @@ export async function listRecs(attemptId: string): Promise<RecRow[]> {
   return all.filter((r) => r.attemptId === attemptId);
 }
 
-/** Uploaded audio leaves the device (keeps only the row's state, without bytes). */
+/** Uploaded audio leaves the device (keeps only the row's state, without bytes). A backup keeps its bytes until the
+ *  stage ends — if the server then refuses the restart, that partial becomes the answer (§4a). */
 export async function markRec(id: string, state: RecState): Promise<void> {
   const r = await getRec(id);
   if (!r) return;
-  await putRec({ ...r, state, chunks: state === 'uploaded' || state === 'dropped' ? [] : r.chunks, updatedAt: Date.now() });
+  await putRec({ ...r, state, chunks: (state === 'uploaded' || state === 'dropped') && !r.backup ? [] : r.chunks, updatedAt: Date.now() });
 }

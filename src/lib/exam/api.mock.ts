@@ -20,6 +20,8 @@ export interface MockState {
   id: string; code: 'ielts' | 'cefr'; short: boolean; startedAt: string; stages: StageBrief[]; answers: Record<string, { value: AnswerValue; seq: number; stageKey: string }>;
   /** Speaking: uploaded itemKey → durationMs, and items that used their one restart. */
   recs?: Record<string, number>; restarts?: string[];
+  /** v1.2: backup (kind=backup) uploads per item, and the attempt's audio-only flag (promptMode). */
+  backups?: string[]; audioOnly?: boolean;
 }
 
 export const now = () => Date.now() + SKEW;
@@ -143,7 +145,7 @@ export function createMockApi(): ExamApi {
       const t = testOf(s);
       const spStage = t.stages.find((x) => x.kind === 'speaking');
       const spBrief = s.stages.find((x) => x.stageKey === 'speaking');
-      const speaking = spStage?.speaking && spBrief ? mockSpeakingResult(id, spStage.speaking, spBrief.lockedAt, iso(now()), s.recs ?? {}) : null;
+      const speaking = spStage?.speaking && spBrief ? mockSpeakingResult(id, spStage.speaking, spBrief.lockedAt, iso(now()), s.recs ?? {}, { restarts: s.restarts, audioOnly: s.audioOnly }) : null;
       const r = scoreAttempt(t, s.answers, locked, iso(now()), Object.fromEntries(s.stages.map((x) => [x.stageKey, x.lockedAt])), speaking);
       return { ok: true, data: { ...r, attemptId: id, mode: mockSpeakingAttempt(id) ? 'section' : r.mode, sections: r.sections.filter((x) => s.stages.some((b) => b.sectionKey === x.key)) } };
     }),

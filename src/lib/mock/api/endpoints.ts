@@ -87,9 +87,9 @@ export const emailStartLink = (body: { exam: OpenExamSlug; mode: AttemptMode; se
 /** EXAM §1.10 body is typed loosely here; the results page reads only what it renders. */
 export type MockResult = Record<string, unknown> & { status?: string; mock: MockResultExt; serverNow: string };
 export const getResult = (attemptId: string, signal?: AbortSignal) => api<MockResult>(`/mock/attempts/${encodeURIComponent(attemptId)}/result`, { signal });
-/** Speaking contract §6 (B2C learner token is accepted on the portal route). */
-export const deleteRecordings = (attemptId: string) =>
-  api<{ deleted: number; serverNow: string }>(`/portal/exams/attempts/${encodeURIComponent(attemptId)}/recordings`, { method: 'DELETE' });
+/** Speaking contract v1.2 §6: the mock-site alias (same auth as every `/mock/*` call). */
+export const deleteRecordings = (attemptId: string, itemKey?: string) =>
+  api<{ deleted: number; serverNow: string }>(`/mock/attempts/${encodeURIComponent(attemptId)}/recordings${itemKey ? `?itemKey=${encodeURIComponent(itemKey)}` : ''}`, { method: 'DELETE' });
 export const getSharedCard = (token: string) => api<{ card: ShareCard; serverNow: string }>(`/mock/share/${encodeURIComponent(token)}`, { auth: false });
 export const createShare = (attemptId: string) =>
   api<{ token: string; url: string; card: ShareCard }>(`/mock/attempts/${encodeURIComponent(attemptId)}/share`, { method: 'POST' });

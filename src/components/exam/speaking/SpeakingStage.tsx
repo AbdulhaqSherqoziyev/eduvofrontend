@@ -61,11 +61,16 @@ export function SpeakingStage({ content }: { content: SpeakingStageContent }) {
       <Banners micSilent={wave.silent} queued={q.pending > 0} />
       {/* design q.261 (centre, gap 24, padding 24); `margin: auto` keeps the top reachable when Part 2 is taller than the screen */}
       <div style={{ flex: 1, minHeight: 0, overflow: 'auto', display: 'flex', flexDirection: 'column', padding: 24 }}>
-        <div style={{ margin: 'auto 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
+        <div style={{ margin: 'auto 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: p2 ? 16 : 24 }}>
         {f.phase !== 'boot' && <SegmentProgress items={content.items} idx={f.phase === 'finishing' ? content.items.length : f.idx} />}
         {body}
         {showNotes && p2Card && <NotesBox value={notes.value} onChange={notes.set} readOnly={f.phase !== 'prep' && f.phase !== 'listen'} autoFocus={f.phase === 'prep'} />}
-        {it && f.phase !== 'mic_lost' && f.phase !== 'finishing' && f.phase !== 'boot' && <SpeakingStrip f={f} bars={wave.bars} />}
+        {it && f.phase !== 'mic_lost' && f.phase !== 'finishing' && f.phase !== 'boot' && (
+          // Part 2 can be taller than 720px: the strip ("I'm ready" / Finish) sticks to the bottom (TL 10-22)
+          <div style={{ position: p2 ? 'sticky' : 'static', bottom: 0, zIndex: 2, background: 'var(--x-page)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, paddingBottom: p2 ? 4 : 0 }}>
+            <SpeakingStrip f={f} bars={wave.bars} />
+          </div>
+        )}
         </div>
       </div>
       <div style={{ height: 56, flexShrink: 0, background: 'var(--x-panel)', borderTop: '1px solid var(--x-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: 'var(--x-muted)' }}>

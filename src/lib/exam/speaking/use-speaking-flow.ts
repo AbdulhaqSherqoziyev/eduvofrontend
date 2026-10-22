@@ -37,6 +37,7 @@ export function useSpeakingFlow(c: SpeakingStageContent) {
   const playing = useRef<Playing | null>(null);
   const rec = useRef<ItemRecorder | null>(null);
   const item = c.items[idx] ?? null;
+  queueFor(id).audioOnly = s.ui.audioOnly || c.promptDisplay === 'audio_only';
   const { reset } = clock;
   const setPhase = useCallback((p: SpPhase) => { setPhaseRaw(p); reset(); }, [reset]);
   const lost = useLost();

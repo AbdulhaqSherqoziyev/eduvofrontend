@@ -65,6 +65,8 @@ export const SPEAKING_TEXT = {
   // {period} values for `privacy_line` / `privacy_keep_b` (spec §1.2: B2C 90 days, ERP centre setting, default 12 months)
   'speaking.period_90d': ['90 days', '90 kun'],
   'speaking.period_12m': ['12 months', '12 oy'],
+  // any other retention (contract v1.2 `audioRetentionDays`, set per environment)
+  'speaking.period_days': ['{n} days', '{n} kun'],
 } satisfies Record<string, [string, string]>;
 
 export const SPEAKING_RU: Partial<Record<keyof typeof SPEAKING_TEXT, string>> = {
@@ -128,4 +130,5 @@ export const SPEAKING_RU: Partial<Record<keyof typeof SPEAKING_TEXT, string>> = 
   'resume.speaking_note_used': 'Продолжите со следующего вопроса. Записанная часть этого ответа сохранена.',
   'speaking.period_90d': '90 дней',
   'speaking.period_12m': '12 месяцев',
+  'speaking.period_days': '{n} дн.',
 };

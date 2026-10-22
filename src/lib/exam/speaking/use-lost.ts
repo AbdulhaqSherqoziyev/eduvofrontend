@@ -51,7 +51,12 @@ export function useLost() {
     d.rec.current = null;
     if (r && !done.current) {
       if (used) await submitRow(await r.stop('final'));
-      else { await r.stop('partial', true); await markRec(recId(id, d.item!.itemKey), 'dropped'); }
+      else {
+        // contract v1.2 §4a order: the partial goes up as `kind=backup` BEFORE the restart
+        const b = await r.stop('final', true);
+        await markRec(recId(id, d.item!.itemKey), 'dropped');
+        if (b.chunks.length) queueFor(id).add(b);
+      }
     }
     setState({ used, initial: false, err: null, offline: false, busy: false });
     d.setPhase('mic_lost');
@@ -59,15 +64,21 @@ export function useLost() {
 
   /** Restart `item` on the server (once); returns where to continue. */
   const restart = async (item: SpeakingItem, reason: 'mic_lost' | 'page_reload', idx: number, partial: RecRow | null): Promise<number | 'offline' | 'locked'> => {
+    if (partial && partial.chunks.length) {
+      const b = { ...partial, id: recId(id, item.itemKey, true), backup: true, state: 'final' as const, updatedAt: Date.now() };
+      await putRec(b);
+      await markRec(partial.id, 'dropped');
+      queueFor(id).add(b);
+    }
+    await queueFor(id).settled(recId(id, item.itemKey, true), 15_000);
     const r = await examApi.restartItem(id, deps.current?.stageKey ?? 'speaking', item.itemKey, { reason, ...(at.current && reason === 'mic_lost' ? { interruptedAt: at.current } : {}) });
     if (r.ok) {
       dispatch({ t: 'DEADLINE', stageKey: r.data.stage.stageKey, deadlineAt: r.data.stage.deadlineAt ?? '' });
       patchSpeakingLocal(id, { restarted: [...speakingLocal(id).restarted, item.itemKey] });
-      if (partial) { await putRec({ ...partial, id: recId(id, item.itemKey, true), backup: true }); await markRec(partial.id, 'dropped'); }
       return idx;
     }
     if (r.code === 'RESTART_LIMIT') {
-      const keep = partial ?? (await getRec(recId(id, item.itemKey, true)));
+      const keep = await getRec(recId(id, item.itemKey, true));
       if (keep && keep.chunks.length) await submitRow(keep);
       return idx + 1;
     }

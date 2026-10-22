@@ -7,7 +7,7 @@
 import type {
   AttemptState, IntegrityEvent, ResultResp, SaveResp, ServerAnswer, StageStartResp, SubmitResp,
 } from './types';
-import type { RecordingUploadResp, RestartReason, RestartResp } from './speaking-types';
+import type { RecordingKind, RecordingUploadResp, RestartReason, RestartResp } from './speaking-types';
 import { createMockApi } from './api.mock';
 
 export const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
@@ -36,7 +36,7 @@ export interface ExamApi {
   /** Media bytes for preload; the mock serves synthesized audio. */
   fetchMedia(url: string, signal?: AbortSignal): Promise<Response>;
   /** Speaking contract §2: one recording per item (multipart). */
-  uploadRecording(id: string, b: { file: Blob; stageKey: string; itemKey: string; durationMs: number }): Promise<ExamResult<RecordingUploadResp>>;
+  uploadRecording(id: string, b: { file: Blob; stageKey: string; itemKey: string; durationMs: number; kind?: RecordingKind; promptMode?: 'audio_only' }): Promise<ExamResult<RecordingUploadResp>>;
   /** Speaking contract §4a: restart an item once after a technical interruption. */
   restartItem(id: string, stageKey: string, itemKey: string, b: { reason: RestartReason; interruptedAt?: string }): Promise<ExamResult<RestartResp>>;
 }
@@ -139,6 +139,8 @@ const realApi: ExamApi = {
     f.append('stageKey', b.stageKey);
     f.append('itemKey', b.itemKey);
     f.append('durationMs', String(Math.round(b.durationMs)));
+    if (b.kind === 'backup') f.append('kind', 'backup');
+    if (b.promptMode) f.append('promptMode', b.promptMode);
     return req(`${A(id)}/recordings`, 'POST', f);
   },
   restartItem: (id, k, item, b) => req(`${A(id)}/stages/${encodeURIComponent(k)}/items/${encodeURIComponent(item)}/restart`, 'POST', b),

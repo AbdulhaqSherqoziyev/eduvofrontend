@@ -7,7 +7,7 @@
  */
 import { ChevronDown } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import type { SpeakingResultItem } from '@/lib/exam/speaking-types';
+import { retentionPeriod, type SpeakingResultItem } from '@/lib/exam/speaking-types';
 import { AudioClip } from './AudioClip';
 import { useSpeaking } from './context';
 import { caps, serif } from './skin';
@@ -19,7 +19,7 @@ function Item({ it, open: forceOpen }: { it: SpeakingResultItem; open: boolean }
   const nonce = playing?.itemKey === it.itemKey ? playing.nonce : 0;
   useEffect(() => { if (nonce && forceOpen) row.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, [nonce, forceOpen]);
   const gone = it.recordingDeleted || (!it.recording && !!sp.recordingsDeletedAt);
-  const goneNote = sp.recordingsDeleteReason === 'retention' ? tx('results.audio_expired', { period: tx(mode === 'b2c' ? 'speaking.period_90d' : 'speaking.period_12m') }) : tx('results.audio_deleted_note');
+  const goneNote = sp.recordingsDeleteReason === 'retention' ? tx('results.audio_expired', { period: ((p) => tx(p.key, { n: p.n ?? '' }))(retentionPeriod(sp.audioRetentionDays, mode === 'b2c')) }) : tx('results.audio_deleted_note');
   return (
     <div ref={row} className="sp-item" style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '14px 0', borderTop: `1px solid ${s.line}` }}>
       <div className="sp-q" lang="en" dir="ltr" style={{ fontSize: 13.5, fontWeight: 700, color: s.sub, lineHeight: 1.45 }}>{it.question}</div>

@@ -1,4 +1,4 @@
-/** Mock of speaking contract §2 (recordings upload) and §4a (item restart). */
+/** Mock of speaking contract v1.2 §2 (recordings upload, kind=backup, promptMode) and §4a (item restart). */
 import type { ExamResult } from '../api';
 import { fail, iso, load, now, respond, save } from '../api.mock';
 import type { RecordingUploadResp, RestartResp } from '../speaking-types';
@@ -10,7 +10,7 @@ function speakingItem(code: 'ielts' | 'cefr', short: boolean, itemKey: string) {
   return mockTest(code, short).stages.find((x) => x.kind === 'speaking')?.speaking?.items.find((i) => i.itemKey === itemKey) ?? null;
 }
 
-export function mockUpload(id: string, b: { file: Blob; stageKey: string; itemKey: string; durationMs: number }): Promise<ExamResult<RecordingUploadResp>> {
+export function mockUpload(id: string, b: { file: Blob; stageKey: string; itemKey: string; durationMs: number; kind?: 'main' | 'backup'; promptMode?: 'audio_only' }): Promise<ExamResult<RecordingUploadResp>> {
   return respond(() => {
     const s = load(id);
     const st = s.stages.find((x) => x.stageKey === b.stageKey);
@@ -19,11 +19,19 @@ export function mockUpload(id: string, b: { file: Blob; stageKey: string; itemKe
     const item = speakingItem(s.code, s.short, b.itemKey);
     if (!item || !item.records) return fail(400, 'UNKNOWN_ITEM');
     if (b.file.size > 5 * 1024 * 1024) return fail(413, 'FILE_TOO_LARGE');
+    if (b.promptMode === 'audio_only') s.audioOnly = true;
+    if (b.kind === 'backup') {
+      if (s.restarts?.includes(b.itemKey)) return fail(409, 'RESTART_LIMIT');
+      if (s.backups?.includes(b.itemKey)) return fail(409, 'BACKUP_EXISTS');
+      s.backups = [...(s.backups ?? []), b.itemKey];
+      save(s);
+      return { ok: true, data: { recordingId: `bak-${b.itemKey}`, itemKey: b.itemKey, kind: 'backup', status: 'UPLOADED', serverNow: iso(now()) } };
+    }
     s.recs = s.recs ?? {};
     if (s.recs[b.itemKey] != null) return fail(409, 'ALREADY_RECORDED');
     s.recs[b.itemKey] = Math.round(b.durationMs);
     save(s);
-    return { ok: true, data: { recordingId: `rec-${b.itemKey}`, itemKey: b.itemKey, status: 'UPLOADED', serverNow: iso(now()) } };
+    return { ok: true, data: { recordingId: `rec-${b.itemKey}`, itemKey: b.itemKey, kind: 'main', status: 'UPLOADED', serverNow: iso(now()) } };
   });
 }
 

@@ -1,7 +1,6 @@
 /**
- * IELTS Speaking wire types — `.claude/specs/exams/speaking-api-contract.md` v1.1 (Bekzod, 2026-10-21).
- * Names follow the contract 1:1. Fields marked `req:` are NOT in the contract yet (asked of Bekzod
- * in the frontend report) and are optional, so the UI works without them.
+ * IELTS Speaking wire types — `.claude/specs/exams/speaking-api-contract.md` v1.2 (Bekzod, 2026-10-22).
+ * Names follow the contract 1:1. v1.2 fields are optional here only so older payloads still render.
  */
 import type { Iso, StageBrief } from './types';
 
@@ -27,14 +26,16 @@ export type PromptDisplay = 'audio_then_text' | 'audio_only' | 'text';
 export interface SpeakingStageContent { kind: 'speaking'; promptDisplay: PromptDisplay; notesField: boolean; items: SpeakingItem[] }
 
 // ── §2 upload / §3 resume / §4a restart ─────────────────────────────────────
-export interface RecordingUploadResp { recordingId: string; itemKey: string; status: 'UPLOADED'; serverNow: Iso }
+/** §2 v1.2: `kind:'backup'` = partial recording from a first interruption (uploaded before the restart, never graded). */
+export type RecordingKind = 'main' | 'backup';
+export interface RecordingUploadResp { recordingId: string; itemKey: string; kind?: RecordingKind; status: 'UPLOADED' | string; serverNow: Iso }
 export interface ResumeRecording { itemKey: string; stageKey: string; status: 'UPLOADED' | 'REJECTED' | string; durationMs?: number | null; deleted?: boolean }
 export type RestartReason = 'mic_lost' | 'page_reload' | 'device_change' | 'network' | 'other';
 export interface RestartResp { stage: StageBrief; itemKey: string; restartsLeft: 0; extendedBySec: number; serverNow: Iso }
 
 // ── §4 result ───────────────────────────────────────────────────────────────
 export type SpeakingStatus = 'pending' | 'received' | 'transcribing' | 'scoring' | 'ready' | 'needs_review' | 'not_graded' | 'no_response'
-  /** req: Dilnoza spec §2.3 `too_short` — not in contract v1.1 (asked of Bekzod); drawn when sent. */
+  /** v1.2: speech present but too little for the 4 criteria — no band. */
   | 'too_short';
 export type SpeakingCriterionKey = 'fluency_coherence' | 'lexical_resource' | 'grammatical_range_accuracy' | 'pronunciation';
 export interface SpeakingQuote { itemKey: string; part: number; quote: string; startMs: number | null }
@@ -48,11 +49,11 @@ export interface SpeakingResultItem {
   transcript: string | null; noResponse: boolean; durationMs: number | null;
   recording: { id: string; url: string; expiresAt: Iso; mime: string } | null;
   recordingDeleted: boolean;
-  /** req (staff, spec §3.2): partial recording kept from before an interruption. */
-  backupRecording?: { id: string; url: string; expiresAt: Iso; mime: string } | null;
-  /** req (staff, spec §3.2): the item was restarted after an interruption. */
+  /** v1.2: partial recording from before an interruption — staff result only (always null for the learner). */
+  backupRecording?: { id: string; url: string; expiresAt: Iso; mime: string; durationMs?: number | null } | null;
+  /** v1.2: the item was restarted after an interruption. */
   restarted?: boolean;
-  /** req (staff table "0:24 / 0:30"). */
+  /** v1.2: the item's answer time ("0:24 / 0:30"). */
   responseSec?: number | null;
 }
 export interface SpeakingHistoryRow { at: Iso; by: { id: string; fullName: string } | null; action: 'override' | 'revert'; from: number | null; to: number | null; note: string | null }
@@ -72,7 +73,7 @@ export interface SpeakingResult {
   band: number | null; label: string | null;
   aiGraded: true;
   teacherReviewed: boolean; teacherNote: string | null;
-  /** req (spec §3.3 "ustoz ismi 12 muted"): who wrote `teacherNote`. */
+  /** v1.2: who changed the score (when `teacherReviewed`). */
   teacherName?: string | null;
   criteria: SpeakingCriterion[] | null;
   summary: string | null;
@@ -87,10 +88,12 @@ export interface SpeakingResult {
   items: SpeakingResultItem[];
   transcriptNote: true;
   canDeleteRecordings: boolean;
-  /** req (spec §2.2 play rule): quote/word `startMs` is trusted only when true. Absent → whole clip from 0. */
+  /** v1.2: quote/word `startMs` is trusted only when true (else the clip plays from 0). */
   timestampsReliable?: boolean;
-  /** req (spec §2.2 "Taken in exam mode" chip): the learner used the audio-only switch. */
+  /** v1.2: taken in audio-only mode (§2 `promptMode`). */
   audioOnly?: boolean;
+  /** v1.2: audio retention of this centre / site in days (ERP 365, B2C 90) — never hard-code "12 months". */
+  audioRetentionDays?: number;
   review?: SpeakingReview;
 }
 
@@ -113,4 +116,12 @@ export function ieltsBand(bands: number[]): number {
 /** `speaking` from any result payload (player, hub, staff, B2C) — null when the attempt has none. */
 export function speakingOf(r: { speaking?: SpeakingResult | null } | null | undefined): SpeakingResult | null {
   return r?.speaking ?? null;
+}
+
+/** `{period}` text key + vars for a retention in days (v1.2 `audioRetentionDays`): 365 → "12 months", 90 → "90 days". */
+export function retentionPeriod(days: number | null | undefined, fallbackB2c: boolean): { key: 'speaking.period_12m' | 'speaking.period_90d' | 'speaking.period_days'; n?: number } {
+  const d = days ?? (fallbackB2c ? 90 : 365);
+  if (d === 365 || d === 366) return { key: 'speaking.period_12m' };
+  if (d === 90) return { key: 'speaking.period_90d' };
+  return { key: 'speaking.period_days', n: d };
 }
