@@ -1,6 +1,6 @@
 /**
- * IELTS Speaking wire types — `.claude/specs/exams/speaking-api-contract.md` v1.2 (Bekzod, 2026-10-22).
- * Names follow the contract 1:1. v1.2 fields are optional here only so older payloads still render.
+ * IELTS Speaking wire types — `.claude/specs/exams/speaking-api-contract.md` v1.3.1 (Bekzod, 2026-10-22).
+ * Names follow the contract 1:1. v1.2+ fields are optional here only so older payloads still render.
  */
 import type { Iso, StageBrief } from './types';
 
@@ -92,6 +92,8 @@ export interface SpeakingResult {
   timestampsReliable?: boolean;
   /** v1.2: taken in audio-only mode (§2 `promptMode`). */
   audioOnly?: boolean;
+  /** v1.3: the attempt's credit was returned (Speaking `no_response`; B2C learner credit / ERP centre credit). */
+  refunded?: boolean;
   /** v1.2: audio retention of this centre / site in days (ERP 365, B2C 90) — never hard-code "12 months". */
   audioRetentionDays?: number;
   review?: SpeakingReview;

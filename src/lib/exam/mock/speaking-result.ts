@@ -30,7 +30,7 @@ export function mockSpeakingResult(id: string, c: SpeakingStageContent, lockedAt
   return {
     sectionKey: 'speaking', stageKey: 'speaking', status,
     band: ready ? (low ? 5 : 6) : null, label: ready ? (low ? '5.0' : '6.0') : null, aiGraded: true,
-    teacherReviewed: false, teacherNote: null, teacherName: null, audioOnly: !!extra.audioOnly, audioRetentionDays: 365,
+    teacherReviewed: false, teacherNote: null, teacherName: null, audioOnly: !!extra.audioOnly, audioRetentionDays: 365, refunded: status === 'no_response',
     criteria: ready ? [
       { key: 'fluency_coherence', name: 'Fluency & Coherence', band: b, note: 'You speak at length with some hesitation; linking words are mostly simple.', nextStep: 'Practise 1-minute answers on everyday topics without stopping.',
         quotes: [{ itemKey: 'p3_t1_q1', part: 3, quote: 'Well, I think the main reason is money, because, um, rich cities can build faster.', startMs: null }, { itemKey: 'p1_f1_q1', part: 1, quote: "I'm a student, I study economics at university.", startMs: null }] },

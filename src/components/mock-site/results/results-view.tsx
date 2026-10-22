@@ -314,7 +314,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
           </section>
         )}
 
-        {speaking && <B2cSpeaking sp={speaking} attemptId={attemptId} sample={!!sample} notGraded={m.notGraded} onChanged={() => void load()} />}
+        {speaking && <B2cSpeaking sp={speaking} attemptId={attemptId} sample={!!sample} onChanged={() => void load()} />}
 
         <section className="m-card" style={sx('padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:18px')}>
           <div style={sx('display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap')}>
@@ -412,7 +412,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
             ) : essayBlock}
           </div>
         )}
-        {ptab === 'speaking' && speaking && <B2cSpeaking phone sp={speaking} attemptId={attemptId} sample={!!sample} notGraded={m.notGraded} onChanged={() => void load()} />}
+        {ptab === 'speaking' && speaking && <B2cSpeaking phone sp={speaking} attemptId={attemptId} sample={!!sample} onChanged={() => void load()} />}
         {ptab === 'review' && (
           <div style={sx('display:flex;flex-direction:column;gap:12px;padding-bottom:24px')}>
             <div style={sx('display:flex;gap:6px;flex-wrap:wrap')}>
