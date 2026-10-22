@@ -10,10 +10,12 @@ import { meter, openMic, type Meter, type MicError } from './recorder';
 
 const SILENT_DB = -60;
 const SILENT_MS = 9000;
+let opening: Promise<Awaited<ReturnType<typeof openMic>>> = Promise.resolve({ ok: false, err: 'errors.mic_not_found' });
 
 export function useMic(onLost: () => void) {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const meterRef = useRef<Meter | null>(null);
+  const gen = useRef(0);
   const lostRef = useRef(onLost);
   lostRef.current = onLost;
 
@@ -25,8 +27,11 @@ export function useMic(onLost: () => void) {
 
   const open = useCallback(async (): Promise<{ ok: true; stream: MediaStream; meter: Meter } | { ok: false; err: MicError }> => {
     close();
-    const r = await openMic();
+    // one getUserMedia at a time: overlapping requests (dev double-mount, a fast reconnect click) can stall the device
+    const mine = ++gen.current;
+    const r = await (opening = opening.then(() => openMic(), () => openMic()));
     if (!r.ok) return r;
+    if (mine !== gen.current) { r.stream.getTracks().forEach((t) => t.stop()); return { ok: false, err: 'errors.mic_not_found' }; } // superseded
     const m = meter(r.stream);
     meterRef.current = m;
     r.stream.getAudioTracks().forEach((t) => { t.onended = () => lostRef.current(); });

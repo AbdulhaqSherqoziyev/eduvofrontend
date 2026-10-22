@@ -15,14 +15,14 @@ const MAX = 600;
 
 export function CueCard({ item, caps, listening }: { item: SpeakingItem; caps: string; listening: boolean }) {
   return (
-    <div lang="en" style={{ width: 660, background: 'var(--x-panel)', border: '1.5px solid var(--x-border)', borderRadius: 18, padding: '22px 32px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+    <div lang="en" style={{ width: 660, background: 'var(--x-panel)', border: '1.5px solid var(--x-border)', borderRadius: 18, padding: '18px 32px', display: 'flex', flexDirection: 'column', gap: 10 }}>
       <CapsRow left={caps} listening={listening} />
       <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: -0.3, lineHeight: 1.35 }}>{item.prompt}</div>
       {item.bullets?.length ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--x-sub)' }}>You should say:</div>
           {item.bullets.map((b) => (
-            <div key={b} style={{ display: 'flex', alignItems: 'baseline', gap: 10, fontSize: 16, lineHeight: 1.7 }}>
+            <div key={b} style={{ display: 'flex', alignItems: 'baseline', gap: 10, fontSize: 16, lineHeight: 1.55 }}>
               <span aria-hidden style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--x-ink)', flexShrink: 0, transform: 'translateY(-3px)' }} />{b}
             </div>
           ))}

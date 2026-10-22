@@ -1,6 +1,7 @@
 'use client';
 
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { forwardRef } from 'react';
 import { cn } from '@/lib/utils/cn';
 
 export const Dialog = DialogPrimitive.Root;
@@ -9,9 +10,12 @@ export const DialogClose = DialogPrimitive.Close;
 export const DialogTitle = DialogPrimitive.Title;
 export const DialogDescription = DialogPrimitive.Description;
 
-export function DialogOverlay({ className, ...props }: DialogPrimitive.DialogOverlayProps) {
+// forwardRef: Radix Presence hands the overlay a ref — a plain function component made React log
+// "Function components cannot be given refs" (the dev "1 error" badge on every dialog).
+export const DialogOverlay = forwardRef<HTMLDivElement, DialogPrimitive.DialogOverlayProps>(function DialogOverlay({ className, ...props }, ref) {
   return (
     <DialogPrimitive.Overlay
+      ref={ref}
       className={cn(
         'fixed inset-0 z-[100] bg-[rgba(28,40,58,0.34)] backdrop-blur-[3px] animate-ovl',
         className,
@@ -19,7 +23,7 @@ export function DialogOverlay({ className, ...props }: DialogPrimitive.DialogOve
       {...props}
     />
   );
-}
+});
 
 export function DialogContent({ className, children, ...props }: DialogPrimitive.DialogContentProps) {
   return (

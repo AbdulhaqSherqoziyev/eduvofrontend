@@ -67,7 +67,7 @@ export function SpeakingStage({ content }: { content: SpeakingStageContent }) {
         {showNotes && p2Card && <NotesBox value={notes.value} onChange={notes.set} readOnly={f.phase !== 'prep' && f.phase !== 'listen'} autoFocus={f.phase === 'prep'} />}
         {it && f.phase !== 'mic_lost' && f.phase !== 'finishing' && f.phase !== 'boot' && (
           // Part 2 can be taller than 720px: the strip ("I'm ready" / Finish) sticks to the bottom (TL 10-22)
-          <div style={{ position: p2 ? 'sticky' : 'static', bottom: 0, zIndex: 2, background: 'var(--x-page)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, paddingBottom: p2 ? 4 : 0 }}>
+          <div style={{ position: p2 ? 'sticky' : 'static', bottom: 0, zIndex: 2, background: 'var(--x-page)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
             <SpeakingStrip f={f} bars={wave.bars} />
           </div>
         )}
