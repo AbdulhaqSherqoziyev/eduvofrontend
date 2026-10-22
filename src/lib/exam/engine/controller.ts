@@ -24,6 +24,9 @@ export function useExamController(attemptId: string) {
   // Speaking: while the microphone is disconnected the stage clock is held (spec §1.6 — the server extends it on restart)
   const deadlineHold = useRef(false);
   const holdDeadline = useCallback((on: boolean) => { deadlineHold.current = on; }, []);
+  // Speaking: on time-out the running answer is saved and the upload queue drained (≤10 s) BEFORE the submit
+  const beforeTimeout = useRef<(() => Promise<void>) | null>(null);
+  const setBeforeTimeout = useCallback((fn: (() => Promise<void>) | null) => { beforeTimeout.current = fn; }, []);
 
   const stage = s.stages.find((x) => x.stageKey === s.stageKey) ?? null;
   const sectionCfg = s.config?.sections.find((x) => x.key === stage?.sectionKey) ?? null;
@@ -52,7 +55,6 @@ export function useExamController(attemptId: string) {
     else if (betweenStages) store.saveDeadline(attemptId, null);
   }, [attemptId, runningDeadline, betweenStages]);
 
-  // ── persistence of prefs/flags/highlights ──
   useEffect(() => { if (s.attempt) store.saveUi(attemptId, s.ui); }, [attemptId, s.ui, s.attempt]);
   useEffect(() => { if (s.attempt) store.saveFlags(attemptId, s.flags); }, [attemptId, s.flags, s.attempt]);
   useEffect(() => { if (s.stageKey && s.phase === 'section') store.saveHighlights(attemptId, s.stageKey, s.highlights); }, [attemptId, s.stageKey, s.highlights, s.phase]);
@@ -64,8 +66,7 @@ export function useExamController(attemptId: string) {
   // before a stage: preload its audio while no timer runs; in a section only as a fallback
   // when the backend sent no `preload` (then the timer is already running — Bekzod req).
   const media = useMediaPreload(['precheck', 'intro', 'welcome', 'tryout'].includes(s.phase) ? s.preload : s.phase === 'section' ? s.media : []);
-  // images: fetched to blobs in the background (never gating) — before the stage from `preload`,
-  // in the stage from `media`, so Task 1 charts / maps survive URL expiry and flaky links.
+  // images: blobs in the background (never gating), from `preload` before the stage and `media` in it
   useEffect(() => { prefetchImages(s.preload); }, [s.preload]);
   useEffect(() => { prefetchImages(s.media); }, [s.media]);
 
@@ -104,11 +105,7 @@ export function useExamController(attemptId: string) {
     return { ok: true, resp };
   }, [attemptId, autosave, boot]);
 
-  /**
-   * Fresh signed media URLs for the running stage. `start` is idempotent (same
-   * deadline, new URLs — backend StageStartService), so an <img> whose URL failed
-   * or expired can ask again. Single-flight, at most once per 4 s.
-   */
+  /** Fresh signed media URLs (start is idempotent: same deadline, new URLs). Single-flight, at most once per 4 s. */
   const refreshing = useRef<{ p: Promise<boolean> | null; at: number }>({ p: null, at: 0 });
   const refreshMedia = useCallback(async (): Promise<boolean> => {
     const r0 = refreshing.current;
@@ -163,6 +160,7 @@ export function useExamController(attemptId: string) {
   const timeOut = useCallback(async () => {
     if (timingOut.current) return;
     timingOut.current = true;
+    if (beforeTimeout.current) await Promise.race([beforeTimeout.current().catch(() => undefined), new Promise((r) => setTimeout(r, 10_500))]);
     dispatch({ t: 'TIMEUP_START', next: nextInfo(), writing: live.current.content?.kind === 'writing', speaking: live.current.content?.kind === 'speaking' });
     while (!(await submit('timeout'))) await new Promise((r) => setTimeout(r, 3000));
     timingOut.current = false;
@@ -193,9 +191,8 @@ export function useExamController(attemptId: string) {
     }
   }, [attemptId, beginStage, onCancelled]);
 
-  return { s, dispatch, stage, sectionCfg, stageCfg, media, setAnswer, beginStage, submit, timeOut, setUi, reportSkip, integrity, boot, refreshMedia, holdDeadline,
-    /** Content of the stage being resumed (fetched during boot) — Speaking's Welcome back reads its question count. */
-    welcomeContent: () => welcomeResp.current?.content ?? null };
+  return { s, dispatch, stage, sectionCfg, stageCfg, media, setAnswer, beginStage, submit, timeOut, setUi, reportSkip, integrity, boot, refreshMedia, holdDeadline, setBeforeTimeout,
+    welcomeContent: () => welcomeResp.current?.content ?? null /* stage resumed at boot (Speaking Welcome back) */ };
 }
 
 export type ExamCtl = ReturnType<typeof useExamController>;

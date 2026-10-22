@@ -38,11 +38,14 @@ export function useSpeakingFlow(c: SpeakingStageContent) {
   const playing = useRef<Playing | null>(null);
   const rec = useRef<ItemRecorder | null>(null);
   const item = c.items[idx] ?? null;
+  const idxRef = useRef(idx);
+  idxRef.current = idx;
   queueFor(id).audioOnly = s.ui.audioOnly || c.promptDisplay === 'audio_only';
   const { reset } = clock;
   const setPhase = useCallback((p: SpPhase) => { setPhaseRaw(p); reset(); }, [reset]);
   const lost = useLost();
   const mic = useMic(() => lost.trigger());
+  const micClose = mic.close;
 
   const enter = useCallback(async (i: number) => {
     const g = ++gen.current;
@@ -50,7 +53,7 @@ export function useSpeakingFlow(c: SpeakingStageContent) {
     setIdx(i);
     setAudioDone(false);
     const it = c.items[i];
-    if (!it) { setPhase('finishing'); return; }
+    if (!it) { setPhase('finishing'); micClose(); return; } // last answer saved: the mic indicator goes off
     if (it.records) patchSpeakingLocal(id, { cur: it.itemKey });
     setPhase(it.kind === 'examiner_line' ? 'line' : 'listen');
     const p = playPrompt(it.promptAudioAssetId, s.media, s.ui.volume);
@@ -64,7 +67,7 @@ export function useSpeakingFlow(c: SpeakingStageContent) {
       return;
     }
     setPhase(it.kind === 'cue_card' ? 'prep' : 'reveal');
-  }, [c.items, id, s.media, s.ui.volume, s.ui.audioOnly, setPhase]);
+  }, [c.items, id, s.media, s.ui.volume, s.ui.audioOnly, setPhase, micClose]);
 
   const startCountdown = useCallback(() => {
     if (!item || !mic.stream || !mic.meter.current) return;
@@ -88,6 +91,23 @@ export function useSpeakingFlow(c: SpeakingStageContent) {
     if (g === gen.current) void enter(idx + 1);
   }, [item, id, idx, enter, setPhase]);
 
+  const saveRef = useRef(saveAnswer);
+  saveRef.current = saveAnswer;
+
+  // stage time-out (controller): keep the running answer and let the queue drain before the submit
+  useEffect(() => {
+    ctl.setBeforeTimeout(async () => {
+      gen.current += 1;
+      playing.current?.stop();
+      const r = rec.current;
+      rec.current = null;
+      const key = r ? c.items[idxRef.current]?.itemKey : undefined;
+      if (r && key) { queueFor(id).add(await r.stop('final')); patchSpeakingLocal(id, { done: [...speakingLocal(id).done, key] }); }
+      await queueFor(id).drained(10_000);
+    });
+    return () => ctl.setBeforeTimeout(null);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // timed transitions
   const el = clock.elapsedMs;
   useEffect(() => {
@@ -95,7 +115,7 @@ export function useSpeakingFlow(c: SpeakingStageContent) {
     if (phase === 'reveal' && el >= REVEAL_MS) startCountdown();
     else if (phase === 'prep' && el >= item.prepSec * 1000) startCountdown();
     else if (phase === 'countdown' && el >= COUNTDOWN_MS) {
-      rec.current?.go();
+      rec.current?.go(item.responseSec, () => void saveRef.current());
       (document.activeElement as HTMLElement | null)?.blur?.(); // focus hygiene: nothing to "Enter" by accident
       setPhase('recording');
     } else if (phase === 'recording' && (rec.current?.elapsed() ?? 0) >= item.responseSec) void saveAnswer();
