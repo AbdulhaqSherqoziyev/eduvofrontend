@@ -8,6 +8,7 @@ import { Price } from '../price';
 import { FaqCards } from './faq';
 import { Chevron, PhoneHow, PhoneSample, ThemeLink } from './landing-phone-parts';
 import { WaitlistRows } from './waitlist';
+import { LandingLeaderboard } from '../leaderboard/landing-leaderboard';
 
 const H = sx('margin:0;font-size:22px;font-weight:800;letter-spacing:-0.025em');
 
@@ -100,6 +101,9 @@ export async function LandingPhone() {
           ))}
         </div>
       </section>
+
+      {/* leaderboard: client-only, names never in the SSR HTML (leaderboard-design.md §3.4) */}
+      <LandingLeaderboard phone />
 
       <section style={sx('padding:36px 18px 0;display:flex;flex-direction:column;gap:12px')}>
         <div style={sx('display:flex;justify-content:space-between;align-items:baseline')}>

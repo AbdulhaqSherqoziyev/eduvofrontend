@@ -115,6 +115,11 @@
       "restored": "Akkauntingiz tiklandi.",
       "err": "Akkauntni tiklab bo‘lmadi. Qayta urinib ko‘ring.",
       "blocked": "Akkauntingiz o‘chirishga rejalashtirilgan. Mock topshirish yoki kredit olish uchun uni tiklang."
-    }
+    },
+    "lbShow": "Ismimni reytingda ko‘rsatish",
+    "nLeaderboard": "Reyting va nishonlar",
+    "nameNotAllowed": "Bu ismni ishlatib bo‘lmaydi. Boshqa ism kiriting.",
+    "nameHint": "Bu ism reytingda ko‘rinadi.",
+    "nameChangeLimit": "Ismni haftasiga bir marta o‘zgartirish mumkin. Keyingi safar: {date}."
   }
 }

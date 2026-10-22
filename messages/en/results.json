@@ -131,5 +131,17 @@
   "speakingNotGraded": "We couldn't score this Speaking. The credit for it was returned to your account.",
   "speakingRefunded": "The credit was returned to your account.",
   "sampleNoAudio": "No audio in the sample",
-  "speakingComputer": "Open on a computer to take the test"
+  "speakingComputer": "Open on a computer to take the test",
+  "points": {
+    "awarded": "+{n} pts",
+    "growth": "+{n} growth bonus",
+    "capped": "+{n} pts · daily limit",
+    "cappedZero": "You've reached today's points limit — more tomorrow",
+    "notCounted": "Not counted for the leaderboard",
+    "notCountedAnswers": "To earn points, answer at least half of the questions.",
+    "notCountedTime": "To earn points, use at least a quarter of the time.",
+    "notCountedWords": "To earn points, write at least half the minimum word count in each task.",
+    "repeat": "This test was already counted",
+    "chipAria": "+{n} effort points. How are points counted?"
+  }
 }

@@ -170,7 +170,7 @@
           [
             "Account: your email address, your name, and your password, which we store only in hashed form. If you sign in with Google, we receive your email address and name from Google.",
             "Profile: your country, interface language, target exam, target score and exam date, if you give them.",
-            "Tests: your answers, essays, flags and timing, and the results we calculate from them.",
+            "Tests: your answers, essays, flags and timing, and the results, effort points, levels and badges we calculate from them.",
             "Orders: what you bought, the price, currency, country and the order status. We do not receive or store your card number.",
             "Technical: your IP address, browser and device type, and logs we need to keep the service secure and working.",
             "Visit statistics, without cookies: the pages you view, where you came from (a link or UTM tag), your device and browser type, browser language, how long you stay on a page, and the country and city worked out from your IP address. We do not store your IP address; visits are counted with an anonymous identifier that changes every day. Raw records are kept for 90 days, after that only totals. We do not use them for advertising and do not sell them."
@@ -224,15 +224,22 @@
         ]
       },
       {
+        "id": "leaderboard",
+        "h": "7. Leaderboard",
+        "body": [
+          "To motivate practice, we show a public leaderboard of the 10 most active learners each week and month, on our home page and in learner dashboards. It shows your full name as entered in your account, your effort points and your average mock score. Effort points come only from finished practice sections, not from payments. You can hide your name at any time in your profile (Show my name on the leaderboard); you then appear as \"Hidden participant\". We remove names that break our rules. Only the current top 10 and the previous period's top 3 are public; older leaderboards are not published. We ask search engines not to index leaderboards."
+        ]
+      },
+      {
         "id": "transfers",
-        "h": "7. International transfers",
+        "h": "8. International transfers",
         "body": [
           "Our servers are in the EU. Some providers, such as AI model and email providers, may process data in other countries, including the United States."
         ]
       },
       {
         "id": "retention",
-        "h": "8. How long we keep data",
+        "h": "9. How long we keep data",
         "body": [
           [
             "Account, profile and test data: while your account is open.",
@@ -244,7 +251,7 @@
       },
       {
         "id": "rights",
-        "h": "9. Your rights",
+        "h": "10. Your rights",
         "body": [
           "You can ask to see, copy, correct or delete your personal data, and you can object to or ask us to limit some uses of it. You can update most profile details yourself in your account settings.",
           "Deleting your account: use Delete account in your account settings, or write to eduvo.erp@gmail.com from the email on your account. The account is removed for good after 14 days. Until then you can ask us to cancel the deletion.",
@@ -253,28 +260,28 @@
       },
       {
         "id": "cookies",
-        "h": "10. Cookies",
+        "h": "11. Cookies",
         "body": [
           "We use only necessary cookies: one keeps you signed in and one remembers your language. Your theme choice is saved in your browser. We do not use analytics or advertising cookies. See the [Cookie policy](/cookies)."
         ]
       },
       {
         "id": "children",
-        "h": "11. Children",
+        "h": "12. Children",
         "body": [
           "Eduvo Mock is for people aged 16 and over. Younger learners may use it only with the consent of a parent or legal guardian. If you think a child under 16 has given us data without that consent, write to us and we will delete it."
         ]
       },
       {
         "id": "security",
-        "h": "12. Security",
+        "h": "13. Security",
         "body": [
           "We use HTTPS for every connection, store passwords only in hashed form and limit who on our team can access personal data."
         ]
       },
       {
         "id": "changes",
-        "h": "13. Changes and contact",
+        "h": "14. Changes and contact",
         "body": [
           "We may update this policy. The date at the top shows the latest version, and we will email you about important changes.",
           "Questions or requests about your data: eduvo.erp@gmail.com."

@@ -115,6 +115,11 @@
       "restored": "Your account is restored.",
       "err": "Couldn’t restore the account. Try again.",
       "blocked": "Your account is scheduled for deletion. Restore it to take mocks or buy credits."
-    }
+    },
+    "lbShow": "Show my name on the leaderboard",
+    "nLeaderboard": "Leaderboard and badges",
+    "nameNotAllowed": "This name can't be used. Please choose another.",
+    "nameHint": "This name is shown on the leaderboard.",
+    "nameChangeLimit": "You can change your name once a week. Next change: {date}."
   }
 }

@@ -15,7 +15,7 @@ export async function generateMetadata({ params: { lang } }: { params: { lang: M
 export default function ResultsPage({ params: { lang, attemptId } }: { params: { lang: MockLocale; attemptId: string } }) {
   setRequestLocale(lang);
   return (
-    <PageShell ns={['results', 'qtypes']}>
+    <PageShell ns={['results', 'qtypes', 'leaderboard']}>
       <SiteHeader active="dash" />
       <ResultsGate attemptId={attemptId} />
     </PageShell>

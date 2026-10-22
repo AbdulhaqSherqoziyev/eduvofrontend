@@ -17,7 +17,7 @@ export async function generateMetadata({ params: { lang } }: { params: { lang: M
 export default function DashboardPage({ params: { lang } }: { params: { lang: MockLocale } }) {
   setRequestLocale(lang);
   return (
-    <PageShell ns={['dashboard', 'qtypes']}>
+    <PageShell ns={['dashboard', 'qtypes', 'leaderboard', 'account']}>
       <SiteHeader active="dash" />
       <AppBar left="logo" lang flat />
       <DashboardView />

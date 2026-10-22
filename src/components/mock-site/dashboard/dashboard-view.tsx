@@ -17,6 +17,7 @@ import { useSpeakingLive } from '@/lib/mock/hooks/use-speaking-live';
 import { sx } from '@/lib/mock/sx';
 import { BarChart, LineChart } from '../charts';
 import { Segmented } from '../segmented';
+import { LbDeskRow, LbOverlays, LbPhoneSection, LbWeekCard, useDashLeaderboard } from '../leaderboard/dashboard-leaderboard';
 
 const EXAM_NAME: Record<OpenExamSlug, string> = { ielts: 'IELTS', sat: 'SAT' };
 const SKEL = sx('background:linear-gradient(90deg,var(--hover) 0,var(--bg) 50%,var(--hover) 100%);background-size:1200px 100%;animation:m-shimmer 1.4s infinite linear');
@@ -39,6 +40,7 @@ export function DashboardView() {
   const [resent, setResent] = useState(false);
   const [pod, setPod] = useState<'morning' | 'afternoon' | 'evening'>('afternoon');
   useEffect(() => setPod(partOfDay()), []);
+  const lbs = useDashLeaderboard(learner);
 
   const load = useCallback(() => {
     setErr(false);
@@ -77,6 +79,9 @@ export function DashboardView() {
               <div className="m-card" style={sx('height:180px')} /><div className="m-card" style={sx('height:180px')} /><div className="m-card" style={sx('height:180px')} />
             </div>
             <div className="m-card" style={sx('height:280px')} />
+            <div style={sx('display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px')}>
+              <div className="m-card" style={sx('height:360px')} /><div className="m-card" style={sx('height:360px')} />
+            </div>
           </div>
         )}
       </main>
@@ -150,6 +155,11 @@ export function DashboardView() {
     return { ...m, nm, meta: m.correct != null && m.total ? `${meta} · ${t('correctOf', { correct: m.correct, total: m.total })}` : meta, action, to, score };
   };
   const mocks = d.mocks.map(mockRow);
+
+  // leaderboard §13.10: under 7 days to the exam the leaderboard moves to the end of the page
+  const examNearDays = lbs.g ? lbs.g.examNear?.daysLeft ?? null : d.countdown && d.countdown.days >= 0 && d.countdown.days < 7 ? d.countdown.days : null;
+  const lbDesk = <LbDeskRow s={lbs} examNearDays={examNearDays} />;
+  const lbPhone = <LbPhoneSection s={lbs} examNearDays={examNearDays} />;
 
   const weakBasis = d.weakestBasis ? t('weakBasis', { n: d.weakestBasis.attempts, exam: EXAM_NAME[d.weakestBasis.exam] }) : null;
 
@@ -246,6 +256,8 @@ export function DashboardView() {
               </div>
             </div>
 
+            {examNearDays == null && lbDesk}
+
             <div style={sx('display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px;align-items:start')}>
               <div className="m-card" style={sx('padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0')}>
                 <span style={sx('font-weight:800;font-size:18px;margin-bottom:4px')}>{t('mocks')}</span>
@@ -291,8 +303,10 @@ export function DashboardView() {
                 <Link className="m-btn m-btn--soft" href={href('/pricing')} style={sx('height:48px;font-weight:800;font-size:16px')}>{t('buyMore')}</Link>
               </div>
             </div>
+            {examNearDays != null && lbDesk}
           </>
         )}
+        {d.isEmpty && lbDesk}
       </main>
 
       {/* ================= <520 (Mobile App `home`) ================= */}
@@ -334,6 +348,7 @@ export function DashboardView() {
                   <span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{tg.gap != null && tg.gap > 0 ? t('phone.toGo', { gap: fmtScore(tg.gap, tg.exam) }) : t('onTarget')}</span>
                 </div>
               )}
+              <LbWeekCard s={lbs} />
               {d.countdown && (
                 <div className="m-card" style={sx('flex:none;width:130px;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:4px')}>
                   <span style={sx('font-size:12px;font-weight:700;color:var(--ink2)')}>{t('phone.examIn')}</span>
@@ -367,6 +382,7 @@ export function DashboardView() {
                 </div>
               </div>
             )}
+            {examNearDays == null && lbPhone}
             <div style={sx('display:flex;flex-direction:column;gap:10px')}>
               <div style={sx('display:flex;justify-content:space-between;align-items:center')}><b style={sx('font-size:16px')}>{t('phone.recent')}</b><Link href={href('/mocks')} style={sx('font-weight:800;font-size:13px')}>{t('phone.all')}</Link></div>
               <div className="m-rows">
@@ -380,9 +396,12 @@ export function DashboardView() {
                 {mocks.length === 0 && <span style={sx('padding:14px 16px;font-size:14px;color:var(--ink2)')}>{t('mocksEmpty')}</span>}
               </div>
             </div>
+            {examNearDays != null && lbPhone}
           </>
         )}
+        {d.isEmpty && lbPhone}
       </main>
+      <LbOverlays s={lbs} />
     </>
   );
 }

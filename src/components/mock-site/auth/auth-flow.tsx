@@ -12,6 +12,7 @@ import { LOCALES, LOCALE_NAMES, htmlLang, isTranslated, type MockLocale } from '
 import { MockApiError, ensureSession } from '@/lib/mock/api/client';
 import { forgotPassword, getMe, googleAuth, login, patchMe, resendVerification, resetPassword, signup, verifyEmail } from '@/lib/mock/api/endpoints';
 import type { Learner, OpenExamSlug } from '@/lib/mock/api/types';
+import { fmtDate } from '@/lib/mock/format';
 import { useLang } from '@/lib/mock/hooks/use-lang';
 import { useSession } from '@/lib/mock/hooks/use-session';
 import { useTurnstile } from '@/lib/mock/hooks/use-turnstile';
@@ -116,6 +117,8 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
       case 'CAPTCHA_FAILED': case 'CAPTCHA_REQUIRED': return t('err.captcha');
       case 'TOKEN_INVALID': return t('err.tokenInvalid');
       case 'TOKEN_EXPIRED': return t('err.tokenExpired');
+      case 'NAME_NOT_ALLOWED': return t('err.nameNotAllowed');
+      case 'NAME_CHANGE_LIMIT': return t('err.nameChangeLimit', { date: typeof e.body.availableAt === 'string' ? fmtDate(lang, e.body.availableAt) : '—' });
       case 'EMAIL_TAKEN': {
         const providers = Array.isArray(e.body.providers) ? (e.body.providers as string[]) : [];
         if (providers.includes('google') && !providers.includes('password')) return t('err.emailTakenGoogle');
@@ -381,6 +384,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
             <label className="m-field" style={sx('display:flex;flex-direction:column;gap:6px')}>{t('onb.name')}
               <input className="m-input" value={dname} maxLength={60} autoComplete="given-name" placeholder={t('onb.namePh')} onChange={(e) => setDname(e.target.value)} />
               <span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{t('onb.nameNote')}</span>
+              <span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{t('onb.nameHint')}</span>
             </label>
             <div role="radiogroup" aria-label={onbTitle} style={sx('display:grid;grid-template-columns:1fr 1fr;gap:14px')}>
               {(['ielts', 'sat'] as const).map((k) => (
@@ -487,6 +491,7 @@ export function AuthFlow({ mode: initial }: { mode: AuthMode }) {
             <label className="m-field" style={sx('display:flex;flex-direction:column;gap:6px')}>{t('onb.name')}
               <input className="m-input" value={dname} maxLength={60} autoComplete="given-name" placeholder={t('onb.namePh')} onChange={(e) => setDname(e.target.value)} style={sx('height:52px;border-radius:16px')} />
               <span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{t('onb.nameNote')}</span>
+              <span style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{t('onb.nameHint')}</span>
             </label>
 
             {(['ielts', 'sat'] as const).map((k) => (

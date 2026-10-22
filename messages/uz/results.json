@@ -131,5 +131,17 @@
   "speakingNotGraded": "Bu Speaking'ni baholay olmadik. Shu bo'lim uchun kredit hisobingizga qaytarildi.",
   "speakingRefunded": "Kredit hisobingizga qaytarildi.",
   "sampleNoAudio": "Namunada audio yo'q",
-  "speakingComputer": "Testni topshirish uchun kompyuterda oching"
+  "speakingComputer": "Testni topshirish uchun kompyuterda oching",
+  "points": {
+    "awarded": "+{n} ball",
+    "growth": "+{n} o‘sish bonusi",
+    "capped": "+{n} ball · kunlik chegara",
+    "cappedZero": "Bugungi ball chegarasiga yetdingiz — ertaga davom etadi",
+    "notCounted": "Reytingga hisoblanmadi",
+    "notCountedAnswers": "Ball olish uchun savollarning kamida yarmiga javob bering.",
+    "notCountedTime": "Ball olish uchun ajratilgan vaqtning kamida chorak qismini ishlating.",
+    "notCountedWords": "Ball olish uchun har bir taskda minimal so‘zlar sonining kamida yarmini yozing.",
+    "repeat": "Bu test avval hisoblangan",
+    "chipAria": "+{n} harakat balli. Ball qanday hisoblanadi?"
+  }
 }

@@ -5,12 +5,12 @@
  * U2 delete (password or Google re-confirm), U3 restore banner while deletion is pending.
  */
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { LOCALE_NAMES, htmlLang } from '@/i18n/locales';
 import { MockApiError } from '@/lib/mock/api/client';
-import { changePassword, deleteAccount, exportMyData, logout, patchMe } from '@/lib/mock/api/endpoints';
+import { changePassword, deleteAccount, exportMyData, getMe, logout, patchMe } from '@/lib/mock/api/endpoints';
 import { SUPPORT_EMAIL } from '@/lib/mock/legal';
 import { useGoogleSignIn } from '../auth/google';
 import { DeletionBanner } from './deletion-banner';
@@ -43,6 +43,11 @@ export function AccountView() {
   const [dark, setDark] = useState<boolean | null>(null);
   const [purch, setPurch] = useState(false);
   const [exporting, setExporting] = useState(false);
+  /** optimistic value of the leaderboard toggle while PATCH runs (leaderboard spec §6) */
+  const [lbHiddenOpt, setLbHiddenOpt] = useState<boolean | null>(null);
+  // the session (login/refresh) learner may come without the `leaderboard` block — P1 always has it
+  const needMe = !!learner && learner.leaderboard === undefined;
+  useEffect(() => { if (needMe) void getMe().catch(() => undefined); }, [needMe]);
 
   if (!learner) return <main style={sx('min-height:60vh')} aria-busy="true" />;
   const L: Learner = learner;
@@ -51,7 +56,15 @@ export function AccountView() {
   const initial = (L.displayName || L.email || '?').charAt(0).toUpperCase();
 
   const toggleNotif = async (k: keyof Learner['notifications']) => {
-    try { await patchMe({ notifications: { [k]: !L.notifications[k] } }); } catch { toast(t('saveErr')); }
+    // `leaderboard` is on by default when the API has not sent it yet
+    const cur = L.notifications[k] ?? true;
+    try { await patchMe({ notifications: { [k]: !cur } }); } catch { toast(t('saveErr')); }
+  };
+  const lbHidden = lbHiddenOpt ?? !!L.leaderboard?.hidden;
+  const toggleLb = async () => {
+    const next = !lbHidden;
+    setLbHiddenOpt(next);
+    try { await patchMe({ leaderboardHidden: next }); } catch { toast(t('saveErr')); } finally { setLbHiddenOpt(null); }
   };
   const toggleDark = () => {
     const next = isDark ? 'light' : 'dark';
@@ -79,11 +92,13 @@ export function AccountView() {
       { label: t('dark'), toggle: true, on: isDark, go: toggleDark },
       { label: t('target'), value: goal ? `${goal.exam === 'ielts' ? 'IELTS' : 'SAT'} ${fmtScore(goal.targetScore, goal.exam)}` : t('notSet'), href: href('/onboarding') },
       { label: t('examDate'), value: goal?.examDate ? fmtDate(lang, goal.examDate) : t('notSet'), href: href('/onboarding') },
+      { label: t('lbShow'), toggle: true, on: !lbHidden, go: () => void toggleLb() },
     ] },
     { title: t('groups.notif'), rows: [
       { label: t('nResult'), toggle: true, on: L.notifications.resultReady, go: () => void toggleNotif('resultReady') },
       { label: t('nWriting'), toggle: true, on: L.notifications.writingGraded, go: () => void toggleNotif('writingGraded') },
       { label: t('nTips'), toggle: true, on: L.notifications.weeklyTips, go: () => void toggleNotif('weeklyTips') },
+      { label: t('nLeaderboard'), toggle: true, on: L.notifications.leaderboard ?? true, go: () => void toggleNotif('leaderboard') },
     ] },
     { title: t('groups.billing'), rows: [{ label: t('purchases'), go: () => setPurch(true) }, { label: t('buy'), href: href('/pricing') }] },
     { title: t('groups.support'), rows: [{ label: t('help'), href: href('/help') }, { label: t('contact'), value: <bdi dir="ltr">{SUPPORT_EMAIL}</bdi>, href: href('/help/contact') }] },
@@ -150,14 +165,17 @@ export function AccountView() {
   );
 }
 
-function EditModal({ kind, learner, onClose }: { kind: 'name' | 'password' | null; learner: Learner; onClose: () => void }) {
+/** name / password editor; the dashboard leaderboard opens it for the name (§4.3) */
+export function EditModal({ kind, learner, onClose }: { kind: 'name' | 'password' | null; learner: Learner; onClose: () => void }) {
   const t = useTranslations('account.account');
+  const { lang } = useLang();
   const toast = useToast();
   const [name, setName] = useState(learner.displayName ?? '');
   const [cur, setCur] = useState('');
   const [pw, setPw] = useState('');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
+  useEffect(() => { if (kind === 'name') { setName(learner.displayName ?? ''); setErr(''); } }, [kind, learner.displayName]);
   const save = async (e: React.FormEvent) => {
     e.preventDefault(); setErr('');
     if (kind === 'password' && pw.length < 8) { setErr(t('short')); return; }
@@ -167,7 +185,9 @@ function EditModal({ kind, learner, onClose }: { kind: 'name' | 'password' | nul
       else { await changePassword({ currentPassword: learner.hasPassword ? cur : undefined, newPassword: pw }); toast(t('pwSaved')); }
       onClose();
     } catch (x) {
-      if (x instanceof MockApiError && x.code === 'INVALID_CREDENTIALS') setErr(t('wrong'));
+      if (x instanceof MockApiError && x.code === 'NAME_CHANGE_LIMIT') setErr(t('nameChangeLimit', { date: typeof x.body.availableAt === 'string' ? fmtDate(lang, x.body.availableAt) : '—' }));
+      else if (x instanceof MockApiError && (x.code === 'NAME_NOT_ALLOWED' || x.fields.some((f) => f.field === 'displayName' && f.code === 'NAME_NOT_ALLOWED'))) setErr(t('nameNotAllowed'));
+      else if (x instanceof MockApiError && x.code === 'INVALID_CREDENTIALS') setErr(t('wrong'));
       else if (x instanceof MockApiError && x.fields.some((f) => f.code === 'PASSWORD_TOO_WEAK')) setErr(t('weak'));
       else setErr(t('saveErr'));
     } finally { setBusy(false); }
@@ -177,7 +197,10 @@ function EditModal({ kind, learner, onClose }: { kind: 'name' | 'password' | nul
       <form onSubmit={save} noValidate style={sx('display:flex;flex-direction:column;gap:14px')}>
         <span style={sx('font-size:20px;font-weight:800')}>{kind === 'name' ? t('nameTitle') : t('pwTitle')}</span>
         {kind === 'name' ? (
-          <input className="m-input" value={name} maxLength={60} onChange={(e) => setName(e.target.value)} aria-label={t('nameTitle')} />
+          <>
+            <input className="m-input" value={name} maxLength={60} onChange={(e) => { setName(e.target.value); setErr(''); }} aria-label={t('nameTitle')} aria-invalid={!!err} aria-describedby="m-name-hint" />
+            <span id="m-name-hint" style={sx('font-size:12px;color:var(--mut);font-weight:600')}>{t('nameHint')}</span>
+          </>
         ) : (
           <>
             {learner.hasPassword && <label className="m-field">{t('pwCurrent')}<input className="m-input" type="password" autoComplete="current-password" value={cur} onChange={(e) => setCur(e.target.value)} /></label>}

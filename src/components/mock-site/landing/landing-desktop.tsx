@@ -8,6 +8,7 @@ import { Price } from '../price';
 import { FaqDesktop } from './faq';
 import { WaitlistForm } from './waitlist';
 import { BrandMark } from '../logo';
+import { LandingLeaderboard } from '../leaderboard/landing-leaderboard';
 
 /** Feature flag: turn on (NEXT_PUBLIC_MOCK_TESTIMONIALS=1) once real quotes replace the placeholders. */
 const SHOW_TESTIMONIALS = process.env.NEXT_PUBLIC_MOCK_TESTIMONIALS === '1';
@@ -215,6 +216,9 @@ export async function LandingDesktop() {
           </div>
         </div>
       </section>
+
+      {/* ---------- leaderboard: client-only, names never in the SSR HTML (leaderboard-design.md §3) ---------- */}
+      <LandingLeaderboard />
 
       {/* ---------- pricing teaser ---------- */}
       <section style={SEC}>

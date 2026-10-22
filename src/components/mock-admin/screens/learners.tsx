@@ -12,9 +12,10 @@ import { FilterOptions, FilterPill, Pager } from '../ui/filters';
 import { EmptyState, ErrorState } from '../ui/state';
 import { SkeletonRows } from '../ui/table';
 import { useUrlState } from './hooks';
+import { LB_STATE } from './learner-leaderboard';
 
 const PAGE_SIZE = 25;
-const DEFAULTS = { q: '', status: '', country: '', balance: '', verified: '', page: '1' };
+const DEFAULTS = { q: '', status: '', country: '', balance: '', verified: '', lb: '', page: '1' };
 export const LEARNER_STATUS: Record<string, { t: string; tone: Tone }> = {
   ACTIVE: { t: 'Faol', tone: 'ok' },
   LOCKED: { t: 'Bloklangan', tone: 'err' },
@@ -47,7 +48,11 @@ export function LearnersScreen() {
     const t = window.setTimeout(() => { if (text.trim() !== f.q) setF({ q: text.trim(), page: '1' }); }, 350);
     return () => window.clearTimeout(t);
   }, [text, f.q, setF]);
-  const query = { q: f.q, status: f.status, country: f.country, balance: f.balance, verified: f.verified, page, pageSize: PAGE_SIZE };
+  const query = { q: f.q, status: f.status, country: f.country, balance: f.balance, verified: f.verified, lb: f.lb || undefined, page, pageSize: PAGE_SIZE };
+  // leaderboard §9.2: "Ism tekshiruvda" filter shows its count
+  const flagged = useQuery({ queryKey: ['am', 'learners', 'lb-counts'], queryFn: () => adminApi.lbCounts(), staleTime: 60_000, retry: false });
+  const flaggedN = flagged.data?.nameFlagged;
+  const LB_OPTS = [{ value: '', label: 'Hammasi' }, { value: 'name_flagged', label: flaggedN != null ? `Ism tekshiruvda (${groupNum(flaggedN)})` : 'Ism tekshiruvda' }] as const;
   const q = useQuery({ queryKey: ['am', 'learners', query], queryFn: () => adminApi.learners(query), placeholderData: (p) => p });
   const set = (patch: Partial<typeof DEFAULTS>) => setF({ page: '1', ...patch });
   const rows = q.data?.items ?? [];
@@ -71,6 +76,9 @@ export function LearnersScreen() {
         </FilterPill>
         <FilterPill label="Email" value={VERIFIED.find((x) => x.value === f.verified)?.label ?? 'Hammasi'} active={!!f.verified}>
           {(close) => <FilterOptions options={VERIFIED} value={f.verified as (typeof VERIFIED)[number]['value']} onPick={(v) => { set({ verified: v }); close(); }} />}
+        </FilterPill>
+        <FilterPill label="Reyting" value={LB_OPTS.find((x) => x.value === f.lb)?.label ?? 'Hammasi'} active={!!f.lb}>
+          {(close) => <FilterOptions options={LB_OPTS} value={f.lb as (typeof LB_OPTS)[number]['value']} onPick={(v) => { set({ lb: v }); close(); }} />}
         </FilterPill>
         <span style={{ flex: 1 }} />
         {q.data && <span style={{ fontSize: 13, color: 'var(--ink2)', fontWeight: 600 }}>{groupNum(q.data.total)} o&apos;quvchi</span>}
@@ -117,7 +125,12 @@ export function LearnersScreen() {
                     </td>
                     <td style={{ ...td, textAlign: 'right', fontWeight: 800, whiteSpace: 'nowrap' }}>{l.paidTotal.length ? moneyList(l.paidTotal) : "0 so'm"}</td>
                     <td style={{ ...td, color: 'var(--ink2)', fontWeight: 600, whiteSpace: 'nowrap' }}>{ago(l.lastActiveAt)}</td>
-                    <td style={{ ...td, padding: '12px 16px 12px 10px' }}><StatusChip tone={s.tone}>{s.t}</StatusChip></td>
+                    <td style={{ ...td, padding: '12px 16px 12px 10px' }}>
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        <StatusChip tone={s.tone}>{s.t}</StatusChip>
+                        {(l.lbState === 'name_flagged' || l.lbState === 'removed') && <StatusChip tone={LB_STATE[l.lbState].tone}>{LB_STATE[l.lbState].t}</StatusChip>}
+                      </div>
+                    </td>
                   </tr>
                 );
               })}

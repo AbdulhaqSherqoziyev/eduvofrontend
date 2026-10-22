@@ -23,6 +23,7 @@ import { SkeletonRows } from '../ui/table';
 import { useToast } from '../ui/toast';
 import { attemptStatus, sectionLabel } from './attempt-shared';
 import { LEARNER_STATUS, goalText } from './learners';
+import { LeaderboardCard } from './learner-leaderboard';
 import { initialsOf } from './order-detail';
 import { statusOf } from './order-shared';
 
@@ -129,6 +130,7 @@ function Profile({ d }: { d: LearnerDetailRes }) {
       </section>
 
       <Balance d={d} />
+      <LeaderboardCard d={d} />
       <Tabs id={l.id} />
 
       <GrantDialog open={dlg === 'grant'} d={d} onClose={() => setDlg(null)} onDone={() => { setDlg(null); refresh(); }} />

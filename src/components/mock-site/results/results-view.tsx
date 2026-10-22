@@ -25,6 +25,7 @@ import { useToast } from '../toast';
 import { CancelledCard } from '../cancelled-card';
 import { ShareModal } from './share-modal';
 import { B2cSpeaking } from './speaking-section';
+import { PointsChip } from '../leaderboard/points-chip';
 
 export type FullResult = ResultResp & { mock: MockResultExt };
 const POLL_MS = 10_000;
@@ -264,7 +265,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
       <main className="m-desk" style={sx('max-width:1200px;margin:0 auto;padding:clamp(20px,4vw,40px) 20px 40px;display:flex;flex-direction:column;gap:28px')}>
         <div style={sx('display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap')}>
           <div style={sx('display:flex;flex-direction:column;gap:6px')}>
-            <span style={sx('display:flex;gap:8px;align-items:center')}><span className="m-eyebrow" style={{ ...sx('font-size:13px;letter-spacing:.05em'), color: `var(--${exam})` }} lang="en">{ielts ? 'IELTS ACADEMIC' : 'DIGITAL SAT'}</span>{sample && <span className="m-pill m-pill--warn">{t('sampleBadge')}</span>}</span>
+            <span style={sx('display:flex;gap:8px;align-items:center')}><span className="m-eyebrow" style={{ ...sx('font-size:13px;letter-spacing:.05em'), color: `var(--${exam})` }} lang="en">{ielts ? 'IELTS ACADEMIC' : 'DIGITAL SAT'}</span>{sample && <span className="m-pill m-pill--warn">{t('sampleBadge')}</span>}{!sample && <PointsChip points={m.points} />}</span>
             <h1 className="m-h1" style={sx('font-size:clamp(26px,3.2vw,38px);letter-spacing:var(--ls-h)')}>{sample ? t('sampleTitle') : t('title')}</h1>
             <span style={sx('font-size:14px;color:var(--ink2);font-weight:600')}>{t.rich('metaLine', { mode: modeStr, date: dateStr, code: () => <bdi dir="ltr">{m.testCode}</bdi> })}</span>
           </div>
@@ -362,6 +363,7 @@ export function ResultsView({ attemptId, sample }: { attemptId?: string; sample?
 
       {/* ================= <520 ================= */}
       <main className="m-phone m-with-cta-phone" style={sx('padding:8px 16px 0;display:flex;flex-direction:column;gap:16px')}>
+        {!sample && m.points && m.points.status !== 'removed' && <div><PointsChip points={m.points} /></div>}
         <div className="m-card" style={sx('padding:20px;display:flex;flex-direction:column;gap:12px')}>
           <div style={sx('display:flex;justify-content:space-between;align-items:center;gap:8px')}><span className="m-eyebrow" style={{ ...sx('letter-spacing:.05em'), color: `var(--${exam})` }} lang="en">{ielts ? 'IELTS ACADEMIC' : 'DIGITAL SAT'}</span>{m.cefr && <span className="m-pill m-pill--ok">CEFR {m.cefr}</span>}{sample && <span className="m-pill m-pill--warn">{t('sampleBadge')}</span>}</div>
           <div style={sx('display:flex;align-items:baseline;gap:10px')}><span style={sx('font-size:76px;font-weight:800;letter-spacing:var(--ls-score-xl);line-height:.95')}><bdi dir="ltr">{overallShown}</bdi></span><span style={sx('font-size:14px;color:var(--mut);font-weight:700')}>{full ? (ielts ? t('phone.overallBand') : t('totalScore').toLowerCase()) : overallLabel}</span></div>

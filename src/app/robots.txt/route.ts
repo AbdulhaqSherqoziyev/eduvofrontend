@@ -30,6 +30,8 @@ export function GET() {
         'Disallow: /*/reset',
         'Disallow: /*/r/',
         'Disallow: /api/',
+        // leaderboard names must never be indexed (leaderboard-design.md §12.1): explicit, even though /api/ covers it
+        'Disallow: /api/mock/leaderboard',
         '',
         `Sitemap: ${MOCK_ORIGIN}/sitemap.xml`,
         '',

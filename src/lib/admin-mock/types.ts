@@ -115,10 +115,24 @@ export interface MarkPaidRes {
 }
 
 /* ---------- learners §5 ---------- */
+/* ---------- leaderboard moderation (leaderboard-design.md §9–10) ---------- */
+export type LbAdminState = 'visible' | 'hidden_by_learner' | 'no_name' | 'name_flagged' | 'removed';
+export type LbRemoveReason = 'name' | 'fraud' | 'request' | 'other';
+export interface AdminLeaderboard {
+  state: LbAdminState;
+  weekPoints: number;
+  lifetimePoints: number;
+  levelKey: 'beginner' | 'striver' | 'scholar' | 'star' | 'master' | null;
+  displayName: string | null;
+  removed: { reason: LbRemoveReason; note: string | null; at: string; by: string | null } | null;
+}
+
 export type AdminLearnerRow = OwnerLearner & {
   shortId: string; attempts: number; paidTotal: Money[];
   balances: Array<{ exam: AdminExam; fullMocks: number; sections: number; unlimitedUntil: string | null }>;
   lastActiveAt: string | null;
+  /** leaderboard state (list chip) */
+  lbState?: LbAdminState;
 };
 export interface LotRow {
   id: string | null; source: 'order' | 'admin' | 'promo' | 'free';
@@ -133,6 +147,7 @@ export interface LearnerDetailRes {
   lotRows: LotRow[];
   counts: { ledger: number; orders: number; attempts: number; tickets: number };
   liveSessions: number;
+  leaderboard?: AdminLeaderboard;
 }
 export interface LedgerRow {
   id: string; at: string; delta: number; exam: string; kind: string;

@@ -170,7 +170,7 @@
           [
             "Akkaunt: email manzilingiz, ismingiz va parolingiz (faqat xeshlangan holda saqlanadi). Google orqali kirsangiz, Google’dan email manzilingiz va ismingizni olamiz.",
             "Profil: mamlakatingiz, interfeys tili, maqsadli imtihon, maqsadli ball va imtihon sanasi (agar kiritsangiz).",
-            "Testlar: javoblaringiz, insholaringiz, belgilar va vaqt, hamda ulardan hisoblangan natijalar.",
+            "Testlar: javoblaringiz, insholaringiz, belgilar va vaqt, hamda ulardan hisoblangan natijalar, harakat ballari, daraja va nishonlar.",
             "Buyurtmalar: nima sotib olganingiz, narx, valyuta, mamlakat va buyurtma holati. Karta raqamingizni olmaymiz va saqlamaymiz.",
             "Texnik: IP manzilingiz, brauzer va qurilma turi, xizmat xavfsiz va to‘g‘ri ishlashi uchun kerakli loglar.",
             "Tashrif statistikasi, cookie’siz: ko‘rilgan sahifalar, qayerdan kelganingiz (havola yoki UTM belgisi), qurilma va brauzer turi, brauzer tili, sahifada qancha vaqt bo‘lganingiz, IP manzildan aniqlangan mamlakat va shahar. IP manzilingizni saqlamaymiz; tashriflar har kuni almashadigan anonim identifikator bilan sanaladi. Xom yozuvlar 90 kun saqlanadi, keyin faqat umumiy sonlar qoladi. Ular reklama uchun ishlatilmaydi va sotilmaydi."
@@ -224,15 +224,22 @@
         ]
       },
       {
+        "id": "leaderboard",
+        "h": "7. Reyting",
+        "body": [
+          "Mashq qilishga undash uchun bosh sahifada va o‘quvchi kabinetida har hafta va har oy eng faol 10 o‘quvchining ochiq reytingini ko‘rsatamiz. Unda akkauntingizdagi to‘liq ismingiz, harakat ballingiz va mocklardagi o‘rtacha natijangiz ko‘rinadi. Harakat balli faqat tugatilgan mashq bo‘limlari uchun beriladi, to‘lov uchun emas. Ismingizni istalgan vaqtda profilingizda yashirishingiz mumkin («Ismimni reytingda ko‘rsatish»); shunda siz «Yashirin ishtirokchi» bo‘lib ko‘rinasiz. Qoidalarimizni buzgan ismlarni olib tashlaymiz. Faqat joriy top 10 va oldingi davrning top 3 taligi ochiq ko‘rsatiladi; eskiroq reytinglar e’lon qilinmaydi. Qidiruv tizimlaridan reytingni indekslamaslikni so‘raymiz."
+        ]
+      },
+      {
         "id": "transfers",
-        "h": "7. Xalqaro uzatish",
+        "h": "8. Xalqaro uzatish",
         "body": [
           "Serverlarimiz Yevropa Ittifoqida. Ayrim provayderlar, masalan AI model va email provayderlari, ma’lumotlarni boshqa davlatlarda, jumladan AQShda qayta ishlashi mumkin."
         ]
       },
       {
         "id": "retention",
-        "h": "8. Ma’lumotlarni qancha saqlaymiz",
+        "h": "9. Ma’lumotlarni qancha saqlaymiz",
         "body": [
           [
             "Akkaunt, profil va test ma’lumotlari: akkauntingiz ochiq ekan.",
@@ -244,7 +251,7 @@
       },
       {
         "id": "rights",
-        "h": "9. Sizning huquqlaringiz",
+        "h": "10. Sizning huquqlaringiz",
         "body": [
           "Shaxsiy ma’lumotlaringizni ko‘rish, nusxasini olish, tuzatish yoki o‘chirishni so‘rashingiz, ayrim foydalanishlarga e’tiroz bildirishingiz yoki ularni cheklashni so‘rashingiz mumkin. Profil ma’lumotlarining ko‘pini akkaunt sozlamalarida o‘zingiz o‘zgartirasiz.",
           "Akkauntni o‘chirish: akkaunt sozlamalarida \"Akkauntni o‘chirish\"ni tanlang yoki akkauntingizdagi emaildan eduvo.erp@gmail.com manziliga yozing. Akkaunt 14 kundan keyin butunlay o‘chiriladi. Shu vaqtgacha o‘chirishni bekor qilishni so‘rashingiz mumkin.",
@@ -253,28 +260,28 @@
       },
       {
         "id": "cookies",
-        "h": "10. Cookie’lar",
+        "h": "11. Cookie’lar",
         "body": [
           "Faqat zaruriy cookie’lardan foydalanamiz: biri sizni tizimda saqlaydi, biri tilingizni eslab qoladi. Tema tanlovingiz brauzeringizda saqlanadi. Analitika yoki reklama cookie’laridan foydalanmaymiz. Batafsil — [Cookie siyosati](/cookies)."
         ]
       },
       {
         "id": "children",
-        "h": "11. Bolalar",
+        "h": "12. Bolalar",
         "body": [
           "Eduvo Mock 16 yosh va undan kattalar uchun. Yoshroq o‘quvchilar undan faqat ota-ona yoki qonuniy vakil roziligi bilan foydalanishi mumkin. 16 yoshdan kichik bola bunday roziliksiz ma’lumot bergan deb o‘ylasangiz, bizga yozing — ularni o‘chiramiz."
         ]
       },
       {
         "id": "security",
-        "h": "12. Xavfsizlik",
+        "h": "13. Xavfsizlik",
         "body": [
           "Har bir ulanishda HTTPS ishlatamiz, parollarni faqat xeshlangan holda saqlaymiz va jamoamizda shaxsiy ma’lumotlarga kirish huquqini cheklaymiz."
         ]
       },
       {
         "id": "changes",
-        "h": "13. O‘zgarishlar va aloqa",
+        "h": "14. O‘zgarishlar va aloqa",
         "body": [
           "Bu siyosatni yangilashimiz mumkin. Tepadagi sana oxirgi versiyani ko‘rsatadi, muhim o‘zgarishlar haqida emailda xabar beramiz.",
           "Ma’lumotlaringiz bo‘yicha savol yoki so‘rovlar: eduvo.erp@gmail.com."

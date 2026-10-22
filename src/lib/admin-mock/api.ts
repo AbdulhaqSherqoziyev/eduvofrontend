@@ -3,7 +3,7 @@ import type { MockAdminAction, MockCreditKind } from '@/lib/types/owner-mock';
 import { req, reqBlob, type Query } from './http';
 import type {
   AdminExam, AdminLearnerRow, AdminMe, AdminMember, AdminPromo, AdminPromoInput, AdminTicketRow, AttemptDetailRes, AdminAttemptRow,
-  AuditItem, Badges, DashboardRes, EnrollRes, ImportStage, InsightsRes, InviteInfo, LearnerDetailRes, LedgerRow, LoginRes, MarkPaidRes,
+  AdminLeaderboard, AuditItem, Badges, LbRemoveReason, DashboardRes, EnrollRes, ImportStage, InsightsRes, InviteInfo, LearnerDetailRes, LedgerRow, LoginRes, MarkPaidRes,
   MockRole, NotificationsRes, OrderDetailRes, OrdersRes, Page, PriceChangeRes, ProductItem, ProductsRes, SearchRes, SettingsRes,
   TestFamily, TestItem, TicketDetailRes, TicketMessage, TicketsRes, VerifyRes, AdminExamCredits, ExamSlug, AdminOrderRow,
 } from './types';
@@ -53,6 +53,10 @@ export const adminApi = {
     post<{ replay: boolean; revoked: number; adminCredits: AdminExamCredits }>(`/learners/${id}/revoke`, body, idem),
   lock: (id: string, reason: string) => post<{ status: 'LOCKED'; cancelledAttempts: number }>(`/learners/${id}/lock`, { reason }),
   unlock: (id: string) => post<{ status: string }>(`/learners/${id}/unlock`, {}),
+  lbCounts: () => req<{ nameFlagged: number }>('/learners/lb-counts'),
+  lbRemove: (id: string, body: { reason: LbRemoveReason; note?: string }) => post<{ leaderboard: AdminLeaderboard }>(`/learners/${id}/leaderboard/remove`, body),
+  lbRestore: (id: string) => post<{ leaderboard: AdminLeaderboard }>(`/learners/${id}/leaderboard/restore`),
+  lbApproveName: (id: string) => post<{ leaderboard: AdminLeaderboard }>(`/learners/${id}/leaderboard/approve-name`),
   sendReset: (id: string, idem: string) => post<{ sent: true; kind: 'reset_password' | 'reset_google_only' }>(`/learners/${id}/send-password-reset`, {}, idem),
 
   /* §6 attempts */

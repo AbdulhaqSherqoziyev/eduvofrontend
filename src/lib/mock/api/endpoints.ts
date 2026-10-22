@@ -2,8 +2,8 @@
 import { applySpeakingFlag, applySpeakingFlagStart } from '../speaking-live';
 import { api, clearSession, currentAccessToken, getSession, refreshSession, setAuthSession, setLearner } from './client';
 import type {
-  AttemptListItem, AttemptMode, AuthSession, Catalog, CheckoutMethods, CreatedAttempt, Currency, Dashboard, ExamCredits,
-  Learner, MePatch, MockResultExt, OpenExamSlug, Order, PaymentMethodGroup, ProgressSeries, Quote, Recommendation, SectionKey, ShareCard,
+  AttemptListItem, AttemptMode, AuthSession, BadgeKey, Catalog, CheckoutMethods, CreatedAttempt, Currency, Dashboard, ExamCredits,
+  Gamification, Leaderboard, LbExam, LbPeriod, Learner, MePatch, MockResultExt, OpenExamSlug, Order, PaymentMethodGroup, ProgressSeries, Quote, Recommendation, SectionKey, ShareCard,
   StartInfo, WaitlistTopic, WeakType,
 } from './types';
 
@@ -154,3 +154,14 @@ export async function changePassword(body: { currentPassword?: string; newPasswo
   setAuthSession(s);
   return s;
 }
+
+/* ---- leaderboard & gamification (leaderboard-design.md §10) ---- */
+/** L1 — auth optional: a learner's token adds `me`/`isMe`; guests send none (public, cached 60 s). */
+export const getLeaderboard = (q: { period: LbPeriod; exam: LbExam }, signal?: AbortSignal) =>
+  api<Leaderboard>(`/mock/leaderboard?period=${q.period}&exam=${q.exam}`, { auth: !!currentAccessToken(), signal });
+/** L2 */
+export const getGamification = (signal?: AbortSignal) => api<Gamification>('/mock/gamification', { signal });
+/** L3 */
+export const markBadgesSeen = (keys: BadgeKey[]) => api<void>('/mock/gamification/badges/seen', { method: 'POST', body: { keys } });
+/** §13.2 one-time name notice — closed once, never shown again (server flag, contract P2) */
+export const dismissNameNotice = () => patchMe({ leaderboardNameNoticeSeen: true });

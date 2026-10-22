@@ -25,7 +25,7 @@ export default async function LandingPage({ params: { lang } }: { params: { lang
   const t = await getTranslations('landing.phone');
   const catalog = await fetchCatalogServer();
   return (
-    <PageShell ns={['landing']}>
+    <PageShell ns={['landing', 'leaderboard']}>
       <CatalogProvider initial={catalog}>
         <SiteHeader />
         <AppBar left="logo" lang login flat />

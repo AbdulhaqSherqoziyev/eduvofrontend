@@ -31,7 +31,9 @@ export interface Learner {
   timezone: string | null;
   goal: { exam: OpenExamSlug; targetScore: number; examDate: string | null; noDateYet: boolean } | null;
   onboardingCompletedAt: string | null;
-  notifications: { resultReady: boolean; writingGraded: boolean; weeklyTips: boolean };
+  notifications: { resultReady: boolean; writingGraded: boolean; weeklyTips: boolean; /** leaderboard contract P1 (default true) */ leaderboard?: boolean };
+  /** leaderboard contract P1 (optional until the backend ships it) */
+  leaderboard?: { hidden: boolean; visibility: LbVisibility; nameNoticePending: boolean; nameChangeAvailableAt: string | null };
   status: 'ACTIVE' | 'DELETION_PENDING';
   deletionScheduledAt: string | null;
   createdAt: string;
@@ -50,7 +52,73 @@ export type MePatch = Partial<{
   notifications: Partial<Learner['notifications']>;
   marketingOptIn: boolean;
   completeOnboarding: true;
+  leaderboardHidden: boolean;
+  leaderboardNameNoticeSeen: true;
 }>;
+
+/* ---- leaderboard & gamification (leaderboard-design.md §10 + §13) ---- */
+export type LbPeriod = 'week' | 'month';
+export type LbExam = 'all' | 'ielts' | 'sat';
+export interface LbAverage { exam: OpenExamSlug; status: 'value' | 'new' | 'practicing'; value: number | null }
+export interface LbRow {
+  rank: number;
+  points: number;
+  hidden: boolean;
+  name: string | null;
+  initials: string | null;
+  isMe?: boolean;
+  /** only positive; null = no arrow (never a "down" signal) */
+  rankUp: number | null;
+  averages: LbAverage[];
+}
+export interface LbChampion { rank: 1 | 2 | 3; points: number; hidden: boolean; name: string | null; initials: string | null }
+export type LbVisibility = 'visible' | 'hidden' | 'no_name' | 'name_flagged' | 'removed';
+export interface LbMe {
+  points: number;
+  rank: number | null;
+  band: 'top10' | 'near' | 'far' | 'zero';
+  gapToTop10: number | null;
+  /** band='far': next level by lifetime points; null at the top level */
+  nextLevel: { key: LevelKey; gap: number } | null;
+  visibility: LbVisibility;
+}
+export interface Leaderboard {
+  period: LbPeriod; exam: LbExam;
+  periodStart: string; periodEndsAt: string; serverNow: string;
+  /** first day of the period → "everyone starts from the same line"; rankUp is null that day */
+  newPeriod: boolean;
+  weekRange: { start: string; end: string };
+  monthKey: string;
+  landing: { visible: boolean; defaultPeriod: LbPeriod | null };
+  rows: LbRow[];
+  champions: LbChampion[];
+  championsRange: { start: string; end: string } | null;
+  me?: LbMe;
+}
+export type LevelKey = 'beginner' | 'striver' | 'scholar' | 'star' | 'master';
+export type BadgeKey = 'first_section' | 'first_full' | 'five_full' | 'ielts_half' | 'sat_50' | 'streak_4' | 'week_champ' | 'month_champ';
+/** champion win: YYYY-MM-DD, both days inclusive (§13.7) */
+export interface BadgeAward { periodStart: string; periodEnd: string; at: string }
+export interface Gamification {
+  weekPoints: number; monthPoints: number; lifetimePoints: number;
+  level: { key: LevelKey | null; min: number; nextKey: LevelKey | null; nextMin: number | null };
+  streak: { weeks: number; thisWeekSections: number; need: 2; status: 'none' | 'active' | 'rest' | 'broken'; restAvailable: boolean };
+  badges: Array<{ key: BadgeKey; earnedAt: string | null; seen: boolean; awards?: BadgeAward[] }>;
+  /** §13.10: 0–6 days to the profile exam date */
+  examNear: { daysLeft: number } | null;
+  /** §13.2: one-time "this is how your name appears" banner; closed via PATCH /mock/me { leaderboardNameNoticeSeen } */
+  nameNotice: { pending: boolean; name: string | null };
+  serverNow: string;
+}
+export type ResultPointsStatus = 'awarded' | 'pending' | 'capped' | 'not_genuine' | 'repeat' | 'removed';
+export interface ResultPoints {
+  status: ResultPointsStatus;
+  total: number;
+  items: Array<{ kind: 'section' | 'full_bonus' | 'growth' | 'streak'; sectionKey?: SectionKey; points: number }>;
+  growthPending?: boolean;
+  notGenuineReason?: 'answers' | 'time' | 'words';
+  cappedPoints?: number;
+}
 
 /* ---- §3 catalog ---- */
 export interface CatalogSection {
@@ -214,6 +282,8 @@ export interface MockResultExt {
   reviewExtra: Record<string, { prompt: string; typeLabelKey: string; evidence: { paragraph: string; text: string | null } | null }>;
   share: { token: string; url: string } | null;
   pdfAvailable: boolean;
+  /** leaderboard R1: effort points of this attempt (null = sample / older attempts) */
+  points?: ResultPoints | null;
 }
 export interface ShareCard {
   exam: OpenExamSlug; scoreLabel: string; scaleMax: number; cefr: string | null;
