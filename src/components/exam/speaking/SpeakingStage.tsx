@@ -4,6 +4,7 @@
  * top bar with a "Part n" pill (no clock), banners, segment progress, question / cue card / examiner line,
  * stage strip, note line, and the fixed 56px bottom bar. No global hotkeys (focus hygiene, §1.3).
  */
+import { useEffect } from 'react';
 import { useExam, useT } from '@/lib/exam/engine/context';
 import type { SpeakingStageContent } from '@/lib/exam/speaking-types';
 import { useSpeakingFlow } from '@/lib/exam/speaking/use-speaking-flow';
@@ -20,7 +21,7 @@ import { SpeakingStrip } from './SpeakingStrip';
 import { useFinishStage } from './use-finish-stage';
 
 export function SpeakingStage({ content }: { content: SpeakingStageContent }) {
-  const { s, sectionCfg } = useExam();
+  const { s, sectionCfg, dispatch } = useExam();
   const { t } = useT();
   const f = useSpeakingFlow(content);
   const wave = useWave(f.mic.meter, f.phase === 'recording');
@@ -28,6 +29,8 @@ export function SpeakingStage({ content }: { content: SpeakingStageContent }) {
   const notes = useNotes(s.attemptId);
   const done = useFinishStage();
   const it = f.item;
+  // 401 on an upload: the recordings stay on this device; the player asks to sign in again and re-queues them
+  useEffect(() => { if (q.auth) dispatch({ t: 'FAIL', kind: 'auth' }); }, [q.auth, dispatch]);
   const audioOnly = s.ui.audioOnly || content.promptDisplay === 'audio_only';
   const textNow = content.promptDisplay === 'text' || f.audioDone;
   const recItems = content.items.filter((x) => x.records && x.part === it?.part);
@@ -45,7 +48,7 @@ export function SpeakingStage({ content }: { content: SpeakingStageContent }) {
 
   let body: React.ReactNode = null;
   if (f.phase === 'mic_lost' && f.lost) body = <MicLostCard st={f.lost} onReconnect={() => void f.reconnect()} />;
-  else if (f.phase === 'finishing') body = <DoneCard pending={q.pending} sent={Math.max(0, q.total - q.pending)} total={q.total} offline={q.offline} last={done.last} busy={done.busy} failed={done.failed} onGo={() => void done.go()} />;
+  else if (f.phase === 'finishing') body = <DoneCard pending={q.pending} sent={Math.max(0, q.total - q.pending)} total={q.total} offline={q.offline} stuck={q.stuck} last={done.last} busy={done.busy} failed={done.failed} onGo={() => void done.go()} />;
   else if (it?.kind === 'examiner_line') body = <ExaminerLineCard caps={(it.itemKey === content.items[0]?.itemKey ? 'SPEAKING' : t('speaking.part_n', { n: it.part }).toUpperCase())} text={it.prompt} showText={textNow && !audioOnly} />;
   else if (it && p2) body = <CueCard item={it} caps={`${t('speaking.part_n', { n: 2 }).toUpperCase()} · ${t('speaking.task_card').toUpperCase()}`} listening={listening} />;
   else if (it) {
@@ -69,6 +72,7 @@ export function SpeakingStage({ content }: { content: SpeakingStageContent }) {
           // Part 2 can be taller than 720px: the strip ("I'm ready" / Finish) sticks to the bottom (TL 10-22)
           <div style={{ position: p2 ? 'sticky' : 'static', bottom: 0, zIndex: 2, background: 'var(--x-page)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
             <SpeakingStrip f={f} bars={wave.bars} />
+            {q.stuck && <div style={{ fontSize: 12.5, color: 'var(--x-muted)', textAlign: 'center' }}>{t('banner.recording_queued')}</div>}
           </div>
         )}
         </div>

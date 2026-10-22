@@ -51,3 +51,17 @@ test('privacy sweep: rows untouched for more than 7 days go', () => {
   const rows = [{ id: 'a', updatedAt: now - 8 * day }, { id: 'b', updatedAt: now - 6 * day }, { id: 'c', updatedAt: now }];
   assert.deepEqual(staleIds(rows, now, 7 * day), ['a']);
 });
+
+import { classifyUpload } from './upload-rules';
+
+test('upload answers: no endless retry on 4xx, 401 pauses, 5xx/network retry', () => {
+  assert.equal(classifyUpload({ ok: true }), 'ok');
+  assert.equal(classifyUpload({ ok: false, kind: 'client', status: 409, code: 'ALREADY_RECORDED' }), 'ok');
+  assert.equal(classifyUpload({ ok: false, kind: 'client', status: 409, code: 'STAGE_LOCKED' }), 'drop');
+  assert.equal(classifyUpload({ ok: false, kind: 'client', status: 400, code: 'UNKNOWN_ITEM' }), 'drop');
+  assert.equal(classifyUpload({ ok: false, kind: 'client', status: 404 }), 'drop');
+  assert.equal(classifyUpload({ ok: false, kind: 'client', status: 403, code: 'PREVIEW_ONLY' }), 'drop');
+  assert.equal(classifyUpload({ ok: false, kind: 'auth', status: 401 }), 'auth');
+  assert.equal(classifyUpload({ ok: false, kind: 'network' }), 'network');
+  assert.equal(classifyUpload({ ok: false, kind: 'server', status: 502 }), 'server');
+});

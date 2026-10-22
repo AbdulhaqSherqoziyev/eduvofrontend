@@ -44,14 +44,16 @@ export function MicLostCard({ st, onReconnect }: { st: LostState; onReconnect: (
   );
 }
 
-export function DoneCard({ pending, sent, total, offline, last, busy, failed, onGo }: {
-  pending: number; sent: number; total: number; offline: boolean; last: boolean; busy: boolean; failed: boolean; onGo: () => void;
+export function DoneCard({ pending, sent, total, offline, stuck, last, busy, failed, onGo }: {
+  pending: number; sent: number; total: number; offline: boolean; stuck: boolean; last: boolean; busy: boolean; failed: boolean; onGo: () => void;
 }) {
   const { t, bi } = useT();
-  const waiting = pending > 0;
+  // uploads failing on the server side (3+ tries / stage locked) must not trap the learner: explain and let them go on
+  const waiting = pending > 0 && !stuck;
   return (
     <div style={{ ...card(520), alignItems: 'center', textAlign: 'center', gap: 14 }} role="status" aria-live="polite">
       {waiting && !offline && <><Spinner size={28} /><Bi pair={bi('speaking.uploading', { n: sent, m: total })} size={16} weight={700} center /></>}
+      {pending > 0 && stuck && !offline && <Bi pair={bi('banner.recording_queued')} size={14} weight={500} center />}
       {waiting && offline && (
         <>
           <Bi pair={bi('banner.recording_queued')} size={15} weight={500} center />
