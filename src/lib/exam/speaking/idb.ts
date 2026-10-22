@@ -67,3 +67,24 @@ export async function markRec(id: string, state: RecState): Promise<void> {
   if (!r) return;
   await putRec({ ...r, state, chunks: (state === 'uploaded' || state === 'dropped') && !r.backup ? [] : r.chunks, updatedAt: Date.now() });
 }
+
+/** Every row of an attempt — after the stage is submitted / the result is read / the learner deleted the audio. */
+export async function deleteRecs(attemptId: string): Promise<void> {
+  for (const [k, r] of mem) if (r.attemptId === attemptId) mem.delete(k);
+  const all = (await tx<RecRow[]>('readonly', (s) => s.getAll())) ?? [];
+  const ids = all.filter((r) => r.attemptId === attemptId).map((r) => r.id);
+  if (ids.length) await tx('readwrite', (s) => { ids.forEach((id) => s.delete(id)); });
+}
+
+/** Privacy sweep at boot: audio never outlives `maxAgeMs` on this device (default 7 days — the B2C "later" window). */
+export async function sweepRecs(maxAgeMs = 7 * 864e5): Promise<number> {
+  const all = (await tx<RecRow[]>('readonly', (s) => s.getAll())) ?? [];
+  const old = staleIds(all, Date.now(), maxAgeMs);
+  if (old.length) await tx('readwrite', (s) => { old.forEach((id) => s.delete(id)); });
+  return old.length;
+}
+
+/** Pure part of the sweep (unit-tested): rows untouched for longer than `maxAgeMs`. */
+export function staleIds(rows: Pick<RecRow, 'id' | 'updatedAt'>[], now: number, maxAgeMs: number): string[] {
+  return rows.filter((r) => now - r.updatedAt > maxAgeMs).map((r) => r.id);
+}

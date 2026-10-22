@@ -12,6 +12,7 @@ import { ItemRecorder } from './item-recorder';
 import { patchSpeakingLocal, speakingLocal } from './local';
 import { playPrompt, type Playing } from './prompt-audio';
 import { queueFor } from './queue';
+import { sweepSpeakingDevice } from './cleanup';
 import { resumePoint } from './resume';
 import { useMic } from './use-mic';
 import { useLost } from './use-lost';
@@ -127,6 +128,7 @@ export function useSpeakingFlow(c: SpeakingStageContent) {
   useEffect(() => {
     let dead = false;
     (async () => {
+      sweepSpeakingDevice();
       const m = await mic.open();
       const rp = await resumePoint(id, c, s.spRecorded, s.spRestarted);
       void queueFor(id, (ok) => ctl.dispatch(ok ? { t: 'SYNCED', sent: {}, at: Date.now() } : { t: 'SYNC_FAIL', at: Date.now() })).restore();

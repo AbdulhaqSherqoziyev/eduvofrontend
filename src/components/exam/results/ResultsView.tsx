@@ -17,6 +17,7 @@ import type { ResultResp, ResultSection } from '@/lib/exam/types';
 import { buildSummary } from '@/lib/exam/result-summary';
 import { AiTaskPanel } from './AiTaskPanel';
 import { SpeakingResultPanel } from './speaking/SpeakingResultPanel';
+import { useForgetSpeakingDevice } from '@/lib/exam/speaking/use-forget';
 import { OverallBlock } from './OverallBlock';
 import { ResultSummary } from './ResultSummary';
 import { PassageModal } from './PassageModal';
@@ -61,6 +62,7 @@ export function ResultsView({ attemptId, locale, isPreview = false }: { attemptI
   const partial = r?.status === 'PARTIAL';
   useEffect(() => { if (!partial) return; const iv = window.setInterval(() => void load(), POLL_MS); return () => window.clearInterval(iv); }, [partial, load]);
 
+  useForgetSpeakingDevice(attemptId, r?.speaking);
   if (!r) {
     return (
       <div style={{ padding: 48, textAlign: 'center', color: '#7A8699', fontWeight: 600, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>

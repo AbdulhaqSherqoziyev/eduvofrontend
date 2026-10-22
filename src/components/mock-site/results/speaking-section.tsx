@@ -11,6 +11,8 @@ import { useTranslations } from 'next-intl';
 import { SpeakingResultPanel } from '@/components/exam/results/speaking/SpeakingResultPanel';
 import { t as pt, type Locale } from '@/lib/exam/i18n';
 import type { SpeakingResult } from '@/lib/exam/speaking-types';
+import { forgetSpeakingDevice } from '@/lib/exam/speaking/cleanup';
+import { useForgetSpeakingDevice } from '@/lib/exam/speaking/use-forget';
 import { deleteRecordings } from '@/lib/mock/api/endpoints';
 import { useLang } from '@/lib/mock/hooks/use-lang';
 import { sx } from '@/lib/mock/sx';
@@ -20,6 +22,7 @@ export function B2cSpeaking({ sp, attemptId, sample, onChanged, phone }: {
   sp: SpeakingResult; attemptId?: string; sample?: boolean; onChanged: () => void; phone?: boolean;
 }) {
   const t = useTranslations('results');
+  useForgetSpeakingDevice(sample ? null : attemptId, sp);
   const toast = useToast();
   const { lang, href } = useLang();
   const loc: Locale = lang === 'uz' || lang === 'ru' ? lang : 'en';
@@ -29,7 +32,7 @@ export function B2cSpeaking({ sp, attemptId, sample, onChanged, phone }: {
   const panel = (
     <SpeakingResultPanel
       sp={sp} skin="b2c" mode="b2c" tx={tx} onToast={toast}
-      onDelete={sample || !attemptId ? undefined : async () => { await deleteRecordings(attemptId); onChanged(); }}
+      onDelete={sample || !attemptId ? undefined : async () => { await deleteRecordings(attemptId); await forgetSpeakingDevice(attemptId); onChanged(); }}
       takeHref={!sample && attemptId && sp.status === 'pending' ? href(`/exam/${attemptId}`) : null}
       phoneNote={<div style={sx('padding:12px 14px;border-radius:14px;box-shadow:var(--inset);font-size:14px;font-weight:700;color:var(--ink2)')}>{t('speakingComputer')}</div>}
       noAudioNote={sample ? t('sampleNoAudio') : undefined}

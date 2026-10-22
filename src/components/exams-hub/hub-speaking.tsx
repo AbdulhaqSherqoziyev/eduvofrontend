@@ -9,9 +9,12 @@ import { SpeakingResultPanel } from '@/components/exam/results/speaking/Speaking
 import { hubApi } from '@/lib/exam/hub-api';
 import { t } from '@/lib/exam/i18n';
 import type { SpeakingResult } from '@/lib/exam/speaking-types';
+import { forgetSpeakingDevice } from '@/lib/exam/speaking/cleanup';
+import { useForgetSpeakingDevice } from '@/lib/exam/speaking/use-forget';
 import { playerUrl } from '@/lib/exam/use-start-attempt';
 
 export function HubSpeaking({ id, sp, onChanged }: { id: string; sp: SpeakingResult; onChanged: () => void }) {
+  useForgetSpeakingDevice(id, sp);
   return (
     <NmCard className="rounded-[24px] p-6 max-md:p-4">
       <SpeakingResultPanel
@@ -20,7 +23,7 @@ export function HubSpeaking({ id, sp, onChanged }: { id: string; sp: SpeakingRes
         mode="erp"
         tx={(k, v) => t(k, 'uz', v)}
         takeHref={sp.status === 'pending' ? playerUrl(id) : null}
-        onDelete={async () => { await hubApi.deleteRecordings(id); onChanged(); }}
+        onDelete={async () => { await hubApi.deleteRecordings(id); await forgetSpeakingDevice(id); onChanged(); }}
       />
     </NmCard>
   );
