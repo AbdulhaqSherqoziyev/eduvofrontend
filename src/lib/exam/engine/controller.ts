@@ -171,6 +171,7 @@ export function useExamController(attemptId: string) {
   useEffect(() => {
     if (!sectionActive || !stage?.deadlineAt) return;
     const dl = Date.parse(stage.deadlineAt);
+    // Speaking mic loss holds this; the release follows a server restart/extend that moved deadlineAt (use-lost.ts)
     const iv = window.setInterval(() => { if (!deadlineHold.current && serverNow() >= dl) void timeOut(); }, 250);
     return () => window.clearInterval(iv);
   }, [sectionActive, stage?.deadlineAt, timeOut]);

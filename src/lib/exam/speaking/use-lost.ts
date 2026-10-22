@@ -14,12 +14,21 @@ import { getRec, markRec, putRec, recId, type RecRow } from './idb';
 import type { ItemRecorder } from './item-recorder';
 import { patchSpeakingLocal, speakingLocal } from './local';
 import type { Playing } from './prompt-audio';
+import { afterMicLoss, afterReload } from './lost-rules';
 import { queueFor } from './queue';
 import type { MicError } from './recorder';
 import type { ResumePoint } from './resume';
 import type { SpPhase } from './use-speaking-flow';
 
 export interface LostState { used: boolean; initial: boolean; err: MicError | null; offline: boolean; busy: boolean }
+
+/**
+ * Stage-clock pause after an interruption that does NOT spend the item restart (contract: Bekzod's `extend`
+ * endpoint, pending). Until it lands the client only releases its hold; wire `examApi.extendStage` here.
+ */
+async function extendAfterPause(_attemptId: string, _stageKey: string, _interruptedAt: string | null): Promise<void> {
+  // TODO(contract extend): POST /portal/exams/attempts/:id/stages/:stageKey/extend { interruptedAt } → DEADLINE
+}
 interface Deps {
   phase: SpPhase; item: SpeakingItem | null; idx: number; stageKey: string;
   rec: React.MutableRefObject<ItemRecorder | null>; gen: React.MutableRefObject<number>; playing: React.MutableRefObject<Playing | null>;
@@ -33,6 +42,7 @@ export function useLost() {
   const deps = useRef<Deps | null>(null);
   const at = useRef<string | null>(null);
   const done = useRef(false);
+  const recording = useRef(false);
   const [state, setState] = useState<LostState | null>(null);
   const isUsed = (k: string) => s.spRestarted.includes(k) || speakingLocal(id).restarted.includes(k);
   const markDone = (k: string) => patchSpeakingLocal(id, { done: [...speakingLocal(id).done, k] });
@@ -46,8 +56,10 @@ export function useLost() {
     holdDeadline(true);
     at.current = new Date(serverNow()).toISOString();
     done.current = d.phase === 'saving' || d.phase === 'saved';
-    const used = !!d.item?.records && isUsed(d.item.itemKey);
     const r = d.rec.current;
+    recording.current = !!r && !done.current;
+    // the item's restart only counts when a recording was running (lost-rules.ts)
+    const used = !!d.item?.records && recording.current && isUsed(d.item.itemKey);
     d.rec.current = null;
     if (r && !done.current) {
       if (used) await submitRow(await r.stop('final'));
@@ -93,10 +105,10 @@ export function useLost() {
     setState({ ...state, busy: true, err: null, offline: false });
     const m = await d.mic.open();
     if (!m.ok) { setState({ ...state, busy: false, err: m.err }); return; }
-    let to: number | 'offline' | 'locked' = d.idx;
-    if (state.initial || !d.item?.records) to = d.idx;
-    else if (done.current || state.used) to = d.idx + 1;
-    else to = await restart(d.item, 'mic_lost', d.idx, null);
+    const rule = afterMicLoss({ initial: state.initial, records: !!d.item?.records, saved: done.current, recording: recording.current, used: state.used });
+    let to: number | 'offline' | 'locked' = rule === 'next' ? d.idx + 1 : d.idx;
+    if (rule === 'restart' && d.item) to = await restart(d.item, 'mic_lost', d.idx, null);
+    else await extendAfterPause(id, d.stageKey, at.current);
     if (to === 'offline') { setState({ ...state, busy: false, offline: true }); return; }
     holdDeadline(false);
     setState(null);
@@ -110,8 +122,10 @@ export function useLost() {
     let to = a.rp.idx;
     const cur = a.items[a.rp.idx];
     if (cur && a.rp.interrupted === cur.itemKey) {
-      if (a.rp.used) { if (a.rp.partial) await submitRow(a.rp.partial); to = a.rp.idx + 1; }
-      else { const r = await restart(cur, 'page_reload', a.rp.idx, a.rp.partial); to = typeof r === 'number' ? r : a.rp.idx; if (r === 'locked') { void timeOut(); return; } }
+      const rule = afterReload({ used: a.rp.used, partial: !!a.rp.partial });
+      if (rule === 'next') { await submitRow(a.rp.partial!); to = a.rp.idx + 1; }
+      else if (rule === 'restart') { const r = await restart(cur, 'page_reload', a.rp.idx, a.rp.partial); to = typeof r === 'number' ? r : a.rp.idx; if (r === 'locked') { void timeOut(); return; } }
+      else await extendAfterPause(id, d.stageKey, null);
     }
     if (!a.micOk) { d.setIdx(to); holdDeadline(true); setState({ used: false, initial: true, err: a.micErr, offline: false, busy: false }); d.setPhase('mic_lost'); return; }
     void d.enter(to);

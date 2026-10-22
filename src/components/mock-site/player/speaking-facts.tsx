@@ -16,7 +16,7 @@ export function MockSpeakingFacts({ fact }: { fact: CSSProperties }) {
         {!allDone && <div style={fact}><ListChecks size={17} style={{ marginTop: 3, color: 'var(--ink2)' }} aria-hidden /><span>{t('resume.speaking_from', { n, m: rp.total })}</span></div>}
         <div style={fact}><Save size={17} style={{ marginTop: 3, color: 'var(--ink2)' }} aria-hidden /><span>{t('resume.saved', { n: rp.saved })}</span></div>
       </div>
-      {!allDone && <div style={sx('font-size:13px;font-weight:600;color:var(--mut);line-height:1.5')}>{t(rp.used ? 'resume.speaking_note_used' : 'resume.speaking_note')}</div>}
+      {!allDone && <div style={sx('font-size:13px;font-weight:600;color:var(--mut);line-height:1.5')}>{t(rp.next ? 'resume.speaking_note_used' : 'resume.speaking_note')}</div>}
       {ask && !allDone && <div style={sx('font-size:13px;font-weight:600;color:var(--ink2);line-height:1.5')}>{t('precheck.mic_permission_where')}</div>}
     </>
   );

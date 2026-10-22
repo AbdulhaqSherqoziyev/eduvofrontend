@@ -21,6 +21,6 @@ export function useSpeakingResume() {
   if (!rp) return { rp: null, ask, n: 0, allDone: false };
   // all answers saved: nothing to "continue from"; a used restart moves on to the next question
   const allDone = rp.saved >= rp.total;
-  const n = rp.used ? Math.min(rp.total, rp.questionNo + 1) : rp.questionNo;
+  const n = rp.next ? Math.min(rp.total, rp.questionNo + 1) : rp.questionNo;
   return { rp, ask, n, allDone };
 }

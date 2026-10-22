@@ -19,8 +19,10 @@ export interface ResumePoint {
   questionNo: number;
   /** the item that was in progress; null on a fresh start */
   interrupted: string | null;
-  /** that item already used its one restart → continue from the next item */
+  /** that item already used its one restart */
   used: boolean;
+  /** continue from the next item (restart used AND a partial recording exists — lost-rules.afterReload) */
+  next: boolean;
   /** its partial recording on this device (if any) */
   partial: RecRow | null;
 }
@@ -37,7 +39,7 @@ export async function resumePoint(attemptId: string, c: SpeakingStageContent, se
   const interrupted = cur && (partial || local.cur === cur.itemKey) ? cur.itemKey : null;
   const used = !!interrupted && (serverRestarted.includes(interrupted) || local.restarted.includes(interrupted));
   // replay the examiner lines that introduce this part (e.g. the Part 2 instructions)
-  if (!used) while (idx > 0 && c.items[idx - 1]?.kind === 'examiner_line') idx -= 1;
+  if (!(used && partial)) while (idx > 0 && c.items[idx - 1]?.kind === 'examiner_line') idx -= 1;
   const saved = rec.filter((i) => spent.has(i.itemKey)).length;
-  return { idx, saved, total: rec.length, questionNo: Math.min(rec.length, saved + 1), interrupted, used, partial };
+  return { idx, saved, total: rec.length, questionNo: Math.min(rec.length, saved + 1), interrupted, used, next: used && !!partial, partial };
 }
