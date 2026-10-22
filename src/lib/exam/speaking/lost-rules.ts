@@ -6,6 +6,9 @@
  */
 export type AfterLoss = 'same' | 'next' | 'restart';
 
+/** Contract v1.5 §4a: restarts per Speaking stage (one per item). */
+export const MAX_STAGE_RESTARTS = 2;
+
 /** Microphone lost during the stage. `recording` = a recorder was running (3-2-1 pre-roll or the answer). */
 export function afterMicLoss(a: { initial: boolean; records: boolean; saved: boolean; recording: boolean; used: boolean }): AfterLoss {
   if (a.initial || !a.records) return 'same';

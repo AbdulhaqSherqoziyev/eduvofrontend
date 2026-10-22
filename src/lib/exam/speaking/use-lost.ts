@@ -8,13 +8,12 @@
 import { useCallback, useRef, useState } from 'react';
 import { examApi } from '../api';
 import { useExam } from '../engine/context';
-import { serverNow } from '../engine/clock';
 import type { SpeakingItem } from '../speaking-types';
 import { getRec, markRec, putRec, recId, type RecRow } from './idb';
 import type { ItemRecorder } from './item-recorder';
 import { patchSpeakingLocal, speakingLocal } from './local';
 import type { Playing } from './prompt-audio';
-import { afterMicLoss, afterReload } from './lost-rules';
+import { afterMicLoss, afterReload, MAX_STAGE_RESTARTS } from './lost-rules';
 import { queueFor } from './queue';
 import type { MicError } from './recorder';
 import type { ResumePoint } from './resume';
@@ -33,19 +32,27 @@ export function useLost() {
   const { s, dispatch, holdDeadline, timeOut } = useExam();
   const id = s.attemptId;
   const deps = useRef<Deps | null>(null);
-  const at = useRef<string | null>(null);
   const done = useRef(false);
   const recording = useRef(false);
   const [state, setState] = useState<LostState | null>(null);
-  const isUsed = (k: string) => s.spRestarted.includes(k) || speakingLocal(id).restarted.includes(k);
+  const restartedAll = () => new Set([...s.spRestarted, ...speakingLocal(id).restarted]);
+  // v1.5: one restart per item AND at most 2 per stage (MAX_STAGE_RESTARTS) — past that the item ends with its partial
+  const isUsed = (k: string) => restartedAll().has(k) || restartedAll().size >= MAX_STAGE_RESTARTS;
+  /** "You'll continue from the next question" note after a refused restart (RESTART_LIMIT), ms */
+  const [notice, setNotice] = useState<number | null>(null);
   const markDone = (k: string) => patchSpeakingLocal(id, { done: [...speakingLocal(id).done, k] });
   const submitRow = async (row: RecRow) => { const fin = { ...row, id: recId(id, row.itemKey), backup: false, state: 'final' as const, updatedAt: Date.now() }; await putRec(fin); queueFor(id).add(fin); markDone(row.itemKey); };
 
-  /** §4b (v1.4): server-measured pause of the stage clock (600 s budget, never spends the item restart). */
+  /**
+   * §4b (v1.5): `pause` only marks the stage (StageBrief.pausedAt — no time-out, uploads wait); `resume` adds the
+   * real paused time to the deadline. The upload queue is held in between (409 STAGE_PAUSED otherwise).
+   */
   const pause = (action: 'pause' | 'resume', itemKey?: string) => {
     const sk = deps.current?.stageKey ?? 'speaking';
+    if (action === 'pause') queueFor(id).pauseUploads();
     return examApi.pauseStage(id, sk, { action, itemKey, reason: 'mic_lost' }).then((r) => {
-      if (r.ok && r.data.stage.deadlineAt) dispatch({ t: 'DEADLINE', stageKey: r.data.stage.stageKey, deadlineAt: r.data.stage.deadlineAt });
+      if (r.ok && r.data.stage.deadlineAt) dispatch({ t: 'DEADLINE', stageKey: r.data.stage.stageKey, deadlineAt: r.data.stage.deadlineAt, pausedAt: r.data.stage.pausedAt ?? null });
+      if (action === 'resume' && (r.ok || r.kind !== 'network')) queueFor(id).resumeUploads();
       else if (!r.ok) console.warn('[speaking] pause', action, r.status, r.code); // PAUSE_LIMIT / offline: the client hold still applies
       return r;
     });
@@ -58,7 +65,6 @@ export function useLost() {
     d.playing.current?.stop();
     holdDeadline(true);
     void pause('pause', d.item?.itemKey);
-    at.current = new Date(serverNow()).toISOString();
     done.current = d.phase === 'saving' || d.phase === 'saved';
     const r = d.rec.current;
     recording.current = !!r && !done.current;
@@ -68,10 +74,12 @@ export function useLost() {
     if (r && !done.current) {
       if (used) await submitRow(await r.stop('final'));
       else {
-        // contract v1.2 §4a order: the partial goes up as `kind=backup` BEFORE the restart
+        // v1.5 §4a: pause → (after reconnect) the partial as `kind=backup` → restart. Only a PARTIAL take is a
+        // backup (shorter than the answer time); a take that already reached it is the answer itself.
         const b = await r.stop('final', true);
         await markRec(recId(id, d.item!.itemKey), 'dropped');
-        if (b.chunks.length) queueFor(id).add(b);
+        if (b.durationMs >= d.item!.responseSec * 1000) await submitRow(b);
+        else if (b.chunks.length) queueFor(id).add(b); // held until resume
       }
     }
     setState({ used, initial: false, err: null, offline: false, busy: false });
@@ -80,22 +88,24 @@ export function useLost() {
 
   /** Restart `item` on the server (once); returns where to continue. */
   const restart = async (item: SpeakingItem, reason: 'mic_lost' | 'page_reload', idx: number, partial: RecRow | null): Promise<number | 'offline' | 'locked'> => {
-    if (partial && partial.chunks.length) {
+    if (partial && partial.chunks.length && partial.durationMs < item.responseSec * 1000) {
       const b = { ...partial, id: recId(id, item.itemKey, true), backup: true, state: 'final' as const, updatedAt: Date.now() };
       await putRec(b);
       await markRec(partial.id, 'dropped');
       queueFor(id).add(b);
     }
     await queueFor(id).settled(recId(id, item.itemKey, true), 15_000);
-    const r = await examApi.restartItem(id, deps.current?.stageKey ?? 'speaking', item.itemKey, { reason, ...(at.current && reason === 'mic_lost' ? { interruptedAt: at.current } : {}) });
+    const r = await examApi.restartItem(id, deps.current?.stageKey ?? 'speaking', item.itemKey, { reason }); // v1.5: the pause measures the gap
     if (r.ok) {
       dispatch({ t: 'DEADLINE', stageKey: r.data.stage.stageKey, deadlineAt: r.data.stage.deadlineAt ?? '' });
       patchSpeakingLocal(id, { restarted: [...speakingLocal(id).restarted, item.itemKey] });
       return idx;
     }
     if (r.code === 'RESTART_LIMIT') {
+      // stage limit (2) or budget spent: the partial is this item's answer, the test goes on — blameless note
       const keep = await getRec(recId(id, item.itemKey, true));
       if (keep && keep.chunks.length) await submitRow(keep);
+      setNotice(Date.now());
       return idx + 1;
     }
     if (r.code === 'ALREADY_RECORDED') return idx + 1;
@@ -121,11 +131,13 @@ export function useLost() {
     void d.enter(to);
   }, [state, holdDeadline, timeOut]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const boot = useCallback(async (a: { rp: ResumePoint; micOk: boolean; micErr: MicError | null; items: SpeakingItem[] }) => {
+  const boot = useCallback(async (a: { rp: ResumePoint; micOk: boolean; micErr: MicError | null; items: SpeakingItem[]; pausedAt?: string | null }) => {
     const d = deps.current;
     if (!d) return;
     let to = a.rp.idx;
     const cur = a.items[a.rp.idx];
+    // v1.5: reopened while the stage is paused → resume first (real paused time goes on the deadline, uploads go on)
+    if (a.pausedAt) await pause('resume', cur?.itemKey);
     if (cur && a.rp.interrupted === cur.itemKey) {
       const rule = afterReload({ used: a.rp.used, partial: !!a.rp.partial });
       if (rule === 'next') { await submitRow(a.rp.partial!); to = a.rp.idx + 1; }
@@ -136,5 +148,5 @@ export function useLost() {
   }, [holdDeadline, timeOut]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const bind = (x: Deps) => { deps.current = x; };
-  return { state, trigger, reconnect, boot, bind };
+  return { state, trigger, reconnect, boot, bind, notice };
 }

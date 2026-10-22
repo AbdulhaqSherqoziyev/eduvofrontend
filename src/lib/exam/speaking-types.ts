@@ -31,7 +31,8 @@ export type RecordingKind = 'main' | 'backup';
 export interface RecordingUploadResp { recordingId: string; itemKey: string; kind?: RecordingKind; status: 'UPLOADED' | string; serverNow: Iso }
 export interface ResumeRecording { itemKey: string; stageKey: string; status: 'UPLOADED' | 'REJECTED' | string; durationMs?: number | null; deleted?: boolean }
 export type RestartReason = 'mic_lost' | 'page_reload' | 'device_change' | 'network' | 'other';
-export interface RestartResp { stage: StageBrief; itemKey: string; restartsLeft: 0; extendedBySec: number; serverNow: Iso }
+/** v1.5: at most 2 restarts per stage; restart + pause time share a 600 s budget. */
+export interface RestartResp { stage: StageBrief; itemKey: string; restartsLeft: number; extendedBySec: number; budgetLeftSec?: number; serverNow: Iso }
 /** §4b (v1.4): pause/resume the stage clock (server-measured, 600 s per stage) — does not spend the item restart. */
 export interface PauseResp { stage: StageBrief; paused: boolean; extendedBySec: number; pauseBudgetLeftSec: number; serverNow: Iso }
 

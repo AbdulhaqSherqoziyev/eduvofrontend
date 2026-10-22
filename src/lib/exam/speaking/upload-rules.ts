@@ -7,13 +7,16 @@
  *           the rows stay on the device and go up after the reboot
  * invalid → 422 RECORDING_INVALID (v1.4: unreadable or < 1 s): dropped, the item stays free on the server;
  *           the learner sees a blameless note (never "record again")
+ * paused  → 409 STAGE_PAUSED (v1.5: stage paused after a mic loss): the queue waits for `resume`, nothing is dropped
  * network → wait for `online`, retry
  * server  → 5xx / unknown: retry; after 3 in a row the "saved on this device" note shows (spec §1.6)
  */
-export type UploadVerdict = 'ok' | 'drop' | 'invalid' | 'auth' | 'network' | 'server';
+export type UploadVerdict = 'ok' | 'drop' | 'invalid' | 'paused' | 'auth' | 'network' | 'server';
 
 export function classifyUpload(r: { ok: boolean; kind?: string; status?: number; code?: string }): UploadVerdict {
   if (r.ok || r.code === 'ALREADY_RECORDED') return 'ok';
+  if (r.code === 'STAGE_PAUSED') return 'paused';
+  if (r.code === 'BACKUP_NOT_PARTIAL') return 'drop'; // v1.5: a backup must be partial — log it, the restart goes on
   if (r.code === 'RECORDING_INVALID' || r.status === 422) return 'invalid';
   if (r.kind === 'network') return 'network';
   if (r.kind === 'auth' || r.status === 401) return 'auth';

@@ -18,6 +18,8 @@ export class UploadQueue {
   private listeners = new Set<Listener>();
   private st: QueueState = { pending: 0, total: 0, offline: false, stuck: false, auth: false, invalidAt: null };
   private waiters = new Map<string, Array<() => void>>();
+  /** v1.5: while the stage is paused nothing is sent (the server would answer 409 STAGE_PAUSED). */
+  private hold = false;
   /** §2 `promptMode=audio_only` — sent with the uploads once the learner chose audio-only. */
   audioOnly = false;
   constructor(private attemptId: string, public onNet?: (ok: boolean) => void) {}
@@ -53,6 +55,9 @@ export class UploadQueue {
     });
   }
 
+  pauseUploads() { this.hold = true; }
+  resumeUploads() { this.hold = false; void this.run(); }
+
   add(row: RecRow) {
     if (this.items.some((x) => x.id === row.id)) return;
     this.items.push(row);
@@ -64,7 +69,7 @@ export class UploadQueue {
     if (this.running) return;
     this.running = true;
     let fails = 0;
-    while (this.items.length) {
+    while (this.items.length && !this.hold) {
       const row = this.items[0];
       const file = new Blob(row.chunks, { type: row.mime || 'audio/webm' });
       const r = await examApi.uploadRecording(this.attemptId, { file, stageKey: row.stageKey, itemKey: row.itemKey, durationMs: row.durationMs,
@@ -83,6 +88,7 @@ export class UploadQueue {
         this.set({ pending: this.items.length, offline: false, stuck: !r.ok && r.code === 'STAGE_LOCKED' });
         continue;
       }
+      if (v === 'paused') { this.hold = true; break; } // kept; resumeUploads() after the stage resumes
       if (v === 'auth') { this.set({ auth: true }); break; } // rows stay on the device; restore() after sign-in
       if (v === 'network') {
         this.onNet?.(false);

@@ -78,3 +78,8 @@ test('result polling: fast while grading, slow while Speaking only waits, off wh
 test('upload answers: 422 RECORDING_INVALID is dropped with a note, not retried', () => {
   assert.equal(classifyUpload({ ok: false, kind: 'client', status: 422, code: 'RECORDING_INVALID' }), 'invalid');
 });
+
+test('upload answers v1.5: STAGE_PAUSED waits (never dropped), BACKUP_NOT_PARTIAL is dropped', () => {
+  assert.equal(classifyUpload({ ok: false, kind: 'client', status: 409, code: 'STAGE_PAUSED' }), 'paused');
+  assert.equal(classifyUpload({ ok: false, kind: 'client', status: 422, code: 'BACKUP_NOT_PARTIAL' }), 'drop');
+});

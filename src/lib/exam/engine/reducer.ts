@@ -10,7 +10,7 @@ export type Action =
   | { t: 'ANSWER'; ids: string[]; value: AnswerValue; seq: number }
   | { t: 'SYNCED'; sent: Record<string, number>; at: number }
   | { t: 'SYNC_FAIL'; at: number }
-  | { t: 'DEADLINE'; stageKey: string; deadlineAt: string }
+  | { t: 'DEADLINE'; stageKey: string; deadlineAt: string; /** Speaking v1.5: pause marker from a pause/resume answer */ pausedAt?: string | null }
   | { t: 'FLAG'; id: string }
   | { t: 'GOTO'; partIdx: number; q?: string | null }
   | { t: 'UI'; patch: Partial<UiPrefs> }
@@ -59,7 +59,7 @@ export function reducer(s: ExamState, a: Action): ExamState {
     case 'SYNC_FAIL':
       return s.syncFailSince ? s : { ...s, syncFailSince: a.at, backOnlineAt: null };
     case 'DEADLINE':
-      return { ...s, stages: s.stages.map((x) => (x.stageKey === a.stageKey && x.deadlineAt !== a.deadlineAt ? { ...x, deadlineAt: a.deadlineAt } : x)) };
+      return { ...s, stages: s.stages.map((x) => (x.stageKey !== a.stageKey ? x : a.pausedAt !== undefined ? { ...x, deadlineAt: a.deadlineAt, pausedAt: a.pausedAt } : x.deadlineAt !== a.deadlineAt ? { ...x, deadlineAt: a.deadlineAt } : x)) };
     case 'FLAG':
       return { ...s, flags: { ...s.flags, [a.id]: !s.flags[a.id] } };
     case 'GOTO':

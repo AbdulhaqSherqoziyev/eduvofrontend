@@ -169,10 +169,11 @@ export function useExamController(attemptId: string) {
   useEffect(() => {
     if (!sectionActive || !stage?.deadlineAt) return;
     const dl = Date.parse(stage.deadlineAt);
-    // Speaking mic loss holds this; the release follows a server restart/extend that moved deadlineAt (use-lost.ts)
-    const iv = window.setInterval(() => { if (!deadlineHold.current && serverNow() >= dl) void timeOut(); }, 250);
+    // Speaking: held while the mic is lost / the stage is paused (v1.5 pausedAt); resume brings the new deadline
+    const paused = !!stage.pausedAt;
+    const iv = window.setInterval(() => { if (!deadlineHold.current && !paused && serverNow() >= dl) void timeOut(); }, 250);
     return () => window.clearInterval(iv);
-  }, [sectionActive, stage?.deadlineAt, timeOut]);
+  }, [sectionActive, stage?.deadlineAt, stage?.pausedAt, timeOut]);
 
   const setUi = useCallback((patch: Partial<UiPrefs>) => {
     if (patch.locale) store.saveLocale(patch.locale);

@@ -88,6 +88,8 @@ export interface StageBrief {
   lockedAt: Iso | null;
   audioStartedAt: Iso | null;
   separateSitting: boolean;
+  /** speaking contract v1.5 §4b: the stage is paused (mic/connection lost) — no time-out, uploads wait for `resume`. */
+  pausedAt?: Iso | null;
 }
 
 export interface MediaRef { assetId: string; url: string; kind: 'audio' | 'image'; mime?: string; bytes: number; durationMs: number | null; expiresAt?: Iso }

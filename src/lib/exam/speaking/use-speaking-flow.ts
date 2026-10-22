@@ -153,13 +153,13 @@ export function useSpeakingFlow(c: SpeakingStageContent) {
       const rp = await resumePoint(id, c, s.spRecorded, s.spRestarted);
       void queueFor(id, (ok) => ctl.dispatch(ok ? { t: 'SYNCED', sent: {}, at: Date.now() } : { t: 'SYNC_FAIL', at: Date.now() })).restore();
       if (dead) return;
-      void lost.boot({ rp, micOk: m.ok, micErr: m.ok ? null : m.err, items: c.items });
+      void lost.boot({ rp, micOk: m.ok, micErr: m.ok ? null : m.err, items: c.items, pausedAt: stage?.pausedAt ?? null });
     })();
     return () => { dead = true; gen.current += 1; playing.current?.stop(); void rec.current?.stop('final').then((row) => queueFor(id).add(row)); };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   lost.bind({ phase, item, idx, rec, gen, playing, mic, enter, setPhase, setIdx, stageKey });
-  return { c, idx, item, phase, audioDone, clock, repeatUsed: !!item && repeated.includes(item.itemKey), mic, lost: lost.state, reconnect: lost.reconnect, repeat, finish, ready, recElapsed: () => rec.current?.elapsed() ?? 0 };
+  return { c, idx, item, phase, audioDone, clock, repeatUsed: !!item && repeated.includes(item.itemKey), mic, lost: lost.state, lostNotice: lost.notice, reconnect: lost.reconnect, repeat, finish, ready, recElapsed: () => rec.current?.elapsed() ?? 0 };
 }
 
 export type SpeakingFlow = ReturnType<typeof useSpeakingFlow>;
