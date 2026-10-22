@@ -111,6 +111,7 @@ export const MOCK_ROUTES: readonly string[] = [
 /** Every admin-mock page (src/app/(mock-admin)/ma), as the public pathname on the admin host. */
 export const ADMIN_ROUTES: readonly string[] = [
   "^/?$",
+  "^/analytics/?$",
   "^/attempts/?$",
   "^/audit/?$",
   "^/invite/?$",

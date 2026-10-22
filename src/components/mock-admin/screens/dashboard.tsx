@@ -18,6 +18,8 @@ import { axisLabels, linePath, niceMax } from '../ui/chart';
 import { ErrorState, InlineEmpty } from '../ui/state';
 import { useToast } from '../ui/toast';
 import { useIsMobile } from './hooks';
+import { useAdminShell } from '../shell/context';
+import { AnalyticsLinkCard } from './analytics/link-card';
 
 type PeriodKey = 'today' | '7d' | '30d' | 'custom';
 const PERIODS: Array<{ key: PeriodKey; label: string }> = [
@@ -54,10 +56,13 @@ export function DashboardScreen() {
   const q = period === 'custom' ? { period, from: range.from, to: range.to } : { period };
   const dash = useQuery({ queryKey: ['am', 'dashboard', q], queryFn: () => adminApi.dashboard(q), placeholderData: (p) => p });
   const pending = useQuery({ queryKey: ['am', 'orders', { tab: 'pending_manual', page: 1, pageSize: 10 }], queryFn: () => adminApi.orders({ tab: 'pending_manual', page: 1, pageSize: 10 }) });
+  const { can } = useAdminShell();
+  // phones have no sidebar: the way into Analitika (Abdulhaq, analytics spec Q3 option a)
+  const analyticsLink = mob && can('mock.insights') ? <AnalyticsLinkCard /> : null;
 
   if (dash.isError && !dash.data) {
     const st = dash.error instanceof AdminApiError ? dash.error.status : 0;
-    return (
+    const err = (
       <ErrorState
         title="Ma'lumotlarni yuklab bo'lmadi"
         text={`${st >= 500 ? `Server javob bermadi (${st}). ` : ''}Internet aloqasini tekshiring yoki qayta urinib ko'ring.`}
@@ -65,10 +70,13 @@ export function DashboardScreen() {
         retrying={dash.isFetching}
       />
     );
+    if (analyticsLink) return <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>{analyticsLink}{err}</div>;
+    return err;
   }
   if (!dash.data) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }} aria-busy="true" aria-label="Yuklanmoqda">
+        {analyticsLink}
         <div style={{ height: 260, borderRadius: 24, ...SHIMMER }} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 20 }}>
           {[1, 2, 3, 4, 5].map((i) => <div key={i} style={{ height: 120, borderRadius: 20, ...SHIMMER }} />)}
@@ -80,6 +88,7 @@ export function DashboardScreen() {
   const d = dash.data;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {analyticsLink}
       <PendingSection q={pending} mob={mob} />
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>

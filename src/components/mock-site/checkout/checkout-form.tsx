@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { trackMockEvent } from '@/components/analytics/mock-tracker';
 import { MockApiError } from '@/lib/mock/api/client';
 import { useCatalog, useCurrency } from '@/lib/mock/catalog';
 import { cancelOrder, createOrder, getMethods, getOrder, getQuote, resendVerification } from '@/lib/mock/api/endpoints';
@@ -85,6 +86,8 @@ export function CheckoutForm() {
       }).catch(() => setBanner({ kind: 'info', text: t('paddle.closed') }));
     },
   });
+  // the final price block is on screen for the first time (admin analytics "Narx hisoblandi")
+  useEffect(() => { if (quote) trackMockEvent('checkout_quote_view'); }, [quote]);
   useEffect(() => { if (paddle.state === 'error') setBanner({ kind: 'err', text: t('paddle.loadErr') }); }, [paddle.state, t]);
 
   useEffect(() => {
@@ -164,7 +167,7 @@ export function CheckoutForm() {
     const prev = paddleOrder.current;
     if (prev && !free && paddleGroup) {
       // same order still open at Paddle → reopen its overlay instead of creating another order
-      if (prev.key === key && prev.order.next?.kind === 'paddle_overlay') { void paddle.open(prev.order.next.clientToken, prev.order.next.transactionId); return; }
+      if (prev.key === key && prev.order.next?.kind === 'paddle_overlay') { void paddle.open(prev.order.next.clientToken, prev.order.next.transactionId, prev.order.id); return; }
       void cancelOrder(prev.order.id).catch(() => undefined); // plan/currency/promo changed: free the pending slot
       paddleOrder.current = null;
       idem.current = uuid();
@@ -176,7 +179,7 @@ export function CheckoutForm() {
       if (next?.kind === 'paddle_overlay' && r.order.status === 'PENDING') {
         paddleOrder.current = { order: r.order, key };
         setBusy(false);
-        void paddle.open(next.clientToken, next.transactionId);
+        void paddle.open(next.clientToken, next.transactionId, r.order.id);
         return;
       }
       router.push(orderUrl(r.order.id));

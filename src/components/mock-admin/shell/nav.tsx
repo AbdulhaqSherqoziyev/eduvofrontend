@@ -1,7 +1,7 @@
 /** Sidebar items of admin-mock.eduvo.uz (design/mock-admin/AdminSidebar.dc.html, same order, labels and icons). */
 import type { Perm } from '@/lib/admin-mock/types';
 
-export type AdminNavKey = 'dash' | 'orders' | 'learners' | 'attempts' | 'tests' | 'prices' | 'promo' | 'tickets' | 'stats' | 'audit' | 'settings';
+export type AdminNavKey = 'dash' | 'orders' | 'learners' | 'attempts' | 'tests' | 'prices' | 'promo' | 'tickets' | 'stats' | 'analytics' | 'audit' | 'settings';
 
 export interface AdminNavItem {
   key: AdminNavKey;
@@ -25,6 +25,7 @@ export const ADMIN_NAV: readonly AdminNavItem[] = [
   { key: 'promo', perm: 'mock.pricing', label: 'Promo-kodlar', href: '/promo', d: 'M3 12V4h8l10 10-8 8zM7.5 7.5h.01' },
   { key: 'tickets', perm: 'mock.manage', label: 'Murojaatlar', href: '/tickets', d: 'M4 5h16v11H8l-4 4z', tone: 'blue' },
   { key: 'stats', perm: 'mock.insights', label: 'Statistika', href: '/stats', d: 'M4 20V10M10 20V4M16 20v-7M22 20H2' },
+  { key: 'analytics', perm: 'mock.insights', label: 'Analitika', href: '/analytics', d: 'M3 12h4l3-8 4 16 3-8h4' },
   { key: 'audit', perm: 'mock.insights', label: 'Audit jurnali', href: '/audit', d: 'M12 8v4l3 2M12 21a9 9 0 100-18 9 9 0 000 18' },
   {
     key: 'settings', perm: 'mock.settings', label: 'Sozlamalar', href: '/settings',

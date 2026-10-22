@@ -92,7 +92,7 @@ export function OrderView({ orderId }: { orderId: string }) {
     onClosed: () => { void fetchOrder(); },
   });
   const overlayOpen = paddle.state === 'open' || paddle.state === 'opening';
-  const reopen = () => { if (order?.next?.kind === 'paddle_overlay') void paddle.open(order.next.clientToken, order.next.transactionId); };
+  const reopen = () => { if (order?.next?.kind === 'paddle_overlay') void paddle.open(order.next.clientToken, order.next.transactionId, order.id); };
 
   const slow = useDelayedFlag(!order && !err);
 

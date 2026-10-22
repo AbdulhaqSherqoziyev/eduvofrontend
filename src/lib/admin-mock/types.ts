@@ -250,3 +250,118 @@ export type AuditItem = MockAdminAction & {
   note: string | null; ip?: string | null;
 };
 export type AuditGroup = 'payments' | 'credits' | 'learners' | 'catalog' | 'content' | 'tickets' | 'settings' | 'auth' | 'alerts';
+
+/* ---------- analytics (.claude/specs/mock-admin/analytics-api-contract.md v1.0) ---------- */
+/** A count the server may mask: tracker cuts with 1–4 come as "<5" (contract §0.6). */
+export type Cnt = number | '<5';
+/** numerator / denominator; the UI shows a percent only when den ≥ 20 (design §1.4) */
+export interface Ratio<N = Cnt> { num: N; den: N }
+export type NullReason = 'retention' | 'not_tracking' | 'no_data' | 'db_error' | 'small';
+export interface Metric<V = number> { cur: V | null; prev: V | null; curReason?: NullReason; prevReason?: NullReason }
+export type AnSite = 'mock' | 'landing';
+export type AnRangeKey = 'today' | '7d' | '28d' | '30d' | '90d';
+export interface MaPeriod {
+  range: AnRangeKey | 'custom'; from: string; to: string; fromUtc: string; cutoff: string;
+  hours: number; days: number; dayAligned: boolean; partialNow: boolean; today: string; currentHour: number;
+  prev: { from: string; to: string; cutoff: string };
+  retentionLimited: boolean; prevRetentionLimited: boolean; tz: 'Asia/Tashkent';
+}
+/** every answer carries serverNow (contract §0.1) */
+interface AnBase { serverNow?: string }
+
+export interface AnRecent {
+  at: string; site: AnSite; path: string; label: string | null; event: string | null;
+  deviceLabel: string; browserLabel: string; countryLabel: string; sourceLabel: string;
+}
+export interface AnLiveRes extends AnBase {
+  updatedAt: string;
+  trackingSince: string | null;
+  site: { guests: number; learners: number };
+  exam: { active: number | null; byExam: Array<{ exam: string; label: string; n: number }>; dbError?: boolean };
+  /** null = database block failed */
+  paidToday: number | null;
+  landing: { eduvo: number; mockHome: number };
+  usualThisHour: number | null;
+  funnelToday: { people: number | null; signups: number | null; cohortPayers: number | null; dbError: boolean };
+  pages: Array<{ site: AnSite; path: string; label: string | null; n: Cnt }>;
+  sources: Array<{ key: string; label: string; n: Cnt }>;
+  recent: AnRecent[];
+  tracker: Array<{ site: AnSite; trackingSince: string | null; lastEventAt: string | null; silent: boolean; silentHours: number | null; thresholdHours: number }>;
+}
+
+export interface AnTrendPoint { t: string; people: number | null; visits: number | null }
+export interface AnOverviewRes extends AnBase {
+  period: MaPeriod;
+  trackingSince: string | null;
+  kpis: { visits: Metric; people: Metric; medianVisitTimeSec: Metric; singlePage: Metric<Ratio<number>> };
+  trend: { bucket: 'hour' | 'day' | 'week'; points: AnTrendPoint[]; prevPoints: AnTrendPoint[] | null };
+  topSources: Array<{ key: string; label: string; people: Cnt; share: number | null }>;
+  topSourcesTotal: number;
+  topPages: Array<{ path: string; label: string | null; views: Cnt; people: Cnt }>;
+  topPagesTotal: number;
+  botFiltered: number;
+}
+
+export interface AnPageRow {
+  path: string; label: string | null;
+  views?: Cnt; people?: Cnt; medianPageTimeSec?: number | null; medianReason?: NullReason; entries?: Cnt; exits?: Cnt;
+  singlePage?: Ratio; medianVisitTimeSec?: number | null; exitRate?: Ratio;
+}
+export interface AnPagesRes extends AnBase {
+  period: MaPeriod; trackingSince: string | null; view: 'all' | 'entry' | 'exit';
+  languages: string[]; rows: AnPageRow[]; total: number; nextCursor: string | null; botFiltered?: number;
+}
+
+export interface AnSourceRow { key: string; label: string; visits: Cnt; people: Cnt; singlePage: Ratio; pricingPeople: Cnt }
+export interface AnCampaignRow {
+  campaign: string; source: string | null; medium: string | null; content: string | null;
+  visits: Cnt; people: Cnt; medianVisitTimeSec: number | null; medianReason?: NullReason;
+}
+export interface AnSourcesRes extends AnBase {
+  period: MaPeriod; trackingSince: string | null; view: 'source' | 'campaign';
+  rows: Array<AnSourceRow | AnCampaignRow>; total: number; nextCursor: string | null; botFiltered?: number;
+}
+
+export interface AnGeoList<R> { rows: R[]; total: number; nextCursor: string | null }
+export interface AnCountryRow { code: string | null; label: string; people: Cnt; share: number | null }
+export interface AnCityRow { city: string | null; country: string | null; countryLabel: string; people: Cnt }
+export interface AnGeoRes extends AnBase {
+  period: MaPeriod; trackingSince: string | null;
+  countries: AnGeoList<AnCountryRow> | null; cities: AnGeoList<AnCityRow> | null; botFiltered?: number;
+}
+
+export type AnHourMetric = 'visits' | 'exam_starts' | 'paid';
+export interface AnHoursRes extends AnBase {
+  period: MaPeriod; metric: AnHourMetric; trackingSince: string | null;
+  cells: number[][]; max: number; peak: { dow: number; hour: number; n: number } | null; unevenWeekdays: boolean; botFiltered?: number;
+}
+export interface AnHoursDayRes extends AnBase {
+  date: string; metric: AnHourMetric; bars: Array<number | null>; isToday: boolean; currentHour: number | null;
+  trackingSince: string | null; beforeTracking: boolean;
+}
+
+export interface AnExamRow { exam: string; label: string; started: number; completed: number; notCompleted: number; inProgress: number }
+export interface AnExamsRes extends AnBase {
+  period: MaPeriod; type: 'full' | 'section'; pay: 'all' | 'free' | 'paid';
+  exams: AnExamRow[];
+  selected: string;
+  stops: {
+    exam: string; label: string;
+    stages: Array<{ key: string; label: string; order: number; n: number }>;
+    notStarted: number; notCompleted: number; completed: number; inProgress: number;
+    separateMissed: Array<{ key: string; label: string; n: number }>;
+  } | null;
+  dbError: boolean;
+}
+
+export interface AnPaymentsRes extends AnBase {
+  period: MaPeriod; trackingSince: string | null;
+  site: { pricing: number | null; checkout: Cnt | null; quote: Cnt | null; quoteSince: string | null };
+  manual: { created: number; claimed: number; paid: number; pending: number; expiredOrCancelled: number; failed: number; refunded: number } | null;
+  paddle: {
+    enabled: boolean; created: number; opened: number | null; paid: number; closedUnpaid: number | null; error: number;
+    pending: number; expiredOrCancelled: number; refunded: number; eventsSince: string | null;
+  } | null;
+  paddleErrors: Array<{ code: string; label: string; n: number }>;
+  dbError: boolean;
+}

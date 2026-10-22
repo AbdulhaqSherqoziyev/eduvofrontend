@@ -148,3 +148,48 @@ export function deltaPp(cur: number, prev: number): { text: string; trend: 'up' 
   const d = Math.round((cur - prev) * 1000) / 10;
   return { text: `${d > 0 ? '+' : d < 0 ? '−' : ''}${Math.abs(d).toFixed(1)} pp`, trend: d > 0 ? 'up' : d < 0 ? 'down' : 'flat' };
 }
+
+/* ---------- analytics (analytics-design.md §1.3–§1.5, §14.2) ---------- */
+type AnCnt = number | '<5';
+
+/** masked count → "<5" / "12 480" / "—" (null) */
+export const cnt = (v: AnCnt | null | undefined) => (v === null || v === undefined ? '—' : v === '<5' ? '<5' : groupNum(v));
+/** numeric value of a count for widths/sorting; "<5" → null */
+export const cntNum = (v: AnCnt | null | undefined) => (typeof v === 'number' ? v : null);
+
+/**
+ * §1.4 + §18.6: a percent only when the denominator is a number ≥ 20 and the numerator is a number;
+ * otherwise "N / M". `rate` is null when no percent may be shown.
+ */
+export function ratioView(num: AnCnt | null | undefined, den: AnCnt | null | undefined): { pct: string | null; frac: string; rate: number | null } {
+  const frac = `${cnt(num)} / ${cnt(den)}`;
+  if (typeof num === 'number' && typeof den === 'number' && den >= 20) {
+    const rate = num / den;
+    return { pct: pct(rate), frac, rate };
+  }
+  return { pct: null, frac, rate: null };
+}
+
+const pad2 = (n: number) => String(n).padStart(2, '0');
+/** 14 → "14:00–15:00" (23 → "23:00–24:00") */
+export const hourRange = (h: number) => `${pad2(h)}:00–${pad2(h + 1)}:00`;
+export const hourLabel = (h: number) => `${pad2(h)}:00`;
+
+/** Monday-first weekday names (§1.5) */
+export const WEEKDAY_SHORT = ['Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh', 'Ya'];
+export const WEEKDAY_LONG = ['dushanba', 'seshanba', 'chorshanba', 'payshanba', 'juma', 'shanba', 'yakshanba'];
+/** "YYYY-MM-DD" → 0 = Monday … 6 = Sunday */
+export const dowOf = (day: string) => (new Date(`${day}T12:00:00Z`).getUTCDay() + 6) % 7;
+/** "YYYY-MM-DD" → "seshanba" / "Se" */
+export const weekday = (day: string, kind: 'short' | 'long' = 'long') => (kind === 'short' ? WEEKDAY_SHORT : WEEKDAY_LONG)[dowOf(day)];
+
+/** Tashkent wall clock of an instant: "14:32:10" */
+export function hms(iso: string | Date) {
+  const d = typeof iso === 'string' ? new Date(iso) : iso;
+  return new Intl.DateTimeFormat('en-GB', { timeZone: TZ, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(d);
+}
+/** Tashkent hour (0–23) of an instant */
+export function tashkentHour(d: Date | string = new Date()) {
+  const x = typeof d === 'string' ? new Date(d) : d;
+  return Number(new Intl.DateTimeFormat('en-GB', { timeZone: TZ, hour: '2-digit', hourCycle: 'h23' }).format(x));
+}

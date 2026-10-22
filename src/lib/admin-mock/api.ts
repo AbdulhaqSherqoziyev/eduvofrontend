@@ -6,6 +6,7 @@ import type {
   AuditItem, Badges, DashboardRes, EnrollRes, ImportStage, InsightsRes, InviteInfo, LearnerDetailRes, LedgerRow, LoginRes, MarkPaidRes,
   MockRole, NotificationsRes, OrderDetailRes, OrdersRes, Page, PriceChangeRes, ProductItem, ProductsRes, SearchRes, SettingsRes,
   TestFamily, TestItem, TicketDetailRes, TicketMessage, TicketsRes, VerifyRes, AdminExamCredits, ExamSlug, AdminOrderRow,
+  AnExamsRes, AnGeoRes, AnHoursDayRes, AnHoursRes, AnLiveRes, AnOverviewRes, AnPagesRes, AnPaymentsRes, AnSourcesRes,
 } from './types';
 
 const post = <T>(path: string, body?: unknown, idem?: string, auth?: boolean) => req<T>(path, { method: 'POST', body: body ?? {}, idem, auth });
@@ -85,6 +86,17 @@ export const adminApi = {
 
   /* §10 */
   insights: (scoreExam: 'ielts' | 'sat') => req<InsightsRes>('/stats/insights', { query: { scoreExam } }),
+
+  /* analytics (analytics-design.md §12.2): `q` = { range } or { from, to } + tab filters */
+  anLive: () => req<AnLiveRes>('/analytics/live'),
+  anOverview: (q: Query) => req<AnOverviewRes>('/analytics/overview', { query: q }),
+  anPages: (q: Query) => req<AnPagesRes>('/analytics/pages', { query: q }),
+  anSources: (q: Query) => req<AnSourcesRes>('/analytics/sources', { query: q }),
+  anGeo: (q: Query) => req<AnGeoRes>('/analytics/geo', { query: q }),
+  anHours: (q: Query) => req<AnHoursRes>('/analytics/hours', { query: q }),
+  anHoursDay: (q: Query) => req<AnHoursDayRes>('/analytics/hours/day', { query: q }),
+  anExams: (q: Query) => req<AnExamsRes>('/analytics/exams', { query: q }),
+  anPayments: (q: Query) => req<AnPaymentsRes>('/analytics/payments', { query: q }),
 
   /* §11 tickets */
   tickets: (q: Query) => req<TicketsRes>('/support-tickets', { query: q }),

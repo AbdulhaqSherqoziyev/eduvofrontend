@@ -98,6 +98,14 @@ export const createOrder = (body: { sku: string; currency: Currency; promoCode?:
   api<{ order: Order; serverNow: string }>('/mock/orders', { method: 'POST', body });
 export const getOrder = (id: string, signal?: AbortSignal) =>
   api<{ order: Order; credits: ExamCredits; serverNow: string }>(`/mock/orders/${encodeURIComponent(id)}`, { signal });
+/**
+ * Paddle overlay step for the admin analytics (analytics-api-contract §10.3): only that the window opened,
+ * closed or failed (+ Paddle's short code) — no card data, no email. Fire-and-forget: errors are swallowed.
+ */
+export function postCheckoutEvent(orderId: string, kind: 'paddle_open' | 'paddle_close' | 'paddle_error', code?: string) {
+  const body = kind === 'paddle_error' && code && /^[A-Za-z0-9_.:-]{1,60}$/.test(code) ? { kind, code } : { kind };
+  void api<{ recorded: boolean }>(`/mock/orders/${encodeURIComponent(orderId)}/checkout-event`, { method: 'POST', body }).catch(() => undefined);
+}
 export const cancelOrder = (id: string) => api<{ order: Order }>(`/mock/orders/${encodeURIComponent(id)}/cancel`, { method: 'POST' });
 /* ---- §9 O5, §11 U1–U4 (v0.5) ---- */
 export const listOrders = (cursor?: string) => api<{ items: Order[]; nextCursor: string | null; serverNow: string }>(`/mock/orders?limit=20${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`);
