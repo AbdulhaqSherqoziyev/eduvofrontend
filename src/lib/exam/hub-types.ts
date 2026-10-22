@@ -32,6 +32,8 @@ export interface HubExam {
   bestOverall: number | null;
   lastAttemptAt: Iso | null;
   activeAttemptId: string | null;
+  /** speaking contract v1.4: a finished attempt whose separate-sitting Speaking can still be taken. */
+  speakingLater?: { attemptId: string; sectionKey: string; availableUntil: Iso } | null;
   /** Optional launch flag; missing → `COMING_SOON` fallback. */
   comingSoon?: boolean;
 }

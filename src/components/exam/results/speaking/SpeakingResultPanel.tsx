@@ -66,7 +66,7 @@ export function SpeakingResultPanel({ sp, skin, mode, tx, loading, onDelete, onT
     return <Ctx.Provider value={{ sp: {} as SpeakingResult, skin: s, tx, mode, playItem, playing: null }}><Skeleton /></Ctx.Provider>;
   }
   const grading = ['received', 'transcribing', 'scoring'].includes(sp.status);
-  const noScore = ['no_response', 'too_short', 'needs_review', 'not_graded'].includes(sp.status);
+  const noScore = ['no_response', 'too_short', 'needs_review', 'not_graded', 'not_taken'].includes(sp.status);
   const learner = mode === 'erp' || mode === 'b2c';
 
   return (
@@ -86,8 +86,8 @@ export function SpeakingResultPanel({ sp, skin, mode, tx, loading, onDelete, onT
           </>
         )}
         {sp.status === 'ready' && !sp.criteria && sp.teacherReviewed && <Feedback />}
-        {sp.status !== 'pending' && !hideRecordings && <Recordings openParts={openParts} setOpenParts={setOpenParts} />}
-        {learner && onDelete && sp.status !== 'pending' && !noAudioNote && (
+        {sp.status !== 'pending' && sp.status !== 'not_taken' && !hideRecordings && <Recordings openParts={openParts} setOpenParts={setOpenParts} />}
+        {learner && onDelete && sp.status !== 'pending' && sp.status !== 'not_taken' && !noAudioNote && (
           <DeleteAudio onDelete={onDelete} onDone={() => (onToast ? onToast(tx('results.audio_deleted')) : setToast(tx('results.audio_deleted')))} />
         )}
         {learner && sp.status !== 'pending' && (

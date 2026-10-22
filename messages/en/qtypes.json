@@ -44,6 +44,8 @@
     "writing_criterion": "Writing {task}: work on {criterion}.",
     "section_focus": "Focus on {section}: your band is {gap} below your target.",
     "generic": "Review the questions you got wrong and read each explanation.",
-    "section_focus_sat": "Focus on {section}: your score is {gap} points below your target."
+    "section_focus_sat": "Focus on {section}: your score is {gap} points below your target.",
+    "speaking_criterion": "Speaking: work on {criterion}.",
+    "speaking_practice": "Practise Speaking: talk for 2 minutes a day on one topic, record yourself and listen back."
   }
 }

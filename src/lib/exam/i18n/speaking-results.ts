@@ -36,6 +36,8 @@ export const SPEAKING_RESULT_TEXT = {
   'results.speaking_not_taken': ['Speaking not taken yet', 'Speaking hali topshirilmagan'],
   'results.speaking_take_now': ['Take Speaking', "Speaking'ni topshirish"],
   'results.speaking_deadline': ['Available until {date}', '{date} gacha'],
+  // contract v1.4 `not_taken` (7-day window over) — for Sevara's review
+  'results.speaking_expired': ["Speaking wasn't taken within 7 days, so it has no score.", "Speaking 7 kun ichida topshirilmadi, shuning uchun ball yo'q."],
 } satisfies Record<string, [string, string]>;
 
 export const SPEAKING_RESULT_RU: Partial<Record<keyof typeof SPEAKING_RESULT_TEXT, string>> = {
@@ -72,4 +74,5 @@ export const SPEAKING_RESULT_RU: Partial<Record<keyof typeof SPEAKING_RESULT_TEX
   'results.speaking_not_taken': 'Speaking ещё не сдан',
   'results.speaking_take_now': 'Сдать Speaking',
   'results.speaking_deadline': 'Доступно до {date}',
+  'results.speaking_expired': 'Speaking не был сдан в течение 7 дней, поэтому балла нет.',
 };

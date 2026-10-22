@@ -51,7 +51,11 @@
     "TR": "Task Response",
     "CC": "Coherence and Cohesion",
     "LR": "Lexical Resource",
-    "GRA": "Grammatical Range and Accuracy"
+    "GRA": "Grammatical Range and Accuracy",
+    "fluency_coherence": "Fluency & Coherence",
+    "lexical_resource": "Lexical Resource",
+    "grammatical_range_accuracy": "Grammatical Range & Accuracy",
+    "pronunciation": "Pronunciation"
   },
   "review": "Разбор вопросов",
   "all": "Все",

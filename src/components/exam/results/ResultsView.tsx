@@ -30,6 +30,7 @@ const isAiSection = (key: string) => key === 'writing' || key === 'speaking';
 
 function sub(sec: ResultSection, locale: Locale, family: string, spStatus?: string): string {
   if (sec.key === 'speaking' && spStatus === 'pending') return t('results.speaking_not_taken', locale);
+  if (sec.key === 'speaking' && spStatus === 'not_taken') return t('results.speaking_expired', locale);
   if (sec.status === 'GRADING' || sec.status === 'PENDING') return t('results.ws_in_progress', locale);
   if (sec.status === 'NEEDS_HUMAN') return t('results.human_review', locale);
   if (sec.status === 'NOT_TAKEN') return '—';

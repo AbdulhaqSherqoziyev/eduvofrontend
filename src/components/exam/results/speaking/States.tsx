@@ -3,7 +3,7 @@
  * Non-ready states of the Speaking block (spec §2.3): grading stepper (4 server steps, no fake
  * progress), teacher review, no_response / too_short (no band, no "0"), B2C not graded, not taken yet.
  */
-import { Check, Hourglass, MicOff, UserCheck } from 'lucide-react';
+import { Check, Clock, Hourglass, MicOff, UserCheck } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useSpeaking } from './context';
 
@@ -53,6 +53,7 @@ export function NoScore({ b2c }: { b2c?: B2cExtras }) {
   const line = (t: string) => <div style={{ fontSize: 13.5, color: s.sub, lineHeight: 1.55 }}>{t}</div>;
   const unfair = b2c?.unfairHref ? <a href={b2c.unfairHref} style={{ fontSize: 13.5, fontWeight: 700, color: s.accent }}>{tx('results.unfair')}</a> : null;
   if (sp.status === 'needs_review') return <Notice icon={<UserCheck size={20} aria-hidden />} title={tx('results.human_review')} />;
+  if (sp.status === 'not_taken') return <Notice icon={<Clock size={20} aria-hidden />} title={tx('results.speaking_expired')} />;
   if (sp.status === 'not_graded') return <Notice icon={<MicOff size={20} aria-hidden />} title={b2c?.notGradedText ?? ''} />;
   const tooShort = sp.status === 'too_short';
   return (

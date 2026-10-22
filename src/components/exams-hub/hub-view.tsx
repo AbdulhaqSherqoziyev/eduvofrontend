@@ -8,6 +8,7 @@ import { ht } from '@/lib/exam/i18n/hub';
 import { readCodeSession } from '@/lib/exam/session';
 import { useCanRunPlayer, useHub, useHubNow, useProgress } from '@/lib/exam/use-hub';
 import { AssignmentStrips } from './assignment-strip';
+import { SpeakingLaterCards } from './speaking-later';
 import { ExamCard, examSoon } from './exam-card';
 import { Delayed, HubError, NoExams, SkeletonBlock } from './hub-states';
 import { OpenOnComputer } from './open-on-computer';
@@ -56,6 +57,7 @@ export function HubView() {
 
   return (
     <>
+      <SpeakingLaterCards exams={exams} now={now} />
       {live.length ? <AssignmentStrips list={live} exams={exams} now={now} /> : null}
       {wide === false && live.length ? <OpenOnComputer narrow={window.innerWidth >= 1024} /> : null}
       {families.length > 1 ? (

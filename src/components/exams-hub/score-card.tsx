@@ -75,6 +75,7 @@ export function ScoreCard({ s, family, cert, selected, onSelect, speakingStatus 
       {ready ? <Distance s={s} family={family} cert={cert} /> : null}
       {grading ? <Pending s={s} /> : null}
       {s.key === 'speaking' && speakingStatus === 'pending' ? <div className="text-[12.5px] font-semibold text-muted">{ht('results.speaking_not_taken')}</div> : null}
+      {s.key === 'speaking' && speakingStatus === 'not_taken' ? <div className="text-[12.5px] font-semibold text-muted">{ht('results.speaking_expired')}</div> : null}
     </button>
   );
 }

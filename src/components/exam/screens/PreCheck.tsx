@@ -30,7 +30,7 @@ export function PreCheck() {
   const needAudio = sections.some((sec) => sec.stages.some((st) => st.audio)) || !!cfg.precheck?.includes('audio');
   // "Take Speaking later" (spec §1.1-e): full mock + separate sitting allowed (B2C always) → no mic needed today
   const [later, setLater] = useState(() => speakingLater(s.attemptId));
-  const canLater = (sec: { separate_sitting?: boolean }) => s.attempt?.mode === 'full' && (!!host.b2c || !!sec.separate_sitting);
+  const canLater = (sec: { key: string; separate_sitting?: boolean }) => s.attempt?.mode === 'full' && (!!host.b2c || !!sec.separate_sitting || s.stages.some((x) => x.sectionKey === sec.key && x.separateSitting));
   const needMic = sections.some((sec) => sec.stages.some((st) => st.kind === 'speaking') && !(later && canLater(sec)));
   const [hp, setHp] = useState<CheckStatus>('not_checked');
   const [mic, setMic] = useState<CheckStatus>('not_checked');

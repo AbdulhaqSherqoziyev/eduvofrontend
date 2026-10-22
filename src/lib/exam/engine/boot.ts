@@ -42,7 +42,9 @@ export function decideBoot(d: AttemptState, initialLocale?: Locale): BootDecisio
   const resumeSaved = cur ? Object.entries(answers).filter(([qid, a]) => isAnswered(a.v) && (d.answers.find((x) => x.questionId === qid)?.stageKey ?? cur.stageKey) === cur.stageKey).length : 0;
   const base = { answers, ui, timeEnded: null as string | null, resumeSaved };
 
-  if (d.attempt.status !== 'ACTIVE' || (!cur && !next)) return { ...base, phase: 'complete', stageKey: null, prevSubmitted: null };
+  // v1.4: L/R/W done → the attempt is COMPLETED, yet its separate-sitting Speaking may still be taken (7 days)
+  const laterOpen = d.attempt.status === 'COMPLETED' && later.some((s) => s.status === 'PENDING' || s.status === 'IN_PROGRESS');
+  if ((d.attempt.status !== 'ACTIVE' && !laterOpen) || (!cur && !next)) return { ...base, phase: 'complete', stageKey: null, prevSubmitted: null };
   if (cur) return { ...base, phase: 'welcome', stageKey: cur.stageKey, prevSubmitted: null };
 
   // The stage this device was working on was locked by the server while away (G8 resume.time_ended).

@@ -7,6 +7,7 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { useExamHost } from '@/components/exam/host';
+import { serverNow } from '@/lib/exam/engine/clock';
 import { useExam, useT } from '@/lib/exam/engine/context';
 import { canRecord } from '@/lib/exam/speaking/recorder';
 import { setSpeakingLater, speakingLater } from '@/lib/exam/speaking/local';
@@ -17,8 +18,14 @@ import { PrivacyModal } from './PrivacyModal';
 import { StickyFooter } from './StickyFooter';
 import { TrialRecording } from './TrialRecording';
 
+/** ERP "until {date}": the separate sitting stays open 7 days after L/R/W (contract v1.4 `separate_sitting_days`). */
+function laterUntil(): string {
+  const d = new Date(serverNow() + 7 * 864e5);
+  return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
+}
+
 export function SpeakingIntro() {
-  const { s, sectionCfg, media, beginStage } = useExam();
+  const { s, stage, sectionCfg, media, beginStage } = useExam();
   const host = useExamHost();
   const { t, bi } = useT();
   const [passed, setPassed] = useState(false);
@@ -26,7 +33,7 @@ export function SpeakingIntro() {
   const [err, setErr] = useState<string | null>(null);
   const [privacy, setPrivacy] = useState(false);
   // full mock only (spec §1.1-e); B2C always, ERP when the assignment allows a separate sitting
-  const canLater = s.attempt?.mode === 'full' && (!!host.b2c || !!sectionCfg?.separate_sitting);
+  const canLater = s.attempt?.mode === 'full' && (!!host.b2c || !!sectionCfg?.separate_sitting || !!stage?.separateSitting);
   const [later, setLater] = useState(() => speakingLater(s.attemptId) && canLater);
   const [overflow, setOverflow] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -41,7 +48,9 @@ export function SpeakingIntro() {
     return () => ro.disconnect();
   }, [later]);
   if (!sectionCfg) return null;
-  if (later) return <LaterCard b2c={b2c} />;
+  if (later) return <LaterCard b2c={b2c} until={b2c ? null : laterUntil()} />;
+  // v1.4: the 7-day separate-sitting window is over (409 SEPARATE_SITTING_EXPIRED on start)
+  if (err === 'SEPARATE_SITTING_EXPIRED') return <LaterCard b2c={b2c} expired />;
 
   const loading = !media.ready && !media.error;
   const period = t(b2c ? 'speaking.period_90d' : 'speaking.period_12m');

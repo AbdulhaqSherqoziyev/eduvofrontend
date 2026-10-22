@@ -97,7 +97,7 @@ export function DashboardView() {
     switch (ns.kind) {
       case 'resume': {
         // spec §4.4: Speaking left for later (L/R/W done) — its own card; days come from `availableUntil` when the API sends it
-        if (spLive && ns.sectionKey === 'speaking' && ns.availableUntil) {
+        if (spLive && (ns.speakingLater || ns.sectionKey === 'speaking') && ns.availableUntil) {
           const days = Math.max(1, Math.ceil((Date.parse(ns.availableUntil) - Date.now()) / 864e5));
           return { title: t('speakingPending'), sub: t('speakingPendingSub', { n: days }), phoneSub: t('speakingPendingSub', { n: days }), cta: t('speakingStart'), href: href(`/exam/${ns.attemptId}`), progress: null as number | null };
         }

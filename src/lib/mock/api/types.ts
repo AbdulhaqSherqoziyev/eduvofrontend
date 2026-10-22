@@ -111,8 +111,10 @@ export interface ExamCredits {
 /* ---- §5 dashboard ---- */
 export type NextStep =
   | { kind: 'resume'; attemptId: string; exam: OpenExamSlug; mode: AttemptMode; testCode: string; sectionKey: SectionKey; remainingSec: number | null; doneSections: Array<{ key: SectionKey; score: number | null }>;
-      /** req (speaking-design §4.4, not in contract yet): Speaking left for later — take it until this time (7-day window) */
-      availableUntil?: string | null }
+      /** speaking contract v1.2/v1.4: the attempt is open until this time (Speaking: L/R/W finish + 7 days) */
+      availableUntil?: string | null;
+      /** v1.4: L/R/W done, only the separate-sitting Speaking is left */
+      speakingLater?: boolean }
   | { kind: 'verify_email' }
   | { kind: 'free_section'; exams: OpenExamSlug[] }
   | { kind: 'writing_grading'; attemptId: string; exam: OpenExamSlug }
