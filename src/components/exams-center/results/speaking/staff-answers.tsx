@@ -6,7 +6,9 @@
  * <768 px: one card per question. Print: clips hidden, transcripts open.
  */
 import { ChevronDown } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { KEY } from '@/lib/hooks/use-center-exams';
 import { AudioClip } from '@/components/exam/results/speaking/AudioClip';
 import type { SpeakingResult, SpeakingResultItem } from '@/lib/exam/speaking-types';
 import { mmss } from '@/components/exam/results/speaking/skin';
@@ -14,6 +16,9 @@ import { SH } from '../../tokens';
 import { ST } from './staff-texts';
 
 function Row({ it, no }: { it: SpeakingResultItem; no: number }) {
+  const qc = useQueryClient();
+  // an expired signed URL (60 min) → re-read the staff result for fresh ones
+  const refresh = () => void qc.invalidateQueries({ queryKey: [KEY, 'attempt-result'] });
   const [open, setOpen] = useState(false);
   const dur = it.durationMs != null ? it.durationMs / 1000 : 0;
   return (
@@ -27,9 +32,9 @@ function Row({ it, no }: { it: SpeakingResultItem; no: number }) {
         <span className="text-[12.5px] tabular-nums text-[#5b6b82] max-md:col-start-2 max-md:row-start-1">{mmss(dur)}{it.responseSec ? ` / ${mmss(it.responseSec)}` : ''}</span>
         <div className="min-w-0 max-md:col-span-2">
           {it.noResponse ? <span className="text-[12.5px] italic text-muted">{ST.no_answer}</span>
-            : it.recording ? <AudioClip url={it.recording.url} durationMs={it.durationMs} /> : null}
+            : it.recording ? <AudioClip key={it.recording.id} url={it.recording.url} durationMs={it.durationMs} onExpired={refresh} /> : null}
           {it.backupRecording ? (
-            <div className="mt-1 flex items-center gap-2"><span className="shrink-0 text-[11px] font-bold text-muted">{ST.before_cut}</span><AudioClip url={it.backupRecording.url} durationMs={null} /></div>
+            <div className="mt-1 flex items-center gap-2"><span className="shrink-0 text-[11px] font-bold text-muted">{ST.before_cut}</span><AudioClip key={it.backupRecording.id} url={it.backupRecording.url} durationMs={it.backupRecording.durationMs ?? null} onExpired={refresh} /></div>
           ) : null}
         </div>
         {it.transcript ? (

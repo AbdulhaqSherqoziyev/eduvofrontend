@@ -29,7 +29,7 @@ function Item({ it, open: forceOpen }: { it: SpeakingResultItem; open: boolean }
         <div className="sp-clip-row" style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
           <div style={{ flex: 1, minWidth: 220 }}>
             {noAudioNote ? <span style={{ fontSize: 12.5, color: s.muted }}>{noAudioNote}</span>
-              : it.recording ? <AudioClip url={it.recording.url} durationMs={it.durationMs} playNonce={nonce} />
+              : it.recording ? <AudioClip key={it.recording.id} url={it.recording.url} durationMs={it.durationMs} playNonce={nonce} />
                 : gone ? <span style={{ fontSize: 12.5, color: s.muted }}>{goneNote}</span> : null}
           </div>
           {it.transcript && (

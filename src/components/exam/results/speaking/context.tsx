@@ -22,6 +22,8 @@ export interface SpeakingCtx {
   playItem: (itemKey: string) => void;
   /** Item whose clip should start, with a nonce per click. */
   playing: { itemKey: string; nonce: number } | null;
+  /** Re-read the result (signed audio URLs live 60 min — contract §5); a clip that fails to load asks for it. */
+  refresh?: () => void;
 }
 
 export const Ctx = createContext<SpeakingCtx | null>(null);

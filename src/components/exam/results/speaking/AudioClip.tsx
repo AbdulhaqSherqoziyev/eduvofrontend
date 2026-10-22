@@ -4,6 +4,9 @@
  * "0:42 / 1:58". idle → loading → playing → ended (back to 0). One clip at a time (play-bus).
  * Track: ←/→ = 5 s. `preload="none"`, never auto-plays; `playNonce` changes only on a user click
  * elsewhere (a quote's play button). Load failure → retry button + `results.audio_load_failed`.
+ * Signed URLs (contract §5, 60 min) change on every result poll: the element keeps its src while a clip is
+ * loaded / playing (callers key it by recording id); a failed load asks the page to re-read the result and
+ * takes the fresh URL on the next retry.
  */
 import { Pause, Play, RotateCcw } from 'lucide-react';
 import { useContext, useEffect, useRef, useState } from 'react';
@@ -27,7 +30,7 @@ export function Spin({ color, size = 14 }: { color: string; size?: number }) {
   );
 }
 
-export function AudioClip({ url, durationMs, playNonce, wide }: { url: string; durationMs: number | null; playNonce?: number; wide?: boolean }) {
+export function AudioClip({ url, durationMs, playNonce, wide, onExpired }: { url: string; durationMs: number | null; playNonce?: number; wide?: boolean; onExpired?: () => void }) {
   // usable outside the panel too (staff answers table): hub palette + Uzbek console strings
   const c = useContext(Ctx);
   const s = c?.skin ?? SKINS.hub;
@@ -37,7 +40,11 @@ export function AudioClip({ url, durationMs, playNonce, wide }: { url: string; d
   const [pos, setPos] = useState(0);
   const [dur, setDur] = useState((durationMs ?? 0) / 1000);
   const [hover, setHover] = useState(false);
-  const src = absMedia(url);
+  const [src, setSrc] = useState(() => absMedia(url));
+  const fresh = absMedia(url);
+  // a new signed URL is taken only while nothing is loaded (idle / error) — never under a playing clip
+  useEffect(() => { if ((st === 'idle' || st === 'error') && fresh !== src && (ref.current?.currentTime ?? 0) === 0) setSrc(fresh); }, [fresh, st, src]);
+  const expired = onExpired ?? c?.refresh;
 
   const play = () => {
     const a = ref.current;
@@ -48,7 +55,7 @@ export function AudioClip({ url, durationMs, playNonce, wide }: { url: string; d
   };
   const toggle = () => { const a = ref.current; if (!a) return; if (st === 'playing') a.pause(); else play(); };
   const seek = (sec: number) => { const a = ref.current; if (!a) return; a.currentTime = Math.max(0, Math.min(dur || a.duration || 0, sec)); setPos(a.currentTime); };
-  const retry = () => { const a = ref.current; if (!a) return; a.load(); setSt('idle'); play(); };
+  const retry = () => { const a = ref.current; if (!a) return; if (fresh !== src) { a.src = fresh; setSrc(fresh); } a.load(); setSt('idle'); play(); };
 
   useEffect(() => {
     if (!playNonce) return;
@@ -69,7 +76,7 @@ export function AudioClip({ url, durationMs, playNonce, wide }: { url: string; d
       <audio ref={ref} src={src} preload="none"
         onLoadedMetadata={(e) => { const d = e.currentTarget.duration; if (Number.isFinite(d) && d > 0) setDur(d); }}
         onPlaying={() => setSt('playing')} onPause={() => setSt((x) => (x === 'error' ? x : 'paused'))} onWaiting={() => setSt('loading')}
-        onTimeUpdate={(e) => setPos(e.currentTarget.currentTime)} onError={() => setSt('error')}
+        onTimeUpdate={(e) => setPos(e.currentTarget.currentTime)} onError={() => { setSt('error'); expired?.(); }}
         onEnded={(e) => { e.currentTarget.currentTime = 0; setPos(0); setSt('idle'); release(e.currentTarget); }} />
       {st === 'error' ? (
         <>

@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test:unit": "rm -rf node_modules/.cache/unit-test && tsc --outDir node_modules/.cache/unit-test --module commonjs --target es2021 --moduleResolution node --esModuleInterop --skipLibCheck --types node src/lib/exam/sat/spr.ts src/lib/exam/sat/spr.test.ts src/lib/exam/speaking/level.ts src/lib/exam/speaking/lost-rules.ts src/lib/exam/speaking/idb.ts src/lib/exam/speaking/upload-rules.ts src/lib/exam/speaking/speaking.test.ts && node --test node_modules/.cache/unit-test/sat/ node_modules/.cache/unit-test/speaking/",
+    "test:unit": "rm -rf node_modules/.cache/unit-test && tsc --outDir node_modules/.cache/unit-test --module commonjs --target es2021 --moduleResolution node --esModuleInterop --skipLibCheck --types node src/lib/exam/sat/spr.ts src/lib/exam/sat/spr.test.ts src/lib/exam/speaking/level.ts src/lib/exam/speaking/lost-rules.ts src/lib/exam/speaking/idb.ts src/lib/exam/speaking/upload-rules.ts src/lib/exam/speaking/poll.ts src/lib/exam/speaking/speaking.test.ts && node --test node_modules/.cache/unit-test/sat/ node_modules/.cache/unit-test/speaking/",
     "i18n:check": "node scripts/i18n-check.mjs"
   },
   "dependencies": {

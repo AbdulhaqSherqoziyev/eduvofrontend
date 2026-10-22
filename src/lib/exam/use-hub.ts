@@ -1,5 +1,6 @@
 'use client';
 /** TanStack Query hooks for the student hub. Components never call hubApi directly. */
+import { resultPollMs } from './speaking/poll';
 import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { HubError, hubApi, hubNow } from './hub-api';
@@ -40,7 +41,7 @@ export function useResult(id: string) {
     queryKey: hubKeys.result(id),
     queryFn: () => hubApi.result(id),
     retry,
-    refetchInterval: (q) => (q.state.data?.status === 'PARTIAL' ? 10_000 : false),
+    refetchInterval: (q) => resultPollMs(q.state.data),
   });
 }
 

@@ -32,6 +32,7 @@ export function B2cSpeaking({ sp, attemptId, sample, onChanged, phone }: {
   const panel = (
     <SpeakingResultPanel
       sp={sp} skin="b2c" mode="b2c" tx={tx} onToast={toast}
+      onRefresh={sample ? undefined : onChanged}
       onDelete={sample || !attemptId ? undefined : async () => { await deleteRecordings(attemptId); await forgetSpeakingDevice(attemptId); onChanged(); }}
       takeHref={!sample && attemptId && sp.status === 'pending' ? href(`/exam/${attemptId}`) : null}
       phoneNote={<div style={sx('padding:12px 14px;border-radius:14px;box-shadow:var(--inset);font-size:14px;font-weight:700;color:var(--ink2)')}>{t('speakingComputer')}</div>}

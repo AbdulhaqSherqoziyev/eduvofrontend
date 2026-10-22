@@ -65,3 +65,12 @@ test('upload answers: no endless retry on 4xx, 401 pauses, 5xx/network retry', (
   assert.equal(classifyUpload({ ok: false, kind: 'network' }), 'network');
   assert.equal(classifyUpload({ ok: false, kind: 'server', status: 502 }), 'server');
 });
+
+import { resultPollMs } from './poll';
+
+test('result polling: fast while grading, slow while Speaking only waits, off when final', () => {
+  assert.equal(resultPollMs({ status: 'FINAL', sections: [] }), false);
+  assert.equal(resultPollMs({ status: 'PARTIAL', sections: [{ status: 'READY' }], speaking: { status: 'pending' } }), 60_000);
+  assert.equal(resultPollMs({ status: 'PARTIAL', sections: [{ status: 'GRADING' }], speaking: { status: 'pending' } }), 10_000);
+  assert.equal(resultPollMs({ status: 'PARTIAL', sections: [], speaking: { status: 'scoring' } }, 15_000), 15_000);
+});

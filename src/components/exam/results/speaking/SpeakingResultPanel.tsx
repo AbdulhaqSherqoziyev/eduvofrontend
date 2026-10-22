@@ -43,9 +43,11 @@ export interface SpeakingPanelProps {
   /** Staff page draws its own answers table (spec §3.2) instead of the accordion. */
   hideRecordings?: boolean;
   gradingNote?: string;
+  /** Re-read the result: an expired signed audio URL (contract §5) gets a fresh one. */
+  onRefresh?: () => void;
 }
 
-export function SpeakingResultPanel({ sp, skin, mode, tx, loading, onDelete, onToast, takeHref, phoneNote, b2c, noAudioNote, hideRecordings, gradingNote }: SpeakingPanelProps) {
+export function SpeakingResultPanel({ sp, skin, mode, tx, loading, onDelete, onToast, takeHref, phoneNote, b2c, noAudioNote, hideRecordings, gradingNote, onRefresh }: SpeakingPanelProps) {
   const s = SKINS[skin];
   const [openParts, setOpenParts] = useState<Set<number>>(new Set());
   const [playing, setPlaying] = useState<SpeakingCtx['playing']>(null);
@@ -57,7 +59,7 @@ export function SpeakingResultPanel({ sp, skin, mode, tx, loading, onDelete, onT
     if (part != null) setOpenParts((o) => new Set(o).add(part));
     setPlaying({ itemKey, nonce: Date.now() });
   }, [sp]);
-  const ctx = useMemo<SpeakingCtx | null>(() => (sp ? { sp, skin: s, tx, mode, playItem, playing, noAudioNote, gradingNote } : null), [sp, s, tx, mode, playItem, playing, noAudioNote, gradingNote]);
+  const ctx = useMemo<SpeakingCtx | null>(() => (sp ? { sp, skin: s, tx, mode, playItem, playing, noAudioNote, gradingNote, refresh: onRefresh } : null), [sp, s, tx, mode, playItem, playing, noAudioNote, gradingNote, onRefresh]);
 
   if (!ctx || !sp) {
     if (!loading) return null;

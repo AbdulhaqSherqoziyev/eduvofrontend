@@ -23,6 +23,7 @@ export function HubSpeaking({ id, sp, onChanged }: { id: string; sp: SpeakingRes
         mode="erp"
         tx={(k, v) => t(k, 'uz', v)}
         takeHref={sp.status === 'pending' ? playerUrl(id) : null}
+        onRefresh={onChanged}
         onDelete={async () => { await hubApi.deleteRecordings(id); await forgetSpeakingDevice(id); onChanged(); }}
       />
     </NmCard>

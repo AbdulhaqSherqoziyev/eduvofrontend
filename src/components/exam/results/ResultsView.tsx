@@ -18,6 +18,7 @@ import { buildSummary } from '@/lib/exam/result-summary';
 import { AiTaskPanel } from './AiTaskPanel';
 import { SpeakingResultPanel } from './speaking/SpeakingResultPanel';
 import { useForgetSpeakingDevice } from '@/lib/exam/speaking/use-forget';
+import { resultPollMs } from '@/lib/exam/speaking/poll';
 import { OverallBlock } from './OverallBlock';
 import { ResultSummary } from './ResultSummary';
 import { PassageModal } from './PassageModal';
@@ -59,8 +60,8 @@ export function ResultsView({ attemptId, locale, isPreview = false }: { attemptI
   }, [attemptId, isPreview]);
   useEffect(() => { void load(); }, [load]);
   // Writing/Speaking are graded after the attempt closes: poll while PARTIAL (also after a transient error, so a dropped poll does not freeze the page).
-  const partial = r?.status === 'PARTIAL';
-  useEffect(() => { if (!partial) return; const iv = window.setInterval(() => void load(), POLL_MS); return () => window.clearInterval(iv); }, [partial, load]);
+  const pollMs = resultPollMs(r, POLL_MS); // slow while Speaking is only waiting to be taken later
+  useEffect(() => { if (!pollMs) return; const iv = window.setInterval(() => void load(), pollMs); return () => window.clearInterval(iv); }, [pollMs, load]);
 
   useForgetSpeakingDevice(attemptId, r?.speaking);
   if (!r) {
@@ -148,7 +149,7 @@ export function ResultsView({ attemptId, locale, isPreview = false }: { attemptI
             {det.status === 'READY' && !isAiSection(det.key) && <span style={{ fontSize: 12, fontWeight: 700, color: '#7A8699', maxWidth: 620, textAlign: 'right' }}>{t('x.auto_how', locale)}</span>}
           </div>
           {det.key === 'speaking' && r.speaking ? (
-            <SpeakingResultPanel sp={r.speaking} skin="flat" mode="preview" tx={(k, v) => t(k, locale, v)} />
+            <SpeakingResultPanel sp={r.speaking} skin="flat" mode="preview" tx={(k, v) => t(k, locale, v)} onRefresh={() => void load()} />
           ) : isAiSection(det.key) ? (
             <AiTaskPanel r={r} family={family} locale={locale} />
           ) : det.status === 'GRADING' || det.status === 'PENDING' ? (
