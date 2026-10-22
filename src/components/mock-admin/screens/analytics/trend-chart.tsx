@@ -31,15 +31,25 @@ export function pointLabel(t: string, bucket: Bucket) {
 const axisLabel = (t: string, bucket: Bucket) => (bucket === 'hour' ? `${String(at(t).hour).padStart(2, '0')}:00` : dayLabel(at(t).day));
 
 const W = 600;
-/** x scale from `scaleN` buckets (yesterday's line uses today's scale) */
-function path(vals: number[], from: number, max: number, H: number, close = false, scaleN = vals.length) {
+/**
+ * Line (or area) through the non-null values; a null breaks the line into separate segments (contract v1.1:
+ * before tracking / hours without a rollup). x scale from `scaleN` buckets (yesterday's line uses today's scale).
+ */
+function path(vals: Array<number | null>, max: number, H: number, close = false, scaleN = vals.length) {
   const n = scaleN;
   const xs = (i: number) => (n === 1 ? W / 2 : (i / (n - 1)) * W);
-  const pts: string[] = [];
-  for (let i = from; i < vals.length; i++) pts.push(`${xs(i).toFixed(1)} ${(H - 10 - (vals[i] / max) * (H - 30)).toFixed(1)}`);
-  if (!pts.length) return '';
-  const d = `M${pts.join('L')}`;
-  return close ? `${d}L${xs(vals.length - 1).toFixed(1)} ${H}L${xs(from).toFixed(1)} ${H}Z` : d;
+  const y = (v: number) => (H - 10 - (v / max) * (H - 30)).toFixed(1);
+  const out: string[] = [];
+  let seg: number[] = [];
+  const flush = () => {
+    if (!seg.length) return;
+    const d = `M${seg.map((i) => `${xs(i).toFixed(1)} ${y(vals[i] as number)}`).join('L')}`;
+    out.push(close ? `${d}L${xs(seg[seg.length - 1]).toFixed(1)} ${H}L${xs(seg[0]).toFixed(1)} ${H}Z` : d);
+    seg = [];
+  };
+  vals.forEach((v, i) => { if (v === null) flush(); else seg.push(i); });
+  flush();
+  return out.join('');
 }
 
 export function TrendChart({ points, prevPoints, bucket, trackingSince, periodLabel, mob }: {
@@ -50,16 +60,17 @@ export function TrendChart({ points, prevPoints, bucket, trackingSince, periodLa
   // points before tracking started come as null: the lines start at the first tracked bucket
   let first = points.findIndex((p) => p.people !== null || p.visits !== null);
   if (first < 0) first = points.length;
-  const people = points.map((p) => p.people ?? 0), visits = points.map((p) => p.visits ?? 0);
-  const prevPeople = prevPoints?.map((p) => p.people ?? 0) ?? [];
-  const max = niceMax(Math.max(1, ...people.slice(first), ...visits.slice(first), ...prevPeople));
+  const people = points.map((p) => p.people), visits = points.map((p) => p.visits);
+  const prevPeople = prevPoints?.map((p) => p.people) ?? [];
+  const nums = (a: Array<number | null>) => a.filter((v): v is number => v !== null);
+  const max = niceMax(Math.max(1, ...nums(people), ...nums(visits), ...nums(prevPeople)));
   const allZero = points.slice(first).every((p) => !p.people && !p.visits);
   const title = bucket === 'hour' ? T.ov.byHour : bucket === 'week' ? T.ov.byWeek : T.ov.byDay;
   const peak = points.slice(first).reduce<TrendPoint | null>((b, p) => (!b || (p.people ?? 0) > (b.people ?? 0) ? p : b), null);
   const aria = peak && !allZero
     ? `${T.ov.people} va ${T.ov.visits.toLowerCase()}, ${periodLabel}. Eng ko'p: ${pointLabel(peak.t, bucket)} — ${groupNum(peak.people ?? 0)} odam.`
     : `${T.ov.people} va ${T.ov.visits.toLowerCase()}, ${periodLabel}.`;
-  const tip = (i: number) => `${pointLabel(points[i].t, bucket)} · ${T.ov.people} ${groupNum(people[i])} · ${T.ov.visits} ${groupNum(visits[i])}`;
+  const tip = (i: number) => `${pointLabel(points[i].t, bucket)} · ${T.ov.people} ${people[i] === null ? '—' : groupNum(people[i] as number)} · ${T.ov.visits} ${visits[i] === null ? '—' : groupNum(visits[i] as number)}`;
   const n = points.length;
   const xPct = (i: number) => (n === 1 ? 50 : (i / (n - 1)) * 100);
   const legend = (c: string, l: string, dashed?: boolean) => (
@@ -84,12 +95,12 @@ export function TrendChart({ points, prevPoints, bucket, trackingSince, periodLa
         <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ width: '100%', height: H, display: 'block' }} role="img" aria-label={aria}>
           <path d={`M0 ${H / 4}H${W}M0 ${H / 2}H${W}M0 ${(3 * H) / 4}H${W}`} stroke="var(--line)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
           {prevPeople.length > 0 && (
-            <path d={path(prevPeople.slice(0, Math.max(1, n)), 0, max, H, false, Math.max(n, prevPeople.length))}
+            <path d={path(prevPeople.slice(0, Math.max(1, n)), max, H, false, Math.max(n, prevPeople.length))}
               fill="none" stroke="var(--mut)" strokeWidth="2" strokeDasharray="4 4" vectorEffect="non-scaling-stroke" />
           )}
-          <path d={path(people, first, max, H, true)} fill="var(--blue)" opacity="0.10" />
-          <path d={path(people, first, max, H)} fill="none" stroke="var(--blue)" strokeWidth="2.5" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-          <path d={path(visits, first, max, H)} fill="none" stroke="var(--ai)" strokeWidth="2.5" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+          <path d={path(people, max, H, true)} fill="var(--blue)" opacity="0.10" />
+          <path d={path(people, max, H)} fill="none" stroke="var(--blue)" strokeWidth="2.5" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+          <path d={path(visits, max, H)} fill="none" stroke="var(--ai)" strokeWidth="2.5" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
           {hover !== null && hover >= first && <path d={`M${(xPct(hover) / 100) * W} 0V${H}`} stroke="var(--line)" strokeWidth="1" vectorEffect="non-scaling-stroke" />}
         </svg>
         {/* invisible full-height hit columns (hover + keyboard focus) */}

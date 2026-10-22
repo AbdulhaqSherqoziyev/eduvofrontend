@@ -61,6 +61,7 @@ export function TabHours({ period, mob, metric, day, setDay }: {
     const peakOk = h.peak && h.peak.n > 0 && h.max > 0;
     heatBody = (
       <Dim on={heat.isFetching && heat.isPlaceholderData} style={{ gap: 12 }}>
+        {!!h.incompleteDays && <span style={mutedText}>{T.hours.incomplete(groupNum(h.incompleteDays))}</span>}
         {(h.unevenWeekdays ?? uneven(period)) && <span style={mutedText}>{T.hours.uneven}</span>}
         {allZero ? <span style={{ ...mutedText, fontSize: 13 }}>{T.hours.allZero(unit)}</span>
           : peakOk && h.peak && (
@@ -80,6 +81,8 @@ export function TabHours({ period, mob, metric, day, setDay }: {
   else if (!dd) dayBody = <Skeleton height={220} />;
   else if (tracker && (dd.beforeTracking || dd.trackingSince === null)) {
     dayBody = <span style={{ ...mutedText, fontSize: 13, padding: '40px 0', textAlign: 'center' }}>{T.hours.noTrackDay(dd.trackingSince ? sinceLabel(dd.trackingSince) : '—')}</span>;
+  } else if (dd.unavailable) {
+    dayBody = <span style={{ ...mutedText, fontSize: 13, padding: '40px 0', textAlign: 'center' }}>{T.hours.unavailableDay}</span>;
   } else {
     dayBody = (
       <Dim on={dayQ.isFetching && dayQ.isPlaceholderData}>

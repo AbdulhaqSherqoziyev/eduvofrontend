@@ -33,16 +33,18 @@ export function TabGeo({ period, mob, show30 }: { period: Period; mob: boolean; 
         <Card title={T.geo.countries}>
           {qc.q.isError && !qc.first ? <QueryError q={qc.q} flat /> : !qc.first ? skel : (
             <TopTable<AnCountryRow> mob={mob} rows={countries} rowKey={(r, i) => `${r.code ?? 'xx'}-${i}`} more={qc.more} empty={empty} bar={(r) => r.people}
+              other={qc.hasMore ? null : qc.pages[qc.pages.length - 1]?.countries?.other}
               name={{ label: T.col.country, render: (r) => ({ title: r.code ? `${flag(r.code)} ${r.label}` : r.label || T.geo.unknown }) }}
               cols={[
                 { key: 'people', label: T.col.people, num: true, render: (r) => cnt(r.people) },
-                ...(mob ? [] : [{ key: 'share', label: T.col.share, num: true, render: (r: AnCountryRow) => (r.share === null || r.people === '<5' ? '—' : pct(r.share)) }]),
+                ...(mob || qc.pages[qc.pages.length - 1]?.countries?.other ? [] : [{ key: 'share', label: T.col.share, num: true, render: (r: AnCountryRow) => (r.share === null ? '—' : pct(r.share)) }]),
               ]} />
           )}
         </Card>
         <Card title={T.geo.cities}>
           {qi.q.isError && !qi.first ? <QueryError q={qi.q} flat /> : !qi.first ? skel : (
             <TopTable<AnCityRow> mob={mob} rows={cities} rowKey={(r, i) => `${r.city ?? '-'}-${r.country ?? '-'}-${i}`} more={qi.more} empty={empty} bar={(r) => r.people}
+              other={qi.hasMore ? null : qi.pages[qi.pages.length - 1]?.cities?.other}
               name={{ label: T.col.city, render: (r) => ({ title: r.city ?? T.geo.noCity }) }}
               cols={[
                 ...(mob ? [] : [{ key: 'country', label: T.col.country, render: (r: AnCityRow) => r.countryLabel || T.geo.unknown }]),

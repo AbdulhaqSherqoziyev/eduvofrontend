@@ -20,7 +20,7 @@ export function TabSources({ period, mob, view: viewParam, set, show30 }: {
 }) {
   const view = !mob && viewParam === 'campaign' ? 'campaign' : 'source';
   const query = period.query ? { ...period.query, view } : null;
-  const { q, first, pages, more, dim } = usePaged<AnSourcesRes>('sources', adminApi.anSources, query, mob);
+  const { q, first, pages, more, dim, hasMore } = usePaged<AnSourcesRes>('sources', adminApi.anSources, query, mob);
   if (q.isError && !first) return <QueryError q={q} />;
   const ts = first ? trackState(first.trackingSince, period) : 'ok';
   if (ts === 'none') return <><NotTracked /><AnalyticsFooter kind="tracker" botFiltered={first?.botFiltered} /></>;
@@ -37,6 +37,7 @@ export function TabSources({ period, mob, view: viewParam, set, show30 }: {
       <Card title={T.src.title} right={controls}>
         {!first ? skeleton : view === 'source' ? (
           <TopTable<AnSourceRow> mob={mob} rows={rows as AnSourceRow[]} rowKey={(r) => r.key} minWidth={680} more={more} empty={empty} bar={(r) => r.people}
+            other={hasMore ? null : pages[pages.length - 1]?.other}
             name={{
               label: T.col.source,
               render: (r) => ({ title: DIRECT_KEYS.has(r.key) || r.label === T.src.direct ? <span style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>{r.label}<InfoPop text={T.src.directHint} /></span> : r.label }),
@@ -51,6 +52,7 @@ export function TabSources({ period, mob, view: viewParam, set, show30 }: {
             ]} />
         ) : (
           <TopTable<AnCampaignRow> mob={mob} rows={rows as AnCampaignRow[]} rowKey={(r, i) => `${r.campaign}|${r.source}|${r.medium}|${i}`} minWidth={760} more={more} empty={empty} bar={(r) => r.people}
+            other={hasMore ? null : pages[pages.length - 1]?.other}
             name={{ label: T.col.campaign, render: (r) => ({ title: r.campaign, hint: r.content ? T.src.contentTitle(r.content) : undefined }) }}
             cols={[
               { key: 'source', label: T.col.source, render: (r) => r.source ?? '—' },

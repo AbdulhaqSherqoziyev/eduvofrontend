@@ -7,7 +7,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { adminApi } from '@/lib/admin-mock/api';
 import { ago, cnt, examLabel, groupNum, hms, timeOnly } from '@/lib/admin-mock/format';
-import type { AnLiveRes, AnRecent, AnSite } from '@/lib/admin-mock/types';
+import type { AnLiveRes, AnOther, AnRecent, AnSite } from '@/lib/admin-mock/types';
 import { Skeleton } from '../../ui/table';
 import { useNow } from '../hooks';
 import { Card, eyebrow, InfoPop, Note, NotTracked, Pill, QueryError } from './blocks';
@@ -110,9 +110,9 @@ export function TabNow({ mob }: { mob: boolean }) {
       {tracked ? (
         <>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,280px),1fr))', gap }}>
-            <ListCard title={T.now.pages} empty={nobody || !d.pages.length ? T.now.listsEmpty : null}
+            <ListCard title={T.now.pages} other={d.pagesOther} empty={nobody || (!d.pages.length && !d.pagesOther) ? T.now.listsEmpty : null}
               rows={d.pages.slice(0, 5).map((p) => ({ k: `${p.site}${p.path}`, l: `${SITE_SHORT[p.site]} · ${p.label ?? p.path}`, n: cnt(p.n) }))} />
-            <ListCard title={T.now.sources} empty={nobody || !d.sources.length ? T.now.listsEmpty : null}
+            <ListCard title={T.now.sources} other={d.sourcesOther} empty={nobody || (!d.sources.length && !d.sourcesOther) ? T.now.listsEmpty : null}
               rows={d.sources.slice(0, 5).map((s) => ({ k: s.key, l: s.label, n: cnt(s.n) }))} />
             <ListCard title={T.now.exams} empty={d.exam.dbError || d.exam.active === null ? T.state.loadErr : d.exam.active === 0 ? T.now.examsEmpty : null}
               rows={d.exam.byExam.map((e) => ({ k: e.exam, l: e.label || examLabel(e.exam), n: groupNum(e.n) }))} />
@@ -127,7 +127,7 @@ export function TabNow({ mob }: { mob: boolean }) {
   );
 }
 
-function ListCard({ title, rows, empty }: { title: string; rows: Array<{ k: string; l: string; n: string }>; empty: string | null }) {
+function ListCard({ title, rows, empty, other }: { title: string; rows: Array<{ k: string; l: string; n: string }>; empty: string | null; other?: AnOther | null }) {
   return (
     <Card title={title} gap={6}>
       {empty ? <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--mut)', padding: '8px 0' }}>{empty}</span> : (
@@ -138,6 +138,9 @@ function ListCard({ title, rows, empty }: { title: string; rows: Array<{ k: stri
               <b style={{ fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>{r.n}</b>
             </div>
           ))}
+          {other && (
+            <div style={{ padding: '8px 0', borderBottom: '1px solid var(--line)', fontSize: 13, fontWeight: 600, color: 'var(--ink2)' }}>{T.other(groupNum(other.rows), other.n)}</div>
+          )}
         </div>
       )}
     </Card>

@@ -44,14 +44,16 @@ export function TabOverview({ period, mob, go }: { period: Period; mob: boolean;
         <div className="ma-an-g2">
           <Card title={T.ov.topSources} right={<LinkBtn onClick={() => go('sources')} />}>
             <TopTable mob={mob} rows={d.topSources} rowKey={(r) => r.key} empty={{ title: T.ov.empty }} bar={(r) => r.people}
+              other={d.topSources.length >= d.topSourcesTotal ? d.topSourcesOther : null}
               name={{ label: T.col.source, render: (r) => ({ title: r.label }) }}
               cols={[
                 { key: 'people', label: T.col.people, num: true, render: (r) => cnt(r.people) },
-                { key: 'share', label: T.col.share, num: true, render: (r) => (r.share === null || r.people === '<5' ? '—' : pct(r.share)) },
+                ...(d.topSourcesOther ? [] : [{ key: 'share', label: T.col.share, num: true, render: (r: AnOverviewRes['topSources'][number]) => (r.share === null ? '—' : pct(r.share)) }]),
               ]} />
           </Card>
           <Card title={T.ov.topPages} right={<LinkBtn onClick={() => go('pages')} />}>
-            <TopTable mob={mob} rows={d.topPages} rowKey={(r) => r.path} empty={{ title: T.ov.empty }} bar={(r) => r.views}
+            <TopTable mob={mob} rows={d.topPages} rowKey={(r) => r.path} empty={{ title: T.ov.empty }} bar={(r) => r.people}
+              other={d.topPages.length >= d.topPagesTotal ? d.topPagesOther : null}
               name={{ label: T.col.page, render: (r) => ({ title: r.label ?? r.path }) }}
               cols={[
                 { key: 'views', label: T.col.views, num: true, render: (r) => cnt(r.views) },

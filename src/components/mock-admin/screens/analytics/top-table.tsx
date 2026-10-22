@@ -4,8 +4,8 @@
  * Desktop shows what the tab fetched (top-10 → "Hammasini ko'rish" → 50 → "Ko'proq");
  * phones show top-5 and the muted "To'liq ro'yxat — kompyuterda".
  */
-import { cntNum } from '@/lib/admin-mock/format';
-import type { Cnt } from '@/lib/admin-mock/types';
+import { cntNum, groupNum } from '@/lib/admin-mock/format';
+import type { AnOther, Cnt } from '@/lib/admin-mock/types';
 import { InlineEmpty } from '../../ui/state';
 import { Table, TableWrap } from '../../ui/table';
 import { mutedText, TextButton } from './blocks';
@@ -13,7 +13,7 @@ import { T } from './texts';
 
 export interface Col<R> { key: string; label: React.ReactNode; num?: boolean; render: (r: R) => React.ReactNode; title?: (r: R) => string | undefined }
 
-export function TopTable<R>({ rows, cols, name, bar, rowKey, mob, mobileLimit = 5, minWidth, empty, more, label }: {
+export function TopTable<R>({ rows, cols, name, bar, rowKey, mob, mobileLimit = 5, minWidth, empty, more, label, other }: {
   rows: R[];
   /** columns after the name column */
   cols: Col<R>[];
@@ -28,8 +28,13 @@ export function TopTable<R>({ rows, cols, name, bar, rowKey, mob, mobileLimit = 
   /** desktop paging: "Hammasini ko'rish" (expand) / "Ko'proq" (next cursor) */
   more?: { label: string; onClick: () => void; busy?: boolean } | null;
   label?: string;
+  /**
+   * v1.1 "Boshqalar ({rows} ta) · {n}" — unnamed summary of the small rows, shown at the end of a complete list
+   * (contract §0.6). While it exists, shares are null and no share line is drawn.
+   */
+  other?: AnOther | null;
 }) {
-  if (!rows.length) {
+  if (!rows.length && !other) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <InlineEmpty title={empty.title} />
@@ -38,6 +43,8 @@ export function TopTable<R>({ rows, cols, name, bar, rowKey, mob, mobileLimit = 
     );
   }
   const shown = mob ? rows.slice(0, mobileLimit) : rows;
+  const showOther = !!other && (!mob || rows.length <= mobileLimit);
+  if (other) bar = undefined;
   const max = Math.max(1, ...shown.map((r) => cntNum(bar?.(r)) ?? 0));
   const num = { textAlign: 'right', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' } as const;
   return (
@@ -72,6 +79,11 @@ export function TopTable<R>({ rows, cols, name, bar, rowKey, mob, mobileLimit = 
                 </tr>
               );
             })}
+            {showOther && other && (
+              <tr className="ma-an-other">
+                <td colSpan={cols.length + 1} style={{ color: 'var(--ink2)', fontWeight: 600 }}>{T.other(groupNum(other.rows), other.n)}</td>
+              </tr>
+            )}
           </tbody>
         </Table>
       </TableWrap>

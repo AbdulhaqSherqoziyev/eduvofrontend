@@ -29,7 +29,7 @@ export function TabPages({ period, mob, view: viewParam, lang, set, show30 }: {
 }) {
   const view = mob ? 'all' : asView(viewParam);
   const query = period.query ? { ...period.query, view, lang: lang || undefined } : null;
-  const { q, first, pages, more, dim } = usePaged<AnPagesRes>('pages', adminApi.anPages, query, mob);
+  const { q, first, pages, more, dim, hasMore } = usePaged<AnPagesRes>('pages', adminApi.anPages, query, mob);
   if (q.isError && !first) return <QueryError q={q} />;
   const rows = pages.flatMap((p) => p.rows);
   const ts = first ? trackState(first.trackingSince, period) : 'ok';
@@ -75,7 +75,8 @@ export function TabPages({ period, mob, view: viewParam, lang, set, show30 }: {
         {!first ? (
           <TableWrap><Table><tbody><SkeletonRows cols={mob ? 3 : cols.length + 1} n={5} /></tbody></Table></TableWrap>
         ) : (
-          <TopTable mob={mob} rows={ts === 'before' ? [] : rows} rowKey={(r) => r.path} minWidth={760} more={more} bar={(r) => (view === 'all' ? r.views : view === 'entry' ? r.entries : r.exits)}
+          <TopTable mob={mob} rows={ts === 'before' ? [] : rows} rowKey={(r) => r.path} minWidth={760} more={more} bar={(r) => (view === 'all' ? r.people : view === 'entry' ? r.entries : r.exits)}
+            other={hasMore ? null : pages[pages.length - 1]?.other}
             name={{ label: T.col.page, render: (r) => ({ title: r.label ?? r.path, sub: r.label ? r.path : undefined }) }}
             cols={cols}
             empty={{ title: T.pages.empty, action: shorterThan(period, 30) ? { label: T.state.show30, onClick: show30 } : undefined }} />

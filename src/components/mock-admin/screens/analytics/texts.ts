@@ -34,6 +34,8 @@ const uz = {
     show30: "30 kunni ko'rish",
     show90: "90 kunni ko'rish",
   },
+  /** v1.1 "Boshqalar" row (Sarvar, contract §0.6) */
+  other: (rows: string, n: string) => `Boshqalar (${rows} ta) · ${n}`,
   table: { showAll: "Hammasini ko'rish", more: "Ko'proq", all: 'Hammasi →', desktopOnly: "To'liq ro'yxat — kompyuterda" },
   foot: {
     cookieless: "Raqamlar cookie'siz sanaladi: bir odam boshqa qurilma yoki tarmoqdan kirsa, alohida sanaladi. Reklama bloklovchisi bor brauzerlar ko'rinmaydi.",
@@ -189,6 +191,9 @@ const uz = {
     max: (n: string) => `maks ${n}`,
     soFar: '(hozirgacha)',
     future: (h: string) => `${h}:00 dan keyingi soatlar hali kelmagan.`,
+    /** v1.1 (Sarvar / contract §6–§7) */
+    incomplete: (n: string) => `${n} kun uchun soatlik ma'lumot yo'q`,
+    unavailableDay: "Bu kun uchun soatlik ma'lumot yo'q",
     noTrackDay: (date: string) => `Bu kun uchun tashrif ma'lumoti yo'q (kuzatuv ${date} dan).`,
   },
 

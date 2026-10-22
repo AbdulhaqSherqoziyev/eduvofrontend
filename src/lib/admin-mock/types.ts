@@ -256,6 +256,8 @@ export type AuditGroup = 'payments' | 'credits' | 'learners' | 'catalog' | 'cont
 export type Cnt = number | '<5';
 /** numerator / denominator; the UI shows a percent only when den ≥ 20 (design §1.4) */
 export interface Ratio<N = Cnt> { num: N; den: N }
+/** v1.1 anti-differencing summary of the list rows whose main count is 1..4 (contract §0.6) */
+export interface AnOther { rows: number; n: '<5' | '≥5' }
 export type NullReason = 'retention' | 'not_tracking' | 'no_data' | 'db_error' | 'small';
 export interface Metric<V = number> { cur: V | null; prev: V | null; curReason?: NullReason; prevReason?: NullReason }
 export type AnSite = 'mock' | 'landing';
@@ -283,8 +285,10 @@ export interface AnLiveRes extends AnBase {
   landing: { eduvo: number; mockHome: number };
   usualThisHour: number | null;
   funnelToday: { people: number | null; signups: number | null; cohortPayers: number | null; dbError: boolean };
-  pages: Array<{ site: AnSite; path: string; label: string | null; n: Cnt }>;
-  sources: Array<{ key: string; label: string; n: Cnt }>;
+  pages: Array<{ site: AnSite; path: string; label: string | null; n: number }>;
+  pagesOther: AnOther | null;
+  sources: Array<{ key: string; label: string; n: number }>;
+  sourcesOther: AnOther | null;
   recent: AnRecent[];
   tracker: Array<{ site: AnSite; trackingSince: string | null; lastEventAt: string | null; silent: boolean; silentHours: number | null; thresholdHours: number }>;
 }
@@ -295,10 +299,12 @@ export interface AnOverviewRes extends AnBase {
   trackingSince: string | null;
   kpis: { visits: Metric; people: Metric; medianVisitTimeSec: Metric; singlePage: Metric<Ratio<number>> };
   trend: { bucket: 'hour' | 'day' | 'week'; points: AnTrendPoint[]; prevPoints: AnTrendPoint[] | null };
-  topSources: Array<{ key: string; label: string; people: Cnt; share: number | null }>;
+  topSources: Array<{ key: string; label: string; people: number; share: number | null }>;
   topSourcesTotal: number;
-  topPages: Array<{ path: string; label: string | null; views: Cnt; people: Cnt }>;
+  topSourcesOther: AnOther | null;
+  topPages: Array<{ path: string; label: string | null; views: Cnt; people: number }>;
   topPagesTotal: number;
+  topPagesOther: AnOther | null;
   botFiltered: number;
 }
 
@@ -309,22 +315,22 @@ export interface AnPageRow {
 }
 export interface AnPagesRes extends AnBase {
   period: MaPeriod; trackingSince: string | null; view: 'all' | 'entry' | 'exit';
-  languages: string[]; rows: AnPageRow[]; total: number; nextCursor: string | null; botFiltered?: number;
+  languages: string[]; rows: AnPageRow[]; total: number; nextCursor: string | null; other: AnOther | null; botFiltered?: number;
 }
 
-export interface AnSourceRow { key: string; label: string; visits: Cnt; people: Cnt; singlePage: Ratio; pricingPeople: Cnt }
+export interface AnSourceRow { key: string; label: string; visits: Cnt; people: number; singlePage: Ratio; pricingPeople: Cnt }
 export interface AnCampaignRow {
   campaign: string; source: string | null; medium: string | null; content: string | null;
-  visits: Cnt; people: Cnt; medianVisitTimeSec: number | null; medianReason?: NullReason;
+  visits: Cnt; people: number; medianVisitTimeSec: number | null; medianReason?: NullReason;
 }
 export interface AnSourcesRes extends AnBase {
   period: MaPeriod; trackingSince: string | null; view: 'source' | 'campaign';
-  rows: Array<AnSourceRow | AnCampaignRow>; total: number; nextCursor: string | null; botFiltered?: number;
+  rows: Array<AnSourceRow | AnCampaignRow>; total: number; nextCursor: string | null; other: AnOther | null; botFiltered?: number;
 }
 
-export interface AnGeoList<R> { rows: R[]; total: number; nextCursor: string | null }
-export interface AnCountryRow { code: string | null; label: string; people: Cnt; share: number | null }
-export interface AnCityRow { city: string | null; country: string | null; countryLabel: string; people: Cnt }
+export interface AnGeoList<R> { rows: R[]; total: number; nextCursor: string | null; other: AnOther | null }
+export interface AnCountryRow { code: string | null; label: string; people: number; share: number | null }
+export interface AnCityRow { city: string | null; country: string | null; countryLabel: string; people: number }
 export interface AnGeoRes extends AnBase {
   period: MaPeriod; trackingSince: string | null;
   countries: AnGeoList<AnCountryRow> | null; cities: AnGeoList<AnCityRow> | null; botFiltered?: number;
@@ -333,11 +339,15 @@ export interface AnGeoRes extends AnBase {
 export type AnHourMetric = 'visits' | 'exam_starts' | 'paid';
 export interface AnHoursRes extends AnBase {
   period: MaPeriod; metric: AnHourMetric; trackingSince: string | null;
-  cells: number[][]; max: number; peak: { dow: number; hour: number; n: number } | null; unevenWeekdays: boolean; botFiltered?: number;
+  cells: number[][]; max: number; peak: { dow: number; hour: number; n: number } | null; unevenWeekdays: boolean;
+  /** v1.1: tracked days without an hourly rollup (older than 90 days) — not in the cells */
+  incompleteDays?: number; botFiltered?: number;
 }
 export interface AnHoursDayRes extends AnBase {
   date: string; metric: AnHourMetric; bars: Array<number | null>; isToday: boolean; currentHour: number | null;
   trackingSince: string | null; beforeTracking: boolean;
+  /** v1.1: tracked day without an hourly rollup → all bars null */
+  unavailable?: boolean;
 }
 
 export interface AnExamRow { exam: string; label: string; started: number; completed: number; notCompleted: number; inProgress: number }
