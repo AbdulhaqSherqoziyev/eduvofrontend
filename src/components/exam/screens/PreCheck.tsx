@@ -25,8 +25,8 @@ export function PreCheck() {
   const host = useExamHost();
   const { t } = useT();
   const cfg = s.config!;
-  const main = s.stages.filter((x) => !x.separateSitting);
-  const sections = cfg.sections.filter((sec) => main.some((x) => x.sectionKey === sec.key));
+  // every stage of the attempt, separate-sitting ones too (IELTS Speaking: the mic is checked here, and "take later" lives here)
+  const sections = cfg.sections.filter((sec) => s.stages.some((x) => x.sectionKey === sec.key));
   const needAudio = sections.some((sec) => sec.stages.some((st) => st.audio)) || !!cfg.precheck?.includes('audio');
   // "Take Speaking later" (spec §1.1-e): full mock + separate sitting allowed (B2C always) → no mic needed today
   const [later, setLater] = useState(() => speakingLater(s.attemptId));
