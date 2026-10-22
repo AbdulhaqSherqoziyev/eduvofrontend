@@ -62,6 +62,9 @@ export const SPEAKING_TEXT = {
   'resume.speaking_from': ['Speaking · question {n} of {m}', 'Speaking · {n}-savol, jami {m}'],
   'resume.speaking_note': ["You'll continue with the question you were answering. Your earlier answers are saved.", 'Javob berayotgan savolingizdan davom etasiz. Oldingi javoblaringiz saqlangan.'],
   'resume.speaking_note_used': ["You'll continue from the next question. What you recorded for this question is saved.", 'Keyingi savoldan davom etasiz. Bu savolning yozilgan qismi saqlandi.'],
+  // contract v1.4 (not in speaking-design §7.1 yet — for Sevara's review): Speaking window over / one recording refused
+  'speaking.later_expired': ['The 7 days to take Speaking have passed. Your other results are ready.', "Speaking'ni topshirish muddati (7 kun) tugadi. Qolgan natijalaringiz tayyor."],
+  'speaking.recording_invalid': ["This answer's recording couldn't be saved — it isn't your fault. The test goes on.", "Bu javobning yozuvi saqlanmadi — bu sizning aybingiz emas. Imtihon davom etadi."],
   // {period} values for `privacy_line` / `privacy_keep_b` (spec §1.2: B2C 90 days, ERP centre setting, default 12 months)
   'speaking.period_90d': ['90 days', '90 kun'],
   'speaking.period_12m': ['12 months', '12 oy'],
@@ -128,6 +131,8 @@ export const SPEAKING_RU: Partial<Record<keyof typeof SPEAKING_TEXT, string>> = 
   'resume.speaking_from': 'Speaking · вопрос {n} из {m}',
   'resume.speaking_note': 'Продолжите с вопроса, на который отвечали. Предыдущие ответы сохранены.',
   'resume.speaking_note_used': 'Продолжите со следующего вопроса. Записанная часть этого ответа сохранена.',
+  'speaking.later_expired': 'Срок сдачи Speaking (7 дней) истёк. Остальные результаты готовы.',
+  'speaking.recording_invalid': 'Запись этого ответа не сохранилась — это не ваша вина. Экзамен продолжается.',
   'speaking.period_90d': '90 дней',
   'speaking.period_12m': '12 месяцев',
   'speaking.period_days': '{n} дн.',

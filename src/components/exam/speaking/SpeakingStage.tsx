@@ -73,6 +73,7 @@ export function SpeakingStage({ content }: { content: SpeakingStageContent }) {
           <div style={{ position: p2 ? 'sticky' : 'static', bottom: 0, zIndex: 2, background: 'var(--x-page)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
             <SpeakingStrip f={f} bars={wave.bars} />
             {q.stuck && <div style={{ fontSize: 12.5, color: 'var(--x-muted)', textAlign: 'center' }}>{t('banner.recording_queued')}</div>}
+            {q.invalidAt != null && Date.now() - q.invalidAt < 10_000 && <div role="status" style={{ fontSize: 12.5, color: 'var(--x-muted)', textAlign: 'center' }}>{t('speaking.recording_invalid')}</div>}
           </div>
         )}
         </div>

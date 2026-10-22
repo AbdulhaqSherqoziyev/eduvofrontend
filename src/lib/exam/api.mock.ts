@@ -11,7 +11,7 @@ import type { AnswerValue, AttemptState, StageBrief } from './types';
 import { mockTest, stageMedia, type MockTest } from './mock/tests';
 import { synthWav, throttledResponse } from './mock/audio';
 import { scoreAttempt } from './mock/scoring';
-import { mockRestart, mockSpeakingAttempt, mockUpload } from './mock/speaking-api';
+import { mockPause, mockRestart, mockSpeakingAttempt, mockUpload } from './mock/speaking-api';
 import { mockSpeakingResult } from './mock/speaking-result';
 
 const SKEW = 1500;
@@ -158,5 +158,6 @@ export function createMockApi(): ExamApi {
     },
     uploadRecording: (id, b) => mockUpload(id, b),
     restartItem: (id, k, item) => mockRestart(id, k, item),
+    pauseStage: (id, k, b) => mockPause(id, k, b.action),
   };
 }

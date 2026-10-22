@@ -1,7 +1,7 @@
 /** Mock of speaking contract v1.2 §2 (recordings upload, kind=backup, promptMode) and §4a (item restart). */
 import type { ExamResult } from '../api';
 import { fail, iso, load, now, respond, save } from '../api.mock';
-import type { RecordingUploadResp, RestartResp } from '../speaking-types';
+import type { PauseResp, RecordingUploadResp, RestartResp } from '../speaking-types';
 import { mockTest } from './tests';
 
 export const mockSpeakingAttempt = (id: string) => id.startsWith('demo-ielts-sp');
@@ -51,5 +51,25 @@ export function mockRestart(id: string, stageKey: string, itemKey: string): Prom
     st.deadlineAt = iso(Date.parse(st.deadlineAt ?? iso(now())) + ext * 1000);
     save(s);
     return { ok: true, data: { stage: st, itemKey, restartsLeft: 0, extendedBySec: ext, serverNow: iso(now()) } };
+  });
+}
+
+/** §4b (v1.4) mock: pause pushes the deadline by the remaining budget, resume trims it to the real pause. */
+const pausedAt = new Map<string, number>();
+export function mockPause(id: string, stageKey: string, action: 'pause' | 'resume'): Promise<ExamResult<PauseResp>> {
+  return respond(() => {
+    const s = load(id);
+    const st = s.stages.find((x) => x.stageKey === stageKey);
+    if (!st || st.status === 'PENDING') return fail(409, 'STAGE_NOT_STARTED');
+    if (st.status === 'LOCKED') return fail(409, 'STAGE_LOCKED');
+    let ext = 0;
+    if (action === 'pause' && !pausedAt.has(id)) pausedAt.set(id, now());
+    if (action === 'resume' && pausedAt.has(id)) {
+      ext = Math.round((now() - pausedAt.get(id)!) / 1000);
+      pausedAt.delete(id);
+      st.deadlineAt = iso(Date.parse(st.deadlineAt ?? iso(now())) + ext * 1000);
+      save(s);
+    }
+    return { ok: true, data: { stage: st, paused: pausedAt.has(id), extendedBySec: ext, pauseBudgetLeftSec: 600, serverNow: iso(now()) } };
   });
 }

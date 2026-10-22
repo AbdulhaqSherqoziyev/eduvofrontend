@@ -32,11 +32,15 @@ export interface RecordingUploadResp { recordingId: string; itemKey: string; kin
 export interface ResumeRecording { itemKey: string; stageKey: string; status: 'UPLOADED' | 'REJECTED' | string; durationMs?: number | null; deleted?: boolean }
 export type RestartReason = 'mic_lost' | 'page_reload' | 'device_change' | 'network' | 'other';
 export interface RestartResp { stage: StageBrief; itemKey: string; restartsLeft: 0; extendedBySec: number; serverNow: Iso }
+/** §4b (v1.4): pause/resume the stage clock (server-measured, 600 s per stage) — does not spend the item restart. */
+export interface PauseResp { stage: StageBrief; paused: boolean; extendedBySec: number; pauseBudgetLeftSec: number; serverNow: Iso }
 
 // ── §4 result ───────────────────────────────────────────────────────────────
 export type SpeakingStatus = 'pending' | 'received' | 'transcribing' | 'scoring' | 'ready' | 'needs_review' | 'not_graded' | 'no_response'
   /** v1.2: speech present but too little for the 4 criteria — no band. */
-  | 'too_short';
+  | 'too_short'
+  /** v1.4: the 7-day separate-sitting window passed without Speaking — no band. */
+  | 'not_taken';
 export type SpeakingCriterionKey = 'fluency_coherence' | 'lexical_resource' | 'grammatical_range_accuracy' | 'pronunciation';
 export interface SpeakingQuote { itemKey: string; part: number; quote: string; startMs: number | null }
 export interface SpeakingCriterion {

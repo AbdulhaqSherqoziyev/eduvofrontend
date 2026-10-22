@@ -74,3 +74,7 @@ test('result polling: fast while grading, slow while Speaking only waits, off wh
   assert.equal(resultPollMs({ status: 'PARTIAL', sections: [{ status: 'GRADING' }], speaking: { status: 'pending' } }), 10_000);
   assert.equal(resultPollMs({ status: 'PARTIAL', sections: [], speaking: { status: 'scoring' } }, 15_000), 15_000);
 });
+
+test('upload answers: 422 RECORDING_INVALID is dropped with a note, not retried', () => {
+  assert.equal(classifyUpload({ ok: false, kind: 'client', status: 422, code: 'RECORDING_INVALID' }), 'invalid');
+});

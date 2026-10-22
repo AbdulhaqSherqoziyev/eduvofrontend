@@ -7,7 +7,7 @@
 import type {
   AttemptState, IntegrityEvent, ResultResp, SaveResp, ServerAnswer, StageStartResp, SubmitResp,
 } from './types';
-import type { RecordingKind, RecordingUploadResp, RestartReason, RestartResp } from './speaking-types';
+import type { PauseResp, RecordingKind, RecordingUploadResp, RestartReason, RestartResp } from './speaking-types';
 import { createMockApi } from './api.mock';
 
 export const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
@@ -39,6 +39,8 @@ export interface ExamApi {
   uploadRecording(id: string, b: { file: Blob; stageKey: string; itemKey: string; durationMs: number; kind?: RecordingKind; promptMode?: 'audio_only' }): Promise<ExamResult<RecordingUploadResp>>;
   /** Speaking contract §4a: restart an item once after a technical interruption. */
   restartItem(id: string, stageKey: string, itemKey: string, b: { reason: RestartReason; interruptedAt?: string }): Promise<ExamResult<RestartResp>>;
+  /** Speaking contract §4b (v1.4): hold / release the stage clock during an interruption. */
+  pauseStage(id: string, stageKey: string, b: { action: 'pause' | 'resume'; itemKey?: string; reason?: 'mic_lost' | 'network' | 'device_change' | 'page_hidden' | 'other' }): Promise<ExamResult<PauseResp>>;
 }
 
 // ── clock samples: every response with serverNow feeds the offset estimator ──
@@ -144,6 +146,7 @@ const realApi: ExamApi = {
     return req(`${A(id)}/recordings`, 'POST', f);
   },
   restartItem: (id, k, item, b) => req(`${A(id)}/stages/${encodeURIComponent(k)}/items/${encodeURIComponent(item)}/restart`, 'POST', b),
+  pauseStage: (id, k, b) => req(`${A(id)}/stages/${encodeURIComponent(k)}/pause`, 'POST', b),
 };
 
 export const examApi: ExamApi = IS_MOCK ? createMockApi() : realApi;

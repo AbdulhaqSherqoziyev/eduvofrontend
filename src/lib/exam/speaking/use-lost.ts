@@ -22,13 +22,6 @@ import type { SpPhase } from './use-speaking-flow';
 
 export interface LostState { used: boolean; initial: boolean; err: MicError | null; offline: boolean; busy: boolean }
 
-/**
- * Stage-clock pause after an interruption that does NOT spend the item restart (contract: Bekzod's `extend`
- * endpoint, pending). Until it lands the client only releases its hold; wire `examApi.extendStage` here.
- */
-async function extendAfterPause(_attemptId: string, _stageKey: string, _interruptedAt: string | null): Promise<void> {
-  // TODO(contract extend): POST /portal/exams/attempts/:id/stages/:stageKey/extend { interruptedAt } → DEADLINE
-}
 interface Deps {
   phase: SpPhase; item: SpeakingItem | null; idx: number; stageKey: string;
   rec: React.MutableRefObject<ItemRecorder | null>; gen: React.MutableRefObject<number>; playing: React.MutableRefObject<Playing | null>;
@@ -48,12 +41,23 @@ export function useLost() {
   const markDone = (k: string) => patchSpeakingLocal(id, { done: [...speakingLocal(id).done, k] });
   const submitRow = async (row: RecRow) => { const fin = { ...row, id: recId(id, row.itemKey), backup: false, state: 'final' as const, updatedAt: Date.now() }; await putRec(fin); queueFor(id).add(fin); markDone(row.itemKey); };
 
+  /** §4b (v1.4): server-measured pause of the stage clock (600 s budget, never spends the item restart). */
+  const pause = (action: 'pause' | 'resume', itemKey?: string) => {
+    const sk = deps.current?.stageKey ?? 'speaking';
+    return examApi.pauseStage(id, sk, { action, itemKey, reason: 'mic_lost' }).then((r) => {
+      if (r.ok && r.data.stage.deadlineAt) dispatch({ t: 'DEADLINE', stageKey: r.data.stage.stageKey, deadlineAt: r.data.stage.deadlineAt });
+      else if (!r.ok) console.warn('[speaking] pause', action, r.status, r.code); // PAUSE_LIMIT / offline: the client hold still applies
+      return r;
+    });
+  };
+
   const trigger = useCallback(async () => {
     const d = deps.current;
     if (!d || state || ['boot', 'finishing', 'mic_lost'].includes(d.phase)) return;
     d.gen.current += 1;
     d.playing.current?.stop();
     holdDeadline(true);
+    void pause('pause', d.item?.itemKey);
     at.current = new Date(serverNow()).toISOString();
     done.current = d.phase === 'saving' || d.phase === 'saved';
     const r = d.rec.current;
@@ -107,8 +111,9 @@ export function useLost() {
     if (!m.ok) { setState({ ...state, busy: false, err: m.err }); return; }
     const rule = afterMicLoss({ initial: state.initial, records: !!d.item?.records, saved: done.current, recording: recording.current, used: state.used });
     let to: number | 'offline' | 'locked' = rule === 'next' ? d.idx + 1 : d.idx;
+    const resumed = await pause('resume', d.item?.itemKey); // the real pause goes on the deadline first
     if (rule === 'restart' && d.item) to = await restart(d.item, 'mic_lost', d.idx, null);
-    else await extendAfterPause(id, d.stageKey, at.current);
+    else if (!resumed.ok && resumed.kind === 'network') to = 'offline';
     if (to === 'offline') { setState({ ...state, busy: false, offline: true }); return; }
     holdDeadline(false);
     setState(null);
@@ -125,9 +130,8 @@ export function useLost() {
       const rule = afterReload({ used: a.rp.used, partial: !!a.rp.partial });
       if (rule === 'next') { await submitRow(a.rp.partial!); to = a.rp.idx + 1; }
       else if (rule === 'restart') { const r = await restart(cur, 'page_reload', a.rp.idx, a.rp.partial); to = typeof r === 'number' ? r : a.rp.idx; if (r === 'locked') { void timeOut(); return; } }
-      else await extendAfterPause(id, d.stageKey, null);
     }
-    if (!a.micOk) { d.setIdx(to); holdDeadline(true); setState({ used: false, initial: true, err: a.micErr, offline: false, busy: false }); d.setPhase('mic_lost'); return; }
+    if (!a.micOk) { d.setIdx(to); holdDeadline(true); void pause('pause', cur?.itemKey); setState({ used: false, initial: true, err: a.micErr, offline: false, busy: false }); d.setPhase('mic_lost'); return; }
     void d.enter(to);
   }, [holdDeadline, timeOut]); // eslint-disable-line react-hooks/exhaustive-deps
 

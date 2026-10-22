@@ -7,7 +7,7 @@ import { examApi } from '../api';
 import { listRecs, markRec, type RecRow } from './idb';
 import { classifyUpload } from './upload-rules';
 
-export interface QueueState { pending: number; total: number; offline: boolean; stuck: boolean; auth: boolean }
+export interface QueueState { pending: number; total: number; offline: boolean; stuck: boolean; auth: boolean; /** last RECORDING_INVALID (ms) */ invalidAt: number | null }
 type Listener = (s: QueueState) => void;
 
 const queues = new Map<string, UploadQueue>();
@@ -16,7 +16,7 @@ export class UploadQueue {
   private items: RecRow[] = [];
   private running = false;
   private listeners = new Set<Listener>();
-  private st: QueueState = { pending: 0, total: 0, offline: false, stuck: false, auth: false };
+  private st: QueueState = { pending: 0, total: 0, offline: false, stuck: false, auth: false, invalidAt: null };
   private waiters = new Map<string, Array<() => void>>();
   /** §2 `promptMode=audio_only` — sent with the uploads once the learner chose audio-only. */
   audioOnly = false;
@@ -70,8 +70,9 @@ export class UploadQueue {
       const r = await examApi.uploadRecording(this.attemptId, { file, stageKey: row.stageKey, itemKey: row.itemKey, durationMs: row.durationMs,
         kind: row.backup ? 'backup' : 'main', ...(this.audioOnly ? { promptMode: 'audio_only' as const } : {}) });
       const v = classifyUpload(r);
-      if (v === 'ok' || v === 'drop') {
-        if (v === 'drop') console.warn('[speaking] recording not accepted', row.itemKey, r.ok ? '' : `${r.status} ${r.code ?? ''}`);
+      if (v === 'ok' || v === 'drop' || v === 'invalid') {
+        if (v === 'invalid') this.set({ invalidAt: Date.now() });
+        if (v !== 'ok') console.warn('[speaking] recording not accepted', row.itemKey, r.ok ? '' : `${r.status} ${r.code ?? ''}`);
         await markRec(row.id, v === 'ok' ? 'uploaded' : 'dropped');
         this.items.shift();
         this.waiters.get(row.id)?.forEach((w) => w());
