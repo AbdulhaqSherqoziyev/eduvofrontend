@@ -88,3 +88,8 @@ export async function sweepRecs(maxAgeMs = 7 * 864e5): Promise<number> {
 export function staleIds(rows: Pick<RecRow, 'id' | 'updatedAt'>[], now: number, maxAgeMs: number): string[] {
   return rows.filter((r) => now - r.updatedAt > maxAgeMs).map((r) => r.id);
 }
+
+export async function deleteRec(id: string): Promise<void> {
+  mem.delete(id);
+  await tx('readwrite', (s) => s.delete(id));
+}

@@ -20,10 +20,14 @@ export function useLevelTest(seconds: number, nBars: number) {
   useEffect(() => () => stopRef.current?.(), []);
   useEffect(() => () => { if (clip) URL.revokeObjectURL(clip); }, [clip]);
 
+  const starting = useRef(false);
   const start = useCallback(async () => {
+    if (starting.current || stopRef.current) return false; // a double click must not open a second stream
+    starting.current = true;
     setErr(null);
     setVerdict(null);
     const r = await openMic();
+    starting.current = false;
     if (!r.ok) { setErr(r.err); return false; }
     const stream = r.stream;
     const m = meter(stream);

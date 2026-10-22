@@ -4,7 +4,7 @@
  * (a WebM can't be trimmed without re-encoding); if speech started early it is kept.
  * Every 1 s chunk is written to IndexedDB (`partial`) — a reload or a crash keeps the answer.
  */
-import { putRec, recId, type RecRow } from './idb';
+import { deleteRec, putRec, recId, type RecRow } from './idb';
 import { newRecorder, type Meter } from './recorder';
 
 const VAD_DB = -45;
@@ -15,6 +15,7 @@ export class ItemRecorder {
   private speech = false;
   private vad: number | null = null;
   private t0 = 0;
+  private limit: { sec: number; on: () => void } | null = null;
   private startedAt = 0;
   private stopping: Promise<RecRow> | null = null;
 
@@ -33,6 +34,8 @@ export class ItemRecorder {
       if (!e.data.size || r !== this.rec) return;
       this.chunks.push(e.data);
       if (!this.stopping) void putRec(this.row('partial'));
+      // chunks keep arriving in a background tab (timers are throttled there): the answer never overruns responseSec
+      if (this.limit && this.t0 && this.elapsed() >= this.limit.sec) { const l = this.limit; this.limit = null; l.on(); }
     };
     this.rec = r;
     this.startedAt = performance.now();
@@ -47,7 +50,8 @@ export class ItemRecorder {
   }
 
   /** Countdown ended: the answer clock starts now. Drops a silent pre-roll. */
-  go() {
+  go(limitSec?: number, onLimit?: () => void) {
+    if (limitSec && onLimit) this.limit = { sec: limitSec, on: onLimit };
     if (this.vad != null) { window.clearInterval(this.vad); this.vad = null; }
     if (!this.speech && this.rec) {
       const old = this.rec;
@@ -56,15 +60,17 @@ export class ItemRecorder {
       try { old.stop(); } catch { /* already stopped */ }
       this.begin();
     }
-    this.t0 = performance.now();
+    this.t0 = Date.now();
   }
 
   /** Seconds of answer since "go" (pre-roll not counted — spec §1.0). */
-  elapsed() { return this.t0 ? (performance.now() - this.t0) / 1000 : 0; }
+  elapsed() { return this.t0 ? (Date.now() - this.t0) / 1000 : 0; }
 
   /** Repeat pressed during the countdown: nothing of this take is kept. */
   cancel() {
-    if (this.vad != null) window.clearInterval(this.vad);
+    if (this.vad != null) { window.clearInterval(this.vad); this.vad = null; }
+    this.limit = null;
+    void deleteRec(recId(this.ids.attemptId, this.ids.itemKey)); // the pre-roll row written so far
     const r = this.rec;
     this.rec = null;
     if (r) { r.ondataavailable = null; try { r.stop(); } catch { /* ignore */ } }
